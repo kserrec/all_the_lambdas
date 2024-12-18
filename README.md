@@ -19,3 +19,7 @@ So far I have defined:
 	- more advanced arithmetic (defined division and integers with operators for them)
 	- pairs and lists with operators for them
 	- algorithms (so far only binary search for church numerals and integers)
+
+How to Run:
+	- download Racket and lazy package
+	- from project root, run racket test.rkt
