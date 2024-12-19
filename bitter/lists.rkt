@@ -35,7 +35,7 @@
     - Logic: Takes two arguments and stores them together,
                 with both ready to be applied to by any function the pair applies to
 |#
-(define _pair
+(define pair
     (lambda (a)
         (lambda (b)
             (lambda (f) 
@@ -79,9 +79,9 @@
     - Contract: func => [func] or {func, []}
     - Logic: Takes one function and makes it head with tail as empty list
 |#
-(define one_list
+(define onelist
     (lambda (a) 
-        ((_pair a) nil)
+        ((pair a) nil)
     )
 )
 
@@ -90,10 +90,10 @@
     - Contract: (func,func) => [func,func] or {func, {func,[]}]
     - Logic: Takes two functions, makes first head, and second head of tail
 |#
-(define two_list
+(define twolist
     (lambda (a)
         (lambda (b) 
-            ((_pair a) ((_pair b) nil))
+            ((pair a) ((pair b) nil))
         )
     )
 )
@@ -153,16 +153,16 @@
                 i.e. the total number of heads it counted through.
 |#
 (define len
-    (lambda (_list)
-        (((Y len-helper) _list) nil)
+    (lambda (list)
+        (((Y len-helper) list) nil)
     )
 )
 
 (define len-helper
     (lambda (f)
-        (lambda (_list)
+        (lambda (list)
             (lambda (n)
-                ((_list (lambda (x)
+                ((list (lambda (x)
                             (lambda (y)
                                 (lambda (z)
                                     ((f y) (succ n))
@@ -181,8 +181,8 @@
     - Logic: If length of list is zero, it is nil
 |#
 (define isNil 
-    (lambda (_list)
-        ((eq (len _list)) zero)
+    (lambda (list)
+        ((eq (len list)) zero)
     )
 )
 
@@ -192,10 +192,10 @@
     - Idea: Return value of list at index i
     - Logic: Take head at ith tail of list
 |#
-(define _ind
-    (lambda (_list)
+(define ind
+    (lambda (list)
         (lambda (i)
-            (_head ((i _tail) _list))
+            (_head ((i _tail) list))
         )
     )
 )
@@ -218,7 +218,7 @@
                 ((l1 (lambda (h)
                         (lambda (t)
                             (lambda (x)
-                                ((_pair h) ((f t) l2))
+                                ((pair h) ((f t) l2))
                             )
                         )
                     )) l2
@@ -236,8 +236,8 @@
                 from head of old list on up recursively
 |#
 (define rev
-    (lambda (_list)
-        (((Y rev-helper) _list) nil)
+    (lambda (list)
+        (((Y rev-helper) list) nil)
     )
 )
 
@@ -247,7 +247,7 @@
             (lambda (newList)
                 (((isNil oldList)
                     newList)
-                    ((f (_tail oldList)) ((_pair (_head oldList)) newList))
+                    ((f (_tail oldList)) ((pair (_head oldList)) newList))
                 )
             )
         )
@@ -264,8 +264,8 @@
 |#
 (define _map
     (lambda (g)
-        (lambda (_list)
-            ((((Y map-helper) g)_list) nil)
+        (lambda (list)
+            ((((Y map-helper) g)list) nil)
         )
     )
 )
@@ -273,12 +273,12 @@
 (define map-helper
     (lambda (f)
         (lambda (g)
-            (lambda (_list)
+            (lambda (list)
                 (lambda (n)
-                    ((_list (lambda (x)
+                    ((list (lambda (x)
                                 (lambda (y)
                                     (lambda (z)
-                                        ((_pair (g x)) (((f g) y) n))
+                                        ((pair (g x)) (((f g) y) n))
                                     )
                                 )
                         ))  n
@@ -298,8 +298,8 @@
 |#
 (define _filter
     (lambda (g)
-        (lambda (_list)
-            ((((Y filter-helper) g)_list) nil)
+        (lambda (list)
+            ((((Y filter-helper) g)list) nil)
         )
     )
 )
@@ -307,13 +307,13 @@
 (define filter-helper
     (lambda (f)
         (lambda (g)
-            (lambda (_list)
+            (lambda (list)
                 (lambda (n)
-                    ((_list (lambda (x)
+                    ((list (lambda (x)
                                 (lambda (y)
                                     (lambda (z)
                                         (((g x)
-                                           ((_pair x) (((f g) y) n)))
+                                           ((pair x) (((f g) y) n)))
                                            (((f g) y) n)
                                         )
                                     )
@@ -341,8 +341,8 @@
     (lambda (f)
         (lambda (g)
             (lambda (i)
-                (lambda (_list)
-                    ((_list (lambda (x)
+                (lambda (list)
+                    ((list (lambda (x)
                                 (lambda (y)
                                     (lambda (z)
                                         ((g x) (((f g) i) y))
@@ -367,17 +367,17 @@
                 else build list with head and count down n recursively, 
                 building new list until n runs out and n elements have been "taken"
 |#
-(define _take (Y take-helper))
+(define take (Y take-helper))
 
 (define take-helper
     (lambda (f)
         (lambda (n)
-            (lambda (_list)
-                ((((_or (isZero n)) (isNil _list))
+            (lambda (list)
+                ((((_or (isZero n)) (isNil list))
                     nil)
-                    ((_pair 
-                        (_head _list)) 
-                        ((f (pred n)) (_tail _list))
+                    ((pair 
+                        (_head list)) 
+                        ((f (pred n)) (_tail list))
                     )
                 )
             )
@@ -394,8 +394,8 @@
 |#
 (define takeTail
     (lambda (n)
-        (lambda (_list)
-            (rev ((_take  n) (rev _list)))
+        (lambda (list)
+            (rev ((take  n) (rev list)))
         )    
     )
 )
@@ -410,13 +410,13 @@
 |#
 (define insert
     (lambda (val)
-        (lambda (_list)
+        (lambda (list)
             (lambda (i)
                 ((app
-                    ((_take i) _list))
-                    ((_pair
+                    ((take i) list))
+                    ((pair
                         val)
-                        ((takeTail ((sub (len _list)) i)) _list)
+                        ((takeTail ((sub (len list)) i)) list)
                     )
                 )
             )
@@ -434,13 +434,13 @@
 |#
 (define replace
     (lambda (val)
-        (lambda (_list)
+        (lambda (list)
             (lambda (i)
                 ((app
-                    ((_take i) _list))
-                    ((_pair
+                    ((take i) list))
+                    ((pair
                         val)
-                        ((takeTail (pred ((sub (len _list)) i))) _list)
+                        ((takeTail (pred ((sub (len list)) i))) list)
                     )
                 )
             )
@@ -456,11 +456,11 @@
 |#
 (define drop
     (lambda (n)
-        (lambda (_list)
+        (lambda (list)
             (rev 
-                ((_take 
-                    ((sub (len _list)) n))
-                    (rev _list)
+                ((take 
+                    ((sub (len list)) n))
+                    (rev list)
                 )
             )
         ) 

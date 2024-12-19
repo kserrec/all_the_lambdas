@@ -1,20 +1,16 @@
-#lang s-exp "lazy-with-macros.rkt"
-(require "macros.rkt")
-(require "logic.rkt"
-         "church.rkt")
+#lang lazy
+(require "algorithms.rkt"
+         "church.rkt"
+         "division.rkt"
+         "integers.rkt"
+         "lists.rkt"
+		 "logic.rkt"
+         "recursion.rkt")
 
 ;===================================================
 
 ; IDENTITY FUNCTION
 (define identity (lambda (x) x))
-
-; (define truetrue (true false))
-; (display (b-read (truetrue false)))
-; (newline)
-
-
-; (define truetrue (true true))
-; (display (b-read (true false)))
 
 (display "NOT TABLE")
 (display "\nnot(true): ")
@@ -93,7 +89,6 @@
 (display "nand(false)(false): ")
 (display (b-read ((nand false) false)))
 (newline)
-
 
 (display "\nif(isZero(0))(1)(2)): ")
 (define if-isZero0-1-2 (((_if (isZero zero)) one) two))
@@ -243,4 +238,215 @@
 (display (b-read ((eq two) five)))
 (newline)
 
+;===================================================
 
+(display "\nFACTORIAL")
+(display "\nfact(0): ")
+(define fact0 (fact zero))
+(display (n-read fact0))
+(newline)
+
+(display "fact(1): ")
+(define fact1 (fact one))
+(display (n-read fact1))
+(newline)
+
+(display "fact(2): ")
+(define fact2 (fact two))
+(display (n-read fact2))
+(newline)
+
+(display "fact(3): ")
+(define fact3 (fact three))
+(display (n-read fact3))
+(newline)
+
+(display "fact(4): ")
+(define fact4 (fact four))
+(display (n-read fact4))
+(newline)
+
+(display "fact(5): ")
+(define fact5 (fact five))
+(display (n-read fact5))
+(newline)
+
+;===================================================
+
+(display "\nFIBONACCI")
+(display "\nfib(0): ")
+(define fib0 (fib zero))
+(display (n-read fib0))
+(newline)
+
+(display "fib(1): ")
+(define fib1 (fib one))
+(display (n-read fib1))
+(newline)
+
+(display "fib(2): ")
+(define fib2 (fib two))
+(display (n-read fib2))
+(newline)
+
+(display "fib(3): ")
+(define fib3 (fib three))
+(display (n-read fib3))
+(newline)
+
+(display "fib(4): ")
+(define fib4 (fib four))
+(display (n-read fib4))
+(newline)
+
+(display "fib(5): ")
+(define fib5 (fib five))
+(display (n-read fib5))
+(newline)
+
+(display "fib(6): ")
+(define fib6 (fib (succ five)))
+(display (n-read fib6))
+(newline)
+
+(display "fib(7): ")
+(define fib7 (fib (succ (succ five))))
+(display (n-read fib7))
+(newline)
+
+;===================================================
+
+(display "\nN-SUM")
+(display "\nnSum(0): ")
+(define nSum0 (nSum zero))
+(display (n-read nSum0))
+(newline)
+
+(display "nSum(1): ")
+(define nSum1 (nSum one))
+(display (n-read nSum1))
+(newline)
+
+(display "nSum(2): ")
+(define nSum2 (nSum two))
+(display (n-read nSum2))
+(newline)
+
+(display "nSum(3): ")
+(define nSum3 (nSum three))
+(display (n-read nSum3))
+(newline)
+
+(display "nSum(4): ")
+(define nSum4 (nSum four))
+(display (n-read nSum4))
+(newline)
+
+(display "nSum(5): ")
+(define nSum5 (nSum five))
+(display (n-read nSum5))
+(newline)
+
+(display "nSum(125): ")
+(define nSum125 (nSum one-twenty-five))
+(display (n-read nSum125))
+(newline)
+
+;===================================================
+
+(display "div(6)(2): ")
+(define div_6_2 ((div (succ five)) two))
+(display (n-read div_6_2))
+(newline)
+
+(display "div(5)(2): ")
+(define div_5_2 ((div five) two))
+(display (n-read div_5_2))
+(newline)
+
+(display "div(7)(2): ")
+(define div_7_2 ((div (succ (succ five))) two))
+(display (n-read div_7_2))
+(newline)
+
+(display "div(8)(2): ")
+(define div_8_2 ((div (succ (succ (succ five)))) two))
+(display (n-read div_8_2))
+(newline)
+
+(display "div(125)(5): ")
+(define div_125_5 ((div one-twenty-five) five))
+(display (n-read div_125_5))
+(newline)
+
+(display "div(4)(5): ")
+(define div_4_5 ((div four) five))
+(display (n-read div_4_5))
+(newline)
+
+;===================================================
+
+(display "\nLISTS")
+(display "\n{true,false}(true): ")
+(display (b-read (((pair true) false) true)))
+(newline)
+(display "{true,false}(false): ")
+(display (b-read (((pair true) false) false)))
+(newline)
+(display "{false,true}(true): ")
+(display (b-read (((pair false) true) true)))
+(newline)
+(display "{false,true}(false): ")
+(display (b-read (((pair false) true) false)))
+(newline)
+(newline)
+(display "\nhead({true,false}): ")
+(display (b-read (_head ((pair true) false))))
+(newline)
+(display "tail({true,false}): ")
+(display (b-read (_tail ((pair true) false))))
+(newline)
+(display "\nhead({one,five}): ")
+(display (n-read (_head ((pair one) five))))
+(newline)
+(display "tail({one,five}): ")
+(display (n-read (_tail ((pair one) five))))
+(newline)
+
+(display "onelist(five) => [5]: ")
+(display "\nhead([5]): ")
+(display (n-read (_head (onelist five))))
+(display "\ntail([5]): ")
+(display (n-read (_tail (onelist five))))
+(newline)
+(display (l-read (onelist five) n-read))
+(newline)
+(display (l-read ((twolist five) two) n-read))
+(newline)
+(display (l-read ((pair three ) ((twolist five) two)) n-read))
+(newline)
+
+(define l_4_5_125 ((pair four) ((twolist five) one-twenty-five)))
+(define l_one_two ((twolist one) two))
+(define l_1_2_4_5_125 ((app l_one_two) l_4_5_125))
+(display "[1,2,4,5,125]: ")
+(display (l-read l_1_2_4_5_125 n-read))
+(newline)
+(display "l_1_2_4_5_125 ind of 1: ")
+(display (n-read ((binarySearch l_1_2_4_5_125) one)))
+(newline)
+(display "l_1_2_4_5_125 ind of 2: ")
+(display (n-read ((binarySearch l_1_2_4_5_125) two)))
+(newline)
+(display "l_1_2_4_5_125 ind of 4: ")
+(display (n-read ((binarySearch l_1_2_4_5_125) four)))
+(newline)
+(display "l_1_2_4_5_125 ind of 5: ")
+(display (n-read ((binarySearch l_1_2_4_5_125) five)))
+(newline)
+(display "l_1_2_4_5_125 ind of 125: ")
+(display (n-read ((binarySearch l_1_2_4_5_125) one-twenty-five)))
+(newline)
+(display "l_1_2_4_5_125 ind of 3: ")
+(display (n-read ((binarySearch l_1_2_4_5_125) three)))
+(newline)

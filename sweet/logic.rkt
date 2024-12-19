@@ -7,6 +7,14 @@
 ;===================================================
 
 #|
+    ~ IDENTITY FUNCTION ~
+    - Contract: func => func
+    - Logic: Returns same function passed
+|#
+
+(def identity x = x)
+
+#|
     ~ TRUE ~
     - Contract: (func,func) => func
     - Logic: Returns first function passed

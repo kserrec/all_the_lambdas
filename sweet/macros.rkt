@@ -1,6 +1,6 @@
 #lang lazy
 (require (for-syntax racket/base))
-(provide def)
+(provide def _let)
 
 (define-syntax (def stx)
   (syntax-case stx (=)
@@ -28,3 +28,8 @@
              (lambda (arg3)
                (lambda (arg4)
                  (lambda (arg5) body))))))]))
+
+(define-syntax (_let stx)
+  (syntax-case stx (=)
+    [(_ name = expr body)
+     #'((lambda (name) body) expr)]))
