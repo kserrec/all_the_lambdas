@@ -45,7 +45,7 @@
 (define makeZ
     (lambda (sign)
         (lambda (nat)
-            ((_pair sign) nat)
+            ((pair sign) nat)
         )
     )
 )

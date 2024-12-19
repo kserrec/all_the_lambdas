@@ -1,17 +1,13 @@
-#lang lazy
+#lang s-exp "lazy-with-macros.rkt"
+(require "macros.rkt")
 (require "algorithms.rkt"
-         "church.rkt"
          "division.rkt"
-         "integers.rkt"
          "lists.rkt"
-		 "logic.rkt"
-         "recursion.rkt"
-         "types.rkt")
+         "logic.rkt"
+         "church.rkt"
+         "recursion.rkt")
 
 ;===================================================
-
-; IDENTITY FUNCTION
-(define identity (lambda (x) x))
 
 (display "NOT TABLE")
 (display "\nnot(true): ")
@@ -90,6 +86,7 @@
 (display "nand(false)(false): ")
 (display (b-read ((nand false) false)))
 (newline)
+
 
 (display "\nif(isZero(0))(1)(2)): ")
 (define if-isZero0-1-2 (((_if (isZero zero)) one) two))
@@ -385,77 +382,28 @@
 (display (n-read div_4_5))
 (newline)
 
-; (display "nSum(125): ")
-; (define nSum125 (nSum one-twenty-five))
-; (display (n-read nSum125))
-; (newline)
 
-;===================================================
-
-(display "\nLISTS")
-(display "\n{true,false}(true): ")
-(display (b-read (((_pair true) false) true)))
+(define l_4_5_125 ((pair four) ((twolist five) one-twenty-five)))
+(define l_one_two ((twolist one) two))
+(define l_1_2_4_5_125 ((app l_one_two) l_4_5_125))
+(display "[1,2,4,5,125]: ")
+(display ((l-read l_1_2_4_5_125) n-read))
 (newline)
-(display "{true,false}(false): ")
-(display (b-read (((_pair true) false) false)))
+(display "l_1_2_4_5_125 ind of 1: ")
+(display (n-read ((binarySearch l_1_2_4_5_125) one)))
 (newline)
-(display "{false,true}(true): ")
-(display (b-read (((_pair false) true) true)))
+(display "l_1_2_4_5_125 ind of 2: ")
+(display (n-read ((binarySearch l_1_2_4_5_125) two)))
 (newline)
-(display "{false,true}(false): ")
-(display (b-read (((_pair false) true) false)))
+(display "l_1_2_4_5_125 ind of 4: ")
+(display (n-read ((binarySearch l_1_2_4_5_125) four)))
 (newline)
+(display "l_1_2_4_5_125 ind of 5: ")
+(display (n-read ((binarySearch l_1_2_4_5_125) five)))
 (newline)
-(display "\nhead({true,false}): ")
-(display (b-read (_head ((_pair true) false))))
+(display "l_1_2_4_5_125 ind of 125: ")
+(display (n-read ((binarySearch l_1_2_4_5_125) one-twenty-five)))
 (newline)
-(display "tail({true,false}): ")
-(display (b-read (_tail ((_pair true) false))))
-(newline)
-(display "\nhead({one,five}): ")
-(display (n-read (_head ((_pair one) five))))
-(newline)
-(display "tail({one,five}): ")
-(display (n-read (_tail ((_pair one) five))))
-(newline)
-
-(display "one_list(five) => [5]: ")
-(display "\nhead([5]): ")
-(display (n-read (_head (one_list five))))
-(display "\ntail([5]): ")
-(display (n-read (_tail (one_list five))))
-(newline)
-(display (l-read (one_list five) n-read))
-(newline)
-(display (l-read ((two_list five) two) n-read))
-(newline)
-(display (l-read ((_pair three ) ((two_list five) two)) n-read))
-(newline)
-
-(display "is type(ERROR) error?: ")
-(display (b-read (isError ERROR)))
-(newline)
-
-(display "NOT(TRUE): ")
-(display (n-read (_type (NOT TRUE))))
-(newline)
-(display (b-read (_val (NOT TRUE))))
-
-(newline)
-(display "NOT(FALSE): ")
-(display (n-read (_type (NOT FALSE))))
-(newline)
-(display (b-read (_val (NOT FALSE))))
-
-(newline)
-(display "NOT(ERROR): ")
-(display (n-read (_type (NOT ERROR))))
-(newline)
-(display (n-read (_val (NOT ERROR))))
-
-(newline)
-(display "NOT(errorTypeObj): ")
-(display (n-read (_type (NOT (makeError true)))))
-(newline)
-(display (n-read (_val (NOT (makeError true)))))
+(display "l_1_2_4_5_125 ind of 3: ")
+(display (n-read ((binarySearch l_1_2_4_5_125) three)))
 (newline)
