@@ -1,11 +1,11 @@
 #lang lazy
 (provide (all-defined-out))
+(require "macros/macros.rkt")
 (require "church.rkt"
          "division.rkt"
          "integers.rkt"
          "lists.rkt"
-         "logic.rkt"
-         "macros.rkt")
+         "logic.rkt")
 
 (define s-a string-append)
 (define (chain err1 err2) (s-a (s-a err1 "->") err2))

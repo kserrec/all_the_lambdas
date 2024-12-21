@@ -1,5 +1,5 @@
-#lang s-exp "lazy-with-macros.rkt"
-(require "macros.rkt")
+#lang s-exp "macros/lazy-with-macros.rkt"
+(require "macros/macros.rkt")
 (provide (all-defined-out))
 (require "logic.rkt")
 
