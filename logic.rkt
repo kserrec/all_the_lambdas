@@ -1,4 +1,5 @@
-#lang lazy
+#lang s-exp "macros/lazy-with-macros.rkt"
+(require "macros/macros.rkt")
 (provide (all-defined-out))
 
 ;===================================================
@@ -6,26 +7,26 @@
 ;===================================================
 
 #|
+    ~ IDENTITY FUNCTION ~
+    - Contract: func => func
+    - Logic: Returns same function passed
+|#
+
+(def identity x = x)
+
+#|
     ~ TRUE ~
     - Contract: (func,func) => func
     - Logic: Returns first function passed
 |#
-(define true 
-    (lambda (x) 
-        (lambda (y) x)
-    )
-)
+(def true x y = x)
 
 #|
     ~ FALSE ~
     - Contract: (func,func) => func
     - Logic: Returns second function passed
 |#
-(define false 
-    (lambda (x) 
-        (lambda (y) y)
-    )
-)
+(def false x y = y)
 
 #|
     ~ IF-THEN-ELSE ~
@@ -33,15 +34,7 @@
     - Logic: By logic of true/false, condition func1 "picks" func2 or func3,
                 the first or second function passed to it
 |#
-(define _if
-    (lambda (check)
-        (lambda (case1)
-            (lambda (case2) 
-                ((check case1) case2)
-            )
-        )
-    )
-)
+; (def _if check case1 case2 = ((check case1) case2))
 
 #|
     ~ BOOLEAN READER ~
@@ -49,11 +42,7 @@
     - Contract: bool => readable(bool)
     - Logic: Outputs bool for user 
 |#
-(define b-read
-    (lambda (b)
-        ((b "true") "false")
-    )
-)
+(def b-read b = ((b "true") "false"))
 
 ;===================================================
 
@@ -63,11 +52,7 @@
     - Idea: Output opposite boolean value of input
     - Logic: If true, picks false, if false, picks true
 |#
-(define _not
-    (lambda (b)
-        ((b false) true)
-    )
-)
+(def _not b = ((b false) true))
 
 #|
     ~ AND ~
@@ -77,13 +62,7 @@
                 then return b2 (true or false)
                 else pick false
 |#
-(define _and
-    (lambda (b1) 
-        (lambda (b2) 
-            ((b1 b2) false)
-        )
-    )
-)
+(def _and b1 b2 = ((b1 b2) false))
 
 #|
     ~ OR ~
@@ -93,13 +72,7 @@
                 then true
                 else b2 (true or false)
 |#
-(define _or
-    (lambda (b1)
-        (lambda (b2) 
-            ((b1 true) b2)
-        )
-    )
-)
+(def _or b1 b2 = ((b1 true) b2))
 
 ;===================================================
 
@@ -111,13 +84,7 @@
                 then true if b2 false
                 else b2 (true or false)
 |#
-(define xor
-    (lambda (b1)
-        (lambda (b2)
-            ((b1 (_not b2)) b2)
-        )
-    )
-)
+(def xor b1 b2 = ((b1 (_not b2)) b2))
 
 #|
     ~ XOR ~
@@ -125,13 +92,7 @@
     - Idea: Return true if neither are true, else false
     - Logic: Not the or of them
 |#
-(define nor
-    (lambda (b1)
-        (lambda (b2) 
-            (_not ((_or b1) b2))
-        )
-    )
-)
+(def nor b1 b2 = (_not ((_or b1) b2)))
 
 #|
     ~ NAND ~
@@ -139,13 +100,7 @@
     - Idea: Return true if both are not true, else false
     - Logic: Not the and of them
 |#
-(define nand
-    (lambda (b1)
-        (lambda (b2) 
-            (_not ((_and b1) b2))
-        )
-    )
-)
+(def nand b1 b2 = (_not ((_and b1) b2)))
 
 ;===================================================
 

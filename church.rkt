@@ -1,4 +1,5 @@
-#lang lazy
+#lang s-exp "macros/lazy-with-macros.rkt"
+(require "macros/macros.rkt")
 (provide (all-defined-out))
 (require "logic.rkt")
 
@@ -37,15 +38,7 @@
     - Idea: n => n+1
     - Logic: Returns successor of n
 |#
-(define succ
-    (lambda (n)
-        (lambda (f)
-            (lambda (x) 
-                (f ((n f) x))
-            )
-        )
-    )
-)
+(def succ n f x = (f ((n f) x)))
 
 #|
     ~ CHURCH READER ~
@@ -53,11 +46,7 @@
     - Contract: nat => readable(nat)
     - Logic: Outputs n for user 
 |#
-(define n-read
-    (lambda (n)
-        ((n (lambda (x) (+ x 1))) 0)
-    )
-)
+(def n-read n = ((n (lambda (x) (+ x 1))) 0))
 
 ;===================================================
 
@@ -83,13 +72,7 @@
     - Idea: m,n => m+n
     - Logic: Repeatedly applies SUCCESSION m times to n
 |#
-(define add
-    (lambda (m)
-        (lambda (n) 
-            ((m succ) n)
-        )
-    )
-)
+(def add m n = ((m succ) n))
 
 #|
     ~ MULTIPLICATION ~
@@ -98,13 +81,7 @@
     - Logic: Multiplication is repeated addition so this...
         repeatedly applies ADDITION n times to m on zero
 |#
-(define mult
-    (lambda (m)
-        (lambda (n) 
-            ((n (add m)) zero)
-        )
-    )
-)
+(def mult m n = ((n (add m)) zero))
 
 #|
     ~ EXPONENTIATION ~
@@ -113,13 +90,7 @@
     - Logic: Exponentiation is repeated multiplication so this...
         repeatedly applies MULTIPLICATION n times to m on one
 |#
-(define exp
-    (lambda (m)
-        (lambda (n) 
-            ((n (mult m)) one)
-        )
-    )
-)
+(def exp m n = ((n (mult m)) one))
 
 #|
     ~ PREDECESSOR ~
@@ -131,16 +102,11 @@
     - Logic: Successively builds up n from 0...
                 but constant function (\u.x) cuts one out
 |#
-(define pred
-    (lambda (n)
-        (lambda (f)
-            (lambda (x)
-                (((n (lambda (g)
-                        (lambda (h) (h (g f)))))
-                    (lambda (u) x))
-                 (lambda (a) a))
-            )
-        )
+(def pred n f x =
+    (((n
+        (lambda (g) (lambda (h) (h (g f)))))    
+            (lambda (u) x))
+                (lambda (a) a)
     )
 )
 
@@ -150,13 +116,7 @@
     - Idea: m,n => m-n
     - Logic: Repeatedly applies PREDECESSOR n times from m
 |#
-(define sub
-    (lambda (m)
-        (lambda (n) 
-            ((n pred) m)
-        )
-    )
-)
+(def sub m n = ((n pred) m))
 
 ;===================================================
 
@@ -172,11 +132,7 @@
         - zero takes second argument, returns true
         - other numbers always return constant false, disregarding true 
 |#
-(define isZero
-    (lambda (n)
-        ((n (lambda (x) false)) true)
-    )
-)
+(def isZero n = ((n (lambda (x) false)) true))
 
 #|
     ~ GREATER-THAN-OR-EQUAL ~
@@ -187,13 +143,7 @@
     - Logic: Check if n-m is zero. 
                 Since pred(0) == 0, n-m will only equal 0 if (m >= n)
 |#
-(define gte
-    (lambda (m)
-        (lambda (n) 
-            (isZero ((sub n) m))
-        )
-    )
-)
+(def gte m n = (isZero ((sub n) m)))
 
 #|
     ~ LESS-THAN-OR-EQUAL ~
@@ -204,13 +154,7 @@
     - Logic: Check if m-n is zero.
                 Since pred(0) == 0, m-n will only equal 0 if (m <= n)
 |#
-(define lte
-    (lambda (m)
-        (lambda (n) 
-            (isZero ((sub m) n))
-        )
-    )
-)
+(def lte m n = (isZero ((sub m) n)))
 
 #|
     ~ EQUAL ~
@@ -220,13 +164,7 @@
                 else => false
     - Logic: Check if (m >= n) AND (m <= n)
 |#
-(define eq
-    (lambda (m)
-        (lambda (n) 
-            ((_and ((lte m) n)) ((gte m) n))
-        )
-    )
-)
+(def eq m n = ((_and ((lte m) n)) ((gte m) n)))
 
 #|
     ~ GREATER-THAN ~
@@ -236,12 +174,10 @@
                 else => false
     - Logic: Check if (m >= n) AND not(m == n)
 |#
-(define gt
-    (lambda (m)
-        (lambda (n)  
-            ((_and ((gte m) n)) (_not ((eq m) n)))      
-        )
-    )
+(def gt m n = 
+    ((_and 
+        ((gte m) n)) 
+        (_not ((eq m) n)))
 )
 
 #|
@@ -252,12 +188,10 @@
                 else => false
     - Logic: Check if (m <= n) AND not(m == n)
 |#
-(define lt
-    (lambda (m)
-        (lambda (n)  
-            ((_and ((lte m) n)) (_not ((eq m) n)))      
-        )
-    )
+(def lt m n = 
+    ((_and 
+        ((lte m) n)) 
+        (_not ((eq m) n)))
 )
 
 ;===================================================

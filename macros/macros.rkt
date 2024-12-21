@@ -27,7 +27,15 @@
            (lambda (arg2)
              (lambda (arg3)
                (lambda (arg4)
-                 (lambda (arg5) body))))))]))
+                 (lambda (arg5) body))))))]
+    [(_ name arg1 arg2 arg3 arg4 arg5 arg6 = body)
+     #'(define name
+         (lambda (arg1)
+           (lambda (arg2)
+             (lambda (arg3)
+               (lambda (arg4)
+                 (lambda (arg5) 
+                   (lambda (arg6) body)))))))]))
 
 (define-syntax (_let stx)
   (syntax-case stx (=)
