@@ -43,14 +43,14 @@
 ; - Logic: get head of pair
 (define head
     (lambda (obj)
-        (head obj)
+        (true obj)
     )
 )
 ; - Structure: {type,val} => val
 ; - Logic: get tail of pair
 (define tail
     (lambda (obj)
-        (tail obj)
+        (false obj)
     )
 )
 
