@@ -62,9 +62,9 @@
                 else make output negative and use regular pred
 |#
 (def succZ z =
-    ((((_or ((eq (_tail z)) zero)) (_head z))
-        ((makeZ true) (succ (_tail z))))
-        ((makeZ false) (pred (_tail z)))))
+    ((((_or ((eq (tail z)) zero)) (head z))
+        ((makeZ true) (succ (tail z))))
+        ((makeZ false) (pred (tail z)))))
 
 #|
     ~ CHURCH INT READER ~
@@ -76,9 +76,9 @@
                     else appends minus sign
 |#
 (def z-read z =
-    ((((_or (_head z)) (isZero (_tail z)))
-        (n-read (_tail z)))
-        (string-append "-" (number->string (n-read (_tail z))))))
+    ((((_or (head z)) (isZero (tail z)))
+        (n-read (tail z)))
+        (string-append "-" (number->string (n-read (tail z))))))
 
 ;===================================================
 
@@ -117,13 +117,13 @@
                         else take difference and use lt to figure sign
 |#
 (def addZ z1 z2 =
-    ((((_and (_head z1)) (_head z2))
-            ((makeZ true) ((add (_tail z1)) (_tail z2))))
-            ((((_and (_not (_head z1))) (_not (_head z2)))
-                ((makeZ false) ((add (_tail z1)) (_tail z2))))
-                (((_head z1)
-                    ((makeZ ((gt (_tail z1)) (_tail z2))) ((sub (_tail z2)) (_tail z1))))
-                    ((makeZ ((lt (_tail z1)) (_tail z2))) ((sub (_tail z1)) (_tail z2)))))))
+    ((((_and (head z1)) (head z2))
+            ((makeZ true) ((add (tail z1)) (tail z2))))
+            ((((_and (_not (head z1))) (_not (head z2)))
+                ((makeZ false) ((add (tail z1)) (tail z2))))
+                (((head z1)
+                    ((makeZ ((gt (tail z1)) (tail z2))) ((sub (tail z2)) (tail z1))))
+                    ((makeZ ((lt (tail z1)) (tail z2))) ((sub (tail z1)) (tail z2)))))))
 
 #|
     ~ SUBTRACTION ~
@@ -134,7 +134,7 @@
 (def subZ z1 z2 = 
     ((addZ 
         z1) 
-        ((makeZ (_not (_head z2))) (_tail z2))))
+        ((makeZ (_not (head z2))) (tail z2))))
 
 #|
     ~ MULTIPLICATION ~
@@ -145,8 +145,8 @@
 |#
 (def multZ z1 z2 = 
     ((makeZ 
-        (_not ((xor (_head z1)) (_head z2)))) 
-        ((mult (_tail z1)) (_tail z2))))
+        (_not ((xor (head z1)) (head z2)))) 
+        ((mult (tail z1)) (tail z2))))
 
 #|
     ~ DIVISION ~
@@ -157,8 +157,8 @@
 |#
 (def divZ z1 z2 = 
     ((makeZ
-        (_not ((xor (_head z1)) (_head z2)))) 
-        ((div (_tail z1)) (_tail z2))))
+        (_not ((xor (head z1)) (head z2)))) 
+        ((div (tail z1)) (tail z2))))
 
 ;===================================================
 
@@ -170,7 +170,7 @@
     - Logic: Check if (n part of z is zero)
                 true, else false
 |#
-(def isZeroZ z = (isZero (_tail z)))
+(def isZeroZ z = (isZero (tail z)))
 
 #|
     ~ GREATER THAN OR EQUAL ~
@@ -185,11 +185,11 @@
                     else (z1 positive OR both z1 AND z2 equal zero)
 |#
 (def gteZ z1 z2 = 
-    ((((_and (_head z1)) (_head z2))
-            ((gte (_tail z1)) (_tail z2)))
-            ((((_and (_not (_head z1))) (_not (_head z2)))
-                    ((lte (_tail z1)) (_tail z2)))
-                    ((_or (_head z1)) ((_and (isZeroZ z1)) (isZeroZ z2))))))
+    ((((_and (head z1)) (head z2))
+            ((gte (tail z1)) (tail z2)))
+            ((((_and (_not (head z1))) (_not (head z2)))
+                    ((lte (tail z1)) (tail z2)))
+                    ((_or (head z1)) ((_and (isZeroZ z1)) (isZeroZ z2))))))
 
 #|
     ~ LESS THAN OR EQUAL ~
@@ -204,11 +204,11 @@
                     else (z2 positive OR both z1 AND z2 equal zero)
 |#
 (def lteZ z1 z2 = 
-    ((((_and (_head z1)) (_head z2))
-            ((lte (_tail z1)) (_tail z2)))
-            ((((_and (_not (_head z1))) (_not (_head z2)))
-                    ((gte (_tail z1)) (_tail z2)))
-                    ((_or (_head z2)) ((_and (isZeroZ z1)) (isZeroZ z2))))))
+    ((((_and (head z1)) (head z2))
+            ((lte (tail z1)) (tail z2)))
+            ((((_and (_not (head z1))) (_not (head z2)))
+                    ((gte (tail z1)) (tail z2)))
+                    ((_or (head z2)) ((_and (isZeroZ z1)) (isZeroZ z2))))))
 
 #|
     ~ EQUAL ~

@@ -50,14 +50,14 @@
     - Contract: {func,func} => func
     - Logic: Returns "head" or "top" or "car" of pair
 |#
-(def _head f = (f true))
+(def head f = (f true))
 
 #|
     ~ TAIL ~
     - Contract: {func,func} => func
     - Logic: Returns "tail" or "bottom" or "cdr" of pair
 |#
-(def _tail f = (f false))
+(def tail f = (f false))
 
 #|
     ~ ONE ELEMENT LIST MAKER ~
@@ -84,17 +84,17 @@
         (lambda (l acc)
             (cond
                 [(equal? l nil) (string-append acc "]")]
-                [(equal? (_tail l) nil)
-                    (let ([result (read-fn (_head l))])
+                [(equal? (tail l) nil)
+                    (let ([result (read-fn (head l))])
                     (string-append acc
                         (if (string? result)
                             result
                             (number->string result))
                         "]"))]
                 [else
-                    (helper (_tail l)
+                    (helper (tail l)
                         (string-append acc 
-                            (let ([result (read-fn (_head l))])
+                            (let ([result (read-fn (head l))])
                                 (if (string? result)
                                     result
                                     (number->string result)))
@@ -138,7 +138,7 @@
     - Idea: Return value of list at index i
     - Logic: Take head at ith tail of list
 |#
-(def ind list i = (_head ((i _tail) list)))
+(def ind list i = (head ((i tail) list)))
 
 ;===================================================
 
@@ -172,7 +172,7 @@
 (def rev-helper f oldList newList = 
     (((isNil oldList)
         newList)
-        ((f (_tail oldList)) ((pair (_head oldList)) newList))))
+        ((f (tail oldList)) ((pair (head oldList)) newList))))
 
 ;===================================================
 
@@ -251,8 +251,8 @@
     ((((_or (isZero n)) (isNil list))
             nil)
             ((pair 
-                (_head list)) 
-                ((f (pred n)) (_tail list)))))
+                (head list)) 
+                ((f (pred n)) (tail list)))))
 
 #|
     ~ TAKE TAIL ~

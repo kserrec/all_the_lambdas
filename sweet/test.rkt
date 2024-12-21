@@ -5,7 +5,8 @@
          "lists.rkt"
          "logic.rkt"
          "church.rkt"
-         "recursion.rkt")
+         "recursion.rkt"
+         "types.rkt")
 
 ;===================================================
 
@@ -88,15 +89,15 @@
 (newline)
 
 
-(display "\nif(isZero(0))(1)(2)): ")
-(define if-isZero0-1-2 (((_if (isZero zero)) one) two))
-(display (n-read if-isZero0-1-2))
-(newline)
+; (display "\nif(isZero(0))(1)(2)): ")
+; (define if-isZero0-1-2 (((_if (isZero zero)) one) two))
+; (display (n-read if-isZero0-1-2))
+; (newline)
 
-(display "\nif(isZero(1))(1)(2)): ")
-(define if-isZero1-1-2 (((_if (isZero one)) one) two))
-(display (n-read if-isZero1-1-2))
-(newline)
+; (display "\nif(isZero(1))(1)(2)): ")
+; (define if-isZero1-1-2 (((_if (isZero one)) one) two))
+; (display (n-read if-isZero1-1-2))
+; (newline)
 
 ;===================================================
 
@@ -406,4 +407,119 @@
 (newline)
 (display "l_1_2_4_5_125 ind of 3: ")
 (display (n-read ((binarySearch l_1_2_4_5_125) three)))
+(newline)
+
+;================================================
+; (display (n-read (_cond true ? two : three)))
+; (newline)
+
+(display (n-read (_if true _then two _else three)))
+(newline)
+
+(display "B-READ(TRUE): ")
+(display (B-READ TRUE))
+(newline)
+
+(display "B-READ(FALSE): ")
+(display (B-READ FALSE))
+(newline)
+
+(define ZERO (makeNat zero))
+(define ONE (makeNat one))
+(define TWO (makeNat two))
+(display "B-READ(TWO): ")
+(display (B-READ TWO))
+(newline)
+
+(display "N-READ(TWO): ")
+(display (N-READ TWO))
+(newline)
+
+(define ONE-TWENTY-FIVE (makeNat one-twenty-five))
+(display "N-READ(125): ")
+(display (N-READ ONE-TWENTY-FIVE))
+(newline)
+
+(display "B-READ(IS_ZERO(ZERO)): ")
+(display (B-READ (IS_ZERO ZERO)))
+(newline)
+
+(display "B-READ(IS_ZERO(ONE)): ")
+(display (B-READ (IS_ZERO ONE)))
+(newline)
+
+(display "B-READ(IS_ZERO(TWO)): ")
+(display (B-READ (IS_ZERO TWO)))
+(newline)
+
+(display "B-READ(IS_ZERO(FALSE)): ")
+(display (B-READ (IS_ZERO FALSE)))
+(newline)
+
+(display "B-READ(IS_ZERO(BOOL_ERROR)): ")
+(display (B-READ (IS_ZERO BOOL_ERROR)))
+(newline)
+
+(display "B-READ(AND(TRUE)(TRUE)): ")
+(display (B-READ ((AND TRUE) TRUE)))
+(newline)
+
+(display "B-READ(AND(TRUE)(FALSE)): ")
+(display (B-READ ((AND TRUE) FALSE)))
+(newline)
+
+(display "B-READ(AND(FALSE)(TRUE)): ")
+(display (B-READ ((AND FALSE) TRUE)))
+(newline)
+
+(display "B-READ(AND(FALSE)(FALSE)): ")
+(display (B-READ ((AND FALSE) FALSE)))
+(newline)
+
+(display "B-READ(AND(TRUE)(BOOL_ERROR)): ")
+(display (B-READ ((AND TRUE) BOOL_ERROR)))
+(newline)
+
+(display "B-READ(AND(TRUE)(TWO)): ")
+(display (B-READ ((AND TRUE) TWO)))
+(newline)
+
+(display "B-READ(AND(TWO)(TRUE)): ")
+(display (B-READ ((AND TWO) TRUE)))
+(newline)
+
+(display "B-READ(AND(IS_ZERO(FALSE))(TRUE)): ")
+(display (B-READ ((AND (IS_ZERO FALSE)) TRUE)))
+(newline)
+
+(display "B-READ(AND(TRUE)(IS_ZERO(FALSE))): ")
+(display (B-READ ((AND TRUE) (IS_ZERO FALSE))))
+(newline)
+
+(display "B-READ(NOT(TRUE)): ")
+(display (B-READ (NOT TRUE)))
+(newline)
+
+(display "B-READ(NOT(FALSE)): ")
+(display (B-READ (NOT FALSE)))
+(newline)
+
+(display "B-READ (NOT(TWO)): ")
+(display (B-READ (NOT TWO)))
+(newline)
+
+(display "B-READ (NOT(IS_ZERO(ZERO))): ")
+(display (B-READ (NOT (IS_ZERO ZERO))))
+(newline)
+
+(display "B-READ (NOT(IS_ZERO(TWO))): ")
+(display (B-READ (NOT (IS_ZERO TWO))))
+(newline)
+
+(display "B-READ (NOT(IS_ZERO(FALSE))): ")
+(display (B-READ (NOT (IS_ZERO FALSE))))
+(newline)
+
+(display "B-READ (NOT(IS_ZERO(NOT(TWO)))): ")
+(display (B-READ (NOT (IS_ZERO (NOT TWO)))))
 (newline)

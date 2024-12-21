@@ -57,7 +57,7 @@
     - Contract: {func,func} => func
     - Logic: Returns "head" or "top" or "car" of pair
 |#
-(define _head
+(define head
     (lambda (f) 
         (f true)
     )
@@ -68,7 +68,7 @@
     - Contract: {func,func} => func
     - Logic: Returns "tail" or "bottom" or "cdr" of pair
 |#
-(define _tail
+(define tail
     (lambda (f) 
         (f false)
     )
@@ -110,17 +110,17 @@
             (lambda (l acc)
                 (cond
                     [(equal? l nil) (string-append acc "]")]
-                    [(equal? (_tail l) nil)
-                      (let ([result (read-fn (_head l))])
+                    [(equal? (tail l) nil)
+                      (let ([result (read-fn (head l))])
                         (string-append acc
                           (if (string? result)
                               result
                               (number->string result))
                           "]"))]
                     [else
-                      (helper (_tail l)
+                      (helper (tail l)
                             (string-append acc 
-                                (let ([result (read-fn (_head l))])
+                                (let ([result (read-fn (head l))])
                                   (if (string? result)
                                       result
                                       (number->string result)))
@@ -132,9 +132,9 @@
 
 ; (define z-read
 ;     (lambda (z1)
-;         ((((_or (_head z1)) (isZero (_tail z1)))
-;             (n-read (_tail z1)))
-;             (string-append "-" (number->string (n-read (_tail z1))))
+;         ((((_or (head z1)) (isZero (tail z1)))
+;             (n-read (tail z1)))
+;             (string-append "-" (number->string (n-read (tail z1))))
 ;         )
 ;     )
 ; )
@@ -195,7 +195,7 @@
 (define ind
     (lambda (list)
         (lambda (i)
-            (_head ((i _tail) list))
+            (head ((i tail) list))
         )
     )
 )
@@ -247,7 +247,7 @@
             (lambda (newList)
                 (((isNil oldList)
                     newList)
-                    ((f (_tail oldList)) ((pair (_head oldList)) newList))
+                    ((f (tail oldList)) ((pair (head oldList)) newList))
                 )
             )
         )
@@ -376,8 +376,8 @@
                 ((((_or (isZero n)) (isNil list))
                     nil)
                     ((pair 
-                        (_head list)) 
-                        ((f (pred n)) (_tail list))
+                        (head list)) 
+                        ((f (pred n)) (tail list))
                     )
                 )
             )
