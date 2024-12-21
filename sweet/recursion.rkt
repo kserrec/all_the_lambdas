@@ -32,9 +32,9 @@
 
 ; FACT-HELPER
 (def fact-helper f n = 
-    (((isZero n)              
-        one)                    
-        ((mult n) (f (pred n)))
+    (_if (isZero n)              
+        _then one                   
+        _else ((mult n) (f (pred n)))
     )
 )
 
@@ -55,14 +55,11 @@
 
 ; FIB-HELPER
 (def fib-helper f n = 
-    (((isZero n)
-        zero)
-        (((isZero (pred n))
-            one)
-            ((add (f ((two pred) n))) (f (pred n)))
-        )
-    )
-)
+    (_if (isZero n)
+        _then zero
+        _else (_if (isZero (pred n))
+                _then one
+                _else ((add (f ((two pred) n))) (f (pred n))))))
 
 ;===================================================
 
@@ -79,10 +76,8 @@
 
 ; N-SUM
 (def nSum-helper f n =
-    (((isZero n)
-        zero)
-        ((add n) (f (pred n)))
-    )
-)
+    (_if (isZero n)
+        _then zero
+        _else ((add n) (f (pred n)))))
 
 ;===================================================

@@ -34,7 +34,7 @@
     - Logic: By logic of true/false, condition func1 "picks" func2 or func3,
                 the first or second function passed to it
 |#
-(def _if check case1 case2 = ((check case1) case2))
+; (def _if check case1 case2 = ((check case1) case2))
 
 #|
     ~ BOOLEAN READER ~

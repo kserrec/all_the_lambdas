@@ -21,9 +21,8 @@
 
 ; DIV-HELPER
 (def div-helper f a b n =
-    ((((gt b) ((sub a) ((mult n) b)))
-        n)
-        (((f a) b) (succ n)))
-)
+    (_if ((gt b) ((sub a) ((mult n) b))) 
+        _then n
+        _else (((f a) b) (succ n))))
 
 ;===================================================

@@ -1,6 +1,6 @@
 #lang lazy
 (require (for-syntax racket/base))
-(provide def _let)
+(provide def _let _if)
 
 (define-syntax (def stx)
   (syntax-case stx (=)
@@ -33,3 +33,13 @@
   (syntax-case stx (=)
     [(_ name = expr body)
      #'((lambda (name) body) expr)]))
+
+; (define-syntax (_cond stx)
+;   (syntax-case stx (?)
+;     [(_ check ? _then : _else)
+;      #'((check _then) _else)]))
+
+(define-syntax (_if stx)
+  (syntax-case stx (_then)
+    [(_ CONDITION _then THEN _else ELSE)
+     #'((CONDITION THEN) ELSE)]))
