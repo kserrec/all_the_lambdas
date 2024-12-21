@@ -136,6 +136,7 @@
 
 #|
     ~ CHECKS TYPE ~
+    - Idea: checks if object passed is given type
     - Structure: (type,obj) => bool
 |#
 (def isType type obj = ((eq (head obj)) type))
@@ -170,20 +171,17 @@
 
 ;===================================================
 
-; ERROR PROPAGATING WITH MAIN AND PROPAGATOR
-;   - generalized solution for single argument functions
-;   - get to maintain original function without alteration
+#|
+    ~ ERROR PROPAGATORS ~
+    - Idea: Takes function, its name, types of its arguments, and arguments
+                to redefine function with ability to handle and propagate errors
+|#
 
-(def ERR-T-ARG ARG =
-    (_if ((eq boolType) ARG)
-        _then BOOL_ERROR
-        _else (_if ((eq natType) ARG)
-                _then NAT_ERROR
-                _else (_if ((eq intType) ARG)
-                        _then INT_ERROR
-                        _else ERROR))))
-
-; SINGLE ARG ERROR PROPAGATION
+#|
+    ~ SINGLE ARG ERROR PROPAGATION ~
+    - Idea: Built for functions which take one argument
+    - Contract: (func, funcName, type, arg) => func
+|#
 (def ADD_ERR_PROP FUNC FUNC-NAME ARG-TYPE X = 
     ; make/chain errors for arg if needed
     (_let errMsg = (wrap FUNC-NAME (E-READ (ERR-T-ARG ARG-TYPE)))
@@ -196,8 +194,11 @@
                 _then chainErrs
                 _else errType))))))
 
-
-; DOUBLE ARG ERROR PROPAGATION
+#|
+    ~ DOUBLE ARG ERROR PROPAGATION ~
+    - Idea: Built for functions which take two arguments
+    - Contract: (func, funcName, type, type, arg, arg) => func
+|#
 (def ADD_ERR_PROP2 FUNC FUNC-NAME ARG-T1 ARG-T2 X1 X2 = 
     ; make/chain errors for arg 1 if needed
     (_let errMsg1 = (wrap FUNC-NAME (wrap "arg1" (E-READ (ERR-T-ARG ARG-T1))))
@@ -218,15 +219,27 @@
                     _then chainErrs1
                     _else errType1)))))))))
 
+#|
+    ~ GETS ERROR TYPE BY ARG TYPE ~
+    - Idea: Takes an argument type and returns related error type
+    - Contract: TYPE => ERROR
+|#
+(def ERR-T-ARG ARG-TYPE =
+    (_if ((eq boolType) ARG-TYPE)
+        _then BOOL_ERROR
+        _else (_if ((eq natType) ARG-TYPE)
+                _then NAT_ERROR
+                _else (_if ((eq intType) ARG-TYPE)
+                        _then INT_ERROR
+                        _else ERROR))))
+
 
 ;===================================================
 
 #|
-    ~ NOT (TYPED) ~
-    - Contract: BOOL => BOOL/BOOL_ERROR
-    - Logic: if (isBool x)
-                    then makeBool (not (val x))
-                    else BOOL_ERROR
+    ~ NOT ~
+    - Contract: BOOL => BOOL/ERROR
+    - Logic: not function with type checking
 |#
 (def _NOT B = 
     (_if (isBool B)
@@ -234,28 +247,28 @@
         _else BOOL_ERROR))
 
 (def NOT B = ((((ADD_ERR_PROP _NOT) "NOT") boolType) B))
-#|
-    ~ AND (TYPED) ~
-    - Contract: (BOOL,BOOL) => BOOL/BOOL_ERROR
-    - Logic: if (and (isBool x)(isBool y))
-                    then makeBool (and (val x)(val y))
-                    else BOOL_ERROR
-|#
 
 ;===================================================
+
+#|
+    ~ AND ~
+    - Contract: (BOOL,BOOL) => BOOL/ERROR
+    - Logic: and function with type checking
+|#
 (def _AND B1 B2 = 
     (_if ((_and (isBool B1)) (isBool B2))
         _then (makeBool ((_and (val B1)) (val B2)))
         _else BOOL_ERROR))
 
 (def AND M N = ((((((ADD_ERR_PROP2 _AND) "AND") boolType) boolType) M) N))
-;===================================================
 
+;===================================================
 
 #|
     ~ IS ZERO
+    - Contract: NAT => BOOL/ERROR
+    - Logic: isZero function with type checking
 |#
-
 (def _IS_ZERO N = 
     (_if (isNat N)
         _then (_if (isZero (val N))
@@ -266,20 +279,31 @@
 (def IS_ZERO N = ((((ADD_ERR_PROP _IS_ZERO) "IS_ZERO") natType) N))
 ;===================================================
 
+
 #|
-    need to define 
-        - the rest of the logical operators
-        - numerical operators
-        - E-read, B-read, N-read
+    ~ READ TYPED VALUES ~
 |#
 
+
+#|
+    ~ READ ERROR MESSAGES ~
+|#
 (def E-READ E = (tail (tail E)))
 
+#|
+    ~ TYPE CHECKING HELPER FOR READING TYPED VALUES ~
+    - Idea: Protects typed reader if passed wrong type, reads as error
+    - Contract: (FUNC, OBJ) => READ(TYPE)
+|#
 (def T-READ FUNC OBJ = 
     (_if (isError OBJ)
         _then (E-READ OBJ)
         _else (FUNC OBJ)))
 
+#|
+    ~ READS BOOL TYPED VALUES ~
+    - Contract: BOOL => READ(BOOL)
+|#
 (def _B-READ B = 
     (_if (isBool B)
         _then (((val B) "bool:TRUE") "bool:FALSE")
@@ -287,6 +311,10 @@
     
 (def B-READ B = ((T-READ _B-READ) B))
 
+#|
+    ~ READS NAT TYPED VALUES ~
+    - Contract: NAT => READ(NAT)
+|#
 (def _N-READ N = 
     (_if (isNat N)
         _then (s-a "nat:" (n-s (n-read (val N))))
@@ -294,9 +322,21 @@
 
 (def N-READ N = ((T-READ _N-READ) N))
 
+#|
+    ~ READS INT TYPED VALUES ~
+    - Contract: INT => READ(INT)
+|#
 (def _Z-READ Z = 
     (_if (isInt Z)
         _then (s-a "int:" (n-s (z-read (val Z))))
         _else (E-READ INT_ERROR)))
 
 (def Z-READ Z = ((T-READ _Z-READ) Z))
+
+;===================================================
+
+#|
+    need to define 
+        - the rest of the logical operators
+        - numerical operators
+|#
