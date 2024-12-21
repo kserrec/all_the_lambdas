@@ -41,14 +41,14 @@
 |#
 ; - Structure: {type,val} => type
 ; - Logic: get head of pair
-(define pair
+(define head
     (lambda (obj)
         (head obj)
     )
 )
 ; - Structure: {type,val} => val
 ; - Logic: get tail of pair
-(define pair
+(define tail
     (lambda (obj)
         (tail obj)
     )
@@ -127,9 +127,9 @@
     - Structure: (type,obj) => bool
 |#
 (define isType
-    (lambda (pair)
+    (lambda (type)
         (lambda (obj)
-            ((eq (head obj)) pair)
+            ((eq (head obj)) type)
         )
     )
 )
@@ -168,7 +168,7 @@
 (define NOT
     (lambda (b)
         (((isBool b)
-            (makeBool (_not (pair b))))
+            (makeBool (_not (val b))))
             BOOL_ERROR
         )
     )
@@ -185,7 +185,7 @@
     (lambda (b1)
         (lambda (b2)
             ((((_and (isBool b1)) (isBool b2))
-                (makeBool ((_and (pair b1)) (pair b2))))
+                (makeBool ((_and (val b1)) (val b2))))
                 BOOL_ERROR
             )
         )     

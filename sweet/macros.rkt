@@ -34,11 +34,6 @@
     [(_ name = expr body)
      #'((lambda (name) body) expr)]))
 
-; (define-syntax (_cond stx)
-;   (syntax-case stx (?)
-;     [(_ check ? _then : _else)
-;      #'((check _then) _else)]))
-
 (define-syntax (_if stx)
   (syntax-case stx (_then)
     [(_ CONDITION _then THEN _else ELSE)
