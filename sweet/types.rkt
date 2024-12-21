@@ -170,92 +170,11 @@
 
 ;===================================================
 
-#|
-    ~ NOT (TYPED) ~
-    - Contract: BOOL => BOOL/BOOL_ERROR
-    - Logic: if (isBool x)
-                    then makeBool (not (val x))
-                    else BOOL_ERROR
-|#
-(def NOT_MAIN B = 
-    (_if (isBool B)
-        _then (makeBool (_not (val B)))
-        _else BOOL_ERROR))
-
-#|
-    ~ AND (TYPED) ~
-    - Contract: (BOOL,BOOL) => BOOL/BOOL_ERROR
-    - Logic: if (and (isBool x)(isBool y))
-                    then makeBool (and (val x)(val y))
-                    else BOOL_ERROR
-|#
-(def AND_MAIN B1 B2 = 
-    (_if ((_and (isBool B1)) (isBool B2))
-        _then (makeBool ((_and (val B1)) (val B2)))
-        _else BOOL_ERROR))
-
-
-(def AND B1 B2 = 
-    (_let funcErr = (makeBoolErr (wrap "AND" (E-READ BOOL_ERROR)))
-        (_if (isError B1)
-            _then B1
-            _else (_if (isError B2)
-                    _then B2
-                    _else (_if ((_and (isBool B1)) (isBool B2))
-                            _then (makeBool ((_and (val B1)) (val B2)))
-                            _else funcErr)))))
-
-;===================================================
-
-#|
-    ~ IS ZERO
-|#
-
-; 1. ORIGINAL
-; (def IS_ZERO N = 
-;     (_if (isNat N)
-;         _then (_if (isZero (val N))
-;                 _then TRUE
-;                 _else FALSE)
-;         _else NAT_ERROR))
-
-;===================================================
-
-; 2. ERROR PROPAGATING
-; (def IS_ZERO N = 
-;     (_let funcErr = (makeNatErr (wrap " IS_ZERO(" (E-READ NAT_ERROR)))
-;         (_if (isError N)
-;             _then N
-;             _else (_if (isNat N)
-;                     _then (_if (isZero (val N))
-;                             _then TRUE
-;                             _else FALSE)
-;                     _else funcErr))))
-
-;===================================================
-
-; 3. ERROR PROPAGATING WITH MAIN
-; (def IS_ZERO N = 
-;     (_let funcErr = (makeNatErr (wrap " IS_ZERO(" (E-READ NAT_ERROR)))
-;         (_if (isError N)
-;             _then N
-;             _else ((IS_ZERO_MAIN funcErr) N))))
-
-; (def IS_ZERO_MAIN ERR N = 
-;     (_if (isNat N)
-;         _then (_if (isZero (val N))
-;                 _then TRUE
-;                 _else FALSE)
-;         _else ERR))
-
-
-;===================================================
-
-; 4. ERROR PROPAGATING WITH MAIN AND PROPAGATOR
+; ERROR PROPAGATING WITH MAIN AND PROPAGATOR
 ;   - generalized solution for single argument functions
 ;   - get to maintain original function without alteration
 
-(def ERR-TYPE-FROM-ARG ARG =
+(def ERR-T-ARG ARG =
     (_if ((eq boolType) ARG)
         _then BOOL_ERROR
         _else (_if ((eq natType) ARG)
@@ -266,30 +185,85 @@
 
 ; SINGLE ARG ERROR PROPAGATION
 (def ADD_ERR_PROP FUNC FUNC-NAME ARG-TYPE X = 
-    (_let errMsg = (wrap FUNC-NAME (E-READ (ERR-TYPE-FROM-ARG ARG-TYPE)))
-        (_let errType = (makeErr ((makeObj ARG-TYPE) errMsg))
-            (_let chainErrs = (makeErr ((makeObj ARG-TYPE) (chain (E-READ X) errMsg)))
-                (_if ((isType ARG-TYPE) X)
-                    _then (FUNC X)
-                    _else (_if (isError X)
-                            _then chainErrs
-                            _else errType))))))
+    ; make/chain errors for arg if needed
+    (_let errMsg = (wrap FUNC-NAME (E-READ (ERR-T-ARG ARG-TYPE)))
+    (_let errType = (makeErr ((makeObj ARG-TYPE) errMsg))
+    (_let chainErrs = (makeErr ((makeObj ARG-TYPE) (chain (E-READ X) errMsg)))
+        ; check types
+        (_if ((isType ARG-TYPE) X)
+             _then (FUNC X)
+            _else (_if (isError X)
+                _then chainErrs
+                _else errType))))))
 
-; MAIN LOGIC FUNCTION
-(def IS_ZERO_MAIN N = 
+
+; DOUBLE ARG ERROR PROPAGATION
+(def ADD_ERR_PROP2 FUNC FUNC-NAME ARG-T1 ARG-T2 X1 X2 = 
+    ; make/chain errors for arg 1 if needed
+    (_let errMsg1 = (wrap FUNC-NAME (wrap "arg1" (E-READ (ERR-T-ARG ARG-T1))))
+    (_let errType1 = (makeErr ((makeObj ARG-T1) errMsg1))
+    (_let chainErrs1 = (makeErr ((makeObj ARG-T1) (chain (E-READ X1) errMsg1)))
+    ; make/chain errors for arg 2 if needed
+    (_let errMsg2 = (wrap FUNC-NAME (wrap "arg2" (E-READ (ERR-T-ARG ARG-T2))))
+    (_let errType2 = (makeErr ((makeObj ARG-T2) errMsg2))
+    (_let chainErrs2 = (makeErr ((makeObj ARG-T2) (chain (E-READ X2) errMsg2)))
+        ; check types
+        (_if ((isType ARG-T1) X1)
+            _then (_if ((isType ARG-T2) X2)
+                    _then ((FUNC X1) X2)
+                    _else (_if (isError X2)
+                            _then chainErrs2
+                            _else errType2))
+            _else (_if (isError X1)
+                    _then chainErrs1
+                    _else errType1)))))))))
+
+
+;===================================================
+
+#|
+    ~ NOT (TYPED) ~
+    - Contract: BOOL => BOOL/BOOL_ERROR
+    - Logic: if (isBool x)
+                    then makeBool (not (val x))
+                    else BOOL_ERROR
+|#
+(def _NOT B = 
+    (_if (isBool B)
+        _then (makeBool (_not (val B)))
+        _else BOOL_ERROR))
+
+(def NOT B = ((((ADD_ERR_PROP _NOT) "NOT") boolType) B))
+#|
+    ~ AND (TYPED) ~
+    - Contract: (BOOL,BOOL) => BOOL/BOOL_ERROR
+    - Logic: if (and (isBool x)(isBool y))
+                    then makeBool (and (val x)(val y))
+                    else BOOL_ERROR
+|#
+
+;===================================================
+(def _AND B1 B2 = 
+    (_if ((_and (isBool B1)) (isBool B2))
+        _then (makeBool ((_and (val B1)) (val B2)))
+        _else BOOL_ERROR))
+
+(def AND M N = ((((((ADD_ERR_PROP2 _AND) "AND") boolType) boolType) M) N))
+;===================================================
+
+
+#|
+    ~ IS ZERO
+|#
+
+(def _IS_ZERO N = 
     (_if (isNat N)
         _then (_if (isZero (val N))
                 _then TRUE
                 _else FALSE)
         _else NAT_ERROR))
 
-
-(def IS_ZERO N = ((((ADD_ERR_PROP IS_ZERO_MAIN) "IS_ZERO") natType) N))
-
-; try generic single arg error prop with NOT function
-(def NOT B = ((((ADD_ERR_PROP NOT_MAIN) "NOT") boolType) B))
-
-
+(def IS_ZERO N = ((((ADD_ERR_PROP _IS_ZERO) "IS_ZERO") natType) N))
 ;===================================================
 
 #|
@@ -301,23 +275,28 @@
 
 (def E-READ E = (tail (tail E)))
 
-(def B-READ B = 
-    (_if (isError B)
-        _then (E-READ B)
-        _else 
-            (_if (isBool B)
-                _then (((val B) "bool:TRUE") "bool:FALSE")
-                _else (E-READ BOOL_ERROR))))
+(def T-READ FUNC OBJ = 
+    (_if (isError OBJ)
+        _then (E-READ OBJ)
+        _else (FUNC OBJ)))
 
-(def N-READ N = 
+(def _B-READ B = 
+    (_if (isBool B)
+        _then (((val B) "bool:TRUE") "bool:FALSE")
+        _else (E-READ BOOL_ERROR)))
+    
+(def B-READ B = ((T-READ _B-READ) B))
+
+(def _N-READ N = 
     (_if (isNat N)
         _then (s-a "nat:" (n-s (n-read (val N))))
         _else (E-READ NAT_ERROR)))
 
-(def Z-READ Z = 
-    (_if (isError Z)
-        _then Z
-        _else 
-            (_if (isInt Z)
-                _then (s-a "int:" (n-s (z-read (val Z))))
-                _else (E-READ INT_ERROR))))
+(def N-READ N = ((T-READ _N-READ) N))
+
+(def _Z-READ Z = 
+    (_if (isInt Z)
+        _then (s-a "int:" (n-s (z-read (val Z))))
+        _else (E-READ INT_ERROR)))
+
+(def Z-READ Z = ((T-READ _Z-READ) Z))
