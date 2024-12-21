@@ -1,11 +1,11 @@
 #lang lazy
 (provide (all-defined-out))
-(require "macros/macros.rkt")
-(require "church.rkt"
-         "division.rkt"
-         "integers.rkt"
-         "lists.rkt"
-         "logic.rkt")
+(require "../macros/macros.rkt")
+(require "../church.rkt"
+         "../division.rkt"
+         "../integers.rkt"
+         "../lists.rkt"
+         "../logic.rkt")
 
 (define s-a string-append)
 (define (chain err1 err2) (s-a (s-a err1 "->") err2))
@@ -52,6 +52,7 @@
 
 #|
     ~ DEFINED TYPES ~
+    - types will be indicated by church numerals
 |#
 
 ;   ERROR
@@ -66,33 +67,37 @@
 ;===================================================
 
 #|
-    ~ TYPED OBJECT MAKERS ~
-    - Idea: each type will be a church numeral
+    ~ SPECIFIC TYPED OBJECT MAKERS ~
+    - Idea: 
+        - each type will be a church numeral
+        - typed objects are pairs {type, val}
+        - error-typed objects will store messages as nested pairs
+            - e.g. {errorType, {type, msg}}
 |#
 
 ;   Makes Error Type Objects
 ;   - Contract: (val) => ERROR
-(def makeErr val = ((makeObj errorType) val))
-(def makeErrErr errMsg = (makeErr (makeErr errMsg)))
+(def setErr val = ((makeObj errorType) val))
+(def setErrErr errMsg = (setErr (setErr errMsg)))
 
 ;   Makes Bool Type Objects
 ;   - Contract: (val) => bool
 (def makeBool val = ((makeObj boolType) val))
-(def makeBoolErr errMsg = (makeErr (makeBool errMsg)))
+(def makeBoolErr errMsg = (setErr (makeBool errMsg)))
 
 ;   Makes Natural Number Type Objects
 ;   - Contract: (val) => nat
 (def makeNat val = ((makeObj natType) val))
-(def makeNatErr errMsg = (makeErr (makeNat errMsg)))
+(def makeNatErr errMsg = (setErr (makeNat errMsg)))
 
 ;   Makes Integer Number Type Objects
 ;   - Contract: (val) => int
 (def makeInt val = ((makeObj intType) val))
-(def makeIntErr errMsg = (makeErr (makeInt errMsg)))
+(def makeIntErr errMsg = (setErr (makeInt errMsg)))
 
 ;   Makes Any Error Type Object
 ;   - Contract (type, errMsg) => {error, {type, errMsg}}
-(def makeSomeErr type errMsg = (makeErr (pair type errMsg)))
+(def makeSomeErr type errMsg = (setErr (pair type errMsg)))
 
 ;===================================================
 
@@ -103,7 +108,7 @@
 
 ;   Universal Error Type Object
 ;   - Idea: has type and val as pair(errorType,'ERROR')
-(define ERROR (makeErrErr "err:err"))
+(define ERROR (setErrErr "err:err"))
 
 ;   Boolean Error Type Object
 ;   - Idea: has type error and val as boolType
@@ -116,17 +121,6 @@
 ;   Int Error Type Object
 ;   - Idea: has type error and val as natType
 (define INT_ERROR (makeIntErr "err:int"))
-
-;===================================================
-
-#|
-    ~ BOOLEAN OBJECTS ~
-;   - Idea: Can list these exhaustively
-|#
-
-;   TRUE & FALSE
-(define TRUE (makeBool true))
-(define FALSE (makeBool false))
 
 ;===================================================
 
@@ -185,8 +179,8 @@
 (def ADD_ERR_PROP FUNC FUNC-NAME ARG-TYPE X = 
     ; make/chain errors for arg if needed
     (_let errMsg = (wrap FUNC-NAME (E-READ (ERR-T-ARG ARG-TYPE)))
-    (_let errType = (makeErr ((makeObj ARG-TYPE) errMsg))
-    (_let chainErrs = (makeErr ((makeObj ARG-TYPE) (chain (E-READ X) errMsg)))
+    (_let errType = (setErr ((makeObj ARG-TYPE) errMsg))
+    (_let chainErrs = (setErr ((makeObj ARG-TYPE) (chain (E-READ X) errMsg)))
         ; check types
         (_if ((isType ARG-TYPE) X)
              _then (FUNC X)
@@ -202,12 +196,12 @@
 (def ADD_ERR_PROP2 FUNC FUNC-NAME ARG-T1 ARG-T2 X1 X2 = 
     ; make/chain errors for arg 1 if needed
     (_let errMsg1 = (wrap FUNC-NAME (wrap "arg1" (E-READ (ERR-T-ARG ARG-T1))))
-    (_let errType1 = (makeErr ((makeObj ARG-T1) errMsg1))
-    (_let chainErrs1 = (makeErr ((makeObj ARG-T1) (chain (E-READ X1) errMsg1)))
+    (_let errType1 = (setErr ((makeObj ARG-T1) errMsg1))
+    (_let chainErrs1 = (setErr ((makeObj ARG-T1) (chain (E-READ X1) errMsg1)))
     ; make/chain errors for arg 2 if needed
     (_let errMsg2 = (wrap FUNC-NAME (wrap "arg2" (E-READ (ERR-T-ARG ARG-T2))))
-    (_let errType2 = (makeErr ((makeObj ARG-T2) errMsg2))
-    (_let chainErrs2 = (makeErr ((makeObj ARG-T2) (chain (E-READ X2) errMsg2)))
+    (_let errType2 = (setErr ((makeObj ARG-T2) errMsg2))
+    (_let chainErrs2 = (setErr ((makeObj ARG-T2) (chain (E-READ X2) errMsg2)))
         ; check types
         (_if ((isType ARG-T1) X1)
             _then (_if ((isType ARG-T2) X2)
@@ -237,53 +231,8 @@
 ;===================================================
 
 #|
-    ~ NOT ~
-    - Contract: BOOL => BOOL/ERROR
-    - Logic: not function with type checking
-|#
-(def _NOT B = 
-    (_if (isBool B)
-        _then (makeBool (_not (val B)))
-        _else BOOL_ERROR))
-
-(def NOT B = ((((ADD_ERR_PROP _NOT) "NOT") boolType) B))
-
-;===================================================
-
-#|
-    ~ AND ~
-    - Contract: (BOOL,BOOL) => BOOL/ERROR
-    - Logic: and function with type checking
-|#
-(def _AND B1 B2 = 
-    (_if ((_and (isBool B1)) (isBool B2))
-        _then (makeBool ((_and (val B1)) (val B2)))
-        _else BOOL_ERROR))
-
-(def AND M N = ((((((ADD_ERR_PROP2 _AND) "AND") boolType) boolType) M) N))
-
-;===================================================
-
-#|
-    ~ IS ZERO
-    - Contract: NAT => BOOL/ERROR
-    - Logic: isZero function with type checking
-|#
-(def _IS_ZERO N = 
-    (_if (isNat N)
-        _then (_if (isZero (val N))
-                _then TRUE
-                _else FALSE)
-        _else NAT_ERROR))
-
-(def IS_ZERO N = ((((ADD_ERR_PROP _IS_ZERO) "IS_ZERO") natType) N))
-;===================================================
-
-
-#|
     ~ READ TYPED VALUES ~
 |#
-
 
 #|
     ~ READ ERROR MESSAGES ~

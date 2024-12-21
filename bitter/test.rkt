@@ -1,16 +1,16 @@
-#lang s-exp "macros/lazy-with-macros.rkt"
-(require "macros/macros.rkt")
+#lang lazy
 (require "algorithms.rkt"
-         "division.rkt"
-         "lists.rkt"
-         "logic.rkt"
          "church.rkt"
+         "division.rkt"
+         "integers.rkt"
+         "lists.rkt"
+		 "logic.rkt"
          "recursion.rkt")
-(require "types/CHURCH.rkt"
-         "types/LOGIC.rkt"
-         "types/TYPES.rkt")
 
 ;===================================================
+
+; IDENTITY FUNCTION
+(define identity (lambda (x) x))
 
 (display "NOT TABLE")
 (display "\nnot(true): ")
@@ -90,16 +90,15 @@
 (display (b-read ((nand false) false)))
 (newline)
 
+(display "\nif(isZero(0))(1)(2)): ")
+(define if-isZero0-1-2 (((_if (isZero zero)) one) two))
+(display (n-read if-isZero0-1-2))
+(newline)
 
-; (display "\nif(isZero(0))(1)(2)): ")
-; (define if-isZero0-1-2 (((_if (isZero zero)) one) two))
-; (display (n-read if-isZero0-1-2))
-; (newline)
-
-; (display "\nif(isZero(1))(1)(2)): ")
-; (define if-isZero1-1-2 (((_if (isZero one)) one) two))
-; (display (n-read if-isZero1-1-2))
-; (newline)
+(display "\nif(isZero(1))(1)(2)): ")
+(define if-isZero1-1-2 (((_if (isZero one)) one) two))
+(display (n-read if-isZero1-1-2))
+(newline)
 
 ;===================================================
 
@@ -385,12 +384,53 @@
 (display (n-read div_4_5))
 (newline)
 
+;===================================================
+
+(display "\nLISTS")
+(display "\n{true,false}(true): ")
+(display (b-read (((pair true) false) true)))
+(newline)
+(display "{true,false}(false): ")
+(display (b-read (((pair true) false) false)))
+(newline)
+(display "{false,true}(true): ")
+(display (b-read (((pair false) true) true)))
+(newline)
+(display "{false,true}(false): ")
+(display (b-read (((pair false) true) false)))
+(newline)
+(newline)
+(display "\nhead({true,false}): ")
+(display (b-read (head ((pair true) false))))
+(newline)
+(display "tail({true,false}): ")
+(display (b-read (tail ((pair true) false))))
+(newline)
+(display "\nhead({one,five}): ")
+(display (n-read (head ((pair one) five))))
+(newline)
+(display "tail({one,five}): ")
+(display (n-read (tail ((pair one) five))))
+(newline)
+
+(display "onelist(five) => [5]: ")
+(display "\nhead([5]): ")
+(display (n-read (head (onelist five))))
+(display "\ntail([5]): ")
+(display (n-read (tail (onelist five))))
+(newline)
+(display (l-read (onelist five) n-read))
+(newline)
+(display (l-read ((twolist five) two) n-read))
+(newline)
+(display (l-read ((pair three ) ((twolist five) two)) n-read))
+(newline)
 
 (define l_4_5_125 ((pair four) ((twolist five) one-twenty-five)))
 (define l_one_two ((twolist one) two))
 (define l_1_2_4_5_125 ((app l_one_two) l_4_5_125))
 (display "[1,2,4,5,125]: ")
-(display ((l-read l_1_2_4_5_125) n-read))
+(display (l-read l_1_2_4_5_125 n-read))
 (newline)
 (display "l_1_2_4_5_125 ind of 1: ")
 (display (n-read ((binarySearch l_1_2_4_5_125) one)))
@@ -409,119 +449,4 @@
 (newline)
 (display "l_1_2_4_5_125 ind of 3: ")
 (display (n-read ((binarySearch l_1_2_4_5_125) three)))
-(newline)
-
-;================================================
-; (display (n-read (_cond true ? two : three)))
-; (newline)
-
-(display (n-read (_if true _then two _else three)))
-(newline)
-
-(display "B-READ(TRUE): ")
-(display (B-READ TRUE))
-(newline)
-
-(display "B-READ(FALSE): ")
-(display (B-READ FALSE))
-(newline)
-
-(define ZERO (makeNat zero))
-(define ONE (makeNat one))
-(define TWO (makeNat two))
-(display "B-READ(TWO): ")
-(display (B-READ TWO))
-(newline)
-
-(display "N-READ(TWO): ")
-(display (N-READ TWO))
-(newline)
-
-(define ONE-TWENTY-FIVE (makeNat one-twenty-five))
-(display "N-READ(125): ")
-(display (N-READ ONE-TWENTY-FIVE))
-(newline)
-
-(display "B-READ(IS_ZERO(ZERO)): ")
-(display (B-READ (IS_ZERO ZERO)))
-(newline)
-
-(display "B-READ(IS_ZERO(ONE)): ")
-(display (B-READ (IS_ZERO ONE)))
-(newline)
-
-(display "B-READ(IS_ZERO(TWO)): ")
-(display (B-READ (IS_ZERO TWO)))
-(newline)
-
-(display "B-READ(IS_ZERO(FALSE)): ")
-(display (B-READ (IS_ZERO FALSE)))
-(newline)
-
-(display "B-READ(IS_ZERO(BOOL_ERROR)): ")
-(display (B-READ (IS_ZERO BOOL_ERROR)))
-(newline)
-
-(display "B-READ(AND(TRUE)(TRUE)): ")
-(display (B-READ ((AND TRUE) TRUE)))
-(newline)
-
-(display "B-READ(AND(TRUE)(FALSE)): ")
-(display (B-READ ((AND TRUE) FALSE)))
-(newline)
-
-(display "B-READ(AND(FALSE)(TRUE)): ")
-(display (B-READ ((AND FALSE) TRUE)))
-(newline)
-
-(display "B-READ(AND(FALSE)(FALSE)): ")
-(display (B-READ ((AND FALSE) FALSE)))
-(newline)
-
-(display "B-READ(AND(TRUE)(BOOL_ERROR)): ")
-(display (B-READ ((AND TRUE) BOOL_ERROR)))
-(newline)
-
-(display "B-READ(AND(TRUE)(TWO)): ")
-(display (B-READ ((AND TRUE) TWO)))
-(newline)
-
-(display "B-READ(AND(TWO)(TRUE)): ")
-(display (B-READ ((AND TWO) TRUE)))
-(newline)
-
-(display "B-READ(AND(IS_ZERO(FALSE))(TRUE)): ")
-(display (B-READ ((AND (IS_ZERO FALSE)) TRUE)))
-(newline)
-
-(display "B-READ(AND(TRUE)(IS_ZERO(FALSE))): ")
-(display (B-READ ((AND TRUE) (IS_ZERO FALSE))))
-(newline)
-
-(display "B-READ(NOT(TRUE)): ")
-(display (B-READ (NOT TRUE)))
-(newline)
-
-(display "B-READ(NOT(FALSE)): ")
-(display (B-READ (NOT FALSE)))
-(newline)
-
-(display "B-READ (NOT(TWO)): ")
-(display (B-READ (NOT TWO)))
-(newline)
-
-(display "B-READ (NOT(IS_ZERO(ZERO))): ")
-(display (B-READ (NOT (IS_ZERO ZERO))))
-(newline)
-
-(display "B-READ (NOT(IS_ZERO(TWO))): ")
-(display (B-READ (NOT (IS_ZERO TWO))))
-(newline)
-
-(display "B-READ (NOT(IS_ZERO(FALSE))): ")
-(display (B-READ (NOT (IS_ZERO FALSE))))
-(newline)
-
-(display "B-READ (NOT(IS_ZERO(NOT(TWO)))): ")
-(display (B-READ (NOT (IS_ZERO (NOT TWO)))))
 (newline)
