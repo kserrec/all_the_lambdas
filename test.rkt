@@ -426,9 +426,6 @@
 (display (B-READ FALSE))
 (newline)
 
-(define ZERO (makeNat zero))
-(define ONE (makeNat one))
-(define TWO (makeNat two))
 (display "B-READ(TWO): ")
 (display (B-READ TWO))
 (newline)
@@ -525,3 +522,138 @@
 (display "B-READ (NOT(IS_ZERO(NOT(TWO)))): ")
 (display (B-READ (NOT (IS_ZERO (NOT TWO)))))
 (newline)
+
+; ===================================================
+
+(display "N-READ SUCC(TWO): ")
+(display (N-READ (SUCC TWO)))
+(newline)
+
+(display "N-READ SUCC(ONE-TWENTY-FIVE): ")
+(display (N-READ (SUCC ONE-TWENTY-FIVE)))
+(newline)
+
+(display "N-READ SUCC(FALSE): ")
+(display (N-READ (SUCC FALSE)))
+(newline)
+
+(display "N-READ SUCC(BOOL_ERROR): ")
+(display (N-READ (SUCC BOOL_ERROR)))
+(newline)
+
+; ===================================================
+
+(display "ADD(TWO)(THREE): ")
+(display (N-READ ((ADD TWO) THREE)))
+(newline)
+
+(display "ADD(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
+(display (N-READ ((ADD ONE-TWENTY-FIVE) ONE-TWENTY-FIVE)))
+(newline)
+
+(display "ADD(FALSE)(TWO): ")
+(display (N-READ ((ADD FALSE) TWO)))
+(newline)
+
+(display "ADD(ONE)(TRUE): ")
+(display (N-READ ((ADD ONE) TRUE)))
+(newline)
+
+(display "ADD(BOOL_ERROR)(TWO): ")
+(display (N-READ ((ADD BOOL_ERROR) TWO)))
+(newline)
+
+
+; ===================================================
+
+(display "MULT(TWO)(THREE): ")
+(display (N-READ ((MULT TWO) THREE)))
+(newline)
+
+(display "MULT(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
+(display (N-READ ((MULT ONE-TWENTY-FIVE) ONE-TWENTY-FIVE)))
+(newline)
+
+(display "MULT(FALSE)(TWO): ")
+(display (N-READ ((MULT FALSE) TWO)))
+(newline)
+
+(display "MULT(ONE)(TRUE): ")
+(display (N-READ ((MULT ONE) TRUE)))
+(newline)
+
+(display "MULT(BOOL_ERROR)(TWO): ")
+(display (N-READ ((MULT BOOL_ERROR) TWO)))
+(newline)
+
+; ===================================================
+
+(display "EXP(TWO)(THREE): ")
+(display (N-READ ((EXP TWO) THREE)))
+(newline)
+
+(display "EXP(ONE-TWENTY-FIVE)(TWO): ")
+(display (N-READ ((EXP ONE-TWENTY-FIVE) TWO)))
+(newline)
+
+(display "EXP(FALSE)(TWO): ")
+(display (N-READ ((EXP FALSE) TWO)))
+(newline)
+
+(display "EXP(ONE)(TRUE): ")
+(display (N-READ ((EXP ONE) TRUE)))
+(newline)
+
+(display "EXP(BOOL_ERROR)(TWO): ")
+(display (N-READ ((EXP BOOL_ERROR) TWO)))
+(newline)
+
+; ===================================================
+
+(display "PRED(ZERO): ")
+(display (N-READ (PRED ZERO)))
+(newline)
+
+(display "PRED(ONE): ")
+(display (N-READ (PRED ONE)))
+(newline)
+
+(display "PRED(TWO): ")
+(display (N-READ (PRED TWO)))
+(newline)
+
+(display "PRED(ONE-TWENTY-FIVE): ")
+(display (N-READ (PRED ONE-TWENTY-FIVE)))
+(newline)
+
+(display "PRED(FALSE): ")
+(display (N-READ (PRED FALSE)))
+(newline)
+
+(display "PRED(BOOL_ERROR): ")
+(display (N-READ (PRED BOOL_ERROR)))
+(newline)
+
+
+; ===================================================
+
+(display "SUB(FIVE)(TWO): ")
+(display (N-READ ((SUB FIVE) TWO)))
+(newline)
+
+(display "SUB(ONE-TWENTY-FIVE)(PRED(ONE-TWENTY-FIVE)): ")
+(display (N-READ ((SUB ONE-TWENTY-FIVE) (PRED ONE-TWENTY-FIVE))))
+(newline)
+
+(display "SUB(ONE-TWENTY-FIVE)(FOUR): ")
+(display (N-READ ((SUB ONE-TWENTY-FIVE) FOUR)))
+(newline)
+
+(display "SUB(ONE)(TRUE): ")
+(display (N-READ ((SUB ONE) TRUE)))
+(newline)
+
+(display "SUB(BOOL_ERROR)(TWO): ")
+(display (N-READ ((SUB BOOL_ERROR) TWO)))
+(newline)
+

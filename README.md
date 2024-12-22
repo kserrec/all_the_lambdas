@@ -26,7 +26,8 @@ I chose to use **Racket** because it was the first language I could find that se
 - **More Advanced Arithmetic** (like division and the creation of integers and operators for them)
 - **Pairs** and **Lists** with operators for them
 - **Algorithms** (so far only Binary Search for church numerals and integers)
-- **Added Syntactic Sugar** to make things look good
+- **Added Syntactic Sugar** to make things look good. Specifically, added def, let, and conditional sugar
+- **Added Types and Type Checking** defined types out of untyped lambda calculus - still work in progress - have error, bool, nat, and int types, and some functions for working with these - remaking everything typed at the moment
 
 #### How to Run:
 1. Download [Racket](https://racket-lang.org/) and the *lazy* package

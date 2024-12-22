@@ -176,7 +176,7 @@
     - Idea: Built for functions which take one argument
     - Contract: (func, funcName, type, arg) => func
 |#
-(def ADD_ERR_PROP FUNC FUNC-NAME ARG-TYPE X = 
+(def ADD_TYPE_CHECK FUNC FUNC-NAME ARG-TYPE X = 
     ; make/chain errors for arg if needed
     (_let errMsg = (wrap FUNC-NAME (E-READ (ERR-T-ARG ARG-TYPE)))
     (_let errType = (setErr ((makeObj ARG-TYPE) errMsg))
@@ -193,7 +193,7 @@
     - Idea: Built for functions which take two arguments
     - Contract: (func, funcName, type, type, arg, arg) => func
 |#
-(def ADD_ERR_PROP2 FUNC FUNC-NAME ARG-T1 ARG-T2 X1 X2 = 
+(def ADD_TYPE_CHECK2 FUNC FUNC-NAME ARG-T1 ARG-T2 X1 X2 = 
     ; make/chain errors for arg 1 if needed
     (_let errMsg1 = (wrap FUNC-NAME (wrap "arg1" (E-READ (ERR-T-ARG ARG-T1))))
     (_let errType1 = (setErr ((makeObj ARG-T1) errMsg1))
@@ -248,28 +248,6 @@
     (_if (isError OBJ)
         _then (E-READ OBJ)
         _else (FUNC OBJ)))
-
-#|
-    ~ READS BOOL TYPED VALUES ~
-    - Contract: BOOL => READ(BOOL)
-|#
-(def _B-READ B = 
-    (_if (isBool B)
-        _then (((val B) "bool:TRUE") "bool:FALSE")
-        _else (E-READ BOOL_ERROR)))
-    
-(def B-READ B = ((T-READ _B-READ) B))
-
-#|
-    ~ READS NAT TYPED VALUES ~
-    - Contract: NAT => READ(NAT)
-|#
-(def _N-READ N = 
-    (_if (isNat N)
-        _then (s-a "nat:" (n-s (n-read (val N))))
-        _else (E-READ NAT_ERROR)))
-
-(def N-READ N = ((T-READ _N-READ) N))
 
 #|
     ~ READS INT TYPED VALUES ~
