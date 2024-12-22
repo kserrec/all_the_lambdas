@@ -36,9 +36,8 @@
 
 #|
     ~ SELECTION FUNCTIONS ~
-    - Idea: select type or value
-    - Structure: (type,val) => {type,val}
-    - Logic: just a pair function
+    - Idea: select type or value from typed object {type, val}
+    - Contract: obj => type/val
 |#
 ; - Structure: {type,val} => type
 ; - Logic: get head of pair
@@ -166,13 +165,13 @@
 ;===================================================
 
 #|
-    ~ ERROR PROPAGATORS ~
-    - Idea: Takes function, its name, types of its arguments, and arguments
+    ~ ERROR TRACING FUNCTION INPUT TYPE CHECKERS ~
+    - Idea: Takes a function, its name, types of its arguments, and arguments
                 to redefine function with ability to handle and propagate errors
 |#
 
 #|
-    ~ SINGLE ARG ERROR PROPAGATION ~
+    ~ SINGLE ARG FUNCTION TYPE CHECK ~
     - Idea: Built for functions which take one argument
     - Contract: (func, funcName, type, arg) => func
 |#
@@ -189,7 +188,7 @@
                 _else errType))))))
 
 #|
-    ~ DOUBLE ARG ERROR PROPAGATION ~
+    ~ DOUBLE ARG FUNCTION TYPE CHECK ~
     - Idea: Built for functions which take two arguments
     - Contract: (func, funcName, type, type, arg, arg) => func
 |#
@@ -249,16 +248,6 @@
         _then (E-READ OBJ)
         _else (FUNC OBJ)))
 
-#|
-    ~ READS INT TYPED VALUES ~
-    - Contract: INT => READ(INT)
-|#
-(def _Z-READ Z = 
-    (_if (isInt Z)
-        _then (s-a "int:" (n-s (z-read (val Z))))
-        _else (E-READ INT_ERROR)))
-
-(def Z-READ Z = ((T-READ _Z-READ) Z))
 
 ;===================================================
 
