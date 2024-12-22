@@ -26,3 +26,27 @@
         _else (((f a) b) (succ n))))
 
 ;===================================================
+
+
+#|
+    ~ MODULO ~
+    - Contract: (nat,nat) => nat
+    - Idea: Same as remainder for natural numbers
+    - Logic: m - (n * quotient)
+|#
+(def mod m n = 
+    (_let q = ((div m) n)
+        ((sub m) ((mult n) q))))
+
+
+; #|
+;     ~ IS-EVEN ~
+;     - Contract: nat => bool
+;     - Idea: if (
+;     - Logic: Check if (m <= n) AND not(m == n)
+; |#
+; (def lt m n = 
+;     ((_and 
+;         ((lte m) n)) 
+;         (_not ((eq m) n)))
+; )

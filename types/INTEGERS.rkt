@@ -70,3 +70,21 @@
 (def _SUBz Z1 Z2 = (makeInt ((subZ (val Z1)) (val Z2))))
 
 (def SUBz Z1 Z2 = ((((((ADD_TYPE_CHECK2 _SUBz) "SUBz") intType) intType) Z1) Z2))
+
+#|
+    ~ MULTIPLICATION ~
+    - Contract: (INT,INT) => INT
+    - Idea: Z1,Z2 => Z1*Z2
+|#
+(def _MULTz Z1 Z2 = (makeInt ((multZ (val Z1)) (val Z2))))
+
+(def MULTz Z1 Z2 = ((((((ADD_TYPE_CHECK2 _MULTz) "MULTz") intType) intType) Z1) Z2))
+
+#|
+    ~ DIVISION ~
+    - Contract: (INT,INT) => INT
+    - Idea: Z1,Z2 => Z1/Z2
+|#
+(def _DIVz Z1 Z2 = (makeInt ((divZ (val Z1)) (val Z2))))
+
+(def DIVz Z1 Z2 = ((((((ADD_TYPE_CHECK2 _DIVz) "DIVz") intType) intType) Z1) Z2))

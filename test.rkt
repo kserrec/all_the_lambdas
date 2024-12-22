@@ -733,3 +733,84 @@
 (display "SUBz(BOOL_ERROR)(TWO): ")
 (display (Z-READ ((SUBz BOOL_ERROR) TWOz)))
 (newline)
+
+; ===================================================
+
+(display "MULTz(TWOz)(THREEz): ")
+(display (Z-READ ((MULTz TWOz) THREEz)))
+(newline)
+
+(def negTHREEz = ((newInt false) three))
+(display "MULTz(negTHREEz)(TWOz): ")
+(display (Z-READ ((MULTz negTHREEz) TWOz)))
+(newline)
+
+(display "MULTz(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
+(display (Z-READ ((MULTz ONE-TWENTY-FIVEz) ONE-TWENTY-FIVEz)))
+(newline)
+
+(display "MULTz(FALSE)(TWO): ")
+(display (Z-READ ((MULTz FALSE) TWOz)))
+(newline)
+
+(display "MULTz(ONE)(TRUE): ")
+(display (Z-READ ((MULTz ONEz) TRUE)))
+(newline)
+
+(display "MULTz(BOOL_ERROR)(TWO): ")
+(display (Z-READ ((MULTz BOOL_ERROR) TWOz)))
+(newline)
+
+
+; ===================================================
+
+(display "DIVz(TWOz)(THREEz): ")
+(display (Z-READ ((DIVz TWOz) THREEz)))
+(newline)
+
+(display "DIVz(negTHREEz)(TWOz): ")
+(display (Z-READ ((DIVz negTHREEz) TWOz)))
+(newline)
+
+(def negTWOz = ((newInt false) two))
+(display "DIVz(MULTz(FOUR)(FIVE))(TWOz): ")
+(display (Z-READ ((DIVz ((MULTz FOURz) FIVEz)) negTWOz)))
+(newline)
+
+(display "DIVz(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
+(display (Z-READ ((DIVz ONE-TWENTY-FIVEz) ONE-TWENTY-FIVEz)))
+(newline)
+
+(display "DIVz(FALSE)(TWO): ")
+(display (Z-READ ((DIVz FALSE) TWOz)))
+(newline)
+
+(display "DIVz(ONE)(TRUE): ")
+(display (Z-READ ((DIVz ONEz) TRUE)))
+(newline)
+
+(display "DIVz(BOOL_ERROR)(TWO): ")
+(display (Z-READ ((DIVz BOOL_ERROR) TWOz)))
+(newline)
+
+; ===================================================
+
+(display "mod(four)(two): ")
+(display (n-read ((mod four) two)))
+(newline)
+
+(display "mod(five)(two): ")
+(display (n-read ((mod five) two)))
+(newline)
+
+(display "mod(mult(four)(five))(three): ")
+(display (n-read ((mod ((mult four) five)) three)))
+(newline)
+
+(display "mod(one-twenty-five)(one-twenty-five): ")
+(display (n-read ((mod one-twenty-five) one-twenty-five)))
+(newline)
+
+(display "mod(two)(five): ")
+(display (n-read ((mod two) five)))
+(newline)
