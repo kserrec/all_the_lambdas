@@ -4,8 +4,10 @@
 
 (define-syntax (def stx)
   (syntax-case stx (=)
-    [(_ name arg = body)
-     #'(define name (lambda (arg) body))]
+    [(_ name = body)
+     #'(define name body)]
+    [(_ name arg1 = body)
+     #'(define name (lambda (arg1) body))]
     [(_ name arg1 arg2 = body)
      #'(define name
          (lambda (arg1)
@@ -41,6 +43,9 @@
   (syntax-case stx (=)
     [(_ name = expr body)
      #'((lambda (name) body) expr)]))
+
+
+; (define TRUE (makeBool true))
 
 (define-syntax (_if stx)
   (syntax-case stx (_then)

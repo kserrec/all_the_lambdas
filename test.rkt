@@ -2,11 +2,13 @@
 (require "macros/macros.rkt")
 (require "algorithms.rkt"
          "division.rkt"
+         "integers.rkt"
          "lists.rkt"
          "logic.rkt"
          "church.rkt"
          "recursion.rkt")
 (require "types/CHURCH.rkt"
+         "types/INTEGERS.rkt"
          "types/LOGIC.rkt"
          "types/TYPES.rkt")
 
@@ -657,3 +659,77 @@
 (display (N-READ ((SUB BOOL_ERROR) TWO)))
 (newline)
 
+; ===================================================
+
+(display "SUCCz(ZEROz): ")
+(display (Z-READ (SUCCz ZEROz)))
+(newline)
+
+(display "SUCCz(ONEz): ")
+(display (Z-READ (SUCCz ONEz)))
+(newline)
+
+(display "SUCCz(TWOz): ")
+(display (Z-READ (SUCCz TWOz)))
+(newline)
+
+(display "SUCCz(THREEz): ")
+(display (Z-READ (SUCCz THREEz)))
+(newline)
+
+(display "SUCCz(FOURz): ")
+(display (Z-READ (SUCCz FOURz)))
+(newline)
+
+(display "SUCCz(FIVEz): ")
+(display (Z-READ (SUCCz FIVEz)))
+(newline)
+
+
+; ===================================================
+
+(display "ADDz(TWOz)(THREEz): ")
+(display (Z-READ ((ADDz TWOz) THREEz)))
+(newline)
+
+(def ONE-TWENTY-FIVEz = ((newInt true) one-twenty-five))
+(display "ADDz(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
+(display (Z-READ ((ADDz ONE-TWENTY-FIVEz) ONE-TWENTY-FIVEz)))
+(newline)
+
+(display "ADDz(FALSE)(TWO): ")
+(display (Z-READ ((ADDz FALSE) TWOz)))
+(newline)
+
+(display "ADDz(ONE)(TRUE): ")
+(display (Z-READ ((ADDz ONEz) TRUE)))
+(newline)
+
+(display "ADDz(BOOL_ERROR)(TWO): ")
+(display (Z-READ ((ADDz BOOL_ERROR) TWOz)))
+(newline)
+; ===================================================
+
+(display "SUBz(TWOz)(THREEz): ")
+(display (Z-READ ((SUBz TWOz) THREEz)))
+(newline)
+
+(display "SUBz(THREEz)(TWOz): ")
+(display (Z-READ ((SUBz THREEz) TWOz)))
+(newline)
+
+(display "SUBz(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
+(display (Z-READ ((SUBz ONE-TWENTY-FIVEz) ONE-TWENTY-FIVEz)))
+(newline)
+
+(display "SUBz(FALSE)(TWO): ")
+(display (Z-READ ((SUBz FALSE) TWOz)))
+(newline)
+
+(display "SUBz(ONE)(TRUE): ")
+(display (Z-READ ((SUBz ONEz) TRUE)))
+(newline)
+
+(display "SUBz(BOOL_ERROR)(TWO): ")
+(display (Z-READ ((SUBz BOOL_ERROR) TWOz)))
+(newline)

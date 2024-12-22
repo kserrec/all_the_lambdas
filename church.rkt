@@ -30,7 +30,7 @@
     - Contract: (func,func) => f2
     - Logic: Same as false
 |#
-(define zero false)
+(def zero = false)
 
 #|
     ~ SUCCESSOR ~
@@ -56,11 +56,11 @@
 |#
 
 ; ONE, TWO, THREE, FOUR, and FIVE
-(define one (succ zero))
-(define two (succ one))
-(define three (succ two))
-(define four (succ three))
-(define five (succ four))
+(def one = (succ zero))
+(def two = (succ one))
+(def three = (succ two))
+(def four = (succ three))
+(def five = (succ four))
 
 ;===================================================
 

@@ -55,13 +55,13 @@
 |#
 
 ;   ERROR
-(define errorType zero)
+(def errorType = zero)
 ;   BOOLEAN
-(define boolType one)
+(def boolType = one)
 ;   NATURAL NUMBER
-(define natType two)
+(def natType = two)
 ;   INT NUMBER
-(define intType three)
+(def intType = three)
 
 ;===================================================
 
@@ -93,6 +93,14 @@
 ;   - Contract: (val) => int
 (def makeInt val = ((makeObj intType) val))
 (def makeIntErr errMsg = (setErr (makeInt errMsg)))
+;  Makes New Integer Number Type Objects 
+;  - Idea: 
+;       - makeInt above works to add the int type to a value,
+;           newInt creates a new INT object entirely.
+;       - This distinction is needed because ints are a pair 
+;           themselves, not just a single value
+;  - Contract: (sign, val) => int
+(def newInt sign val = ((makeObj intType) ((makeZ sign) val)))
 
 ;   Makes Any Error Type Object
 ;   - Contract (type, errMsg) => {error, {type, errMsg}}
@@ -107,19 +115,19 @@
 
 ;   Universal Error Type Object
 ;   - Idea: has type and val as pair(errorType,'ERROR')
-(define ERROR (setErrErr "err:err"))
+(def ERROR = (setErrErr "err:err"))
 
 ;   Boolean Error Type Object
 ;   - Idea: has type error and val as boolType
-(define BOOL_ERROR (makeBoolErr "err:bool"))
+(def BOOL_ERROR = (makeBoolErr "err:bool"))
 
 ;   Nat Error Type Object
 ;   - Idea: has type error and val as natType
-(define NAT_ERROR (makeNatErr "err:nat"))
+(def NAT_ERROR = (makeNatErr "err:nat"))
 
 ;   Int Error Type Object
 ;   - Idea: has type error and val as natType
-(define INT_ERROR (makeIntErr "err:int"))
+(def INT_ERROR = (makeIntErr "err:int"))
 
 ;===================================================
 
@@ -239,8 +247,8 @@
 (def E-READ E = (tail (tail E)))
 
 #|
-    ~ TYPE CHECKING HELPER FOR READING TYPED VALUES ~
-    - Idea: Protects typed reader if passed wrong type, reads as error
+    ~ ERROR HELPER FUNCTION FOR READERS ~
+    - Idea: Reads error msg if passed error object instead of intended type
     - Contract: (FUNC, OBJ) => READ(TYPE)
 |#
 (def T-READ FUNC OBJ = 

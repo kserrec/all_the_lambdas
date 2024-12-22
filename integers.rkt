@@ -51,7 +51,7 @@
     - Logic: n part same as false
     - Note: bool true or false, thus -0 == +0
 |#
-(define zeroZ ((makeZ true) zero))
+(def zeroZ = ((makeZ true) zero))
 
 #|
     ~ INT SUCCESSOR ~
@@ -87,18 +87,18 @@
     - Logic: As created by makeZ
 |#
 
-(define negFive ((makeZ false) five))
-(define negFour ((makeZ false) four))
-(define negThree ((makeZ false) three))
-(define negTwo ((makeZ false) two))
-(define negOne ((makeZ false) one))
-(define negZero ((makeZ false) zero))
-(define posZero ((makeZ true) zero))
-(define posOne ((makeZ true) one))
-(define posTwo ((makeZ true) two))
-(define posThree ((makeZ true) three))
-(define posFour ((makeZ true) four))
-(define posFive ((makeZ true) five))
+(def negFive = ((makeZ false) five))
+(def negFour = ((makeZ false) four))
+(def negThree = ((makeZ false) three))
+(def negTwo = ((makeZ false) two))
+(def negOne = ((makeZ false) one))
+(def negZero = ((makeZ false) zero))
+(def posZero = ((makeZ true) zero))
+(def posOne = ((makeZ true) one))
+(def posTwo = ((makeZ true) two))
+(def posThree = ((makeZ true) three))
+(def posFour = ((makeZ true) four))
+(def posFive = ((makeZ true) five))
 
 ;===================================================
 
@@ -135,6 +135,14 @@
     ((addZ 
         z1) 
         ((makeZ (_not (head z2))) (tail z2))))
+
+#|
+    ~ PREDECESSOR ~
+    - Contract: (int,int) => int
+    - Idea: z1 => z1-1
+    - Logic: Use subZ
+|#
+(def predZ z1 = ((subZ z1) posOne))
 
 #|
     ~ MULTIPLICATION ~

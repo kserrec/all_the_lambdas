@@ -13,12 +13,12 @@
 ;   - Idea: Typed Church Numerals
 |#
 
-(define ZERO (makeNat zero))
-(define ONE (makeNat one))
-(define TWO (makeNat two))
-(define THREE (makeNat three))
-(define FOUR (makeNat four))
-(define FIVE (makeNat five))
+(def ZERO = (makeNat zero))
+(def ONE = (makeNat one))
+(def TWO = (makeNat two))
+(def THREE = (makeNat three))
+(def FOUR = (makeNat four))
+(def FIVE = (makeNat five))
 
 #|
     ~ SUCCESSOR ~

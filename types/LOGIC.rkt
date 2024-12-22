@@ -12,8 +12,8 @@
 |#
 
 ;   TRUE & FALSE
-(define TRUE (makeBool true))
-(define FALSE (makeBool false))
+(def TRUE = (makeBool true))
+(def FALSE = (makeBool false))
 
 ;===================================================
 

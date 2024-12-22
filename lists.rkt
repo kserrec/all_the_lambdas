@@ -1,7 +1,6 @@
 #lang s-exp "macros/lazy-with-macros.rkt"
 (require "macros/macros.rkt")
 (provide (all-defined-out))
-
 (require "church.rkt"
          "logic.rkt"
          "recursion.rkt")

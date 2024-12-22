@@ -32,3 +32,15 @@ I chose to use **Racket** because it was the first language I could find that se
 #### How to Run:
 1. Download [Racket](https://racket-lang.org/) and the *lazy* package
 2. From bitter or sweet, run `racket test.rkt`
+
+
+#### How to Dissect:
+- I recommend starting in the bitter folder with logic.rkt. Logic is where it all begins. And bitter is most pure.
+- But if you want syntax sugar, stay in the root and follow the same path I will outline here.
+- Or if you want types and sugar, go to the types folder, but still the steps are the same -  start with logic wherever you go. It's only logical.
+- Then go to church. Because after logic comes numbers. 
+- Then recursion.rkt. We need this. 
+- From there you can branch out to division or lists or integers.
+- Then algorithms.
+
+- note: these are not all complete and there's more on the way afterwards too. 

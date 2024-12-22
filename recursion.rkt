@@ -28,7 +28,7 @@
                         then 1
                         else n*fact(n-1)
 |#
-(define fact (Y fact-helper))
+(def fact = (Y fact-helper))
 
 ; FACT-HELPER
 (def fact-helper f n = 
@@ -51,7 +51,7 @@
                             then 1
                             else fib(n-2)+fib(n-1)
 |#
-(define fib  (Y fib-helper))
+(def fib = (Y fib-helper))
 
 ; FIB-HELPER
 (def fib-helper f n = 
@@ -72,7 +72,7 @@
                         then 0
                         else n+nSum(n-1)
 |#
-(define nSum (Y nSum-helper))
+(def nSum = (Y nSum-helper))
 
 ; N-SUM
 (def nSum-helper f n =
