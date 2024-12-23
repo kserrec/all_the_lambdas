@@ -18,6 +18,8 @@ Ideas have also been taken from this book, [Functional Programming Through Lambd
 To be able to build complex structures that work reliably out of a language with just a couple syntax and substitution rules is a fascination and joy.  
 I chose to use **Racket** because it was the first language I could find that seemed to give me the tools I needed for doing this as simply as possible.
 
+Note: this is a work in progress and I don't know when it will be complete if ever.
+
 #### What's been done/made so far:
 - **Boolean values** and logical operators
 - **Church Numerals** and arithmetic operators
@@ -28,6 +30,7 @@ I chose to use **Racket** because it was the first language I could find that se
 - **Algorithms** (so far only Binary Search for church numerals and integers)
 - **Added Syntactic Sugar** to make things look good. Specifically, added def, let, and conditional sugar
 - **Added Types and Type Checking** defined types out of untyped lambda calculus - still work in progress - have error, bool, nat, and int types, and some functions for working with these - remaking everything typed at the moment
+- **Integers** and basic operators for them
 
 #### How to Run:
 1. Download [Racket](https://racket-lang.org/) and the *lazy* package
@@ -36,11 +39,9 @@ I chose to use **Racket** because it was the first language I could find that se
 
 #### How to Dissect:
 - I recommend starting in the bitter folder with logic.rkt. Logic is where it all begins. And bitter is most pure.
-- But if you want syntax sugar, stay in the root and follow the same path I will outline here.
+- But if you want syntactic sugar, stay in the root and follow the same path I will outline here.
 - Or if you want types and sugar, go to the types folder, but still the steps are the same -  start with logic wherever you go. It's only logical.
 - Then go to church. Because after logic comes numbers. 
 - Then recursion.rkt. We need this. 
 - From there you can branch out to division or lists or integers.
 - Then algorithms.
-
-- note: these are not all complete and there's more on the way afterwards too. 
