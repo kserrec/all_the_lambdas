@@ -51,7 +51,7 @@
     - Logic: n part same as false
     - Note: bool true or false, thus -0 == +0
 |#
-(def zeroZ = ((makeZ true) zero))
+(def posZero = ((makeZ true) zero))
 
 #|
     ~ INT SUCCESSOR ~
@@ -62,9 +62,13 @@
                 else make output negative and use regular pred
 |#
 (def succZ z =
-    ((((_or ((eq (tail z)) zero)) (head z))
-        ((makeZ true) (succ (tail z))))
-        ((makeZ false) (pred (tail z)))))
+    ; let vars
+    (_let zSign = (head z)
+    (_let zVal = (tail z)
+    ; core logic
+    ((((_or ((eq zVal) zero)) zSign)
+        ((makeZ true) (succ zVal)))
+        ((makeZ false) (pred zVal))))))
 
 #|
     ~ CHURCH INT READER ~
@@ -76,9 +80,13 @@
                     else appends minus sign
 |#
 (def z-read z =
-    ((((_or (head z)) (isZero (tail z)))
-        (n-read (tail z)))
-        (string-append "-" (number->string (n-read (tail z))))))
+    ; let vars
+    (_let zSign = (head z)
+    (_let zVal = (tail z)
+    ; core logic
+    ((((_or zSign) (isZero zVal))
+        (n-read zVal))
+        (string-append "-" (number->string (n-read zVal)))))))
 
 ;===================================================
 
@@ -93,7 +101,6 @@
 (def negTwo = ((makeZ false) two))
 (def negOne = ((makeZ false) one))
 (def negZero = ((makeZ false) zero))
-(def posZero = ((makeZ true) zero))
 (def posOne = ((makeZ true) one))
 (def posTwo = ((makeZ true) two))
 (def posThree = ((makeZ true) three))
@@ -117,13 +124,26 @@
                         else take difference and use lt to figure sign
 |#
 (def addZ z1 z2 =
-    ((((_and (head z1)) (head z2))
-            ((makeZ true) ((add (tail z1)) (tail z2))))
-            ((((_and (_not (head z1))) (_not (head z2)))
-                ((makeZ false) ((add (tail z1)) (tail z2))))
-                (((head z1)
-                    ((makeZ ((gt (tail z1)) (tail z2))) ((sub (tail z2)) (tail z1))))
-                    ((makeZ ((lt (tail z1)) (tail z2))) ((sub (tail z1)) (tail z2)))))))
+    ; let vars
+    (_let z1Sign = (head z1)
+    (_let z1Val = (tail z1)
+    (_let z2Sign = (head z2)
+    (_let z2Val = (tail z2)
+    ; core logic
+    (_if (_not ((xor z1Sign) z2Sign))
+    ; if both same sign
+        _then ((makeZ z1Sign) ((add z1Val) z2Val))
+        ; then make result their sign and use regular addition
+        _else (_if ((gt z1Val) z2Val)
+        ; else if different signs and |z1| > |z2|
+                _then ((makeZ z1Sign) ((sub z1Val) z2Val))
+                ; then take sign of larger and do regular diff
+                _else ((makeZ z2Sign) ((sub z2Val) z1Val))
+                ; else take sign of larger and do reverse diff
+            )
+    )
+)))))
+                
 
 #|
     ~ SUBTRACTION ~
@@ -131,10 +151,9 @@
     - Idea: z1,z2 => z1-z2
     - Logic: Use addZ by reframing z1-z2 as z1+(-z2)
 |#
+
 (def subZ z1 z2 = 
-    ((addZ 
-        z1) 
-        ((makeZ (_not (head z2))) (tail z2))))
+    ((addZ z1) ((multZ z2) negOne)))
 
 #|
     ~ PREDECESSOR ~
@@ -152,9 +171,15 @@
                 and do regular multiplication for number
 |#
 (def multZ z1 z2 = 
+    ; let vars
+    (_let z1Sign = (head z1)
+    (_let z1Val = (tail z1)
+    (_let z2Sign = (head z2)
+    (_let z2Val = (tail z2)
+    ; core logic
     ((makeZ 
-        (_not ((xor (head z1)) (head z2)))) 
-        ((mult (tail z1)) (tail z2))))
+        (_not ((xor z1Sign) z2Sign))) ; sign
+        ((mult z1Val) z2Val)))))))    ; val
 
 #|
     ~ DIVISION ~
@@ -164,9 +189,42 @@
                 and do regular division for number
 |#
 (def divZ z1 z2 = 
+    ; let vars
+    (_let z1Sign = (head z1)
+    (_let z1Val = (tail z1)
+    (_let z2Sign = (head z2)
+    (_let z2Val = (tail z2)
+    ; core logic
     ((makeZ
-        (_not ((xor (head z1)) (head z2)))) 
-        ((div (tail z1)) (tail z2))))
+        (_not ((xor z1Sign) z2Sign))) ; sign
+        ((div z1Val) z2Val)))))))     ; val
+
+#|
+    ~ EXPONENTIATION ~
+    - Contract: (int,int) => int
+    - Idea: z1,z2 => z1^z2
+    - Logic: Do regular exponent except when z2 < 0, then result is 0
+|#
+(def expZ z1 z2 = 
+    ; let vars
+    (_let z1Sign = (head z1)
+    (_let z1Val = (tail z1)
+    (_let z2Sign = (head z2)
+    (_let z2Val = (tail z2)
+    ; core logic
+    (_if (_not z2Sign)
+    ; if raised to negative power
+        _then posZero
+        ; then default to zero
+        _else (_if z1Sign
+        ; else if z1 positive
+                _then ((makeZ true) ((_exp z1Val) z1Val))
+                ; then make positive and do regular exponent
+                _else ((makeZ (isEven z2Val)) ((_exp z1Val) z1Val))
+                ; else flip sign based on even or odd power
+            )
+    )
+)))))
 
 ;===================================================
 
@@ -186,18 +244,27 @@
     - Idea: if (z1 >= z2)
                 then => true
                 else => false
-    - Logic: IF (z1 AND z2 positive)
+    - Logic: IF (both positive)
                 then (n1 >= n2)
-                else IF (z1 AND z2 negative)
+                else IF (both negative)
                     then (n2 <= n1)
-                    else (z1 positive OR both z1 AND z2 equal zero)
+                    else (z1 positive OR both are zero)
 |#
 (def gteZ z1 z2 = 
-    ((((_and (head z1)) (head z2))
-            ((gte (tail z1)) (tail z2)))
-            ((((_and (_not (head z1))) (_not (head z2)))
-                    ((lte (tail z1)) (tail z2)))
-                    ((_or (head z1)) ((_and (isZeroZ z1)) (isZeroZ z2))))))
+    ; let vars
+    (_let z1Sign = (head z1)
+    (_let z1Val = (tail z1)
+    (_let z2Sign = (head z2)
+    (_let z2Val = (tail z2)
+    ; core logic
+    (_if ((_and z1Sign) z2Sign)
+        _then ((gte z1Val) z2Val)
+        _else (_if ((_and (_not z1Sign)) (_not z2Sign))
+                _then ((lte z1Val) z2Val)
+                _else ((_or z1Sign) ((_and (isZeroZ z1)) (isZeroZ z2)))
+            )
+    )
+)))))
 
 #|
     ~ LESS THAN OR EQUAL ~
@@ -212,11 +279,20 @@
                     else (z2 positive OR both z1 AND z2 equal zero)
 |#
 (def lteZ z1 z2 = 
-    ((((_and (head z1)) (head z2))
-            ((lte (tail z1)) (tail z2)))
-            ((((_and (_not (head z1))) (_not (head z2)))
-                    ((gte (tail z1)) (tail z2)))
-                    ((_or (head z2)) ((_and (isZeroZ z1)) (isZeroZ z2))))))
+    ; let vars
+    (_let z1Sign = (head z1)
+    (_let z1Val = (tail z1)
+    (_let z2Sign = (head z2)
+    (_let z2Val = (tail z2)
+    ; core logic
+    (_if ((_and z1Sign) z2Sign)
+        _then ((lte z1Val) z2Val)
+        _else (_if ((_and (_not z1Sign)) (_not z2Sign))
+                _then ((gte z1Val) z2Val)
+                _else ((_or z2Sign) ((_and (isZeroZ z1)) (isZeroZ z2)))
+            )
+    )
+)))))
 
 #|
     ~ EQUAL ~

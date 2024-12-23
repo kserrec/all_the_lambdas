@@ -708,26 +708,65 @@
 (display "ADDz(BOOL_ERROR)(TWO): ")
 (display (Z-READ ((ADDz BOOL_ERROR) TWOz)))
 (newline)
+
+; ===================================================
+
+(display "MULTz(TWOz)(negONEz): ")
+(display (Z-READ ((MULTz TWOz) negONEz)))
+(newline)
+
+(def negTWOz = ((newInt false) two))
+(display "MULTz(negTWOz)(negONEz): ")
+(display (Z-READ ((MULTz negTWOz) negONEz)))
+(newline)
+
+(display "MULTz(TWOz)(THREEz): ")
+(display (Z-READ ((MULTz TWOz) THREEz)))
+(newline)
+
+(display "MULTz(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
+(display (Z-READ ((MULTz ONE-TWENTY-FIVEz) ONE-TWENTY-FIVEz)))
+(newline)
+
+(display "MULTz(FALSE)(TWO): ")
+(display (Z-READ ((MULTz FALSE) TWOz)))
+(newline)
+
+(display "MULTz(ONE)(TRUE): ")
+(display (Z-READ ((MULTz ONEz) TRUE)))
+(newline)
+
+(display "MULTz(BOOL_ERROR)(TWO): ")
+(display (Z-READ ((MULTz BOOL_ERROR) TWOz)))
+(newline)
+
 ; ===================================================
 
 (display "SUBz(TWOz)(THREEz): ")
 (display (Z-READ ((SUBz TWOz) THREEz)))
+(newline)
+(display "n-read tail(tail(SUBz(TWOz)(THREEz))): ")
+(display (n-read (tail (tail ((SUBz TWOz) THREEz)))))
 (newline)
 
 (display "SUBz(THREEz)(TWOz): ")
 (display (Z-READ ((SUBz THREEz) TWOz)))
 (newline)
 
-(display "SUBz(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
-(display (Z-READ ((SUBz ONE-TWENTY-FIVEz) ONE-TWENTY-FIVEz)))
+
+(display "ADDz(THREEz)(negTWOz): ")
+(def Z4 = ((ADDz THREEz) negTWOz))
+(display (Z-READ Z4))
 (newline)
 
-(display "SUBz(FALSE)(TWO): ")
-(display (Z-READ ((SUBz FALSE) TWOz)))
+(display "addZ(posThree)(negTwo): ")
+(def z4 = ((addZ posThree) negTwo))
+(display (z-read z4))
 (newline)
 
-(display "SUBz(ONE)(TRUE): ")
-(display (Z-READ ((SUBz ONEz) TRUE)))
+(display "addZ(posFour)(negTwo): ")
+(def z5 = ((addZ posFour) negTwo))
+(display (z-read z5))
 (newline)
 
 (display "SUBz(BOOL_ERROR)(TWO): ")
@@ -772,7 +811,6 @@
 (display (Z-READ ((DIVz negTHREEz) TWOz)))
 (newline)
 
-(def negTWOz = ((newInt false) two))
 (display "DIVz(MULTz(FOUR)(FIVE))(TWOz): ")
 (display (Z-READ ((DIVz ((MULTz FOURz) FIVEz)) negTWOz)))
 (newline)
