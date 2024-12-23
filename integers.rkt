@@ -140,7 +140,7 @@
     ~ PREDECESSOR ~
     - Contract: (int,int) => int
     - Idea: z1 => z1-1
-    - Logic: Use subZ
+    - Logic: Use subZ (really, this is unnecessary since subtraction is more general)
 |#
 (def predZ z1 = ((subZ z1) posOne))
 

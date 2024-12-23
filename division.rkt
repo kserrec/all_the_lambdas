@@ -2,6 +2,7 @@
 (require "macros/macros.rkt")
 (provide (all-defined-out))
 (require "church.rkt"
+         "logic.rkt"
          "recursion.rkt")
 
 ;===================================================
@@ -26,3 +27,28 @@
         _else (((f a) b) (succ n))))
 
 ;===================================================
+
+
+#|
+    ~ MODULO ~
+    - Contract: (nat,nat) => nat
+    - Idea: Same as remainder for natural numbers
+    - Logic: m - (n * quotient)
+|#
+(def mod m n = 
+    (_let q = ((div m) n)
+        ((sub m) ((mult n) q))))
+
+; #|
+;     ~ IS-EVEN ~
+;     - Contract: nat => bool
+;     - Logic: check if n modulo of 2 is zero
+; |#
+(def isEven n = (isZero ((mod n) two)))
+
+; #|
+;     ~ IS-ODD ~
+;     - Contract: nat => bool
+;     - Logic: check if not even
+; |#
+(def isOdd n = (_not (isEven n)))

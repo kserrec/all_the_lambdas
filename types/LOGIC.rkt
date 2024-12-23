@@ -37,7 +37,7 @@
 |#
 (def _NOT B = (makeBool (_not (val B))))
 
-(def NOT B = ((((ADD_TYPE_CHECK _NOT) "NOT") boolType) B))
+(def NOT B = ((((TYPE_CHECK _NOT) "NOT") boolType) B))
 
 #|
     ~ AND ~
@@ -46,7 +46,7 @@
 |#
 (def _AND B1 B2 = (makeBool ((_and (val B1)) (val B2))))
 
-(def AND B1 B2 = ((((((ADD_TYPE_CHECK2 _AND) "AND") boolType) boolType) B1) B2))
+(def AND B1 B2 = ((((((TYPE_CHECK2 _AND) "AND") boolType) boolType) B1) B2))
 
 #|
     ~ OR ~
@@ -55,7 +55,7 @@
 |#
 (def _OR B1 B2 = (makeBool ((_or (val B1)) (val B2))))
 
-(def OR B1 B2 = ((((((ADD_TYPE_CHECK2 _OR) "OR") boolType) boolType) B1) B2))
+(def OR B1 B2 = ((((((TYPE_CHECK2 _OR) "OR") boolType) boolType) B1) B2))
 
 ;===================================================
 
@@ -66,7 +66,7 @@
 |#
 (def _XOR B1 B2 = (makeBool ((xor (val B1)) (val B2))))
 
-(def XOR B1 B2 = ((((((ADD_TYPE_CHECK2 _XOR) "XOR") boolType) boolType) B1) B2))
+(def XOR B1 B2 = ((((((TYPE_CHECK2 _XOR) "XOR") boolType) boolType) B1) B2))
 
 #|
     ~ NOR ~
@@ -75,7 +75,7 @@
 |#
 (def _NOR B1 B2 = (makeBool ((nor (val B1)) (val B2))))
 
-(def NOR B1 B2 = ((((((ADD_TYPE_CHECK2 _NOR) "NOR") boolType) boolType) B1) B2))
+(def NOR B1 B2 = ((((((TYPE_CHECK2 _NOR) "NOR") boolType) boolType) B1) B2))
 
 #|
     ~ NAND ~
@@ -84,4 +84,4 @@
 |#
 (def _NAND B1 B2 = (makeBool ((nand (val B1)) (val B2))))
 
-(def NAND B1 B2 = ((((((ADD_TYPE_CHECK2 _NAND) "NAND") boolType) boolType) B1) B2))
+(def NAND B1 B2 = ((((((TYPE_CHECK2 _NAND) "NAND") boolType) boolType) B1) B2))

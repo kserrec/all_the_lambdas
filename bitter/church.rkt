@@ -113,7 +113,7 @@
     - Logic: Exponentiation is repeated multiplication so this...
         repeatedly applies MULTIPLICATION n times to m on one
 |#
-(define exp
+(define _exp
     (lambda (m)
         (lambda (n) 
             ((n (mult m)) one)

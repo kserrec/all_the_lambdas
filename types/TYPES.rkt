@@ -183,7 +183,7 @@
     - Idea: Built for functions which take one argument
     - Contract: (func, funcName, type, arg) => func
 |#
-(def ADD_TYPE_CHECK FUNC FUNC-NAME ARG-TYPE X = 
+(def TYPE_CHECK FUNC FUNC-NAME ARG-TYPE X = 
     ; make/chain errors for arg if needed
     (_let errMsg = (wrap FUNC-NAME (E-READ (ERR-T-ARG ARG-TYPE)))
     (_let errType = (setErr ((makeObj ARG-TYPE) errMsg))
@@ -200,7 +200,7 @@
     - Idea: Built for functions which take two arguments
     - Contract: (func, funcName, type, type, arg, arg) => func
 |#
-(def ADD_TYPE_CHECK2 FUNC FUNC-NAME ARG-T1 ARG-T2 X1 X2 = 
+(def TYPE_CHECK2 FUNC FUNC-NAME ARG-T1 ARG-T2 X1 X2 = 
     ; make/chain errors for arg 1 if needed
     (_let errMsg1 = (wrap FUNC-NAME (wrap "arg1" (E-READ (ERR-T-ARG ARG-T1))))
     (_let errType1 = (setErr ((makeObj ARG-T1) errMsg1))
@@ -234,6 +234,46 @@
                         _then INT_ERROR
                         _else ERROR))))
 
+
+#|
+    ~ MAKE F TYPED ~
+    - Idea: no reason to specifically remake these functions,  
+                just need to operate on their values
+|#
+; For One Argument Functions
+(def MAKE-TYPED-FUNC-1 FUNC FUNC-TYPE X = ((makeObj FUNC-TYPE) (FUNC (val X))))
+
+; For TWo Argument Functions
+(def MAKE-TYPED-FUNC-2 FUNC FUNC-TYPE X1 X2 = ((makeObj FUNC-TYPE) ((FUNC (val X1)) (val X2))))
+
+
+#|
+    ~ MAKE F TYPED AND CHECKED ~
+    - Idea: transform our untyped functions to fully typed
+                let's do this!
+|#
+; For One Argument Functions
+(def TYPE-N-CHECK-F F F-NAME IN-TYPE OUT-TYPE X = 
+    ((((TYPE_CHECK 
+        (lambda (X) (((MAKE-TYPED-FUNC-1 F) OUT-TYPE) X))) 
+        F-NAME) IN-TYPE) X))
+
+; For Two Argument Functions
+(def TYPE-N-CHECK-F2 F F-NAME IN-TYPE1 IN-TYPE2 OUT-TYPE X1 X2 = 
+    ((((((TYPE_CHECK2
+        (lambda (X1)
+            (lambda (X2)
+                ((((MAKE-TYPED-FUNC-2 F) OUT-TYPE) X1) X2)))) 
+        F-NAME) IN-TYPE1) IN-TYPE2) X1) X2))
+
+
+; (def _ADD M N = ((((MAKE-TYPED-FUNC-2 add) natType) M) N))
+; (def IS_ZERO N = ((((TYPE_CHECK _IS_ZERO) "IS_ZERO") natType) N))
+; (def TYPE_CHECK FUNC FUNC-NAME ARG-TYPE X = 
+; (def SUCCz Z = ((((TYPE_CHECK _SUCCz) "SUCC_Z") intType) Z))
+
+
+; (def TYPE-AND-CHECK-FUNC-1 FUNC FUNC-TYPE X1 X2 = ((makeObj FUNC-TYPE) ((FUNC (val X1)) (val X2))))
 
 ;===================================================
 
