@@ -27,9 +27,7 @@
     - Idea: N => N+1
     - Logic: Returns successor of N
 |#
-(def _SUCC N = (makeNat (succ (val N))))
-
-(def SUCC N = ((((TYPE_CHECK _SUCC) "SUCC") natType) N))
+(def SUCC N = (((((TYPE-N-CHECK-F succ) "SUCC") natType) natType) N))
 
 #|
     ~ READS NAT TYPED VALUES ~
