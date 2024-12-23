@@ -125,7 +125,7 @@
 (newline)
 
 (display "\nexp(5)(3): ")
-(define one-twenty-five ((exp five) three))
+(define one-twenty-five ((_exp five) three))
 (display (n-read one-twenty-five))
 (newline)
 

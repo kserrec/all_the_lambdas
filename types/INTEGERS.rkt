@@ -39,7 +39,7 @@
 |#
 (def _SUCCz Z = (makeInt (succZ (val Z))))
 
-(def SUCCz Z = ((((ADD_TYPE_CHECK _SUCCz) "SUCC_Z") intType) Z))
+(def SUCCz Z = ((((TYPE_CHECK _SUCCz) "SUCC_Z") intType) Z))
 
 ;===================================================
 
@@ -60,7 +60,7 @@
 |#
 (def _ADDz Z1 Z2 = (makeInt ((addZ (val Z1)) (val Z2))))
 
-(def ADDz Z1 Z2 = ((((((ADD_TYPE_CHECK2 _ADDz) "ADDz") intType) intType) Z1) Z2))
+(def ADDz Z1 Z2 = ((((((TYPE_CHECK2 _ADDz) "ADDz") intType) intType) Z1) Z2))
 
 #|
     ~ SUBTRACTION ~
@@ -69,7 +69,7 @@
 |#
 (def _SUBz Z1 Z2 = (makeInt ((subZ (val Z1)) (val Z2))))
 
-(def SUBz Z1 Z2 = ((((((ADD_TYPE_CHECK2 _SUBz) "SUBz") intType) intType) Z1) Z2))
+(def SUBz Z1 Z2 = ((((((TYPE_CHECK2 _SUBz) "SUBz") intType) intType) Z1) Z2))
 
 #|
     ~ MULTIPLICATION ~
@@ -78,7 +78,7 @@
 |#
 (def _MULTz Z1 Z2 = (makeInt ((multZ (val Z1)) (val Z2))))
 
-(def MULTz Z1 Z2 = ((((((ADD_TYPE_CHECK2 _MULTz) "MULTz") intType) intType) Z1) Z2))
+(def MULTz Z1 Z2 = ((((((TYPE_CHECK2 _MULTz) "MULTz") intType) intType) Z1) Z2))
 
 #|
     ~ DIVISION ~
@@ -87,4 +87,4 @@
 |#
 (def _DIVz Z1 Z2 = (makeInt ((divZ (val Z1)) (val Z2))))
 
-(def DIVz Z1 Z2 = ((((((ADD_TYPE_CHECK2 _DIVz) "DIVz") intType) intType) Z1) Z2))
+(def DIVz Z1 Z2 = ((((((TYPE_CHECK2 _DIVz) "DIVz") intType) intType) Z1) Z2))

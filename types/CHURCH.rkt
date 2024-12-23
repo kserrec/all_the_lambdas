@@ -1,6 +1,7 @@
 #lang lazy
 (provide (all-defined-out))
 (require "../church.rkt"
+         "../division.rkt"
          "../logic.rkt"
          "../macros/macros.rkt")
 (require "LOGIC.rkt"
@@ -28,7 +29,7 @@
 |#
 (def _SUCC N = (makeNat (succ (val N))))
 
-(def SUCC N = ((((ADD_TYPE_CHECK _SUCC) "SUCC") natType) N))
+(def SUCC N = ((((TYPE_CHECK _SUCC) "SUCC") natType) N))
 
 #|
     ~ READS NAT TYPED VALUES ~
@@ -48,21 +49,10 @@
     - Contract: NAT => BOOL/ERROR
     - Logic: isZero function with type checking
 |#
-; (def _IS_ZERO N = 
-;     (_if (isNat N)
-;         _then (_if (isZero (val N))
-;                 _then TRUE
-;                 _else FALSE)
-;         _else NAT_ERROR))
-
-(def _IS_ZERO N = 
-    (_if (isZero (val N))
-        _then TRUE
-        _else FALSE))
-
-(def IS_ZERO N = ((((ADD_TYPE_CHECK _IS_ZERO) "IS_ZERO") natType) N))
+(def IS_ZERO N = (((((TYPE-N-CHECK-F isZero) "IS_ZERO") natType) boolType) N))
 
 ;===================================================
+
 ; ARITHMETIC 
 
 #|
@@ -70,27 +60,21 @@
     - Contract: (NAT,NAT) => NAT
     - Idea: M,N => M+N
 |#
-(def _ADD M N = (makeNat (((val M) succ) (val N))))
-
-(def ADD M N = ((((((ADD_TYPE_CHECK2 _ADD) "ADD") natType) natType) M) N))
+(def ADD M N = (((((((TYPE-N-CHECK-F2 add) "ADD") natType) natType) natType) M) N))
 
 #|
     ~ MULTIPLICATION ~
     - Contract: (NAT,NAT) => NAT
     - Idea: M,N => M*N
 |#
-(def _MULT M N = (makeNat (((val N) (add (val M))) zero)))
-
-(def MULT M N = ((((((ADD_TYPE_CHECK2 _MULT) "MULT") natType) natType) M) N))
+(def MULT M N = (((((((TYPE-N-CHECK-F2 mult) "MULT") natType) natType) natType) M) N))
 
 #|
     ~ EXPONENTIATION ~
     - Contract: (NAT,NAT) => NAT
     - Idea: M,N => M^N
 |#
-(def _EXP M N = (makeNat (((val N) (mult (val M))) one)))
-
-(def EXP M N = ((((((ADD_TYPE_CHECK2 _EXP) "EXP") natType) natType) M) N))
+(def EXP M N = (((((((TYPE-N-CHECK-F2 _exp) "EXP") natType) natType) natType) M) N))
 
 #|
     ~ PREDECESSOR ~
@@ -100,18 +84,35 @@
             then => 0
             else => n-1
 |#
-(def _PRED N = (makeNat (pred (val N))))
-
-(def PRED N = ((((ADD_TYPE_CHECK _PRED) "PRED") natType) N))
-
+(def PRED N = (((((TYPE-N-CHECK-F pred) "PRED") natType) natType) N))
 
 #|
     ~ SUBTRACTION ~
     - Contract: (NAT,NAT) => NAT
     - Idea: M,N => M-N
 |#
-(def _SUB M N = (makeNat (((val N) pred) (val M))))
-
-(def SUB M N = ((((((ADD_TYPE_CHECK2 _SUB) "SUB") natType) natType) M) N))
+(def SUB M N = (((((((TYPE-N-CHECK-F2 sub) "SUB") natType) natType) natType) M) N))
 
 ;===================================================
+
+#|
+    ~ MODULO ~
+    - Contract: (NAT,NAT) => NAT
+    - Idea: Same as remainder for natural numbers
+    - Logic: M - (N * QUOTIENT)
+|#
+(def MOD M N = (((((((TYPE-N-CHECK-F2 mod) "MOD") natType) natType) natType) M) N))
+
+#|
+    ~ IS-EVEN ~
+    - Contract: NAT => BOOL
+    - Logic: check if n modulo of 2 is zero
+|#
+(def IS_EVEN N = (((((TYPE-N-CHECK-F isEven) "IS_EVEN") natType) boolType) N))
+
+; #|
+;     ~ IS-ODD ~
+;     - Contract: NAT => BOOL
+;     - Logic: check if not even
+; |#
+(def IS_ODD N = (((((TYPE-N-CHECK-F isOdd) "IS_ODD") natType) boolType) N))

@@ -128,7 +128,7 @@
 (newline)
 
 (display "\nexp(5)(3): ")
-(define one-twenty-five ((exp five) three))
+(define one-twenty-five ((_exp five) three))
 (display (n-read one-twenty-five))
 (newline)
 
@@ -813,4 +813,100 @@
 
 (display "mod(two)(five): ")
 (display (n-read ((mod two) five)))
+(newline)
+
+; ===================================================
+
+(display "isEven(four): ")
+(display (b-read (isEven four)))
+(newline)
+
+(display "isEven(five): ")
+(display (b-read (isEven five)))
+(newline)
+
+(display "isEven(mult(four)(five)): ")
+(display (b-read (isEven ((mult four) five))))
+(newline)
+
+(display "isEven(one-twenty-five): ")
+(display (b-read (isEven one-twenty-five)))
+(newline)
+
+(display "isEven(zero): ")
+(display (b-read (isEven zero)))
+(newline)
+
+; ===================================================
+
+(display "isOdd(four): ")
+(display (b-read (isOdd four)))
+(newline)
+
+(display "isOdd(five): ")
+(display (b-read (isOdd five)))
+(newline)
+
+(display "isOdd(mult(four)(five)): ")
+(display (b-read (isOdd ((mult four) five))))
+(newline)
+
+(display "isOdd(one-twenty-five): ")
+(display (b-read (isOdd one-twenty-five)))
+(newline)
+
+(display "isOdd(zero): ")
+(display (b-read (isOdd zero)))
+(newline)
+
+; ===================================================
+
+(display "IS_EVEN(FOUR): ")
+(display (B-READ (IS_EVEN FOUR)))
+(newline)
+
+(display "IS_EVEN(FIVE): ")
+(display (B-READ (IS_EVEN FIVE)))
+(newline)
+
+(display "IS_EVEN(MULT(FOUR)(FIVE)): ")
+(display (B-READ (IS_EVEN ((MULT FOUR) FIVE))))
+(newline)
+
+(display "IS_EVEN(ONE-TWENTY-FIVE): ")
+(display (B-READ (IS_EVEN ONE-TWENTY-FIVE)))
+(newline)
+
+(display "IS_EVEN(ZERO): ")
+(display (B-READ (IS_EVEN ZERO)))
+(newline)
+
+(display "IS_EVEN(TRUE): ")
+(display (B-READ (IS_EVEN TRUE)))
+(newline)
+
+; ===================================================
+
+(display "IS_ODD(FOUR): ")
+(display (B-READ (IS_ODD FOUR)))
+(newline)
+
+(display "IS_ODD(FIVE): ")
+(display (B-READ (IS_ODD FIVE)))
+(newline)
+
+(display "IS_ODD(mult(FOUR)(FIVE)): ")
+(display (B-READ (IS_ODD ((MULT FOUR) FIVE))))
+(newline)
+
+(display "IS_ODD(ONE-TWENTY-FIVE): ")
+(display (B-READ (IS_ODD ONE-TWENTY-FIVE)))
+(newline)
+
+(display "IS_ODD(ZERO): ")
+(display (B-READ (IS_ODD ZERO)))
+(newline)
+
+(display "IS_ODD(FALSE): ")
+(display (B-READ (IS_ODD FALSE)))
 (newline)

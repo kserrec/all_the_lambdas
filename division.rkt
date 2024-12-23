@@ -2,6 +2,7 @@
 (require "macros/macros.rkt")
 (provide (all-defined-out))
 (require "church.rkt"
+         "logic.rkt"
          "recursion.rkt")
 
 ;===================================================
@@ -38,15 +39,16 @@
     (_let q = ((div m) n)
         ((sub m) ((mult n) q))))
 
-
 ; #|
 ;     ~ IS-EVEN ~
 ;     - Contract: nat => bool
-;     - Idea: if (
-;     - Logic: Check if (m <= n) AND not(m == n)
+;     - Logic: check if n modulo of 2 is zero
 ; |#
-; (def lt m n = 
-;     ((_and 
-;         ((lte m) n)) 
-;         (_not ((eq m) n)))
-; )
+(def isEven n = (isZero ((mod n) two)))
+
+; #|
+;     ~ IS-ODD ~
+;     - Contract: nat => bool
+;     - Logic: check if not even
+; |#
+(def isOdd n = (_not (isEven n)))

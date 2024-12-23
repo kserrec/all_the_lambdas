@@ -90,7 +90,7 @@
     - Logic: Exponentiation is repeated multiplication so this...
         repeatedly applies MULTIPLICATION n times to m on one
 |#
-(def exp m n = ((n (mult m)) one))
+(def _exp m n = ((n (mult m)) one))
 
 #|
     ~ PREDECESSOR ~
