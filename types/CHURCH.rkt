@@ -99,20 +99,49 @@
     ~ MODULO ~
     - Contract: (NAT,NAT) => NAT
     - Idea: Same as remainder for natural numbers
-    - Logic: M - (N * QUOTIENT)
 |#
 (def MOD M N = (((((((TYPE-N-CHECK-F2 mod) "MOD") natType) natType) natType) M) N))
 
 #|
     ~ IS-EVEN ~
     - Contract: NAT => BOOL
-    - Logic: check if n modulo of 2 is zero
 |#
 (def IS_EVEN N = (((((TYPE-N-CHECK-F isEven) "IS_EVEN") natType) boolType) N))
 
 ; #|
 ;     ~ IS-ODD ~
 ;     - Contract: NAT => BOOL
-;     - Logic: check if not even
 ; |#
 (def IS_ODD N = (((((TYPE-N-CHECK-F isOdd) "IS_ODD") natType) boolType) N))
+
+;===================================================
+
+#|
+    ~ GREATER-THAN-OR-EQUAL ~
+    - Contract: (NAT,NAT) => BOOL
+|#
+(def GTE M N = (((((((TYPE-N-CHECK-F2 gte) "GTE") natType) natType) boolType) M) N))
+
+#|
+    ~ LESS-THAN-OR-EQUAL ~
+    - Contract: (NAT,NAT) => BOOL
+|#
+(def LTE M N = (((((((TYPE-N-CHECK-F2 lte) "LTE") natType) natType) boolType) M) N))
+
+; #|
+;     ~ EQUAL ~
+;     - Contract: (NAT,NAT) => BOOL
+; |#
+(def EQ M N = (((((((TYPE-N-CHECK-F2 eq) "EQ") natType) natType) boolType) M) N))
+
+; #|
+;     ~ GREATER-THAN ~
+;     - Contract: (NAT,NAT) => BOOL
+; |#
+(def GT M N = (((((((TYPE-N-CHECK-F2 gt) "GT") natType) natType) boolType) M) N))
+
+; #|
+;     ~ LESS-THAN ~
+;     - Contract: (NAT,NAT) => BOOL
+; |#
+(def LT M N = (((((((TYPE-N-CHECK-F2 lt) "LT") natType) natType) boolType) M) N))

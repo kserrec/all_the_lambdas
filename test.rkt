@@ -910,3 +910,154 @@
 (display "IS_ODD(FALSE): ")
 (display (B-READ (IS_ODD FALSE)))
 (newline)
+
+
+; ===================================================
+
+(display "GTE(TWO)(THREE): ")
+(display (B-READ ((GTE TWO) THREE)))
+(newline)
+
+(display "GTE(THREE)(TWO): ")
+(display (B-READ ((GTE THREE) TWO)))
+(newline)
+
+(display "GTE(MULT(FOUR)(FIVE))(TWO): ")
+(display (B-READ ((GTE ((MULT FOUR) FIVE)) TWO)))
+(newline)
+
+(display "GTE(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
+(display (B-READ ((GTE ONE-TWENTY-FIVE) ONE-TWENTY-FIVE)))
+(newline)
+
+(display "GTE(FALSE)(TWO): ")
+(display (B-READ ((GTE FALSE) TWO)))
+(newline)
+
+(display "GTE(ONE)(TRUE): ")
+(display (B-READ ((GTE ONE) TRUE)))
+(newline)
+
+(display "GTE(BOOL_ERROR)(TWO): ")
+(display (B-READ ((GTE BOOL_ERROR) TWO)))
+(newline)
+
+; ===================================================
+
+(display "LTE(TWO)(THREE): ")
+(display (B-READ ((LTE TWO) THREE)))
+(newline)
+
+(display "LTE(THREE)(TWO): ")
+(display (B-READ ((LTE THREE) TWO)))
+(newline)
+
+(display "LTE(MULT(FOUR)(FIVE))(TWO): ")
+(display (B-READ ((LTE ((MULT FOUR) FIVE)) TWO)))
+(newline)
+
+(display "LTE(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
+(display (B-READ ((LTE ONE-TWENTY-FIVE) ONE-TWENTY-FIVE)))
+(newline)
+
+(display "LTE(FALSE)(TWO): ")
+(display (B-READ ((LTE FALSE) TWO)))
+(newline)
+
+(display "LTE(ONE)(TRUE): ")
+(display (B-READ ((LTE ONE) TRUE)))
+(newline)
+
+(display "LTE(BOOL_ERROR)(TWO): ")
+(display (B-READ ((LTE BOOL_ERROR) TWO)))
+(newline)
+
+; ===================================================
+
+(display "EQ(TWO)(THREE): ")
+(display (B-READ ((EQ TWO) THREE)))
+(newline)
+
+(display "EQ(THREE)(THREE): ")
+(display (B-READ ((EQ THREE) THREE)))
+(newline)
+
+(display "EQ(MULT(FOUR)(FIVE))(TWO): ")
+(display (B-READ ((EQ ((MULT FOUR) FIVE)) TWO)))
+(newline)
+
+(display "EQ(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
+(display (B-READ ((EQ ONE-TWENTY-FIVE) ONE-TWENTY-FIVE)))
+(newline)
+
+(display "EQ(FALSE)(TWO): ")
+(display (B-READ ((EQ FALSE) TWO)))
+(newline)
+
+(display "EQ(ONE)(TRUE): ")
+(display (B-READ ((EQ ONE) TRUE)))
+(newline)
+
+(display "EQ(BOOL_ERROR)(TWO): ")
+(display (B-READ ((EQ BOOL_ERROR) TWO)))
+(newline)
+
+; ===================================================
+
+(display "GT(TWO)(THREE): ")
+(display (B-READ ((GT TWO) THREE)))
+(newline)
+
+(display "GT(THREE)(TWO): ")
+(display (B-READ ((GT THREE) TWO)))
+(newline)
+
+(display "GT(MULT(FOUR)(FIVE))(TWO): ")
+(display (B-READ ((GT ((MULT FOUR) FIVE)) TWO)))
+(newline)
+
+(display "GT(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
+(display (B-READ ((GT ONE-TWENTY-FIVE) ONE-TWENTY-FIVE)))
+(newline)
+
+(display "GT(FALSE)(TWO): ")
+(display (B-READ ((GT FALSE) TWO)))
+(newline)
+
+(display "GT(ONE)(TRUE): ")
+(display (B-READ ((GT ONE) TRUE)))
+(newline)
+
+(display "GT(BOOL_ERROR)(TWO): ")
+(display (B-READ ((GT BOOL_ERROR) TWO)))
+(newline)
+
+; ===================================================
+
+(display "LT(TWO)(THREE): ")
+(display (B-READ ((LT TWO) THREE)))
+(newline)
+
+(display "LT(THREE)(TWO): ")
+(display (B-READ ((LT THREE) TWO)))
+(newline)
+
+(display "LT(MULT(FOUR)(FIVE))(TWO): ")
+(display (B-READ ((LT ((MULT FOUR) FIVE)) TWO)))
+(newline)
+
+(display "LT(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
+(display (B-READ ((LT ONE-TWENTY-FIVE) ONE-TWENTY-FIVE)))
+(newline)
+
+(display "LT(FALSE)(TWO): ")
+(display (B-READ ((LT FALSE) TWO)))
+(newline)
+
+(display "LT(ONE)(TRUE): ")
+(display (B-READ ((LT ONE) TRUE)))
+(newline)
+
+(display "LT(BOOL_ERROR)(TWO): ")
+(display (B-READ ((LT BOOL_ERROR) TWO)))
+(newline)
