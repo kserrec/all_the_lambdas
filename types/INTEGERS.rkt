@@ -100,7 +100,7 @@
     - Logic: Check if (n part of z is zero)
                 true, else false
 |#
-(def IS_ZEROz Z = (((((TYPE-N-CHECK-F isZeroz) "IS_ZEROz") intType) boolType) Z))
+(def IS_ZEROz Z = (((((TYPE-N-CHECK-F isZeroZ) "IS_ZEROz") intType) boolType) Z))
 
 #|
     ~ GREATER THAN OR EQUAL ~

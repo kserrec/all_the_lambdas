@@ -692,14 +692,6 @@
 (display (Z-READ ((ADDz TWOz) THREEz)))
 (newline)
 
-(display "ADDz(negTHREEz)(TWOz): ")
-(display (Z-READ ((ADDz negTHREEz) TWOz)))
-(newline)
-
-(display "ADDz(TWOz)(negTHREEz): ")
-(display (Z-READ ((ADDz TWOz) negTHREEz)))
-(newline)
-
 (def ONE-TWENTY-FIVEz = ((newInt true) one-twenty-five))
 (display "ADDz(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
 (display (Z-READ ((ADDz ONE-TWENTY-FIVEz) ONE-TWENTY-FIVEz)))
@@ -723,16 +715,13 @@
 (display (Z-READ ((MULTz TWOz) negONEz)))
 (newline)
 
+(def negTWOz = ((newInt false) two))
 (display "MULTz(negTWOz)(negONEz): ")
 (display (Z-READ ((MULTz negTWOz) negONEz)))
 (newline)
 
 (display "MULTz(TWOz)(THREEz): ")
 (display (Z-READ ((MULTz TWOz) THREEz)))
-(newline)
-
-(display "MULTz(negTHREEz)(TWOz): ")
-(display (Z-READ ((MULTz negTHREEz) TWOz)))
 (newline)
 
 (display "MULTz(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
@@ -780,327 +769,333 @@
 (display (z-read z5))
 (newline)
 
-; (dispay)
-; (display "n-read tail(tail(SUBz(THREEz)(TWOz))): ")
-; (display (n-read (tail (tail ((SUBz THREEz) TWOz)))))
-; (newline)
-
-; (display "SUBz(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
-; (display (Z-READ ((SUBz ONE-TWENTY-FIVEz) ONE-TWENTY-FIVEz)))
-; (newline)
-
-; (display "SUBz(FALSE)(TWO): ")
-; (display (Z-READ ((SUBz FALSE) TWOz)))
-; (newline)
-
-; (display "SUBz(ONE)(TRUE): ")
-; (display (Z-READ ((SUBz ONEz) TRUE)))
-; (newline)
-
-; (display "SUBz(BOOL_ERROR)(TWO): ")
-; (display (Z-READ ((SUBz BOOL_ERROR) TWOz)))
-; (newline)
+(display "SUBz(BOOL_ERROR)(TWO): ")
+(display (Z-READ ((SUBz BOOL_ERROR) TWOz)))
+(newline)
 
 ; ===================================================
 
+(display "MULTz(TWOz)(THREEz): ")
+(display (Z-READ ((MULTz TWOz) THREEz)))
+(newline)
 
+(def negTHREEz = ((newInt false) three))
+(display "MULTz(negTHREEz)(TWOz): ")
+(display (Z-READ ((MULTz negTHREEz) TWOz)))
+(newline)
 
-; ; ===================================================
+(display "MULTz(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
+(display (Z-READ ((MULTz ONE-TWENTY-FIVEz) ONE-TWENTY-FIVEz)))
+(newline)
 
-; (display "DIVz(TWOz)(THREEz): ")
-; (display (Z-READ ((DIVz TWOz) THREEz)))
-; (newline)
+(display "MULTz(FALSE)(TWO): ")
+(display (Z-READ ((MULTz FALSE) TWOz)))
+(newline)
 
-; (display "DIVz(negTHREEz)(TWOz): ")
-; (display (Z-READ ((DIVz negTHREEz) TWOz)))
-; (newline)
+(display "MULTz(ONE)(TRUE): ")
+(display (Z-READ ((MULTz ONEz) TRUE)))
+(newline)
 
-; (def negTWOz = ((newInt false) two))
-; (display "DIVz(MULTz(FOUR)(FIVE))(TWOz): ")
-; (display (Z-READ ((DIVz ((MULTz FOURz) FIVEz)) negTWOz)))
-; (newline)
+(display "MULTz(BOOL_ERROR)(TWO): ")
+(display (Z-READ ((MULTz BOOL_ERROR) TWOz)))
+(newline)
 
-; (display "DIVz(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
-; (display (Z-READ ((DIVz ONE-TWENTY-FIVEz) ONE-TWENTY-FIVEz)))
-; (newline)
 
-; (display "DIVz(FALSE)(TWO): ")
-; (display (Z-READ ((DIVz FALSE) TWOz)))
-; (newline)
+; ===================================================
 
-; (display "DIVz(ONE)(TRUE): ")
-; (display (Z-READ ((DIVz ONEz) TRUE)))
-; (newline)
+(display "DIVz(TWOz)(THREEz): ")
+(display (Z-READ ((DIVz TWOz) THREEz)))
+(newline)
 
-; (display "DIVz(BOOL_ERROR)(TWO): ")
-; (display (Z-READ ((DIVz BOOL_ERROR) TWOz)))
-; (newline)
+(display "DIVz(negTHREEz)(TWOz): ")
+(display (Z-READ ((DIVz negTHREEz) TWOz)))
+(newline)
 
-; ; ===================================================
+(display "DIVz(MULTz(FOUR)(FIVE))(TWOz): ")
+(display (Z-READ ((DIVz ((MULTz FOURz) FIVEz)) negTWOz)))
+(newline)
 
-; (display "mod(four)(two): ")
-; (display (n-read ((mod four) two)))
-; (newline)
+(display "DIVz(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
+(display (Z-READ ((DIVz ONE-TWENTY-FIVEz) ONE-TWENTY-FIVEz)))
+(newline)
 
-; (display "mod(five)(two): ")
-; (display (n-read ((mod five) two)))
-; (newline)
+(display "DIVz(FALSE)(TWO): ")
+(display (Z-READ ((DIVz FALSE) TWOz)))
+(newline)
 
-; (display "mod(mult(four)(five))(three): ")
-; (display (n-read ((mod ((mult four) five)) three)))
-; (newline)
+(display "DIVz(ONE)(TRUE): ")
+(display (Z-READ ((DIVz ONEz) TRUE)))
+(newline)
 
-; (display "mod(one-twenty-five)(one-twenty-five): ")
-; (display (n-read ((mod one-twenty-five) one-twenty-five)))
-; (newline)
+(display "DIVz(BOOL_ERROR)(TWO): ")
+(display (Z-READ ((DIVz BOOL_ERROR) TWOz)))
+(newline)
 
-; (display "mod(two)(five): ")
-; (display (n-read ((mod two) five)))
-; (newline)
+; ===================================================
 
-; ; ===================================================
+(display "mod(four)(two): ")
+(display (n-read ((mod four) two)))
+(newline)
 
-; (display "isEven(four): ")
-; (display (b-read (isEven four)))
-; (newline)
+(display "mod(five)(two): ")
+(display (n-read ((mod five) two)))
+(newline)
 
-; (display "isEven(five): ")
-; (display (b-read (isEven five)))
-; (newline)
+(display "mod(mult(four)(five))(three): ")
+(display (n-read ((mod ((mult four) five)) three)))
+(newline)
 
-; (display "isEven(mult(four)(five)): ")
-; (display (b-read (isEven ((mult four) five))))
-; (newline)
+(display "mod(one-twenty-five)(one-twenty-five): ")
+(display (n-read ((mod one-twenty-five) one-twenty-five)))
+(newline)
 
-; (display "isEven(one-twenty-five): ")
-; (display (b-read (isEven one-twenty-five)))
-; (newline)
+(display "mod(two)(five): ")
+(display (n-read ((mod two) five)))
+(newline)
 
-; (display "isEven(zero): ")
-; (display (b-read (isEven zero)))
-; (newline)
+; ===================================================
 
-; ; ===================================================
+(display "isEven(four): ")
+(display (b-read (isEven four)))
+(newline)
 
-; (display "isOdd(four): ")
-; (display (b-read (isOdd four)))
-; (newline)
+(display "isEven(five): ")
+(display (b-read (isEven five)))
+(newline)
 
-; (display "isOdd(five): ")
-; (display (b-read (isOdd five)))
-; (newline)
+(display "isEven(mult(four)(five)): ")
+(display (b-read (isEven ((mult four) five))))
+(newline)
 
-; (display "isOdd(mult(four)(five)): ")
-; (display (b-read (isOdd ((mult four) five))))
-; (newline)
+(display "isEven(one-twenty-five): ")
+(display (b-read (isEven one-twenty-five)))
+(newline)
 
-; (display "isOdd(one-twenty-five): ")
-; (display (b-read (isOdd one-twenty-five)))
-; (newline)
+(display "isEven(zero): ")
+(display (b-read (isEven zero)))
+(newline)
 
-; (display "isOdd(zero): ")
-; (display (b-read (isOdd zero)))
-; (newline)
+; ===================================================
 
-; ; ===================================================
+(display "isOdd(four): ")
+(display (b-read (isOdd four)))
+(newline)
 
-; (display "IS_EVEN(FOUR): ")
-; (display (B-READ (IS_EVEN FOUR)))
-; (newline)
+(display "isOdd(five): ")
+(display (b-read (isOdd five)))
+(newline)
 
-; (display "IS_EVEN(FIVE): ")
-; (display (B-READ (IS_EVEN FIVE)))
-; (newline)
+(display "isOdd(mult(four)(five)): ")
+(display (b-read (isOdd ((mult four) five))))
+(newline)
 
-; (display "IS_EVEN(MULT(FOUR)(FIVE)): ")
-; (display (B-READ (IS_EVEN ((MULT FOUR) FIVE))))
-; (newline)
+(display "isOdd(one-twenty-five): ")
+(display (b-read (isOdd one-twenty-five)))
+(newline)
 
-; (display "IS_EVEN(ONE-TWENTY-FIVE): ")
-; (display (B-READ (IS_EVEN ONE-TWENTY-FIVE)))
-; (newline)
+(display "isOdd(zero): ")
+(display (b-read (isOdd zero)))
+(newline)
 
-; (display "IS_EVEN(ZERO): ")
-; (display (B-READ (IS_EVEN ZERO)))
-; (newline)
+; ===================================================
 
-; (display "IS_EVEN(TRUE): ")
-; (display (B-READ (IS_EVEN TRUE)))
-; (newline)
+(display "IS_EVEN(FOUR): ")
+(display (B-READ (IS_EVEN FOUR)))
+(newline)
 
-; ; ===================================================
+(display "IS_EVEN(FIVE): ")
+(display (B-READ (IS_EVEN FIVE)))
+(newline)
 
-; (display "IS_ODD(FOUR): ")
-; (display (B-READ (IS_ODD FOUR)))
-; (newline)
+(display "IS_EVEN(MULT(FOUR)(FIVE)): ")
+(display (B-READ (IS_EVEN ((MULT FOUR) FIVE))))
+(newline)
 
-; (display "IS_ODD(FIVE): ")
-; (display (B-READ (IS_ODD FIVE)))
-; (newline)
+(display "IS_EVEN(ONE-TWENTY-FIVE): ")
+(display (B-READ (IS_EVEN ONE-TWENTY-FIVE)))
+(newline)
 
-; (display "IS_ODD(mult(FOUR)(FIVE)): ")
-; (display (B-READ (IS_ODD ((MULT FOUR) FIVE))))
-; (newline)
+(display "IS_EVEN(ZERO): ")
+(display (B-READ (IS_EVEN ZERO)))
+(newline)
 
-; (display "IS_ODD(ONE-TWENTY-FIVE): ")
-; (display (B-READ (IS_ODD ONE-TWENTY-FIVE)))
-; (newline)
+(display "IS_EVEN(TRUE): ")
+(display (B-READ (IS_EVEN TRUE)))
+(newline)
 
-; (display "IS_ODD(ZERO): ")
-; (display (B-READ (IS_ODD ZERO)))
-; (newline)
+; ===================================================
 
-; (display "IS_ODD(FALSE): ")
-; (display (B-READ (IS_ODD FALSE)))
-; (newline)
+(display "IS_ODD(FOUR): ")
+(display (B-READ (IS_ODD FOUR)))
+(newline)
 
+(display "IS_ODD(FIVE): ")
+(display (B-READ (IS_ODD FIVE)))
+(newline)
 
-; ; ===================================================
+(display "IS_ODD(mult(FOUR)(FIVE)): ")
+(display (B-READ (IS_ODD ((MULT FOUR) FIVE))))
+(newline)
 
-; (display "GTE(TWO)(THREE): ")
-; (display (B-READ ((GTE TWO) THREE)))
-; (newline)
+(display "IS_ODD(ONE-TWENTY-FIVE): ")
+(display (B-READ (IS_ODD ONE-TWENTY-FIVE)))
+(newline)
 
-; (display "GTE(THREE)(TWO): ")
-; (display (B-READ ((GTE THREE) TWO)))
-; (newline)
+(display "IS_ODD(ZERO): ")
+(display (B-READ (IS_ODD ZERO)))
+(newline)
 
-; (display "GTE(MULT(FOUR)(FIVE))(TWO): ")
-; (display (B-READ ((GTE ((MULT FOUR) FIVE)) TWO)))
-; (newline)
+(display "IS_ODD(FALSE): ")
+(display (B-READ (IS_ODD FALSE)))
+(newline)
 
-; (display "GTE(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
-; (display (B-READ ((GTE ONE-TWENTY-FIVE) ONE-TWENTY-FIVE)))
-; (newline)
 
-; (display "GTE(FALSE)(TWO): ")
-; (display (B-READ ((GTE FALSE) TWO)))
-; (newline)
+; ===================================================
 
-; (display "GTE(ONE)(TRUE): ")
-; (display (B-READ ((GTE ONE) TRUE)))
-; (newline)
+(display "GTE(TWO)(THREE): ")
+(display (B-READ ((GTE TWO) THREE)))
+(newline)
 
-; (display "GTE(BOOL_ERROR)(TWO): ")
-; (display (B-READ ((GTE BOOL_ERROR) TWO)))
-; (newline)
+(display "GTE(THREE)(TWO): ")
+(display (B-READ ((GTE THREE) TWO)))
+(newline)
 
-; ; ===================================================
+(display "GTE(MULT(FOUR)(FIVE))(TWO): ")
+(display (B-READ ((GTE ((MULT FOUR) FIVE)) TWO)))
+(newline)
 
-; (display "LTE(TWO)(THREE): ")
-; (display (B-READ ((LTE TWO) THREE)))
-; (newline)
+(display "GTE(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
+(display (B-READ ((GTE ONE-TWENTY-FIVE) ONE-TWENTY-FIVE)))
+(newline)
 
-; (display "LTE(THREE)(TWO): ")
-; (display (B-READ ((LTE THREE) TWO)))
-; (newline)
+(display "GTE(FALSE)(TWO): ")
+(display (B-READ ((GTE FALSE) TWO)))
+(newline)
 
-; (display "LTE(MULT(FOUR)(FIVE))(TWO): ")
-; (display (B-READ ((LTE ((MULT FOUR) FIVE)) TWO)))
-; (newline)
+(display "GTE(ONE)(TRUE): ")
+(display (B-READ ((GTE ONE) TRUE)))
+(newline)
 
-; (display "LTE(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
-; (display (B-READ ((LTE ONE-TWENTY-FIVE) ONE-TWENTY-FIVE)))
-; (newline)
+(display "GTE(BOOL_ERROR)(TWO): ")
+(display (B-READ ((GTE BOOL_ERROR) TWO)))
+(newline)
 
-; (display "LTE(FALSE)(TWO): ")
-; (display (B-READ ((LTE FALSE) TWO)))
-; (newline)
+; ===================================================
 
-; (display "LTE(ONE)(TRUE): ")
-; (display (B-READ ((LTE ONE) TRUE)))
-; (newline)
+(display "LTE(TWO)(THREE): ")
+(display (B-READ ((LTE TWO) THREE)))
+(newline)
 
-; (display "LTE(BOOL_ERROR)(TWO): ")
-; (display (B-READ ((LTE BOOL_ERROR) TWO)))
-; (newline)
+(display "LTE(THREE)(TWO): ")
+(display (B-READ ((LTE THREE) TWO)))
+(newline)
 
-; ; ===================================================
+(display "LTE(MULT(FOUR)(FIVE))(TWO): ")
+(display (B-READ ((LTE ((MULT FOUR) FIVE)) TWO)))
+(newline)
 
-; (display "EQ(TWO)(THREE): ")
-; (display (B-READ ((EQ TWO) THREE)))
-; (newline)
+(display "LTE(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
+(display (B-READ ((LTE ONE-TWENTY-FIVE) ONE-TWENTY-FIVE)))
+(newline)
 
-; (display "EQ(THREE)(THREE): ")
-; (display (B-READ ((EQ THREE) THREE)))
-; (newline)
+(display "LTE(FALSE)(TWO): ")
+(display (B-READ ((LTE FALSE) TWO)))
+(newline)
 
-; (display "EQ(MULT(FOUR)(FIVE))(TWO): ")
-; (display (B-READ ((EQ ((MULT FOUR) FIVE)) TWO)))
-; (newline)
+(display "LTE(ONE)(TRUE): ")
+(display (B-READ ((LTE ONE) TRUE)))
+(newline)
 
-; (display "EQ(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
-; (display (B-READ ((EQ ONE-TWENTY-FIVE) ONE-TWENTY-FIVE)))
-; (newline)
+(display "LTE(BOOL_ERROR)(TWO): ")
+(display (B-READ ((LTE BOOL_ERROR) TWO)))
+(newline)
 
-; (display "EQ(FALSE)(TWO): ")
-; (display (B-READ ((EQ FALSE) TWO)))
-; (newline)
+; ===================================================
 
-; (display "EQ(ONE)(TRUE): ")
-; (display (B-READ ((EQ ONE) TRUE)))
-; (newline)
+(display "EQ(TWO)(THREE): ")
+(display (B-READ ((EQ TWO) THREE)))
+(newline)
 
-; (display "EQ(BOOL_ERROR)(TWO): ")
-; (display (B-READ ((EQ BOOL_ERROR) TWO)))
-; (newline)
+(display "EQ(THREE)(THREE): ")
+(display (B-READ ((EQ THREE) THREE)))
+(newline)
 
-; ; ===================================================
+(display "EQ(MULT(FOUR)(FIVE))(TWO): ")
+(display (B-READ ((EQ ((MULT FOUR) FIVE)) TWO)))
+(newline)
 
-; (display "GT(TWO)(THREE): ")
-; (display (B-READ ((GT TWO) THREE)))
-; (newline)
+(display "EQ(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
+(display (B-READ ((EQ ONE-TWENTY-FIVE) ONE-TWENTY-FIVE)))
+(newline)
 
-; (display "GT(THREE)(TWO): ")
-; (display (B-READ ((GT THREE) TWO)))
-; (newline)
+(display "EQ(FALSE)(TWO): ")
+(display (B-READ ((EQ FALSE) TWO)))
+(newline)
 
-; (display "GT(MULT(FOUR)(FIVE))(TWO): ")
-; (display (B-READ ((GT ((MULT FOUR) FIVE)) TWO)))
-; (newline)
+(display "EQ(ONE)(TRUE): ")
+(display (B-READ ((EQ ONE) TRUE)))
+(newline)
 
-; (display "GT(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
-; (display (B-READ ((GT ONE-TWENTY-FIVE) ONE-TWENTY-FIVE)))
-; (newline)
+(display "EQ(BOOL_ERROR)(TWO): ")
+(display (B-READ ((EQ BOOL_ERROR) TWO)))
+(newline)
 
-; (display "GT(FALSE)(TWO): ")
-; (display (B-READ ((GT FALSE) TWO)))
-; (newline)
+; ===================================================
 
-; (display "GT(ONE)(TRUE): ")
-; (display (B-READ ((GT ONE) TRUE)))
-; (newline)
+(display "GT(TWO)(THREE): ")
+(display (B-READ ((GT TWO) THREE)))
+(newline)
 
-; (display "GT(BOOL_ERROR)(TWO): ")
-; (display (B-READ ((GT BOOL_ERROR) TWO)))
-; (newline)
+(display "GT(THREE)(TWO): ")
+(display (B-READ ((GT THREE) TWO)))
+(newline)
 
-; ; ===================================================
+(display "GT(MULT(FOUR)(FIVE))(TWO): ")
+(display (B-READ ((GT ((MULT FOUR) FIVE)) TWO)))
+(newline)
 
-; (display "LT(TWO)(THREE): ")
-; (display (B-READ ((LT TWO) THREE)))
-; (newline)
+(display "GT(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
+(display (B-READ ((GT ONE-TWENTY-FIVE) ONE-TWENTY-FIVE)))
+(newline)
 
-; (display "LT(THREE)(TWO): ")
-; (display (B-READ ((LT THREE) TWO)))
-; (newline)
+(display "GT(FALSE)(TWO): ")
+(display (B-READ ((GT FALSE) TWO)))
+(newline)
 
-; (display "LT(MULT(FOUR)(FIVE))(TWO): ")
-; (display (B-READ ((LT ((MULT FOUR) FIVE)) TWO)))
-; (newline)
+(display "GT(ONE)(TRUE): ")
+(display (B-READ ((GT ONE) TRUE)))
+(newline)
 
-; (display "LT(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
-; (display (B-READ ((LT ONE-TWENTY-FIVE) ONE-TWENTY-FIVE)))
-; (newline)
+(display "GT(BOOL_ERROR)(TWO): ")
+(display (B-READ ((GT BOOL_ERROR) TWO)))
+(newline)
 
-; (display "LT(FALSE)(TWO): ")
-; (display (B-READ ((LT FALSE) TWO)))
-; (newline)
+; ===================================================
 
-; (display "LT(ONE)(TRUE): ")
-; (display (B-READ ((LT ONE) TRUE)))
-; (newline)
+(display "LT(TWO)(THREE): ")
+(display (B-READ ((LT TWO) THREE)))
+(newline)
 
-; (display "LT(BOOL_ERROR)(TWO): ")
-; (display (B-READ ((LT BOOL_ERROR) TWO)))
-; (newline)
+(display "LT(THREE)(TWO): ")
+(display (B-READ ((LT THREE) TWO)))
+(newline)
+
+(display "LT(MULT(FOUR)(FIVE))(TWO): ")
+(display (B-READ ((LT ((MULT FOUR) FIVE)) TWO)))
+(newline)
+
+(display "LT(ONE-TWENTY-FIVE)(ONE-TWENTY-FIVE): ")
+(display (B-READ ((LT ONE-TWENTY-FIVE) ONE-TWENTY-FIVE)))
+(newline)
+
+(display "LT(FALSE)(TWO): ")
+(display (B-READ ((LT FALSE) TWO)))
+(newline)
+
+(display "LT(ONE)(TRUE): ")
+(display (B-READ ((LT ONE) TRUE)))
+(newline)
+
+(display "LT(BOOL_ERROR)(TWO): ")
+(display (B-READ ((LT BOOL_ERROR) TWO)))
+(newline)
