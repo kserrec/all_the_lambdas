@@ -87,7 +87,7 @@
 (def xor b1 b2 = ((b1 (_not b2)) b2))
 
 #|
-    ~ XOR ~
+    ~ NOR ~
     - Contract: (bool,bool) => bool
     - Idea: Return true if neither are true, else false
     - Logic: Not the or of them

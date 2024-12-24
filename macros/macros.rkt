@@ -53,9 +53,6 @@
     [(_ name = expr body)
      #'((lambda (name) body) expr)]))
 
-
-; (define TRUE (makeBool true))
-
 (define-syntax (_if stx)
   (syntax-case stx (_then)
     [(_ CONDITION _then THEN _else ELSE)
