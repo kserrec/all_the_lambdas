@@ -16,9 +16,7 @@
            [failed-tests (filter-fails test-list)]
            [failed-length (length failed-tests)]
            [difference (- original-length failed-length)])
-        (newline)
         (displayln "---------------------------------------------------")
-        (newline)
         (displayln (string-append "-- " test-label " results:"))
         (displayln (string-append (number->string failed-length) " FAIL " (number->string difference) " PASS " (number->string original-length) " TEST(s) "))
         (newline)

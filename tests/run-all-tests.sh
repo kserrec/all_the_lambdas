@@ -2,7 +2,7 @@
 
 # Iterate over all Racket test files and execute them
 for test_file in *.rkt; do
-    echo "***************************************"
+    echo "***************************************************"
     echo ""
     echo "Running $test_file..."
     racket "$test_file"
