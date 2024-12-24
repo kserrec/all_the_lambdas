@@ -115,3 +115,19 @@
     (test-list-element "rev(l-5-4-2-0-4-2)" ((l-read (rev l-5-4-2-0-4-2)) n-read) "[2,4,0,2,4,5]")))
 
 (show-results "rev" rev-tests)
+
+; ====================================================================
+
+(define add2 (lambda (x) ((add x) two)))
+(define _andTrue (lambda (x) ((_and x) true)))
+(define square (lambda (x) ((mult x) x)))
+
+(define _map-tests (list
+    (test-list-element "_map(l-false)" ((l-read ((_map _andTrue) l-false)) b-read) "[false]")
+    (test-list-element "_map(l-true)" ((l-read ((_map _andTrue) l-true)) b-read) "[true]")
+    (test-list-element "_map(l-false)" ((l-read ((_map _not) l-false)) b-read) "[true]")
+    (test-list-element "_map(l-0)" ((l-read ((_map add2) l-0)) n-read) "[2]")
+    (test-list-element "_map(l-5-4-2-0-4-2)" ((l-read ((_map add2) l-5-4-2-0-4-2)) n-read) "[7,6,4,2,6,4]")
+    (test-list-element "_map(l-5-4-2-0-4-2)" ((l-read ((_map square) l-5-4-2-0-4-2)) n-read) "[25,16,4,0,16,4]")))
+
+(show-results "_map" _map-tests)

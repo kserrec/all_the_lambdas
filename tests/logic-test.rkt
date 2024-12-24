@@ -9,7 +9,7 @@
 
 (define _not-tests (list 
     (test-list-element "_not(true)" (b-read (_not true)) "false")
-    (test-list-element "_not(false)" (b-read (_not false)) "true")))
+    (test-list-element "_not(false)" (b-read (_not false)) "truee")))
 
 (show-results "_not" _not-tests)
 
