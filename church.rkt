@@ -46,7 +46,7 @@
     - Contract: nat => readable(nat)
     - Logic: Outputs n for user 
 |#
-(def n-read n = ((n (lambda (x) (+ x 1))) 0))
+(def n-read n = (number->string ((n (lambda (x) (+ x 1))) 0)))
 
 ;===================================================
 
