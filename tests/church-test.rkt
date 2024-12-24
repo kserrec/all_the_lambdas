@@ -1,11 +1,12 @@
 #lang racket
 (require rackunit
          rackunit/text-ui
+         "../logic.rkt"
          "../church.rkt")
 
-(define church-tests
+(define church-arithmetic-tests
  (test-suite
-  "Church Numeral Operations Tests"
+  "Church Numeral Arithmetic Operations Tests"
 
    ;    succ tests
    (test-case "succ zero => one"
@@ -134,5 +135,135 @@
 
 ))
 
+(define church-relations-tests
+ (test-suite
+  "Church Numeral Relations Operations Tests"
 
-(run-tests church-tests 'verbose)
+   ;    isZero tests
+   (test-case "isZero zero => true"
+    (check-equal? (force (b-read (isZero zero))) "true"))
+
+   (test-case "isZero one => false"
+    (check-equal? (force (b-read (isZero one))) "false"))
+
+   (test-case "isZero two => false"
+    (check-equal? (force (b-read (isZero two))) "false"))
+
+   (test-case "isZero three => false"
+    (check-equal? (force (b-read (isZero three))) "false"))
+
+   (test-case "isZero four => false"
+    (check-equal? (force (b-read (isZero four))) "false"))
+
+   (test-case "isZero five => false"
+    (check-equal? (force (b-read (isZero five))) "false"))
+
+
+   ;    gte tests
+   (test-case "gte two zero => true"
+    (check-equal? (force (b-read ((gte two) zero))) "true"))
+
+   (test-case "gte zero one => false"
+    (check-equal? (force (b-read ((gte zero) one))) "false"))
+
+   (test-case "gte two two => false"
+    (check-equal? (force (b-read ((gte two) two))) "true"))
+
+   (test-case "gte three three => false"
+    (check-equal? (force (b-read ((gte three) three))) "true"))
+
+   (test-case "gte five four => false"
+    (check-equal? (force (b-read ((gte five) four))) "true"))
+
+   (test-case "gte two five => false"
+    (check-equal? (force (b-read ((gte two) five))) "false"))
+
+
+   ;    lte tests
+   (test-case "lte two zero => true"
+    (check-equal? (force (b-read ((lte two) zero))) "false"))
+
+   (test-case "lte zero one => false"
+    (check-equal? (force (b-read ((lte zero) one))) "true"))
+
+   (test-case "lte two two => false"
+    (check-equal? (force (b-read ((lte two) two))) "true"))
+
+   (test-case "lte three three => false"
+    (check-equal? (force (b-read ((lte three) three))) "true"))
+
+   (test-case "lte five four => false"
+    (check-equal? (force (b-read ((lte five) four))) "false"))
+
+   (test-case "lte two five => false"
+    (check-equal? (force (b-read ((lte two) five))) "true"))
+
+
+   ;    eq tests
+   (test-case "eq two zero => true"
+    (check-equal? (force (b-read ((eq two) zero))) "false"))
+
+   (test-case "eq zero one => false"
+    (check-equal? (force (b-read ((eq zero) one))) "false"))
+
+   (test-case "eq two two => false"
+    (check-equal? (force (b-read ((eq two) two))) "true"))
+
+   (test-case "eq three three => false"
+    (check-equal? (force (b-read ((eq three) three))) "true"))
+
+   (test-case "eq five four => false"
+    (check-equal? (force (b-read ((eq five) four))) "false"))
+
+   (test-case "eq two five => false"
+    (check-equal? (force (b-read ((eq two) five))) "false"))
+
+
+   ;    gt tests
+   (test-case "gt two zero => true"
+    (check-equal? (force (b-read ((gt two) zero))) "true"))
+
+   (test-case "gt zero one => false"
+    (check-equal? (force (b-read ((gt zero) one))) "false"))
+
+   (test-case "gt two two => false"
+    (check-equal? (force (b-read ((gt two) two))) "false"))
+
+   (test-case "gt three three => false"
+    (check-equal? (force (b-read ((gt three) three))) "false"))
+
+   (test-case "gt five four => false"
+    (check-equal? (force (b-read ((gt five) four))) "true"))
+
+   (test-case "gt two five => false"
+    (check-equal? (force (b-read ((gt two) five))) "false"))
+
+
+   ;    lt tests
+   (test-case "lt two zero => true"
+    (check-equal? (force (b-read ((lt two) zero))) "false"))
+
+   (test-case "lt zero one => false"
+    (check-equal? (force (b-read ((lt zero) one))) "true"))
+
+   (test-case "lt two two => false"
+    (check-equal? (force (b-read ((lt two) two))) "false"))
+
+   (test-case "lt three three => false"
+    (check-equal? (force (b-read ((lt three) three))) "false"))
+
+   (test-case "lt five four => false"
+    (check-equal? (force (b-read ((lt five) four))) "false"))
+
+   (test-case "lt two five => false"
+    (check-equal? (force (b-read ((lt two) five))) "true"))
+))
+
+
+(displayln "***************************************")
+(displayln "Running church arithmetic tests")
+(run-tests church-arithmetic-tests 'verbose)
+(newline)
+(displayln "***************************************")
+(displayln "Running church relations tests")
+(run-tests church-relations-tests 'verbose)
