@@ -28,12 +28,12 @@
 
     More notes: 
         - This approach to structuring the integers seemed simpler and more logical than {nat, nat} 
-            where the value of the would be their difference, e.g. {6,8} is -2
-        - The lambdas for working with them below this way may suggest this approach is not simpler.
+            where the value of the integer would be their difference, e.g. {6,8} is -2
+        - The lambdas for working with them this way below may suggest this approach is not simpler.
         - But this accords far more with our normal way of thinking of integers, 
             not as each being the difference of infinitely many (!) pairs of natural numbers,
-            but as a single natural number with a positive or negative.
-        - With this approach there is only a single redundant value, zero, as both positive or negative
+            but as a single number with a positive or negative sign in front.
+        - With this approach there is only a single redundant value, zero, as both positive or negative.
 
 |#
 ;===================================================

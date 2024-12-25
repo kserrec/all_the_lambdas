@@ -19,7 +19,7 @@
 
 #|
     ~ READS BOOL TYPED VALUES ~
-    - Contract: BOOL => READ(BOOL)
+    - Contract: BOOL => READABLE(BOOL)
 |#
 (def _B-READ B = 
     (_if (isBool B)

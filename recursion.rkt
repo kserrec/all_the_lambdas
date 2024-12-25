@@ -10,8 +10,11 @@
 
 #|
     ~ Y-COMBINATOR ~
-    - Contract: YF => F(YF)
-    - Logic: Classic Y-Combinator:
+    - Logic: YF => F(YF)
+    - Contract: func => func
+        - note: func must be a function that takes a function as an argument
+                    and it MUST have a base case
+    - Idea: Classic Y-Combinator:
                 Takes function f and uses double self-application with it to make fixed point
 |#
 (def Y f = ((lambda (x) (f (x x)))

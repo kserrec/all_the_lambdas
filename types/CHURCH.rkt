@@ -31,7 +31,7 @@
 
 #|
     ~ READS NAT TYPED VALUES ~
-    - Contract: NAT => READ(NAT)
+    - Contract: NAT => READABLE(NAT)
 |#
 (def _N-READ N = 
     (_if (isNat N)

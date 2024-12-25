@@ -28,8 +28,10 @@
 
    ===================
     ~ NATURALS ~
+    - Idea: returns index of target in list
     - Contract: (list,nat) => nat
-        - note: list must be sorted
+        - note1: list must be sorted
+        - note2: returns true if element is not in list
 |#
 (def binarySearch list target =
     (((((Y binarySearch-helper) list) target) zero) (pred (len list))))
@@ -47,7 +49,8 @@
 #|
     ~ BINARY SEARCH INTEGERS ~
     - Contract: (list,int) => int
-        - note: list must be sorted
+        - note1: list must be sorted
+        - note2: returns -1 if element is not in list
 |#
 
 (def binarySearchZ list target =

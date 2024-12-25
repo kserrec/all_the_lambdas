@@ -13,7 +13,7 @@
 
 #|
     ~ READS INT TYPED VALUES ~
-    - Contract: INT => READ(INT)
+    - Contract: INT => READABLE(INT)
     - Idea: prepend "int:" to value
     - Note: extra logic needed because z-read prints strings or ints 
                 depending on sign and zero can be signed either way

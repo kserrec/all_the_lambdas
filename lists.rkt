@@ -104,7 +104,7 @@
 
 #|
     ~ LENGTH ~
-    - Contract: Y(len)(list) => len(Y(len))(list) => nat
+    - Contract: list => nat
     - Idea: Get length of list (not including nil element)
     - Logic: The inner function (\xyz.f(y)(succ(n))) wipes out the head x of the list, 
                 then it recurses taking the tail y as the new list for its first argument
