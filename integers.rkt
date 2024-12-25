@@ -86,7 +86,7 @@
     ; core logic
     ((((_or zSign) (isZero zVal))
         (n-read zVal))
-        (string-append "-" (number->string (n-read zVal)))))))
+        (string-append "-" (n-read zVal))))))
 
 ;===================================================
 
@@ -218,9 +218,9 @@
         ; then default to zero
         _else (_if z1Sign
         ; else if z1 positive
-                _then ((makeZ true) ((_exp z1Val) z1Val))
+                _then ((makeZ true) ((_exp z1Val) z2Val))
                 ; then make positive and do regular exponent
-                _else ((makeZ (isEven z2Val)) ((_exp z1Val) z1Val))
+                _else ((makeZ (isEven z2Val)) ((_exp z1Val) z2Val))
                 ; else flip sign based on even or odd power
             )
     )
