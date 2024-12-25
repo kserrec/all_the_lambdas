@@ -22,9 +22,10 @@
     For typed objects, a pair of this format is used: typed_obj = {type, value}
 
     Types will just be represented by church numerals
-    - zero is the error type
-    - one is the boolean type
-    - two ...
+    - zero is the ERROR type
+    - one is the BOOL type
+    - two is the NAT type
+    - three is the INT type
 |#
 
 #|

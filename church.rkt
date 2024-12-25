@@ -10,7 +10,7 @@
 #| NATURAL NUMBERS (n)
 
     For the Church Numerals (natural numbers in lambda calculus):
-    Definition - nat ::= 0 | S(nat)
+    Definition: nat ::= 0 | Succ(nat)
 
     The lambdas look like this:
         0: \fx.x
@@ -27,7 +27,7 @@
 
 #|
     ~ ZERO ~
-    - Contract: (func,func) => f2
+    - Contract: (func,func) => func
     - Logic: Same as false
 |#
 (def zero = false)
