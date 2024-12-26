@@ -12,8 +12,8 @@
 |#
 
 ;   TRUE & FALSE
-(def TRUE = (makeBool true))
-(def FALSE = (makeBool false))
+(def TRUE = (make-bool true))
+(def FALSE = (make-bool false))
 
 ;===================================================
 
@@ -21,67 +21,55 @@
     ~ READS BOOL TYPED VALUES ~
     - Contract: BOOL => READABLE(BOOL)
 |#
-(def _B-READ B = 
-    (_if (isBool B)
+(def _bool-read B = 
+    (_if (is-bool B)
         _then (((val B) "bool:TRUE") "bool:FALSE")
-        _else (E-READ BOOL_ERROR)))
+        _else (err-read BOOL-ERROR)))
     
-(def B-READ B = ((T-READ _B-READ) B))
+(def bool-read B = ((read-type _bool-read) B))
 
 ;===================================================
 
 #|
-    ~ NOT ~
+    ~ t-not ~
     - Contract: BOOL => BOOL
     - Logic: not function with type checking
 |#
-(def _NOT B = (makeBool (_not (val B))))
-
-(def NOT B = ((((TYPE_CHECK _NOT) "NOT") boolType) B))
+(def t-not B = (((((type-n-check-f _not) "t-not") bool-type) bool-type) B))
 
 #|
-    ~ AND ~
+    ~ t-and ~
     - Contract: (BOOL,BOOL) => BOOL
     - Logic: and function with type checking
 |#
-(def _AND B1 B2 = (makeBool ((_and (val B1)) (val B2))))
-
-(def AND B1 B2 = ((((((TYPE_CHECK2 _AND) "AND") boolType) boolType) B1) B2))
+(def t-and N1 N2 = (((((((type-n-check-f2 _and) "t-and") bool-type) bool-type) bool-type) N1) N2))
 
 #|
-    ~ OR ~
+    ~ t-or ~
     - Contract: (BOOL,BOOL) => BOOL
     - Logic: or function with type checking
 |#
-(def _OR B1 B2 = (makeBool ((_or (val B1)) (val B2))))
-
-(def OR B1 B2 = ((((((TYPE_CHECK2 _OR) "OR") boolType) boolType) B1) B2))
+(def t-or N1 N2 = (((((((type-n-check-f2 _or) "t-or") bool-type) bool-type) bool-type) N1) N2))
 
 ;===================================================
 
 #|
-    ~ XOR ~
+    ~ t-xor ~
     - Contract: (BOOL,BOOL) => BOOL
     - Logic: xor function with type checking
 |#
-(def _XOR B1 B2 = (makeBool ((xor (val B1)) (val B2))))
-
-(def XOR B1 B2 = ((((((TYPE_CHECK2 _XOR) "XOR") boolType) boolType) B1) B2))
+(def t-xor N1 N2 = (((((((type-n-check-f2 xor) "t-xor") bool-type) bool-type) bool-type) N1) N2))
 
 #|
-    ~ NOR ~
+    ~ t-nor ~
     - Contract: (BOOL,BOOL) => BOOL
-    - Logic: xor function with type checking
+    - Logic: nor function with type checking
 |#
-(def _NOR B1 B2 = (makeBool ((nor (val B1)) (val B2))))
-
-(def NOR B1 B2 = ((((((TYPE_CHECK2 _NOR) "NOR") boolType) boolType) B1) B2))
+(def t-nor N1 N2 = (((((((type-n-check-f2 nor) "t-nor") bool-type) bool-type) bool-type) N1) N2))
 
 #|
-    ~ NAND ~
+    ~ t-nand ~
     - Contract: (BOOL,BOOL) => BOOL
-    - Logic: xor function with type checking
+    - Logic: nand function with type checking
 |#
-(def _NAND B1 B2 = (makeBool ((nand (val B1)) (val B2))))
-
-(def NAND B1 B2 = ((((((TYPE_CHECK2 _NAND) "NAND") boolType) boolType) B1) B2))
+(def t-nand N1 N2 = (((((((type-n-check-f2 nand) "t-nand") bool-type) bool-type) bool-type) N1) N2))

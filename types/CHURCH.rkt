@@ -14,12 +14,12 @@
 ;   - Idea: Typed Church Numerals
 |#
 
-(def ZERO = (makeNat zero))
-(def ONE = (makeNat one))
-(def TWO = (makeNat two))
-(def THREE = (makeNat three))
-(def FOUR = (makeNat four))
-(def FIVE = (makeNat five))
+(def ZERO = (make-nat zero))
+(def ONE = (make-nat one))
+(def TWO = (make-nat two))
+(def THREE = (make-nat three))
+(def FOUR = (make-nat four))
+(def FIVE = (make-nat five))
 
 #|
     ~ SUCCESSOR ~
@@ -27,18 +27,18 @@
     - Idea: N => N+1
     - Logic: Returns successor of N
 |#
-(def SUCC N = (((((TYPE-N-CHECK-F succ) "SUCC") natType) natType) N))
+(def SUCC N = (((((type-n-check-f succ) "SUCC") nat-type) nat-type) N))
 
 #|
     ~ READS NAT TYPED VALUES ~
     - Contract: NAT => READABLE(NAT)
 |#
 (def _N-READ N = 
-    (_if (isNat N)
+    (_if (is-nat N)
         _then (s-a "nat:" (n-s (n-read (val N))))
-        _else (E-READ NAT_ERROR)))
+        _else (err-read BOOL-ERROR)))
 
-(def N-READ N = ((T-READ _N-READ) N))
+(def N-READ N = ((read-type _N-READ) N))
 
 ;===================================================
 
@@ -47,7 +47,7 @@
     - Contract: NAT => BOOL/ERROR
     - Logic: isZero function with type checking
 |#
-(def IS_ZERO N = (((((TYPE-N-CHECK-F isZero) "IS_ZERO") natType) boolType) N))
+(def IS_ZERO N = (((((type-n-check-f isZero) "IS_ZERO") nat-type) bool-type) N))
 
 ;===================================================
 
@@ -58,21 +58,21 @@
     - Contract: (NAT,NAT) => NAT
     - Idea: M,N => M+N
 |#
-(def ADD M N = (((((((TYPE-N-CHECK-F2 add) "ADD") natType) natType) natType) M) N))
+(def ADD M N = (((((((type-n-check-f2 add) "ADD") nat-type) nat-type) nat-type) M) N))
 
 #|
     ~ MULTIPLICATION ~
     - Contract: (NAT,NAT) => NAT
     - Idea: M,N => M*N
 |#
-(def MULT M N = (((((((TYPE-N-CHECK-F2 mult) "MULT") natType) natType) natType) M) N))
+(def MULT M N = (((((((type-n-check-f2 mult) "MULT") nat-type) nat-type) nat-type) M) N))
 
 #|
     ~ EXPONENTIATION ~
     - Contract: (NAT,NAT) => NAT
     - Idea: M,N => M^N
 |#
-(def EXP M N = (((((((TYPE-N-CHECK-F2 _exp) "EXP") natType) natType) natType) M) N))
+(def EXP M N = (((((((type-n-check-f2 _exp) "EXP") nat-type) nat-type) nat-type) M) N))
 
 #|
     ~ PREDECESSOR ~
@@ -82,14 +82,14 @@
             then => 0
             else => n-1
 |#
-(def PRED N = (((((TYPE-N-CHECK-F pred) "PRED") natType) natType) N))
+(def PRED N = (((((type-n-check-f pred) "PRED") nat-type) nat-type) N))
 
 #|
     ~ SUBTRACTION ~
     - Contract: (NAT,NAT) => NAT
     - Idea: M,N => M-N
 |#
-(def SUB M N = (((((((TYPE-N-CHECK-F2 sub) "SUB") natType) natType) natType) M) N))
+(def SUB M N = (((((((type-n-check-f2 sub) "SUB") nat-type) nat-type) nat-type) M) N))
 
 ;===================================================
 
@@ -98,19 +98,19 @@
     - Contract: (NAT,NAT) => NAT
     - Idea: Same as remainder for natural numbers
 |#
-(def MOD M N = (((((((TYPE-N-CHECK-F2 mod) "MOD") natType) natType) natType) M) N))
+(def MOD M N = (((((((type-n-check-f2 mod) "MOD") nat-type) nat-type) nat-type) M) N))
 
 #|
     ~ IS-EVEN ~
     - Contract: NAT => BOOL
 |#
-(def IS_EVEN N = (((((TYPE-N-CHECK-F isEven) "IS_EVEN") natType) boolType) N))
+(def IS_EVEN N = (((((type-n-check-f isEven) "IS_EVEN") nat-type) bool-type) N))
 
 ; #|
 ;     ~ IS-ODD ~
 ;     - Contract: NAT => BOOL
 ; |#
-(def IS_ODD N = (((((TYPE-N-CHECK-F isOdd) "IS_ODD") natType) boolType) N))
+(def IS_ODD N = (((((type-n-check-f isOdd) "IS_ODD") nat-type) bool-type) N))
 
 ;===================================================
 
@@ -118,28 +118,28 @@
     ~ GREATER-THAN-OR-EQUAL ~
     - Contract: (NAT,NAT) => BOOL
 |#
-(def GTE M N = (((((((TYPE-N-CHECK-F2 gte) "GTE") natType) natType) boolType) M) N))
+(def GTE M N = (((((((type-n-check-f2 gte) "GTE") nat-type) nat-type) bool-type) M) N))
 
 #|
     ~ LESS-THAN-OR-EQUAL ~
     - Contract: (NAT,NAT) => BOOL
 |#
-(def LTE M N = (((((((TYPE-N-CHECK-F2 lte) "LTE") natType) natType) boolType) M) N))
+(def LTE M N = (((((((type-n-check-f2 lte) "LTE") nat-type) nat-type) bool-type) M) N))
 
 ; #|
 ;     ~ EQUAL ~
 ;     - Contract: (NAT,NAT) => BOOL
 ; |#
-(def EQ M N = (((((((TYPE-N-CHECK-F2 eq) "EQ") natType) natType) boolType) M) N))
+(def EQ M N = (((((((type-n-check-f2 eq) "EQ") nat-type) nat-type) bool-type) M) N))
 
 ; #|
 ;     ~ GREATER-THAN ~
 ;     - Contract: (NAT,NAT) => BOOL
 ; |#
-(def GT M N = (((((((TYPE-N-CHECK-F2 gt) "GT") natType) natType) boolType) M) N))
+(def GT M N = (((((((type-n-check-f2 gt) "GT") nat-type) nat-type) bool-type) M) N))
 
 ; #|
 ;     ~ LESS-THAN ~
 ;     - Contract: (NAT,NAT) => BOOL
 ; |#
-(def LT M N = (((((((TYPE-N-CHECK-F2 lt) "LT") natType) natType) boolType) M) N))
+(def LT M N = (((((((type-n-check-f2 lt) "LT") nat-type) nat-type) bool-type) M) N))
