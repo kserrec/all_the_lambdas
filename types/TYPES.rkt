@@ -164,8 +164,9 @@
 (def make-int val = ((make-obj int) val))
 
 ;   Makes List Type Objects
-;   - Contract: val => INT
-(def _make-list val = ((make-obj _list) val))
+;   - Contract: (type, val) => LIST
+;   - Logic: maps over untyped list to make it typed
+(def _make-list type val = ((make-obj _list) ((_map (make-obj type)) val)))
 
 ;===================================================
 
@@ -357,7 +358,7 @@
 (def read-bool B = (((val B) "bool:TRUE") "bool:FALSE"))
 (def read-nat N = (string-append "nat:" (n-read (val N))))
 (def read-int Z = (string-append "int:" (z-read (val Z))))
-(def read-list L = (string-append "list:" (l-read (val Z))))
+(def read-list L = (string-append "list:" ((l-read (val L)) read-any)))
 
 (def read-any OBJ = 
     (_if (is-bool OBJ)
