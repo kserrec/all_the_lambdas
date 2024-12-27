@@ -31,14 +31,18 @@
           (loop (add1 i)))))
           
   (define key (substring s (add1 bracket-pos) colon-pos))
-  (define key+colon (string-append key ":"))
+  (define key+colon (string-append ":" key))
   
-  ; Remove all instances of key+colon
+  ; Remove all instances of "type:"
   (define removed
-    (regexp-replace* (regexp (regexp-quote key+colon)) s ""))
+    (regexp-replace* (regexp (regexp-quote (string-append key ":"))) s ""))
     
-  ; Add single instance at start
-  (string-append key+colon removed))
+  ; Insert type after "list"
+  (define list-end 4) ; "list" is 4 chars
+  (string-append 
+    (substring removed 0 list-end)
+    key+colon
+    (substring removed list-end)))
 
 ;===================================================
 ; TYPES
@@ -109,7 +113,7 @@
 |#
 
 ;   ERROR
-(def error-type = zero)
+(def _error = zero)
 ;   BOOLEAN
 (def bool = one)
 ;   NATURAL NUMBER
@@ -126,15 +130,15 @@
     - Idea: 
         - each type will be defined by a church numeral
         - typed objects are pairs {type, val}
-        - error-typed objects will store messages as nested pairs
-            - e.g. {error-type, {type, msg}}
+        - _error objects will store messages as nested pairs
+            - e.g. {_error, {type, msg}}
 |#
 
 ;   MAKE ERROR OBJECT FUNCTIONS
 
 ;   Makes An Error Type Object
 ;   - Contract: error-val => ERROR
-(def set-error val = ((make-obj error-type) val))
+(def set-error val = ((make-obj _error) val))
 
 ;   Makes Any Kind of Error Type Object
 ;   - Contract (type, err-msg) => {error, {type, err-msg}}
@@ -142,7 +146,7 @@
 
 
 ;   - Specific error makers
-(def make-err-err err-msg = ((make-error error-type) err-msg))
+(def make-err-err err-msg = ((make-error _error) err-msg))
 
 (def make-bool-err err-msg = ((make-error bool) err-msg))
 
@@ -160,7 +164,7 @@
 |#
 
 ;   Universal Error Type Object
-;   - Idea: has type and val as pair(error-type,'ERROR')
+;   - Idea: has type and val as pair(_error,'ERROR')
 (def ERROR = (make-err-err "err:err"))
 
 ;   Boolean Error Type Object
@@ -228,7 +232,7 @@
     - Idea: use is-type
     - Structure: obj => bool
 |#
-(def is-error obj = ((is-type error-type) obj))
+(def is-error obj = ((is-type _error) obj))
 
 #|
     ~ IS BOOL ~
