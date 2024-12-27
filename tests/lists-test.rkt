@@ -160,11 +160,11 @@
 ; ====================================================================
 
 (define take-tests (list
-    (test-list-element "take(four)(l-5-4-2-0-4-2)" ((l-read ((take zero) l-5-4-2-0-4-2)) n-read) "[]")
-    (test-list-element "take(four)(l-5-4-2-0-4-2)" ((l-read ((take (succ five)) l-5-4-2-0-4-2)) n-read) "[5,4,2,0,4,2]")
-    (test-list-element "take(four)(l-5-4-2-0-4-2)" ((l-read ((take four) l-5-4-2-0-4-2)) n-read) "[5,4,2,0]")
-    (test-list-element "take(two)(l-5-4-2-0-4-2)" ((l-read ((take two) l-5-4-2-0-4-2)) n-read) "[5,4]")
-    (test-list-element "take(three)(l-t-f-f-t)" ((l-read ((take three) l-t-f-f-t)) b-read) "[true,false,false]")
+    (test-list-element "take(four)(l-5-4-2-0-4-2)" ((l-read ((_take zero) l-5-4-2-0-4-2)) n-read) "[]")
+    (test-list-element "take(four)(l-5-4-2-0-4-2)" ((l-read ((_take (succ five)) l-5-4-2-0-4-2)) n-read) "[5,4,2,0,4,2]")
+    (test-list-element "take(four)(l-5-4-2-0-4-2)" ((l-read ((_take four) l-5-4-2-0-4-2)) n-read) "[5,4,2,0]")
+    (test-list-element "take(two)(l-5-4-2-0-4-2)" ((l-read ((_take two) l-5-4-2-0-4-2)) n-read) "[5,4]")
+    (test-list-element "take(three)(l-t-f-f-t)" ((l-read ((_take three) l-t-f-f-t)) b-read) "[true,false,false]")
 ))
 
 (show-results "take" take-tests)
@@ -208,10 +208,10 @@
 ; ====================================================================
 
 (define drop-tests (list
-    (test-list-element "drop(zero)(l-5-4-2-0-4-2)" ((l-read ((drop zero) l-5-4-2-0-4-2)) n-read) "[5,4,2,0,4,2]")
-    (test-list-element "drop(zero)(l-5-4-2-0-4-2)" ((l-read ((drop two) l-5-4-2-0-4-2)) n-read) "[2,0,4,2]")
-    (test-list-element "drop(three)(l-t-f-f-t)" ((l-read ((drop three) l-t-f-f-t)) b-read) "[true]")
-    (test-list-element "drop(four)(l-t-f-f-t)" ((l-read ((drop four) l-t-f-f-t)) b-read) "[]")
+    (test-list-element "drop(zero)(l-5-4-2-0-4-2)" ((l-read ((_drop zero) l-5-4-2-0-4-2)) n-read) "[5,4,2,0,4,2]")
+    (test-list-element "drop(zero)(l-5-4-2-0-4-2)" ((l-read ((_drop two) l-5-4-2-0-4-2)) n-read) "[2,0,4,2]")
+    (test-list-element "drop(three)(l-t-f-f-t)" ((l-read ((_drop three) l-t-f-f-t)) b-read) "[true]")
+    (test-list-element "drop(four)(l-t-f-f-t)" ((l-read ((_drop four) l-t-f-f-t)) b-read) "[]")
 ))
 
 (show-results "drop" drop-tests)

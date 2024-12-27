@@ -13,8 +13,8 @@
 ; ====================================================================
 
 (define make-error-tests (list
-    (test-list-element "make-error(error-type)('err:err')" 
-        (read-any ((make-error error-type) "err:err")) "err:err")
+    (test-list-element "make-error(_error)('err:err')" 
+        (read-any ((make-error _error) "err:err")) "err:err")
     (test-list-element "make-error(bool)('err:bool')" 
         (read-any ((make-error bool) "err:bool")) "err:bool")
     (test-list-element "make-error(nat)('err:nat')" 
@@ -29,11 +29,11 @@
 
 
 (define is-type-tests (list
-    (test-list-element "is-type(error-type)(TRUE)" (b-read ((is-type error-type) TRUE)) "false")
-    (test-list-element "is-type(error-type)(FALSE)" (b-read ((is-type error-type) FALSE)) "false")
-    (test-list-element "is-type(error-type)(THREE)" (b-read ((is-type error-type) THREE)) "false")
-    (test-list-element "is-type(error-type)(ERROR)" (b-read ((is-type error-type) ERROR)) "true")
-    (test-list-element "is-type(error-type)(posONE)" (b-read ((is-type error-type) posONE)) "false")
+    (test-list-element "is-type(_error)(TRUE)" (b-read ((is-type _error) TRUE)) "false")
+    (test-list-element "is-type(_error)(FALSE)" (b-read ((is-type _error) FALSE)) "false")
+    (test-list-element "is-type(_error)(THREE)" (b-read ((is-type _error) THREE)) "false")
+    (test-list-element "is-type(_error)(ERROR)" (b-read ((is-type _error) ERROR)) "true")
+    (test-list-element "is-type(_error)(posONE)" (b-read ((is-type _error) posONE)) "false")
 
     (test-list-element "is-type(bool)(TRUE)" (b-read ((is-type bool) TRUE)) "true")
     (test-list-element "is-type(bool)(FALSE)" (b-read ((is-type bool) FALSE)) "true")

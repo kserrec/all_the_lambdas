@@ -1,5 +1,6 @@
 #lang lazy
 (provide (all-defined-out))
+(require racket/string)
 (require "../macros/macros.rkt")
 (require "../church.rkt"
          "../division.rkt"
@@ -7,7 +8,41 @@
          "../lists.rkt"
          "../logic.rkt")
 
+;===================================================
+
+; ~ HELPER FUNCTIONS ~
+
+; wraps function names around errors for error tracing
 (define (wrap funcName err) (string-append funcName "(" err ")"))
+
+; rewrites typed lists more nicely
+(define (transform-string s)
+  ; Find positions using substring search
+  (define bracket-pos 
+    (let loop ([i 0])
+      (if (char=? (string-ref s i) #\[)
+          i
+          (loop (add1 i)))))
+          
+  (define colon-pos
+    (let loop ([i (add1 bracket-pos)])
+      (if (char=? (string-ref s i) #\:)
+          i
+          (loop (add1 i)))))
+          
+  (define key (substring s (add1 bracket-pos) colon-pos))
+  (define key+colon (string-append ":" key))
+  
+  ; Remove all instances of "type:"
+  (define removed
+    (regexp-replace* (regexp (regexp-quote (string-append key ":"))) s ""))
+    
+  ; Insert type after "list"
+  (define list-end 4) ; "list" is 4 chars
+  (string-append 
+    (substring removed 0 list-end)
+    key+colon
+    (substring removed list-end)))
 
 ;===================================================
 ; TYPES
@@ -78,13 +113,15 @@
 |#
 
 ;   ERROR
-(def error-type = zero)
+(def _error = zero)
 ;   BOOLEAN
 (def bool = one)
 ;   NATURAL NUMBER
 (def nat = two)
 ;   INT NUMBER
 (def int = three)
+;   LIST 
+(def _list = four)
 
 ;===================================================
 
@@ -93,15 +130,15 @@
     - Idea: 
         - each type will be defined by a church numeral
         - typed objects are pairs {type, val}
-        - error-typed objects will store messages as nested pairs
-            - e.g. {error-type, {type, msg}}
+        - _error objects will store messages as nested pairs
+            - e.g. {_error, {type, msg}}
 |#
 
 ;   MAKE ERROR OBJECT FUNCTIONS
 
 ;   Makes An Error Type Object
 ;   - Contract: error-val => ERROR
-(def set-error val = ((make-obj error-type) val))
+(def set-error val = ((make-obj _error) val))
 
 ;   Makes Any Kind of Error Type Object
 ;   - Contract (type, err-msg) => {error, {type, err-msg}}
@@ -109,13 +146,15 @@
 
 
 ;   - Specific error makers
-(def make-err-err err-msg = ((make-error error-type) err-msg))
+(def make-err-err err-msg = ((make-error _error) err-msg))
 
 (def make-bool-err err-msg = ((make-error bool) err-msg))
 
 (def make-nat-err err-msg = ((make-error nat) err-msg))
 
 (def make-int-err err-msg = ((make-error int) err-msg))
+
+(def make-list-err err-msg = ((make-error _list) err-msg))
 
 ;===================================================
 
@@ -125,7 +164,7 @@
 |#
 
 ;   Universal Error Type Object
-;   - Idea: has type and val as pair(error-type,'ERROR')
+;   - Idea: has type and val as pair(_error,'ERROR')
 (def ERROR = (make-err-err "err:err"))
 
 ;   Boolean Error Type Object
@@ -139,6 +178,10 @@
 ;   Int Error Type Object
 ;   - Idea: has type error and val as nat
 (def INT-ERROR = (make-int-err "err:int"))
+
+;   List Error Type Object
+;   - Idea: has type error and val as nat
+(def LIST-ERROR = (make-list-err "err:list"))
 
 ;===================================================
 
@@ -154,6 +197,11 @@
 ;   Makes Integer Number Type Objects
 ;   - Contract: val => INT
 (def make-int val = ((make-obj int) val))
+
+;   Makes List Type Objects
+;   - Contract: (type, val) => LIST
+;   - Logic: maps over untyped list to make it typed
+(def _make-list type val = ((make-obj _list) ((_map (make-obj type)) val)))
 
 ;===================================================
 
@@ -184,7 +232,7 @@
     - Idea: use is-type
     - Structure: obj => bool
 |#
-(def is-error obj = ((is-type error-type) obj))
+(def is-error obj = ((is-type _error) obj))
 
 #|
     ~ IS BOOL ~
@@ -206,6 +254,13 @@
     - Structure: obj => int
 |#
 (def is-int obj = ((is-type int) obj))
+
+#|
+    ~ IS LIST ~
+    - Idea: use is-type
+    - Structure: obj => list
+|#
+(def is-list obj = ((is-type _list) obj))
 
 ;===================================================
 
@@ -280,7 +335,9 @@
                 _then NAT-ERROR
                 _else (_if ((eq int) param-type)
                         _then INT-ERROR
-                        _else ERROR))))
+                        _else (_if ((eq _list) param-type)
+                                _then LIST-ERROR
+                                _else ERROR)))))
 
 #|
     ~ MAKE F TYPED ~
@@ -333,11 +390,11 @@
         _then (err-read obj)
         _else (func obj)))
 
-
 (def read-error E = (tail (tail E)))
 (def read-bool B = (((val B) "bool:TRUE") "bool:FALSE"))
 (def read-nat N = (string-append "nat:" (n-read (val N))))
 (def read-int Z = (string-append "int:" (z-read (val Z))))
+(def read-list L = (transform-string (string-append "list" ((l-read (val L)) read-any))))
 
 (def read-any OBJ = 
     (_if (is-bool OBJ)
@@ -348,7 +405,11 @@
             _else (
                 _if (is-int OBJ)
                 _then (read-int OBJ)
-                _else (read-error OBJ)
+                _else (
+                    _if (is-list OBJ)
+                    _then (read-list OBJ)
+                    _else (read-error OBJ)
+                )
             )
         )
     )

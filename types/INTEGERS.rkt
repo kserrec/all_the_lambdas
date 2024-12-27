@@ -28,6 +28,7 @@
 ;===================================================
 
 (def posZERO = (make-int posZero))
+(def negZERO = (make-int negZero))
 
 #|
     ~ SUCCESSOR ~
