@@ -20,9 +20,7 @@
 |#
 (def _Z-READ Z = 
     (_if (is-int Z)
-        _then (s-a "int:" (_if ((_or (head (val Z))) (isZero (tail (val Z))))
-                            _then (n-s (z-read (val Z))) 
-                            _else (z-read (val Z))))
+        _then (string-append "int:" (z-read (val Z)))
         _else (err-read BOOL-ERROR)))
 
 (def Z-READ Z = ((read-type _Z-READ) Z))
@@ -37,7 +35,7 @@
     - Idea: Z => Z+1
     - Logic: Returns successor of Z
 |#
-(def SUCCz Z = (((((type-n-check-f succZ) "SUCCz") int-type) int-type) Z))
+(def SUCCz Z = (((((fully-type succZ) "SUCCz") int) Z) int))
 
 ;===================================================
 
@@ -59,35 +57,35 @@
     - Contract: (INT,INT) => INT
     - Idea: Z1,Z2 => Z1+Z2
 |#
-(def ADDz Z1 Z2 = (((((((type-n-check-f2 addZ) "ADDz") int-type) int-type) int-type) Z1) Z2))
+(def ADDz Z1 Z2 = (((((((fully-type2 addZ) "ADDz") int) Z1) int) Z2) int))
 
 #|
     ~ SUBTRACTION ~
     - Contract: (INT,INT) => INT
     - Idea: Z1,Z2 => Z1-Z2
 |#
-(def SUBz Z1 Z2 = (((((((type-n-check-f2 subZ) "SUBz") int-type) int-type) int-type) Z1) Z2))
+(def SUBz Z1 Z2 = (((((((fully-type2 subZ) "SUBz") int) Z1) int) Z2) int))
 
 #|
     ~ MULTIPLICATION ~
     - Contract: (INT,INT) => INT
     - Idea: Z1,Z2 => Z1*Z2
 |#
-(def MULTz Z1 Z2 = (((((((type-n-check-f2 multZ) "MULTz") int-type) int-type) int-type) Z1) Z2))
+(def MULTz Z1 Z2 = (((((((fully-type2 multZ) "MULTz") int) Z1) int) Z2) int))
 
 #|
     ~ DIVISION ~
     - Contract: (INT,INT) => INT
     - Idea: Z1,Z2 => Z1/Z2
 |#
-(def DIVz Z1 Z2 = (((((((type-n-check-f2 divZ) "DIVz") int-type) int-type) int-type) Z1) Z2))
+(def DIVz Z1 Z2 = (((((((fully-type2 divZ) "DIVz") int) Z1) int) Z2) int))
 
 #|
     ~ EXPONENTIATION ~
     - Contract: (INT,INT) => INT
     - Idea: Z1,Z2 => Z1^Z2
 |#
-(def EXPz Z1 Z2 = (((((((type-n-check-f2 expZ) "EXPz") int-type) int-type) int-type) Z1) Z2))
+(def EXPz Z1 Z2 = (((((((fully-type2 expZ) "EXPz") int) Z1) int) Z2) int))
 
 
 ;===================================================
@@ -100,34 +98,34 @@
     - Logic: Check if (n part of z is zero)
                 true, else false
 |#
-(def IS_ZEROz Z = (((((type-n-check-f isZeroZ) "IS_ZEROz") int-type) bool-type) Z))
+(def IS_ZEROz Z = (((((fully-type isZeroZ) "IS_ZEROz") int) Z) bool))
 
 #|
     ~ GREATER THAN OR EQUAL ~
     - Contract: (INT,INT) => BOOL
 |#
-(def GTEz Z1 Z2 = (((((((type-n-check-f2 gteZ) "GTEz") int-type) int-type) bool-type) Z1) Z2))
+(def GTEz Z1 Z2 = (((((((fully-type2 gteZ) "GTEz") int) Z1) int) Z2) bool))
 
 #|
     ~ LESS THAN OR EQUAL ~
     - Contract: (INT,INT) => BOOL
 |#
-(def LTEz Z1 Z2 = (((((((type-n-check-f2 lteZ) "LTEz") int-type) int-type) bool-type) Z1) Z2))
+(def LTEz Z1 Z2 = (((((((fully-type2 lteZ) "LTEz") int) Z1) int) Z2) bool))
 
 #|
     ~ EQUAL ~
     - Contract: (INT,INT) => BOOL
 |#
-(def EQz Z1 Z2 = (((((((type-n-check-f2 eqZ) "EQz") int-type) int-type) bool-type) Z1) Z2))
+(def EQz Z1 Z2 = (((((((fully-type2 eqZ) "EQz") int) Z1) int) Z2) bool))
 
 #|
     ~ GREATER THAN ~
     - Contract: (INT,INT) => BOOL
 |#
-(def GTz Z1 Z2 = (((((((type-n-check-f2 gtZ) "GTz") int-type) int-type) bool-type) Z1) Z2))
+(def GTz Z1 Z2 = (((((((fully-type2 gtZ) "GTz") int) Z1) int) Z2) bool))
 
 #|
     ~ LESS THAN ~
     - Contract: (INT,INT) => BOOL
 |#
-(def LTz Z1 Z2 = (((((((type-n-check-f2 ltZ) "LTz") int-type) int-type) bool-type) Z1) Z2))
+(def LTz Z1 Z2 = (((((((fully-type2 ltZ) "LTz") int) Z1) int) Z2) bool))

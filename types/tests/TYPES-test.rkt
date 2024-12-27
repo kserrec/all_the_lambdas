@@ -12,18 +12,18 @@
 ; ~ TYPED LOGIC TESTS ~
 ; ====================================================================
 
-(define make-err-tests (list
-    (test-list-element "make-err(error-type)('err:err')" 
-        (err-read ((make-error error-type) "err:err")) "err:err")
-    (test-list-element "make-err(bool-type)('err:bool')" 
-        (err-read ((make-error bool-type) "err:bool")) "err:bool")
-    (test-list-element "make-err(nat-type)('err:nat')" 
-        (err-read ((make-error nat-type) "err:nat")) "err:nat")
-    (test-list-element "make-err(int-type)('err:int')" 
-        (err-read ((make-error int-type) "err:int")) "err:int")
+(define make-error-tests (list
+    (test-list-element "make-error(error-type)('err:err')" 
+        (read-any ((make-error error-type) "err:err")) "err:err")
+    (test-list-element "make-error(bool)('err:bool')" 
+        (read-any ((make-error bool) "err:bool")) "err:bool")
+    (test-list-element "make-error(nat)('err:nat')" 
+        (read-any ((make-error nat) "err:nat")) "err:nat")
+    (test-list-element "make-error(int)('err:int')" 
+        (read-any ((make-error int) "err:int")) "err:int")
 ))
 
-(show-results "make-err" make-err-tests)
+(show-results "make-error" make-error-tests)
 
 ; ====================================================================
 
@@ -35,26 +35,24 @@
     (test-list-element "is-type(error-type)(ERROR)" (b-read ((is-type error-type) ERROR)) "true")
     (test-list-element "is-type(error-type)(posONE)" (b-read ((is-type error-type) posONE)) "false")
 
-    (test-list-element "is-type(bool-type)(TRUE)" (b-read ((is-type bool-type) TRUE)) "true")
-    (test-list-element "is-type(bool-type)(FALSE)" (b-read ((is-type bool-type) FALSE)) "true")
-    (test-list-element "is-type(bool-type)(ONE)" (b-read ((is-type bool-type) ONE)) "false")
-    (test-list-element "is-type(bool-type)(negONE)" (b-read ((is-type bool-type) negONE)) "false")
+    (test-list-element "is-type(bool)(TRUE)" (b-read ((is-type bool) TRUE)) "true")
+    (test-list-element "is-type(bool)(FALSE)" (b-read ((is-type bool) FALSE)) "true")
+    (test-list-element "is-type(bool)(ONE)" (b-read ((is-type bool) ONE)) "false")
+    (test-list-element "is-type(bool)(negONE)" (b-read ((is-type bool) negONE)) "false")
 
-    (test-list-element "is-type(nat-type)(ZERO)" (b-read ((is-type nat-type) ZERO)) "true")
-    (test-list-element "is-type(nat-type)(ONE)" (b-read ((is-type nat-type) ONE)) "true")
-    (test-list-element "is-type(nat-type)(TWO)" (b-read ((is-type nat-type) TWO)) "true")
-    (test-list-element "is-type(nat-type)(THREE)" (b-read ((is-type nat-type) THREE)) "true")
-    (test-list-element "is-type(nat-type)(TRUE)" (b-read ((is-type nat-type) TRUE)) "false")
-    (test-list-element "is-type(nat-type)(TRUE)" (b-read ((is-type nat-type) negTHREE)) "false")
+    (test-list-element "is-type(nat)(ZERO)" (b-read ((is-type nat) ZERO)) "true")
+    (test-list-element "is-type(nat)(ONE)" (b-read ((is-type nat) ONE)) "true")
+    (test-list-element "is-type(nat)(TWO)" (b-read ((is-type nat) TWO)) "true")
+    (test-list-element "is-type(nat)(THREE)" (b-read ((is-type nat) THREE)) "true")
+    (test-list-element "is-type(nat)(TRUE)" (b-read ((is-type nat) TRUE)) "false")
+    (test-list-element "is-type(nat)(TRUE)" (b-read ((is-type nat) negTHREE)) "false")
 
-    (test-list-element "is-type(int-type)(negONE)" (b-read ((is-type int-type) negONE)) "true")
-    (test-list-element "is-type(int-type)(posONE)" (b-read ((is-type int-type) posONE)) "true")
-    (test-list-element "is-type(int-type)(negTWO)" (b-read ((is-type int-type) negTWO)) "true")
-    (test-list-element "is-type(int-type)(posTHREE)" (b-read ((is-type int-type) posTHREE)) "true")
-    (test-list-element "is-type(int-type)(TRUE)" (b-read ((is-type int-type) TRUE)) "false")
-    (test-list-element "is-type(int-type)(ERROR)" (b-read ((is-type int-type) ERROR)) "false")
+    (test-list-element "is-type(int)(negONE)" (b-read ((is-type int) negONE)) "true")
+    (test-list-element "is-type(int)(posONE)" (b-read ((is-type int) posONE)) "true")
+    (test-list-element "is-type(int)(negTWO)" (b-read ((is-type int) negTWO)) "true")
+    (test-list-element "is-type(int)(posTHREE)" (b-read ((is-type int) posTHREE)) "true")
+    (test-list-element "is-type(int)(TRUE)" (b-read ((is-type int) TRUE)) "false")
+    (test-list-element "is-type(int)(ERROR)" (b-read ((is-type int) ERROR)) "false")
 ))
 
 (show-results "is-type" is-type-tests)
-
-; ====================================================================

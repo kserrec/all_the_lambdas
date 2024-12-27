@@ -4,7 +4,7 @@
 
 (define (test-list-element test-scene expression expectation)
     (list 
-        (string-append (string-append test-scene " -EXPECTED: ") expectation) 
+        (string-append test-scene " -EXPECTED: " expectation) 
         (string-append "-ACTUAL: " expression) 
         (string=? expression expectation)))
 

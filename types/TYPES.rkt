@@ -7,10 +7,7 @@
          "../lists.rkt"
          "../logic.rkt")
 
-(define s-a string-append)
-(define (chain err1 err2) (s-a (s-a err1 "->") err2))
-(define (wrap funcName err) (s-a (s-a (s-a funcName "(") err) ")"))
-(define n-s number->string)
+(define (wrap funcName err) (string-append funcName "(" err ")"))
 
 ;===================================================
 ; TYPES
@@ -83,11 +80,11 @@
 ;   ERROR
 (def error-type = zero)
 ;   BOOLEAN
-(def bool-type = one)
+(def bool = one)
 ;   NATURAL NUMBER
-(def nat-type = two)
+(def nat = two)
 ;   INT NUMBER
-(def int-type = three)
+(def int = three)
 
 ;===================================================
 
@@ -114,11 +111,11 @@
 ;   - Specific error makers
 (def make-err-err err-msg = ((make-error error-type) err-msg))
 
-(def make-bool-err err-msg = ((make-error bool-type) err-msg))
+(def make-bool-err err-msg = ((make-error bool) err-msg))
 
-(def make-nat-err err-msg = ((make-error nat-type) err-msg))
+(def make-nat-err err-msg = ((make-error nat) err-msg))
 
-(def make-int-err err-msg = ((make-error int-type) err-msg))
+(def make-int-err err-msg = ((make-error int) err-msg))
 
 ;===================================================
 
@@ -132,15 +129,15 @@
 (def ERROR = (make-err-err "err:err"))
 
 ;   Boolean Error Type Object
-;   - Idea: has type error and val as bool-type
+;   - Idea: has type error and val as bool
 (def BOOL-ERROR = (make-bool-err "err:bool"))
 
 ;   Nat Error Type Object
-;   - Idea: has type error and val as nat-type
+;   - Idea: has type error and val as nat
 (def NAT-ERROR = (make-nat-err "err:nat"))
 
 ;   Int Error Type Object
-;   - Idea: has type error and val as nat-type
+;   - Idea: has type error and val as nat
 (def INT-ERROR = (make-int-err "err:int"))
 
 ;===================================================
@@ -148,15 +145,15 @@
 ;   Other Typed Objects Makers
 
 ;   - Contract: val => BOOL
-(def make-bool val = ((make-obj bool-type) val))
+(def make-bool val = ((make-obj bool) val))
 
 ;   Makes Natural Number Type Objects
 ;   - Contract: val => NAT
-(def make-nat val = ((make-obj nat-type) val))
+(def make-nat val = ((make-obj nat) val))
 
 ;   Makes Integer Number Type Objects
 ;   - Contract: val => INT
-(def make-int val = ((make-obj int-type) val))
+(def make-int val = ((make-obj int) val))
 
 ;===================================================
 
@@ -194,21 +191,21 @@
     - Idea: use is-type
     - Structure: obj => bool
 |#
-(def is-bool obj = ((is-type bool-type) obj))
+(def is-bool obj = ((is-type bool) obj))
 
 #|
     ~ IS NAT ~
     - Idea: use is-type
     - Structure: obj => nat
 |#
-(def is-nat obj = ((is-type nat-type) obj))
+(def is-nat obj = ((is-type nat) obj))
 
 #|
     ~ IS INT ~
     - Idea: use is-type
     - Structure: obj => int
 |#
-(def is-int obj = ((is-type int-type) obj))
+(def is-int obj = ((is-type int) obj))
 
 ;===================================================
 
@@ -220,14 +217,19 @@
 
 #|
     ~ SINGLE ARG FUNCTION TYPE CHECK ~
-    - Idea: Built for functions which take one argument
     - Contract: (func, funcName, type, arg) => func
+    - Idea: Returns error if inputs is not right type, else runs function
+    - Logic: If passed input is right type
+                then run function
+                else if error was passed
+                        then chain passed error with new error
+                        else pass new error
 |#
 (def type-check func func-name param-type param = 
     ; make/chain errors for arg if needed
     (_let err-msg = (wrap func-name (err-read (param-err-type param-type)))
     (_let err = ((make-error param-type) err-msg)
-    (_let chain-errs = ((make-error param-type) (chain (err-read param) err-msg))
+    (_let chain-errs = ((make-error param-type) (string-append (err-read param) "->" err-msg))
         ; check types
         (_if ((is-type param-type) param)
              _then (func param)
@@ -237,18 +239,24 @@
 
 #|
     ~ DOUBLE ARG FUNCTION TYPE CHECK ~
-    - Idea: Built for functions which take two arguments
     - Contract: (func, funcName, type, type, arg, arg) => func
+    - Idea: Returns error if inputs are not right type, else runs function
+    - Logic: If passed inputs are right type
+                then run function
+                else if error was passed
+                        then chain passed error with new error
+                        else pass new error
+            note: fails early to chain errors from first failure on up
 |#
 (def type-check2 func func-name param-type1 param-type2 param1 param2 = 
     ; make/chain errors for arg 1 if needed
     (_let err-msg1 = (wrap func-name (wrap "arg1" (err-read (param-err-type param-type1))))
     (_let err1 = ((make-error param-type1) err-msg1)
-    (_let chain-errs1 = ((make-error param-type1) (chain (err-read param1) err-msg1))
+    (_let chain-errs1 = ((make-error param-type1) (string-append (err-read param1) "->" err-msg1))
     ; make/chain errors for arg 2 if needed
     (_let err-msg2 = (wrap func-name (wrap "arg2" (err-read (param-err-type param-type2))))
     (_let err2 = ((make-error param-type2) err-msg2)
-    (_let chain-errs2 = ((make-error param-type2) (chain (err-read param2) err-msg2))
+    (_let chain-errs2 = ((make-error param-type2) (string-append (err-read param2) "->" err-msg2))
         ; check types
         (_if ((is-type param-type1) param1)
             _then (_if ((is-type param-type2) param2)
@@ -266,24 +274,23 @@
     - Contract: TYPE => ERROR
 |#
 (def param-err-type param-type =
-    (_if ((eq bool-type) param-type)
+    (_if ((eq bool) param-type)
         _then BOOL-ERROR
-        _else (_if ((eq nat-type) param-type)
-                _then BOOL-ERROR
-                _else (_if ((eq int-type) param-type)
-                        _then BOOL-ERROR
+        _else (_if ((eq nat) param-type)
+                _then NAT-ERROR
+                _else (_if ((eq int) param-type)
+                        _then INT-ERROR
                         _else ERROR))))
 
 #|
     ~ MAKE F TYPED ~
-    - Idea: no reason to specifically remake these functions,  
-                just need to operate on their values
+    - Idea: Add type to the functions based on their return type
 |#
 ; For One Argument Functions
-(def make-typed-func-1 func func-type param = ((make-obj func-type) (func (val param))))
+(def make-typed-func func param func-type = ((make-obj func-type) (func (val param))))
 
-; For TWo Argument Functions
-(def make-typed-func-2 func func-type param1 param2 = ((make-obj func-type) ((func (val param1)) (val param2))))
+; For Two Argument Functions
+(def make-typed-func-2 func param1 param2 func-type = ((make-obj func-type) ((func (val param1)) (val param2))))
 
 
 #|
@@ -292,17 +299,17 @@
                 let's do this!
 |#
 ; For One Argument Functions
-(def type-n-check-f func func-name param-type return-type param = 
+(def fully-type func func-name param-type param return-type = 
     ((((type-check 
-        (lambda (param) (((make-typed-func-1 func) return-type) param))) 
+        (lambda (param) (((make-typed-func func) param) return-type)))
         func-name) param-type) param))
 
 ; For Two Argument Functions
-(def type-n-check-f2 func func-name param-type1 param-type2 return-type param1 param2 = 
+(def fully-type2 func func-name param-type1 param1 param-type2 param2 return-type = 
     ((((((type-check2
         (lambda (param1)
             (lambda (param2)
-                ((((make-typed-func-2 func) return-type) param1) param2)))) 
+                ((((make-typed-func-2 func) param1) param2) return-type)))) 
         func-name) param-type1) param-type2) param1) param2))
 
 ;===================================================
@@ -327,10 +334,25 @@
         _else (func obj)))
 
 
-;===================================================
+(def read-error E = (tail (tail E)))
+(def read-bool B = (((val B) "bool:TRUE") "bool:FALSE"))
+(def read-nat N = (string-append "nat:" (n-read (val N))))
+(def read-int Z = (string-append "int:" (z-read (val Z))))
 
-#|
-    need to define 
-        - the rest of the logical operators
-        - numerical operators
-|#
+(def read-any OBJ = 
+    (_if (is-bool OBJ)
+        _then (read-bool OBJ)
+        _else (
+            _if (is-nat OBJ)
+            _then (read-nat OBJ)
+            _else (
+                _if (is-int OBJ)
+                _then (read-int OBJ)
+                _else (read-error OBJ)
+            )
+        )
+    )
+)
+
+
+;===================================================

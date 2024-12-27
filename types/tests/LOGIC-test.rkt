@@ -3,83 +3,96 @@
 (require "../CHURCH.rkt"
          "../INTEGERS.rkt"
          "../LOGIC.rkt"
+         "../TYPES.rkt"
          "../../tests/helpers/test-helpers.rkt")
 
 ; ====================================================================
 ; ~ TYPED LOGIC TESTS ~
 ; ====================================================================
 
-(define t-not-tests (list 
-    (test-list-element "t-not(TRUE)" (bool-read (t-not TRUE)) "bool:FALSE")
-    (test-list-element "t-not(FALSE)" (bool-read (t-not FALSE)) "bool:TRUE")
-    (test-list-element "t-not(ONE)" (bool-read (t-not ONE)) "t-not(err:bool)")
-    (test-list-element "t-not(FIVE)" (bool-read (t-not FIVE)) "t-not(err:bool)")
-    (test-list-element "t-not(negTHREE)" (bool-read (t-not negTHREE)) "t-not(err:bool)")
+(define NOT-tests (list 
+    ; normal
+    (test-list-element "NOT(TRUE)" (read-any (NOT TRUE)) "bool:FALSE")
+    (test-list-element "NOT(FALSE)" (read-any (NOT FALSE)) "bool:TRUE")
+    ; type fails
+    (test-list-element "NOT(ONE)" (read-any (NOT ONE)) "NOT(err:bool)")
+    (test-list-element "NOT(FIVE)" (read-any (NOT FIVE)) "NOT(err:bool)")
+    (test-list-element "NOT(negTHREE)" (read-any (NOT negTHREE)) "NOT(err:bool)")
 ))
 
-(show-results "t-not" t-not-tests)
+(show-results "NOT" NOT-tests)
 
 ; ====================================================================
 
-(define t-and-tests (list
-    (test-list-element "t-and(TRUE)(TRUE)" (bool-read ((t-and TRUE) TRUE)) "bool:TRUE")
-    (test-list-element "t-and(TRUE)(FALSE)" (bool-read ((t-and TRUE) FALSE)) "bool:FALSE")
-    (test-list-element "t-and(FALSE)(TRUE)" (bool-read ((t-and FALSE) TRUE)) "bool:FALSE")
-    (test-list-element "t-and(FALSE)(FALSE)" (bool-read ((t-and FALSE) FALSE)) "bool:FALSE")
-    (test-list-element "t-and(negTHREE)(TRUE)" (bool-read ((t-and negTHREE) TRUE)) "t-and(arg1(err:bool))")
-    (test-list-element "t-and(FALSE)(TWO)" (bool-read ((t-and FALSE) TWO)) "t-and(arg2(err:bool))")
+(define AND-tests (list
+    ; normal
+    (test-list-element "AND(TRUE)(TRUE)" (read-any ((AND TRUE) TRUE)) "bool:TRUE")
+    (test-list-element "AND(TRUE)(FALSE)" (read-any ((AND TRUE) FALSE)) "bool:FALSE")
+    (test-list-element "AND(FALSE)(TRUE)" (read-any ((AND FALSE) TRUE)) "bool:FALSE")
+    (test-list-element "AND(FALSE)(FALSE)" (read-any ((AND FALSE) FALSE)) "bool:FALSE")
+    ; type fails
+    (test-list-element "AND(negTHREE)(TRUE)" (read-any ((AND negTHREE) TRUE)) "AND(arg1(err:bool))")
+    (test-list-element "AND(FALSE)(TWO)" (read-any ((AND FALSE) TWO)) "AND(arg2(err:bool))")
 ))
 
-(show-results "t-and" t-and-tests)
+(show-results "AND" AND-tests)
 
 ; ====================================================================
 
-(define t-or-tests (list 
-    (test-list-element "t-or(TRUE)(TRUE)" (bool-read ((t-or TRUE) TRUE)) "bool:TRUE")
-    (test-list-element "t-or(TRUE)(FALSE)" (bool-read ((t-or TRUE) FALSE)) "bool:TRUE")
-    (test-list-element "t-or(FALSE)(TRUE)" (bool-read ((t-or FALSE) TRUE)) "bool:TRUE")
-    (test-list-element "t-or(FALSE)(FALSE)" (bool-read ((t-or FALSE) FALSE)) "bool:FALSE")
-    (test-list-element "t-or(negTHREE)(TRUE)" (bool-read ((t-or negTHREE) TRUE)) "t-or(arg1(err:bool))")
-    (test-list-element "t-or(FALSE)(TWO)" (bool-read ((t-or FALSE) TWO)) "t-or(arg2(err:bool))")
+(define OR-tests (list 
+    ; normal
+    (test-list-element "OR(TRUE)(TRUE)" (read-any ((OR TRUE) TRUE)) "bool:TRUE")
+    (test-list-element "OR(TRUE)(FALSE)" (read-any ((OR TRUE) FALSE)) "bool:TRUE")
+    (test-list-element "OR(FALSE)(TRUE)" (read-any ((OR FALSE) TRUE)) "bool:TRUE")
+    (test-list-element "OR(FALSE)(FALSE)" (read-any ((OR FALSE) FALSE)) "bool:FALSE")
+    ; type fails
+    (test-list-element "OR(negTHREE)(TRUE)" (read-any ((OR negTHREE) TRUE)) "OR(arg1(err:bool))")
+    (test-list-element "OR(FALSE)(TWO)" (read-any ((OR FALSE) TWO)) "OR(arg2(err:bool))")
 ))
 
-(show-results "t-or" t-or-tests)
+(show-results "OR" OR-tests)
 
 ; ====================================================================
 
-(define t-xor-tests (list 
-    (test-list-element "t-xor(TRUE)(TRUE)" (bool-read ((t-xor TRUE) TRUE)) "bool:FALSE")
-    (test-list-element "t-xor(TRUE)(FALSE)" (bool-read ((t-xor TRUE) FALSE)) "bool:TRUE")
-    (test-list-element "t-xor(FALSE)(TRUE)" (bool-read ((t-xor FALSE) TRUE)) "bool:TRUE")
-    (test-list-element "t-xor(FALSE)(FALSE)" (bool-read ((t-xor FALSE) FALSE)) "bool:FALSE")
-    (test-list-element "t-xor(negTHREE)(TRUE)" (bool-read ((t-xor negTHREE) TRUE)) "t-xor(arg1(err:bool))")
-    (test-list-element "t-xor(FALSE)(TWO)" (bool-read ((t-xor FALSE) TWO)) "t-xor(arg2(err:bool))")
+(define XOR-tests (list 
+    ; normal
+    (test-list-element "XOR(TRUE)(TRUE)" (read-any ((XOR TRUE) TRUE)) "bool:FALSE")
+    (test-list-element "XOR(TRUE)(FALSE)" (read-any ((XOR TRUE) FALSE)) "bool:TRUE")
+    (test-list-element "XOR(FALSE)(TRUE)" (read-any ((XOR FALSE) TRUE)) "bool:TRUE")
+    (test-list-element "XOR(FALSE)(FALSE)" (read-any ((XOR FALSE) FALSE)) "bool:FALSE")
+    ; type fails
+    (test-list-element "XOR(negTHREE)(TRUE)" (read-any ((XOR negTHREE) TRUE)) "XOR(arg1(err:bool))")
+    (test-list-element "XOR(FALSE)(TWO)" (read-any ((XOR FALSE) TWO)) "XOR(arg2(err:bool))")
 ))
 
-(show-results "t-xor" t-xor-tests)
+(show-results "XOR" XOR-tests)
 
 ; ====================================================================
 
-(define t-nor-tests (list 
-    (test-list-element "t-nor(TRUE)(TRUE)" (bool-read ((t-nor TRUE) TRUE)) "bool:FALSE")
-    (test-list-element "t-nor(TRUE)(FALSE)" (bool-read ((t-nor TRUE) FALSE)) "bool:FALSE")
-    (test-list-element "t-nor(FALSE)(TRUE)" (bool-read ((t-nor FALSE) TRUE)) "bool:FALSE")
-    (test-list-element "t-nor(FALSE)(FALSE)" (bool-read ((t-nor FALSE) FALSE)) "bool:TRUE")
-    (test-list-element "t-nor(negTHREE)(TRUE)" (bool-read ((t-nor negTHREE) TRUE)) "t-nor(arg1(err:bool))")
-    (test-list-element "t-nor(FALSE)(TWO)" (bool-read ((t-nor FALSE) TWO)) "t-nor(arg2(err:bool))")
+(define NOR-tests (list
+    ; normal
+    (test-list-element "NOR(TRUE)(TRUE)" (read-any ((NOR TRUE) TRUE)) "bool:FALSE")
+    (test-list-element "NOR(TRUE)(FALSE)" (read-any ((NOR TRUE) FALSE)) "bool:FALSE")
+    (test-list-element "NOR(FALSE)(TRUE)" (read-any ((NOR FALSE) TRUE)) "bool:FALSE")
+    (test-list-element "NOR(FALSE)(FALSE)" (read-any ((NOR FALSE) FALSE)) "bool:TRUE")
+    ; type fails
+    (test-list-element "NOR(negTHREE)(TRUE)" (read-any ((NOR negTHREE) TRUE)) "NOR(arg1(err:bool))")
+    (test-list-element "NOR(FALSE)(TWO)" (read-any ((NOR FALSE) TWO)) "NOR(arg2(err:bool))")
 ))
 
-(show-results "t-nor" t-nor-tests)
+(show-results "NOR" NOR-tests)
 
 ; ====================================================================
 
-(define t-nand-tests (list 
-    (test-list-element "t-nand(TRUE)(TRUE)" (bool-read ((t-nand TRUE) TRUE)) "bool:FALSE")
-    (test-list-element "t-nand(TRUE)(FALSE)" (bool-read ((t-nand TRUE) FALSE)) "bool:TRUE")
-    (test-list-element "t-nand(FALSE)(TRUE)" (bool-read ((t-nand FALSE) TRUE)) "bool:TRUE")
-    (test-list-element "t-nand(FALSE)(FALSE)" (bool-read ((t-nand FALSE) FALSE)) "bool:TRUE")
-    (test-list-element "t-nand(negTHREE)(TRUE)" (bool-read ((t-nand negTHREE) TRUE)) "t-nand(arg1(err:bool))")
-    (test-list-element "t-nand(FALSE)(TWO)" (bool-read ((t-nand FALSE) TWO)) "t-nand(arg2(err:bool))")
+(define NAND-tests (list 
+    ; normal
+    (test-list-element "NAND(TRUE)(TRUE)" (read-any ((NAND TRUE) TRUE)) "bool:FALSE")
+    (test-list-element "NAND(TRUE)(FALSE)" (read-any ((NAND TRUE) FALSE)) "bool:TRUE")
+    (test-list-element "NAND(FALSE)(TRUE)" (read-any ((NAND FALSE) TRUE)) "bool:TRUE")
+    (test-list-element "NAND(FALSE)(FALSE)" (read-any ((NAND FALSE) FALSE)) "bool:TRUE")
+    ; type fails
+    (test-list-element "NAND(negTHREE)(TRUE)" (read-any ((NAND negTHREE) TRUE)) "NAND(arg1(err:bool))")
+    (test-list-element "NAND(FALSE)(TWO)" (read-any ((NAND FALSE) TWO)) "NAND(arg2(err:bool))")
 ))
 
-(show-results "t-nand" t-nand-tests)
+(show-results "NAND" NAND-tests)

@@ -31,45 +31,45 @@
 ;===================================================
 
 #|
-    ~ t-not ~
+    ~ NOT ~
     - Contract: BOOL => BOOL
     - Logic: not function with type checking
 |#
-(def t-not B = (((((type-n-check-f _not) "t-not") bool-type) bool-type) B))
+(def NOT B = (((((fully-type _not) "NOT") bool) B) bool))
 
 #|
-    ~ t-and ~
+    ~ AND ~
     - Contract: (BOOL,BOOL) => BOOL
     - Logic: and function with type checking
 |#
-(def t-and N1 N2 = (((((((type-n-check-f2 _and) "t-and") bool-type) bool-type) bool-type) N1) N2))
+(def AND N1 N2 = (((((((fully-type2 _and) "AND") bool) N1) bool) N2) bool))
 
 #|
-    ~ t-or ~
+    ~ OR ~
     - Contract: (BOOL,BOOL) => BOOL
     - Logic: or function with type checking
 |#
-(def t-or N1 N2 = (((((((type-n-check-f2 _or) "t-or") bool-type) bool-type) bool-type) N1) N2))
+(def OR N1 N2 = (((((((fully-type2 _or) "OR") bool) N1) bool) N2) bool))
 
 ;===================================================
 
 #|
-    ~ t-xor ~
+    ~ XOR ~
     - Contract: (BOOL,BOOL) => BOOL
     - Logic: xor function with type checking
 |#
-(def t-xor N1 N2 = (((((((type-n-check-f2 xor) "t-xor") bool-type) bool-type) bool-type) N1) N2))
+(def XOR N1 N2 = (((((((fully-type2 xor) "XOR") bool) N1) bool) N2) bool))
 
 #|
-    ~ t-nor ~
+    ~ NOR ~
     - Contract: (BOOL,BOOL) => BOOL
     - Logic: nor function with type checking
 |#
-(def t-nor N1 N2 = (((((((type-n-check-f2 nor) "t-nor") bool-type) bool-type) bool-type) N1) N2))
+(def NOR N1 N2 = (((((((fully-type2 nor) "NOR") bool) N1) bool) N2) bool))
 
 #|
-    ~ t-nand ~
+    ~ NAND ~
     - Contract: (BOOL,BOOL) => BOOL
     - Logic: nand function with type checking
 |#
-(def t-nand N1 N2 = (((((((type-n-check-f2 nand) "t-nand") bool-type) bool-type) bool-type) N1) N2))
+(def NAND N1 N2 = (((((((fully-type2 nand) "NAND") bool) N1) bool) N2) bool))
