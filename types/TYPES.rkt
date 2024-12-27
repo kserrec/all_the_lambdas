@@ -335,7 +335,9 @@
                 _then NAT-ERROR
                 _else (_if ((eq int) param-type)
                         _then INT-ERROR
-                        _else ERROR))))
+                        _else (_if ((eq _list) param-type)
+                                _then LIST-ERROR
+                                _else ERROR)))))
 
 #|
     ~ MAKE F TYPED ~
