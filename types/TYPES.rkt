@@ -85,6 +85,8 @@
 (def nat = two)
 ;   INT NUMBER
 (def int = three)
+;   LIST 
+(def _list = four)
 
 ;===================================================
 
@@ -117,6 +119,8 @@
 
 (def make-int-err err-msg = ((make-error int) err-msg))
 
+(def make-list-err err-msg = ((make-error _list) err-msg))
+
 ;===================================================
 
 #|
@@ -140,6 +144,10 @@
 ;   - Idea: has type error and val as nat
 (def INT-ERROR = (make-int-err "err:int"))
 
+;   List Error Type Object
+;   - Idea: has type error and val as nat
+(def LIST-ERROR = (make-list-err "err:list"))
+
 ;===================================================
 
 ;   Other Typed Objects Makers
@@ -154,6 +162,10 @@
 ;   Makes Integer Number Type Objects
 ;   - Contract: val => INT
 (def make-int val = ((make-obj int) val))
+
+;   Makes List Type Objects
+;   - Contract: val => INT
+(def _make-list val = ((make-obj _list) val))
 
 ;===================================================
 
@@ -206,6 +218,13 @@
     - Structure: obj => int
 |#
 (def is-int obj = ((is-type int) obj))
+
+#|
+    ~ IS LIST ~
+    - Idea: use is-type
+    - Structure: obj => list
+|#
+(def is-list obj = ((is-type _list) obj))
 
 ;===================================================
 
@@ -338,6 +357,7 @@
 (def read-bool B = (((val B) "bool:TRUE") "bool:FALSE"))
 (def read-nat N = (string-append "nat:" (n-read (val N))))
 (def read-int Z = (string-append "int:" (z-read (val Z))))
+(def read-list L = (string-append "list:" (l-read (val Z))))
 
 (def read-any OBJ = 
     (_if (is-bool OBJ)
@@ -348,7 +368,11 @@
             _else (
                 _if (is-int OBJ)
                 _then (read-int OBJ)
-                _else (read-error OBJ)
+                _else (
+                    _if (is-list OBJ)
+                    _then (read-list OBJ)
+                    _else (read-error OBJ)
+                )
             )
         )
     )
