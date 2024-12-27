@@ -1,5 +1,6 @@
 #lang lazy
 (provide (all-defined-out))
+(require racket/string)
 (require "../macros/macros.rkt")
 (require "../church.rkt"
          "../division.rkt"
@@ -7,7 +8,37 @@
          "../lists.rkt"
          "../logic.rkt")
 
+;===================================================
+
+; ~ HELPER FUNCTIONS ~
+
+; wraps function names around errors for error tracing
 (define (wrap funcName err) (string-append funcName "(" err ")"))
+
+; rewrites typed lists more nicely
+(define (transform-string s)
+  ; Find positions using substring search
+  (define bracket-pos 
+    (let loop ([i 0])
+      (if (char=? (string-ref s i) #\[)
+          i
+          (loop (add1 i)))))
+          
+  (define colon-pos
+    (let loop ([i (add1 bracket-pos)])
+      (if (char=? (string-ref s i) #\:)
+          i
+          (loop (add1 i)))))
+          
+  (define key (substring s (add1 bracket-pos) colon-pos))
+  (define key+colon (string-append key ":"))
+  
+  ; Remove all instances of key+colon
+  (define removed
+    (regexp-replace* (regexp (regexp-quote key+colon)) s ""))
+    
+  ; Add single instance at start
+  (string-append key+colon removed))
 
 ;===================================================
 ; TYPES
@@ -353,12 +384,11 @@
         _then (err-read obj)
         _else (func obj)))
 
-
 (def read-error E = (tail (tail E)))
 (def read-bool B = (((val B) "bool:TRUE") "bool:FALSE"))
 (def read-nat N = (string-append "nat:" (n-read (val N))))
 (def read-int Z = (string-append "int:" (z-read (val Z))))
-(def read-list L = (string-append "list:" ((l-read (val L)) read-any)))
+(def read-list L = (transform-string (string-append "list" ((l-read (val L)) read-any))))
 
 (def read-any OBJ = 
     (_if (is-bool OBJ)
