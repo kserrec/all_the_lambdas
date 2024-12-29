@@ -214,11 +214,26 @@
 
 ;===================================================
 
-
+; "fully-type" function returns falsely typed list by just tagging with a _list type, but it doesn't have typed elements so this extra wrapping with _make-list is needed
 (def INSERT X L I = ((_make-list (type X)) (val (((((((((fully-type3 insert) "INSERT") (type X)) X) _list) (un-type-els L)) nat) I) _list))))
 
-(displayln "insert test")
-(def inserted-LIST-5523 = (((INSERT FOUR) LIST-5-5-2-3) TWO))
-(displayln (read-any inserted-LIST-5523))
+; (displayln "insert test")
+; (def inserted-LIST-5523 = (((INSERT FOUR) LIST-5-5-2-3) TWO))
+; (displayln (read-any inserted-LIST-5523))
 ; (displayln (n-read (type inserted-LIST-5523)))
 ; (displayln (n-read (type (val inserted-LIST-5523))))
+
+
+(def REPLACE X L I = ((_make-list (type X)) (val (((((((((fully-type3 replace) "REPLACE") (type X)) X) _list) (un-type-els L)) nat) I) _list))))
+
+(displayln "replace test")
+(def replaced-LIST-5523 = (((REPLACE FOUR) LIST-5-5-2-3) TWO))
+(displayln (read-any replaced-LIST-5523))
+; (displayln (n-read (type inserted-LIST-5523)))
+; (displayln (n-read (type (val replaced-LIST-5523))))
+
+
+(def DROP N L = (((((((fully-type2 _drop) "DROP") nat) N) _list) L) _list))
+
+(displayln "drop test")
+(displayln (read-any ((DROP ONE) LIST-5-5-2-3)))
