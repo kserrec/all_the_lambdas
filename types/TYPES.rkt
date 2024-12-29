@@ -272,7 +272,7 @@
 
 #|
     ~ SINGLE ARG FUNCTION TYPE CHECK ~
-    - Contract: (func, funcName, type, arg) => func
+    - Contract: (func, funcName, type, param) => func
     - Idea: Returns error if inputs is not right type, else runs function
     - Logic: If passed input is right type
                 then run function
@@ -294,7 +294,7 @@
 
 #|
     ~ DOUBLE ARG FUNCTION TYPE CHECK ~
-    - Contract: (func, funcName, type, type, arg, arg) => func
+    - Contract: (func, funcName, type, type, param, param) => func
     - Idea: Returns error if inputs are not right type, else runs function
     - Logic: If passed inputs are right type
                 then run function
@@ -323,6 +323,47 @@
                     _then chain-errs1
                     _else err1)))))))))
 
+
+#|
+    ~ TRIPLE ARG FUNCTION TYPE CHECK ~
+    - Contract: (func, funcName, type, type, type, param, param, param) => func
+    - Idea: Returns error if inputs are not right type, else runs function
+    - Logic: If passed inputs are right type
+                then run function
+                else if error was passed
+                        then chain passed error with new error
+                        else pass new error
+            note: fails early to chain errors from first failure on up
+|#
+(def type-check3 func func-name param-type1 param-type2 param-type3 param1 param2 param3 = 
+    ; make/chain errors for param 1 if needed
+    (_let err-msg1 = (wrap func-name (wrap "arg1" (err-read (param-err-type param-type1))))
+    (_let err1 = ((make-error param-type1) err-msg1)
+    (_let chain-errs1 = ((make-error param-type1) (string-append (err-read param1) "->" err-msg1))
+    ; make/chain errors for param 2 if needed
+    (_let err-msg2 = (wrap func-name (wrap "arg2" (err-read (param-err-type param-type2))))
+    (_let err2 = ((make-error param-type2) err-msg2)
+    (_let chain-errs2 = ((make-error param-type2) (string-append (err-read param2) "->" err-msg2))
+    ; make/chain errors for param 3 if needed
+    (_let err-msg3 = (wrap func-name (wrap "arg3" (err-read (param-err-type param-type3))))
+    (_let err3 = ((make-error param-type2) err-msg3)
+    (_let chain-errs3 = ((make-error param-type3) (string-append (err-read param3) "->" err-msg3))
+        ; check types
+        (_if ((is-type param-type1) param1)
+            _then (_if ((is-type param-type2) param2)
+                    _then (_if ((is-type param-type3) param3)
+                            _then (((func param1) param2) param3)
+                            _else (_if (is-error param3)
+                                    _then chain-errs3
+                                    _else err3))
+                    _else (_if (is-error param2)
+                            _then chain-errs2
+                            _else err2))
+            _else (_if (is-error param1)
+                    _then chain-errs1
+                    _else err1))))))))))))
+
+
 #|
     ~ GETS ERROR TYPE BY PARAM TYPE ~
     - Idea: Takes a parameter type and returns related error type
@@ -344,11 +385,13 @@
     - Idea: Add type to the functions based on their return type
 |#
 ; For One Argument Functions
-(def make-typed-func func param func-type = ((make-obj func-type) (func (val param))))
+(def make-typed-func func param return-type = ((make-obj return-type) (func (val param))))
 
 ; For Two Argument Functions
-(def make-typed-func-2 func param1 param2 func-type = ((make-obj func-type) ((func (val param1)) (val param2))))
+(def make-typed-func-2 func param1 param2 return-type = ((make-obj return-type) ((func (val param1)) (val param2))))
 
+; For Three Argument Functions
+(def make-typed-func-3 func param1 param2 param3 return-type = ((make-obj return-type) (((func (val param1)) (val param2)) (val param3))))
 
 #|
     ~ MAKE F TYPED AND CHECKED ~
@@ -368,6 +411,15 @@
             (lambda (param2)
                 ((((make-typed-func-2 func) param1) param2) return-type)))) 
         func-name) param-type1) param-type2) param1) param2))
+
+; For Three Argument Functions
+(def fully-type3 func func-name param-type1 param1 param-type2 param2 param-type3 param3 return-type = 
+    ((((((((type-check3
+        (lambda (param1)
+            (lambda (param2)
+                (lambda (param3)
+                    (((((make-typed-func-3 func) param1) param2) param3) return-type)))))
+        func-name) param-type1) param-type2) param-type3) param1) param2) param3))
 
 ;===================================================
 
@@ -394,7 +446,8 @@
 (def read-bool B = (((val B) "bool:TRUE") "bool:FALSE"))
 (def read-nat N = (string-append "nat:" (n-read (val N))))
 (def read-int Z = (string-append "int:" (z-read (val Z))))
-(def read-list L = (transform-string (string-append "list" ((l-read (val L)) read-any))))
+; (def read-list L = (transform-string (string-append "list" ((l-read (val L)) read-any))))
+(def read-list L = (string-append "list" ((l-read (val L)) read-any)))
 
 (def read-any OBJ = 
     (_if (is-bool OBJ)
