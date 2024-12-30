@@ -205,9 +205,9 @@
     ((_list (lambda (x)
                 (lambda (y)
                     (lambda (z)
-                        (((g x)
-                            ((pair x) (((f g) y) n)))
-                            (((f g) y) n)
+                        (_if (g x)
+                            _then ((pair x) (((f g) y) n))
+                            _else(((f g) y) n)
                         )
                     )
                 )
@@ -218,14 +218,14 @@
     - Contract: (func, value, list) => new value (of same "type" as original value) 
         - note: value can be any "type" of value
     - Idea: Takes a function g, initial value i, and a list
-                and applies g to recursively to each element on each other after 
+                and applies g recursively to each element on each other after 
                 starting with the initial value to return a final single value
     - Logic: Applies g to both head x and the value return from recursive call until it hits base
 |#
 (define _fold (Y fold-helper))
 
-(def fold-helper f g i _list = 
-    ((_list (lambda (x)
+(def fold-helper f g i lst = 
+    ((lst (lambda (x)
                 (lambda (y)
                     (lambda (z)
                         ((g x) (((f g) i) y))
@@ -300,4 +300,3 @@
             (rev _list))))
 
 ;===================================================
-
