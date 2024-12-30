@@ -203,6 +203,9 @@
 ;   - Logic: maps over untyped list to make it typed
 (def _make-list type val = ((make-obj _list) ((_map (make-obj type)) val)))
 
+
+(def untype-elements L = ((make-obj _list) ((_map val) (val L))))
+
 ;===================================================
 
 ;  Makes New Integer Number Type Objects 
@@ -457,8 +460,8 @@
 (def read-bool B = (((val B) "bool:TRUE") "bool:FALSE"))
 (def read-nat N = (string-append "nat:" (n-read (val N))))
 (def read-int Z = (string-append "int:" (z-read (val Z))))
-; (def read-list L = (transform-string (string-append "list" ((l-read (val L)) read-any))))
-(def read-list L = (string-append "list" ((l-read (val L)) read-any)))
+(def read-list L = (transform-string (string-append "list" ((l-read (val L)) read-any))))
+; (def read-list L = (string-append "list" ((l-read (val L)) read-any)))
 
 (def read-any OBJ = 
     (_if (is-bool OBJ)

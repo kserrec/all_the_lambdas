@@ -13,11 +13,6 @@
 
 ;===================================================
 
-; helper functions
-(def un-type-els L = ((make-obj _list) ((_map val) (val L))))
-
-;===================================================
-
 ; TYPED NILs
 (def make-NIL type = ((pair type) false))
 
@@ -37,8 +32,8 @@
 
 ;===================================================
 
-; have to use un-type-els because fully-type-f adds types to elements so sub elements cannot go in already typed
-(def IND L I = (((((((fully-type2 ind) "IND") _list) (un-type-els L)) nat) I) nat))
+; have to use untype-elements because fully-type-f adds types to elements so sub elements cannot go in already typed
+(def IND L I = (((((((fully-type2 ind) "IND") _list) (untype-elements L)) nat) I) nat))
 
 ;===================================================
 
