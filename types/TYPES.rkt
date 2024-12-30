@@ -393,6 +393,8 @@
 ; For Three Argument Functions
 (def make-typed-func-3 func param1 param2 param3 return-type = ((make-obj return-type) (((func (val param1)) (val param2)) (val param3))))
 
+(def keep-typed-func-3 func param1 param2 param3 = (((func (val param1)) (val param2)) (val param3)))
+
 #|
     ~ MAKE F TYPED AND CHECKED ~
     - Idea: transform our untyped functions to fully typed
@@ -419,6 +421,15 @@
             (lambda (param2)
                 (lambda (param3)
                     (((((make-typed-func-3 func) param1) param2) param3) return-type)))))
+        func-name) param-type1) param-type2) param-type3) param1) param2) param3))
+
+; don't package up object with type value, because it already is a typed value like fully-type3
+(def keep-typed3 func func-name param-type1 param1 param-type2 param2 param-type3 param3 return-type = 
+    ((((((((type-check3
+        (lambda (param1)
+            (lambda (param2)
+                (lambda (param3)
+                    ((((keep-typed-func-3 func) param1) param2) param3)))))
         func-name) param-type1) param-type2) param-type3) param1) param2) param3))
 
 ;===================================================

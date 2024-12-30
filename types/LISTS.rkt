@@ -14,42 +14,7 @@
 ;===================================================
 
 ; helper functions
-
-(def un-type obj = (val obj))
-
-(def un-type-els L = ((make-obj _list) ((_map un-type) (un-type L))))
-
-;===================================================
-
-; definitions for tests 
-
-(def l-0 = ((pair zero) nil))
-(def l-5 = ((pair five) nil))
-(def l-2 = ((pair two) nil))
-(def l-3 = ((pair three) nil))
-
-
-(def l-0-5-2-3 = ((app ((app ((app l-0) l-5)) l-2)) l-3))
-(def l-5-5-2-3 = ((app ((app ((app l-5) l-5)) l-2)) l-3))
-
-
-(def l-p2 = ((pair posTwo) nil))
-(def l-n3 = ((pair negThree) nil))
-(def l-p4 = ((pair posFour) nil))
-
-(def l-p4-n3-p4-p2 = ((app ((app ((app l-p4) l-n3)) l-p4)) l-p2))
-
-; (displayln (z-read (head l-p4-n3-p4-p2)))
-
-; (displayln ((l-read l-p4-n3-p4-p2) z-read))
-
-(def LIST-0 = ((_make-list nat) l-0))
-
-(def LIST-5 = ((_make-list nat) l-5))
-
-(def LIST-0-5-2-3 = ((_make-list nat) l-0-5-2-3))
-(def LIST-5-5-2-3 = ((_make-list nat) l-5-5-2-3))
-(def LIST-p4-n3-p4-p2 = ((_make-list int) l-p4-n3-p4-p2))
+(def un-type-els L = ((make-obj _list) ((_map val) (val L))))
 
 ;===================================================
 
@@ -105,9 +70,7 @@
 
 (def FILTER G L = (((((((fully-type2 _filter-helper-typed) "FILTER") bool) ((make-obj bool) G)) _list) L) _list))
 
-; has to be passed the untyped version of g - haven't worked out a way to get it passed the typed version and have it work yet
-(def FOLD g X L = (((((((((fully-type3 _fold) "FOLD") bool) ((make-obj bool) g)) (type X)) X) _list) (un-type-els L)) (type X)))
-
+(def FOLD G X L = (((((((((keep-typed3 _fold) "FOLD") bool) ((make-obj bool) G)) (type X)) ((make-obj (type X)) X)) _list) L) (type X)))
 ;===================================================
 
 (def TAKE N L = (((((((fully-type2 _take) "TAKE") nat) N) _list) L) _list))
@@ -126,3 +89,10 @@
 
 
 (def DROP N L = (((((((fully-type2 _drop) "DROP") nat) N) _list) L) _list))
+
+;===================================================
+
+
+
+
+
