@@ -33,7 +33,7 @@
 ;===================================================
 
 ; have to use untype-elements because fully-type-f adds types to elements so sub elements cannot go in already typed
-(def IND L I = (((((((fully-type2 ind) "IND") _list) (untype-elements L)) nat) I) nat))
+(def IND L I = (((((((fully-type2 ind) "IND") _list) (untype-elements L)) nat) I) (type (head (val L)))))
 
 ;===================================================
 

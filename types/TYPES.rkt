@@ -460,8 +460,8 @@
 (def read-bool B = (((val B) "bool:TRUE") "bool:FALSE"))
 (def read-nat N = (string-append "nat:" (n-read (val N))))
 (def read-int Z = (string-append "int:" (z-read (val Z))))
-(def read-list L = (transform-string (string-append "list" ((l-read (val L)) read-any))))
-; (def read-list L = (string-append "list" ((l-read (val L)) read-any)))
+; (def read-list L = (transform-string (string-append "list" ((l-read (val L)) read-any))))
+(def read-list L = (string-append "list" ((l-read (val L)) read-any)))
 
 (def read-any OBJ = 
     (_if (is-bool OBJ)
