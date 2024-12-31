@@ -144,34 +144,34 @@
 (define FOLD-tests (list
     (test-list-element "FOLD(ADDz)(0)(LIST-n2-p1-p2-n4-n5)" (read-any (((FOLD ADDz) posZERO) LIST-n2-p1-p2-n4-n5)) "int:-8")
     (test-list-element "FOLD(MULT)(1)(LIST-1-3-4-2)" (read-any (((FOLD MULT) ONE) LIST-1-3-4-2)) "nat:24")
-    (test-list-element "FOLD(EXP)(2)(LIST-2-3)" (read-any (((FOLD EXP) ONE) ((_make-list nat) (_cons two three)))) "nat:64")
+    (test-list-element "FOLD(EXP)(2)(LIST-2-3)" (read-any (((FOLD EXP) ONE) ((_make-list nat) (_cons two three)))) "nat:8")
 ))
 
 (show-results "FOLD" FOLD-tests)
 
 ; ====================================================================
 
-; (define TAKE-tests (list
-;     (test-list-element "TAKE(four)(l-5-4-2-0-4-2)" (read-any ((TAKE zero) l-5-4-2-0-4-2)) "list[]")
-;     (test-list-element "TAKE(four)(l-5-4-2-0-4-2)" (read-any ((TAKE (succ five)) l-5-4-2-0-4-2)) "list:nat[5,4,2,0,4,2]")
-;     (test-list-element "TAKE(four)(l-5-4-2-0-4-2)" (read-any ((TAKE four) l-5-4-2-0-4-2)) "list:nat[5,4,2,0]")
-;     (test-list-element "TAKE(two)(l-5-4-2-0-4-2)" (read-any ((TAKE two) l-5-4-2-0-4-2)) "list:nat[5,4]")
-;     (test-list-element "TAKE(three)(l-t-f-f-t)" (read-any ((TAKE three) l-t-f-f-t)) "list:bool[TRUE,FALSE,FALSE]")
-; ))
+(define TAKE-tests (list
+    (test-list-element "TAKE(FOUR)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE FOUR) LIST-n2-p1-p2-n4-n5)) "list:int[-2,1,2,-4]")
+    (test-list-element "TAKE(FIVE)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE (SUCC FOUR)) LIST-n2-p1-p2-n4-n5)) "list:int[-2,1,2,-4,-5]")
+    (test-list-element "TAKE(ZERO)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE ZERO) LIST-n2-p1-p2-n4-n5)) "list[]")
+    (test-list-element "TAKE(TWO)(LIST-1-3-4-2)" (read-any ((TAKE TWO) LIST-1-3-4-2)) "list:nat[1,3]")
+    (test-list-element "TAKE(THREE)(LIST-T-F-F-T)" (read-any ((TAKE THREE) LIST-T-F-F-T)) "list:bool[TRUE,FALSE,FALSE]")
+))
 
-; (show-results "TAKE" TAKE-tests)
+(show-results "TAKE" TAKE-tests)
 
-; ; ====================================================================
+; ====================================================================
 
-; (define TAKE-TAIL-tests (list
-;     (test-list-element "TAKE-TAIL(four)(l-5-4-2-0-4-2)" (read-any ((TAKE-TAIL zero) l-5-4-2-0-4-2)) "list[]")
-;     (test-list-element "TAKE-TAIL(four)(l-5-4-2-0-4-2)" (read-any ((TAKE-TAIL (succ five)) l-5-4-2-0-4-2)) "list:nat[5,4,2,0,4,2]")
-;     (test-list-element "TAKE-TAIL(four)(l-5-4-2-0-4-2)" (read-any ((TAKE-TAIL four) l-5-4-2-0-4-2)) "list:nat[2,0,4,2]")
-;     (test-list-element "TAKE-TAIL(two)(l-5-4-2-0-4-2)" (read-any ((TAKE-TAIL two) l-5-4-2-0-4-2)) "list:nat[4,2]")
-;     (test-list-element "TAKE-TAIL(three)(l-t-f-f-t)" (read-any ((TAKE-TAIL three) l-t-f-f-t)) "list:bool[FALSE,FALSE,TRUE]")
-; ))
+(define TAKE-TAIL-tests (list
+    (test-list-element "TAKE(FOUR)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE-TAIL FOUR) LIST-n2-p1-p2-n4-n5)) "list:int[1,2,-4,-5]")
+    (test-list-element "TAKE(FIVE)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE-TAIL (SUCC FOUR)) LIST-n2-p1-p2-n4-n5)) "list:int[-2,1,2,-4,-5]")
+    (test-list-element "TAKE(ZERO)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE-TAIL ZERO) LIST-n2-p1-p2-n4-n5)) "list[]")
+    (test-list-element "TAKE(TWO)(LIST-1-3-4-2)" (read-any ((TAKE-TAIL TWO) LIST-1-3-4-2)) "list:nat[4,2]")
+    (test-list-element "TAKE(THREE)(LIST-T-F-F-T)" (read-any ((TAKE-TAIL THREE) LIST-T-F-F-T)) "list:bool[FALSE,FALSE,TRUE]")
+))
 
-; (show-results "TAKE-TAIL" TAKE-TAIL-tests)
+(show-results "TAKE-TAIL" TAKE-TAIL-tests)
 
 ; ; ====================================================================
 
