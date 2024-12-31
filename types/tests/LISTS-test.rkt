@@ -96,19 +96,19 @@
 
 ; ; ====================================================================
 
-; (define l-5-4-2-0-4-2 ((app l-5-4-2) l-0-4-2))
+(define l-5-4-2-0-4-2 ((app l-5-4-2) l-0-4-2))
 
-; (define rev-tests (list
-;     (test-list-element "rev(nil)" ((l-read (rev nil)) b-read) "[]")
-;     (test-list-element "rev(l-false)" ((l-read (rev l-false)) b-read) "[false]")
-;     (test-list-element "rev(l-true)" ((l-read (rev l-true)) b-read) "[true]")
-;     (test-list-element "rev(l-false)" ((l-read (rev l-false)) b-read) "[false]")
-;     (test-list-element "rev(l-0)" ((l-read (rev l-0)) n-read) "[0]")
-;     (test-list-element "rev(l-4-2)" ((l-read (rev l-4-2)) n-read) "[2,4]")
-;     (test-list-element "rev(l-0-4-2)" ((l-read (rev l-0-4-2)) n-read) "[2,4,0]")
-;     (test-list-element "rev(l-5-4-2-0-4-2)" ((l-read (rev l-5-4-2-0-4-2)) n-read) "[2,4,0,2,4,5]")))
+(define REV-tests (list
+    (test-list-element "REV(nil)" (read-any (REV nil)) "list[]")
+    (test-list-element "REV(l-false)" (read-any (REV l-false)) "list:bool[FALSE]")
+    (test-list-element "REV(l-true)" (read-any (REV l-true)) "list:bool[TRUE]")
+    (test-list-element "REV(l-false)" (read-any (REV l-false)) "list:bool[FALSE]")
+    (test-list-element "REV(l-0)" (read-any (REV l-0)) "list:nat[0]")
+    (test-list-element "REV(l-4-2)" (read-any (REV l-4-2)) "list:nat[2,4]")
+    (test-list-element "REV(l-0-4-2)" (read-any (REV l-0-4-2)) "list:nat[2,4,0]")
+    (test-list-element "REV(l-5-4-2-0-4-2)" (read-any (REV l-5-4-2-0-4-2)) "list:nat[2,4,0,2,4,5]")))
 
-; (show-results "rev" rev-tests)
+(show-results "REV" REV-tests)
 
 ; ; ====================================================================
 
@@ -117,94 +117,94 @@
 ; (define square (lambda (x) ((mult x) x)))
 ; (define l-t-f-f-t ((pair true) ((pair false) ((twolist false) true))))
 
-; (define _map-tests (list
-;     (test-list-element "_map(_andTrue)(l-false)" ((l-read ((_map _andTrue) l-false)) b-read) "[false]")
-;     (test-list-element "_map(_andTrue)(l-true)" ((l-read ((_map _andTrue) l-true)) b-read) "[true]")
-;     (test-list-element "_map(_not)(l-false)" ((l-read ((_map _not) l-false)) b-read) "[true]")
-;     (test-list-element "_map(_not)(l-t-f-f-t)" ((l-read ((_map _not) l-t-f-f-t)) b-read) "[false,true,true,false]")
-;     (test-list-element "_map(add2)(l-0)" ((l-read ((_map add2) l-0)) n-read) "[2]")
-;     (test-list-element "_map(add2)(l-5-4-2-0-4-2)" ((l-read ((_map add2) l-5-4-2-0-4-2)) n-read) "[7,6,4,2,6,4]")
-;     (test-list-element "_map(square)(l-5-4-2-0-4-2)" ((l-read ((_map square) l-5-4-2-0-4-2)) n-read) "[25,16,4,0,16,4]")
-;     (test-list-element "_map(lambda (x) ((_exp x) x))(l-5-4-2-0-4-2)" ((l-read ((_map (lambda (x) ((_exp x) x))) l-5-4-2-0-4-2)) n-read) "[3125,256,4,1,256,4]")))
+(define MAP-tests (list
+    (test-list-element "MAP(_andTrue)(l-false)" (read-any ((MAP _andTrue) l-false)) "list:bool[FALSE]")
+    (test-list-element "MAP(_andTrue)(l-true)" (read-any ((MAP _andTrue) l-true)) "list:bool[TRUE]")
+    (test-list-element "MAP(_not)(l-false)" (read-any ((MAP _not) l-false)) "list:bool[TRUE]")
+    (test-list-element "MAP(_not)(l-t-f-f-t)" (read-any ((MAP _not) l-t-f-f-t)) "list:bool[FALSE,TRUE,TRUE,FALSE]")
+    (test-list-element "MAP(add2)(l-0)" (read-any ((MAP add2) l-0)) "list:nat[2]")
+    (test-list-element "MAP(add2)(l-5-4-2-0-4-2)" (read-any ((MAP add2) l-5-4-2-0-4-2)) "list:nat[7,6,4,2,6,4]")
+    (test-list-element "MAP(square)(l-5-4-2-0-4-2)" (read-any ((MAP square) l-5-4-2-0-4-2)) "list:nat[25,16,4,0,16,4]")
+    (test-list-element "MAP(lambda (x) ((_exp x) x))(l-5-4-2-0-4-2)" (read-any ((MAP (lambda (x) ((_exp x) x))) l-5-4-2-0-4-2)) "list:nat[3125,256,4,1,256,4]")))
 
-; (show-results "_map" _map-tests)
+(show-results "MAP" MAP-tests)
 
-; ; ====================================================================
+; ====================================================================
 
-; (define _filter-tests (list
-;     (test-list-element "_filter(_andTrue)(l-t-f-f-t)" ((l-read ((_filter _andTrue) l-t-f-f-t)) b-read) "[true,true]")
-;     (test-list-element "_filter(isEven)(l-0)" ((l-read ((_filter isEven) l-0)) n-read) "[0]")
-;     (test-list-element "_filter(isEven)(l-5-4-2-0-4-2)" ((l-read ((_filter isEven) l-5-4-2-0-4-2)) n-read) "[4,2,0,4,2]")
-;     (test-list-element "_filter(isOdd)(l-5-4-2-0-4-2)" ((l-read ((_filter isOdd) l-5-4-2-0-4-2)) n-read) "[5]")
-;     (test-list-element "_filter(l-5-4-2-0-4-2)" ((l-read ((_filter (lambda (x) ((eq x) two))) l-5-4-2-0-4-2)) n-read) "[2,2]")))
+(define FILTER-tests (list
+    (test-list-element "FILTER(_andTrue)(l-t-f-f-t)" (read-any ((FILTER _andTrue) l-t-f-f-t)) "list:bool[TRUE,TRUE]")
+    (test-list-element "FILTER(isEven)(l-0)" (read-any ((FILTER isEven) l-0)) "list:nat[0]")
+    (test-list-element "FILTER(isEven)(l-5-4-2-0-4-2)" (read-any ((FILTER isEven) l-5-4-2-0-4-2)) "list:nat[4,2,0,4,2]")
+    (test-list-element "FILTER(isOdd)(l-5-4-2-0-4-2)" (read-any ((FILTER isOdd) l-5-4-2-0-4-2)) "list:nat[5]")
+    (test-list-element "FILTER(l-5-4-2-0-4-2)" (read-any ((FILTER (lambda (x) ((eq x) two))) l-5-4-2-0-4-2)) "list:nat[2,2]")))
 
-; (show-results "_filter" _filter-tests)
+(show-results "FILTER" FILTER-tests)
 
-; ; ====================================================================
+; ====================================================================
 
-; (define _fold-tests (list
-;     (test-list-element "_fold(add)(0)(l-5-4-2-0-4-2)" (n-read (((_fold add) zero) l-5-4-2-0-4-2)) "17")
-;     (test-list-element "_fold(mult)(1)(l-5-4-2)" (n-read (((_fold mult) one) l-5-4-2)) "40")
-;     (test-list-element "_fold(mult)(2)(l-4-2)" (n-read (((_fold _exp) two) l-4-2)) "256")
-; ))
+(define FOLD-tests (list
+    (test-list-element "FOLD(add)(0)(l-5-4-2-0-4-2)" (read-any (((FOLD add) zero) l-5-4-2-0-4-2)) "nat:17")
+    (test-list-element "FOLD(mult)(1)(l-5-4-2)" (read-any (((FOLD mult) one) l-5-4-2)) "nat:40")
+    (test-list-element "FOLD(mult)(2)(l-4-2)" (read-any (((FOLD _exp) two) l-4-2)) "nat:256")
+))
 
-; (show-results "_fold" _fold-tests)
+(show-results "FOLD" FOLD-tests)
 
-; ; ====================================================================
+; ====================================================================
 
-; (define take-tests (list
-;     (test-list-element "take(four)(l-5-4-2-0-4-2)" ((l-read ((_take zero) l-5-4-2-0-4-2)) n-read) "[]")
-;     (test-list-element "take(four)(l-5-4-2-0-4-2)" ((l-read ((_take (succ five)) l-5-4-2-0-4-2)) n-read) "[5,4,2,0,4,2]")
-;     (test-list-element "take(four)(l-5-4-2-0-4-2)" ((l-read ((_take four) l-5-4-2-0-4-2)) n-read) "[5,4,2,0]")
-;     (test-list-element "take(two)(l-5-4-2-0-4-2)" ((l-read ((_take two) l-5-4-2-0-4-2)) n-read) "[5,4]")
-;     (test-list-element "take(three)(l-t-f-f-t)" ((l-read ((_take three) l-t-f-f-t)) b-read) "[true,false,false]")
-; ))
+(define TAKE-tests (list
+    (test-list-element "TAKE(four)(l-5-4-2-0-4-2)" (read-any ((TAKE zero) l-5-4-2-0-4-2)) "list[]")
+    (test-list-element "TAKE(four)(l-5-4-2-0-4-2)" (read-any ((TAKE (succ five)) l-5-4-2-0-4-2)) "list:nat[5,4,2,0,4,2]")
+    (test-list-element "TAKE(four)(l-5-4-2-0-4-2)" (read-any ((TAKE four) l-5-4-2-0-4-2)) "list:nat[5,4,2,0]")
+    (test-list-element "TAKE(two)(l-5-4-2-0-4-2)" (read-any ((TAKE two) l-5-4-2-0-4-2)) "list:nat[5,4]")
+    (test-list-element "TAKE(three)(l-t-f-f-t)" (read-any ((TAKE three) l-t-f-f-t)) "list:bool[TRUE,FALSE,FALSE]")
+))
 
-; (show-results "take" take-tests)
+(show-results "TAKE" TAKE-tests)
 
-; ; ====================================================================
+; ====================================================================
 
-; (define takeTail-tests (list
-;     (test-list-element "takeTail(four)(l-5-4-2-0-4-2)" ((l-read ((takeTail zero) l-5-4-2-0-4-2)) n-read) "[]")
-;     (test-list-element "takeTail(four)(l-5-4-2-0-4-2)" ((l-read ((takeTail (succ five)) l-5-4-2-0-4-2)) n-read) "[5,4,2,0,4,2]")
-;     (test-list-element "takeTail(four)(l-5-4-2-0-4-2)" ((l-read ((takeTail four) l-5-4-2-0-4-2)) n-read) "[2,0,4,2]")
-;     (test-list-element "takeTail(two)(l-5-4-2-0-4-2)" ((l-read ((takeTail two) l-5-4-2-0-4-2)) n-read) "[4,2]")
-;     (test-list-element "takeTail(three)(l-t-f-f-t)" ((l-read ((takeTail three) l-t-f-f-t)) b-read) "[false,false,true]")
-; ))
+(define TAKE-TAIL-tests (list
+    (test-list-element "TAKE-TAIL(four)(l-5-4-2-0-4-2)" (read-any ((TAKE-TAIL zero) l-5-4-2-0-4-2)) "list[]")
+    (test-list-element "TAKE-TAIL(four)(l-5-4-2-0-4-2)" (read-any ((TAKE-TAIL (succ five)) l-5-4-2-0-4-2)) "list:nat[5,4,2,0,4,2]")
+    (test-list-element "TAKE-TAIL(four)(l-5-4-2-0-4-2)" (read-any ((TAKE-TAIL four) l-5-4-2-0-4-2)) "list:nat[2,0,4,2]")
+    (test-list-element "TAKE-TAIL(two)(l-5-4-2-0-4-2)" (read-any ((TAKE-TAIL two) l-5-4-2-0-4-2)) "list:nat[4,2]")
+    (test-list-element "TAKE-TAIL(three)(l-t-f-f-t)" (read-any ((TAKE-TAIL three) l-t-f-f-t)) "list:bool[FALSE,FALSE,TRUE]")
+))
 
-; (show-results "takeTail" takeTail-tests)
+(show-results "TAKE-TAIL" TAKE-TAIL-tests)
 
-; ; ====================================================================
+; ====================================================================
 
-; (define insert-tests (list
-;     (test-list-element "insert(four)(l-5-4-2-0-4-2)(three)" ((l-read (((insert four) l-5-4-2-0-4-2) three)) n-read) "[5,4,2,4,0,4,2]")
-;     (test-list-element "insert(five)(l-5-4-2-0-4-2)(two)" ((l-read (((insert five) l-5-4-2-0-4-2) two)) n-read) "[5,4,5,2,0,4,2]")
-;     (test-list-element "insert(mult(5)(2))(l-4-2)(one)" ((l-read (((insert ((mult five) two)) l-4-2) one)) n-read) "[4,10,2]")
-;     (test-list-element "insert(one)(l-4-2)(zero)" ((l-read (((insert one) l-4-2) zero)) n-read) "[1,4,2]")
-;     (test-list-element "insert(five)(l-4-2)(two)" ((l-read (((insert five) l-4-2) two)) n-read) "[4,2,5]")
-; ))
+(define insert-tests (list
+    (test-list-element "insert(four)(l-5-4-2-0-4-2)(three)" (read-any (((insert four) l-5-4-2-0-4-2) three)) "list:nat[5,4,2,4,0,4,2]")
+    (test-list-element "insert(five)(l-5-4-2-0-4-2)(two)" (read-any (((insert five) l-5-4-2-0-4-2) two)) "list:nat[5,4,5,2,0,4,2]")
+    (test-list-element "insert(mult(5)(2))(l-4-2)(one)" (read-any (((insert ((mult five) two)) l-4-2) one)) "list:nat[4,10,2]")
+    (test-list-element "insert(one)(l-4-2)(zero)" (read-any (((insert one) l-4-2) zero)) "list:nat[1,4,2]")
+    (test-list-element "insert(five)(l-4-2)(two)" (read-any (((insert five) l-4-2) two)) "list:nat[4,2,5]")
+))
 
-; (show-results "insert" insert-tests)
+(show-results "insert" insert-tests)
 
-; ; ====================================================================
+; ====================================================================
 
-; (define replace-tests (list
-;     (test-list-element "replace(four)(l-5-4-2-0-4-2)(three)" ((l-read (((replace four) l-5-4-2-0-4-2) three)) n-read) "[5,4,2,4,4,2]")
-;     (test-list-element "replace(five)(l-5-4-2-0-4-2)(two)" ((l-read (((replace five) l-5-4-2-0-4-2) two)) n-read) "[5,4,5,0,4,2]")
-;     (test-list-element "replace(mult(5)(2))(l-4-2)(one)" ((l-read (((replace ((mult five) two)) l-4-2) one)) n-read) "[4,10]")
-;     (test-list-element "replace(one)(l-4-2)(zero)" ((l-read (((replace one) l-4-2) zero)) n-read) "[1,2]")
-;     (test-list-element "replace(five)(l-4-2)(one)" ((l-read (((replace five) l-4-2) one)) n-read) "[4,5]")
-; ))
+(define REPLACE-tests (list
+    (test-list-element "REPLACE(four)(l-5-4-2-0-4-2)(three)" (read-any (((REPLACE four) l-5-4-2-0-4-2) three)) "list:nat[5,4,2,4,4,2]")
+    (test-list-element "REPLACE(five)(l-5-4-2-0-4-2)(two)" (read-any (((REPLACE five) l-5-4-2-0-4-2) two)) "list:nat[5,4,5,0,4,2]")
+    (test-list-element "REPLACE(mult(5)(2))(l-4-2)(one)" (read-any (((REPLACE ((mult five) two)) l-4-2) one)) "list:nat[4,10]")
+    (test-list-element "REPLACE(one)(l-4-2)(zero)" (read-any (((REPLACE one) l-4-2) zero)) "list:nat[1,2]")
+    (test-list-element "REPLACE(five)(l-4-2)(one)" (read-any (((REPLACE five) l-4-2) one)) "list:nat[4,5]")
+))
 
-; (show-results "replace" replace-tests)
+(show-results "REPLACE" REPLACE-tests)
 
-; ; ====================================================================
+; ====================================================================
 
-; (define drop-tests (list
-;     (test-list-element "drop(zero)(l-5-4-2-0-4-2)" ((l-read ((_drop zero) l-5-4-2-0-4-2)) n-read) "[5,4,2,0,4,2]")
-;     (test-list-element "drop(zero)(l-5-4-2-0-4-2)" ((l-read ((_drop two) l-5-4-2-0-4-2)) n-read) "[2,0,4,2]")
-;     (test-list-element "drop(three)(l-t-f-f-t)" ((l-read ((_drop three) l-t-f-f-t)) b-read) "[true]")
-;     (test-list-element "drop(four)(l-t-f-f-t)" ((l-read ((_drop four) l-t-f-f-t)) b-read) "[]")
-; ))
+(define DROP-tests (list
+    (test-list-element "DROP(zero)(l-5-4-2-0-4-2)" (read-any ((_DROP zero) l-5-4-2-0-4-2)) "list:nat[5,4,2,0,4,2]")
+    (test-list-element "DROP(zero)(l-5-4-2-0-4-2)" (read-any ((_DROP two) l-5-4-2-0-4-2)) "list:nat[2,0,4,2]")
+    (test-list-element "DROP(three)(l-t-f-f-t)" (read-any ((_DROP three) l-t-f-f-t)) "list:bool[TRUE]")
+    (test-list-element "DROP(four)(l-t-f-f-t)" (read-any ((_DROP four) l-t-f-f-t)) "list[]")
+))
 
-; (show-results "drop" drop-tests)
+(show-results "DROP" DROP-tests)
