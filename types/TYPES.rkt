@@ -17,32 +17,36 @@
 
 ; rewrites typed lists more nicely
 (define (transform-string s)
-  ; Find positions using substring search
-  (define bracket-pos 
-    (let loop ([i 0])
-      (if (char=? (string-ref s i) #\[)
-          i
-          (loop (add1 i)))))
-          
-  (define colon-pos
-    (let loop ([i (add1 bracket-pos)])
-      (if (char=? (string-ref s i) #\:)
-          i
-          (loop (add1 i)))))
-          
-  (define key (substring s (add1 bracket-pos) colon-pos))
-  (define key+colon (string-append ":" key))
-  
-  ; Remove all instances of "type:"
-  (define removed
-    (regexp-replace* (regexp (regexp-quote (string-append key ":"))) s ""))
-    
-  ; Insert type after "list"
-  (define list-end 4) ; "list" is 4 chars
-  (string-append 
-    (substring removed 0 list-end)
-    key+colon
-    (substring removed list-end)))
+    ; If the string is just "list[]", return it unchanged
+    (if (string=? s "list[]")
+            s
+            (let* (; Find positions using substring search
+                         [bracket-pos 
+                            (let loop ([i 0])
+                                (if (char=? (string-ref s i) #\[)
+                                        i
+                                        (loop (add1 i))))]
+                         
+                         [colon-pos
+                            (let loop ([i (add1 bracket-pos)])
+                                (if (char=? (string-ref s i) #\:)
+                                        i
+                                        (loop (add1 i))))]
+                                        
+                         [key (substring s (add1 bracket-pos) colon-pos)]
+                         [key+colon (string-append ":" key)]
+                         
+                         ; Remove all instances of "type:"
+                         [removed
+                            (regexp-replace* (regexp (regexp-quote (string-append key ":"))) s "")]
+                            
+                         ; Insert type after "list"
+                         [list-end 4]) ; "list" is 4 chars
+                
+                (string-append 
+                    (substring removed 0 list-end)
+                    key+colon
+                    (substring removed list-end)))))
 
 ;===================================================
 ; TYPES
@@ -460,8 +464,8 @@
 (def read-bool B = (((val B) "bool:TRUE") "bool:FALSE"))
 (def read-nat N = (string-append "nat:" (n-read (val N))))
 (def read-int Z = (string-append "int:" (z-read (val Z))))
-; (def read-list L = (transform-string (string-append "list" ((l-read (val L)) read-any))))
-(def read-list L = (string-append "list" ((l-read (val L)) read-any)))
+(def read-list L = (transform-string (string-append "list" ((l-read (val L)) read-any))))
+; (def read-list L = (string-append "list" ((l-read (val L)) read-any)))
 
 (def read-any OBJ = 
     (_if (is-bool OBJ)

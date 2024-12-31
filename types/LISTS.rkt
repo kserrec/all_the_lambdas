@@ -14,13 +14,8 @@
 ;===================================================
 
 ; TYPED NILs
-(def make-NIL type = ((pair type) false))
 
-(def NIL-error = (make-NIL _error))
-(def NIL-bool = (make-NIL bool))
-(def NIL-nat = (make-NIL nat))
-(def NIL-int = (make-NIL int))
-(def NIL-list = (make-NIL _list))
+(def NIL-list = ((pair _list) false))
 
 ;===================================================
 

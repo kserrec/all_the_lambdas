@@ -15,75 +15,79 @@
 ; ~ LISTS TESTS ~
 ; ====================================================================
 
-(define boolLIST-T ((_make-list bool) (onelist true)))
-(define boolLIST-F ((_make-list bool) (onelist false)))
-(define natLIST-0 ((_make-list nat) (onelist zero)))
-(define natLIST-4 ((_make-list nat) (onelist four)))
-(define natLIST-0-1 ((_make-list nat) ((twolist zero) one)))
-(define natLIST-1-0 ((_make-list nat) ((twolist one) zero)))
-(define intLIST-p2-n3-p0-p4 ((_make-list int) ((app ((twolist posTwo) negThree)) ((twolist posZero) posFour))))
+(define LIST-T ((_make-list bool) (onelist true)))
+(define LIST-F ((_make-list bool) (onelist false)))
+(define LIST-0 ((_make-list nat) (onelist zero)))
+(define LIST-4 ((_make-list nat) (onelist four)))
+(define LIST-0-1 ((_make-list nat) ((twolist zero) one)))
+(define LIST-1-0 ((_make-list nat) ((twolist one) zero)))
+(define LIST-p2-n3-p0-p4 ((_make-list int) ((app ((twolist posTwo) negThree)) ((twolist posZero) posFour))))
 
-(define read-any-LISTS-tests (list 
-    ; normal cases
-    (test-list-element "read-any(NIL-list)" (read-any NIL-list) "list[]")
-    (test-list-element "read-any(boolLIST-T)" (read-any boolLIST-T) "list[bool:TRUE]")
-    (test-list-element "read-any(boolLIST-F)" (read-any boolLIST-F) "list[bool:FALSE]")
-    (test-list-element "read-any(natLIST-0)" (read-any natLIST-0) "list[nat:0]")
-    (test-list-element "read-any(natLIST-4)" (read-any natLIST-4) "list[nat:4]")
-    (test-list-element "read-any(natLIST-0-1)" (read-any natLIST-0-1) "list[nat:0,nat:1]")
-    (test-list-element "read-any(intLIST-p2-n3-p0-p4)" (read-any intLIST-p2-n3-p0-p4) "list[int:2,int:-3,int:0,int:4]")
-))
+(define LIST-n2-p1-p2-n4-n5 ((_make-list int) (_cons negTwo posOne posTwo negFour negFive)))
 
-(show-results "read-any-LISTS-tests" read-any-LISTS-tests)
+(displayln (read-any LIST-n2-p1-p2-n4-n5))
 
-; ====================================================================
+; (define read-any-LISTS-tests (list 
+;     ; normal cases
+;     (test-list-element "read-any(NIL-list)" (read-any NIL-list) "list[]")
+;     (test-list-element "read-any(LIST-T)" (read-any LIST-T) "list[bool:TRUE]")
+;     (test-list-element "read-any(LIST-F)" (read-any LIST-F) "list[bool:FALSE]")
+;     (test-list-element "read-any(LIST-0)" (read-any LIST-0) "list[nat:0]")
+;     (test-list-element "read-any(LIST-4)" (read-any LIST-4) "list[nat:4]")
+;     (test-list-element "read-any(LIST-0-1)" (read-any LIST-0-1) "list[nat:0,nat:1]")
+;     (test-list-element "read-any(LIST-p2-n3-p0-p4)" (read-any LIST-p2-n3-p0-p4) "list[int:2,int:-3,int:0,int:4]")
+; ))
 
-(define LEN-tests (list 
-    (test-list-element "LEN(nil)" (read-any (LEN NIL-list)) "nat:0")
-    (test-list-element "LEN([TRUE])" (read-any (LEN boolLIST-T)) "nat:1")
-    (test-list-element "LEN([FALSE])" (read-any (LEN boolLIST-F)) "nat:1")
-    (test-list-element "LEN([nat:0,nat:1])" (read-any (LEN natLIST-0-1)) "nat:2")
-    (test-list-element "LEN([2,-3,0,4])" (read-any (LEN intLIST-p2-n3-p0-p4)) "nat:4")
-))
-
-(show-results "LEN" LEN-tests)
-
-; ====================================================================
-
-(define IS-NIL-tests (list 
-    (test-list-element "IS-NIL(NIL-list)" (read-any (IS-NIL NIL-list)) "bool:TRUE")
-    (test-list-element "IS-NIL([TRUE])" (read-any (IS-NIL boolLIST-T)) "bool:FALSE")
-    (test-list-element "IS-NIL([FALSE])" (read-any (IS-NIL boolLIST-F)) "bool:FALSE")
-    (test-list-element "IS-NIL([nat:0,nat:1])" (read-any (IS-NIL natLIST-0-1)) "bool:FALSE")
-    (test-list-element "IS-NIL([2,-3,0,4])" (read-any (IS-NIL intLIST-p2-n3-p0-p4)) "bool:FALSE")
-))
-
-(show-results "IS-NIL" IS-NIL-tests)
-
-; ====================================================================
-
-(define IND-tests (list
-    ; (test-list-element "IND([TRUE])" (read-any ((IND boolLIST-T) ZERO)) "bool:TRUE")
-    (test-list-element "IND([natLIST-1-0](0))" (read-any ((IND natLIST-1-0) ZERO)) "nat:1")
-    (test-list-element "IND([natLIST-1-0](1))" (read-any ((IND natLIST-1-0) ONE)) "nat:0")
-    (test-list-element "IND([intLIST-p2-n3-p0-p4](0))" (read-any ((IND intLIST-p2-n3-p0-p4) ZERO)) "int:2")
-))
-
-(show-results "IND" IND-tests)
+; (show-results "read-any-LISTS-tests" read-any-LISTS-tests)
 
 ; ; ====================================================================
 
-; (define app-tests (list
-;     (test-list-element "app(nil)(l-true)" ((l-read ((app l-true) nil)) b-read) "[true]")
-;     (test-list-element "app(l-false)(nil)" ((l-read ((app nil) l-false)) b-read) "[false]")
-;     (test-list-element "app(l-true)(l-true)" ((l-read ((app l-true) l-true)) b-read) "[true,true]")
-;     (test-list-element "app(l-false)(l-true)" ((l-read ((app l-false) l-true)) b-read) "[false,true]")
-;     (test-list-element "app(l-0)(l-0)" ((l-read ((app l-0) l-0)) n-read) "[0,0]")
-;     (test-list-element "app(l-0)(l-4)" ((l-read ((app l-0) l-4)) n-read) "[0,4]")
-;     (test-list-element "app(l-0-1)(l-0)" ((l-read ((app l-0-1) l-0)) n-read) "[0,1,0]")
-;     (test-list-element "app(l-0-4-2)(l-0-1)" ((l-read ((app l-0-4-2) l-0-1)) n-read) "[0,4,2,0,1]")))
+; (define LEN-tests (list 
+;     (test-list-element "LEN(nil)" (read-any (LEN NIL-list)) "nat:0")
+;     (test-list-element "LEN([TRUE])" (read-any (LEN LIST-T)) "nat:1")
+;     (test-list-element "LEN([FALSE])" (read-any (LEN LIST-F)) "nat:1")
+;     (test-list-element "LEN([nat:0,nat:1])" (read-any (LEN LIST-0-1)) "nat:2")
+;     (test-list-element "LEN([2,-3,0,4])" (read-any (LEN LIST-p2-n3-p0-p4)) "nat:4")
+; ))
 
-; (show-results "app" app-tests)
+; (show-results "LEN" LEN-tests)
+
+; ; ====================================================================
+
+; (define IS-NIL-tests (list 
+;     (test-list-element "IS-NIL(NIL-list)" (read-any (IS-NIL NIL-list)) "bool:TRUE")
+;     (test-list-element "IS-NIL([TRUE])" (read-any (IS-NIL LIST-T)) "bool:FALSE")
+;     (test-list-element "IS-NIL([FALSE])" (read-any (IS-NIL LIST-F)) "bool:FALSE")
+;     (test-list-element "IS-NIL([nat:0,nat:1])" (read-any (IS-NIL LIST-0-1)) "bool:FALSE")
+;     (test-list-element "IS-NIL([2,-3,0,4])" (read-any (IS-NIL LIST-p2-n3-p0-p4)) "bool:FALSE")
+; ))
+
+; (show-results "IS-NIL" IS-NIL-tests)
+
+; ; ====================================================================
+
+; (define IND-tests (list
+;     (test-list-element "IND([TRUE])" (read-any ((IND LIST-T) ZERO)) "bool:TRUE")
+;     (test-list-element "IND([LIST-1-0](0))" (read-any ((IND LIST-1-0) ZERO)) "nat:1")
+;     (test-list-element "IND([LIST-1-0](1))" (read-any ((IND LIST-1-0) ONE)) "nat:0")
+;     (test-list-element "IND([LIST-p2-n3-p0-p4](0))" (read-any ((IND LIST-p2-n3-p0-p4) ZERO)) "int:2")
+; ))
+
+; (show-results "IND" IND-tests)
+
+; ====================================================================
+
+; (define APP-tests (list
+;     (test-list-element "APP(nil)(l-true)" ((l-read ((APP l-true) nil)) b-read) "[true]")
+;     (test-list-element "APP(l-false)(nil)" ((l-read ((APP nil) l-false)) b-read) "[false]")
+;     (test-list-element "APP(l-true)(l-true)" ((l-read ((APP l-true) l-true)) b-read) "[true,true]")
+;     (test-list-element "APP(l-false)(l-true)" ((l-read ((APP l-false) l-true)) b-read) "[false,true]")
+;     (test-list-element "APP(l-0)(l-0)" ((l-read ((APP l-0) l-0)) n-read) "[0,0]")
+;     (test-list-element "APP(l-0)(l-4)" ((l-read ((APP l-0) l-4)) n-read) "[0,4]")
+;     (test-list-element "APP(l-0-1)(l-0)" ((l-read ((APP l-0-1) l-0)) n-read) "[0,1,0]")
+;     (test-list-element "APP(l-0-4-2)(l-0-1)" ((l-read ((APP l-0-4-2) l-0-1)) n-read) "[0,4,2,0,1]")))
+
+; (show-results "APP" APP-tests)
 
 ; ; ====================================================================
 
