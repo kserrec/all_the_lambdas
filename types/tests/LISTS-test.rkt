@@ -173,37 +173,37 @@
 
 (show-results "TAKE-TAIL" TAKE-TAIL-tests)
 
+; ====================================================================
+
+(define INSERT-tests (list
+    (test-list-element "INSERT(posFOUR)(LIST-n2-p1-p2-n4-n5)(ZERO)" (read-any (((INSERT posFOUR) LIST-n2-p1-p2-n4-n5) ZERO)) "list:int[4,-2,1,2,-4,-5]")
+    (test-list-element "INSERT(negTHREE)(LIST-n2-p1-p2-n4-n5)(TWO)" (read-any (((INSERT negTHREE) LIST-n2-p1-p2-n4-n5) TWO)) "list:int[-2,1,-3,2,-4,-5]")
+    (test-list-element "INSERT(FIVE)(LIST-1-3-4-2)(ONE)" (read-any (((INSERT FIVE) LIST-1-3-4-2) ONE)) "list:nat[1,5,3,4,2]")
+    (test-list-element "INSERT(MULT(5)(2))(LIST-1-3-4-2)(FOUR)" (read-any (((INSERT ((MULT FIVE) TWO)) LIST-1-3-4-2) FOUR)) "list:nat[1,3,4,2,10]")
+    (test-list-element "INSERT(TRUE)(LIST-T-F-F-T)(TWO)" (read-any (((INSERT TRUE) LIST-T-F-F-T) TWO)) "list:bool[TRUE,FALSE,TRUE,FALSE,TRUE]")
+))
+
+(show-results "INSERT" INSERT-tests)
+
+; ====================================================================
+
+(define REPLACE-tests (list
+    (test-list-element "REPLACE(posFOUR)(LIST-n2-p1-p2-n4-n5)(ZERO)" (read-any (((REPLACE posFOUR) LIST-n2-p1-p2-n4-n5) ZERO)) "list:int[4,1,2,-4,-5]")
+    (test-list-element "REPLACE(negTHREE)(LIST-n2-p1-p2-n4-n5)(TWO)" (read-any (((REPLACE negTHREE) LIST-n2-p1-p2-n4-n5) TWO)) "list:int[-2,1,-3,-4,-5]")
+    (test-list-element "REPLACE(FIVE)(LIST-1-3-4-2)(ONE)" (read-any (((REPLACE FIVE) LIST-1-3-4-2) ONE)) "list:nat[1,5,4,2]")
+    (test-list-element "REPLACE(MULT(5)(2))(LIST-1-3-4-2)(FOUR)" (read-any (((REPLACE ((MULT FIVE) TWO)) LIST-1-3-4-2) FOUR)) "list:nat[1,3,4,2,10]")
+    (test-list-element "REPLACE(TRUE)(LIST-T-F-F-T)(TWO)" (read-any (((REPLACE TRUE) LIST-T-F-F-T) TWO)) "list:bool[TRUE,FALSE,TRUE,TRUE]")
+))
+
+(show-results "REPLACE" REPLACE-tests)
+
 ; ; ====================================================================
 
-; (define insert-tests (list
-;     (test-list-element "insert(four)(l-5-4-2-0-4-2)(three)" (read-any (((insert four) l-5-4-2-0-4-2) three)) "list:nat[5,4,2,4,0,4,2]")
-;     (test-list-element "insert(five)(l-5-4-2-0-4-2)(two)" (read-any (((insert five) l-5-4-2-0-4-2) two)) "list:nat[5,4,5,2,0,4,2]")
-;     (test-list-element "insert(mult(5)(2))(l-4-2)(one)" (read-any (((insert ((mult five) two)) l-4-2) one)) "list:nat[4,10,2]")
-;     (test-list-element "insert(one)(l-4-2)(zero)" (read-any (((insert one) l-4-2) zero)) "list:nat[1,4,2]")
-;     (test-list-element "insert(five)(l-4-2)(two)" (read-any (((insert five) l-4-2) two)) "list:nat[4,2,5]")
-; ))
+(define DROP-tests (list
+    (test-list-element "DROP(ZERO)(LIST-T-F-F-T)" (read-any ((DROP ZERO) LIST-T-F-F-T)) "list:bool[TRUE,FALSE,FALSE,TRUE]")
+    (test-list-element "DROP(TWO)(LIST-1-3-4-2)" (read-any ((DROP TWO) LIST-1-3-4-2)) "list:nat[4,2]")
+    (test-list-element "DROP(FIVE)(LIST-n2-p1-p2-n4-n5)" (read-any ((DROP FIVE) LIST-n2-p1-p2-n4-n5)) "list[]")
+    (test-list-element "DROP(THREE)(LIST-n2-p1-p2-n4-n5)" (read-any ((DROP THREE) LIST-n2-p1-p2-n4-n5)) "list:int[-4,-5]")
+))
 
-; (show-results "insert" insert-tests)
-
-; ; ====================================================================
-
-; (define REPLACE-tests (list
-;     (test-list-element "REPLACE(four)(l-5-4-2-0-4-2)(three)" (read-any (((REPLACE four) l-5-4-2-0-4-2) three)) "list:nat[5,4,2,4,4,2]")
-;     (test-list-element "REPLACE(five)(l-5-4-2-0-4-2)(two)" (read-any (((REPLACE five) l-5-4-2-0-4-2) two)) "list:nat[5,4,5,0,4,2]")
-;     (test-list-element "REPLACE(mult(5)(2))(l-4-2)(one)" (read-any (((REPLACE ((mult five) two)) l-4-2) one)) "list:nat[4,10]")
-;     (test-list-element "REPLACE(one)(l-4-2)(zero)" (read-any (((REPLACE one) l-4-2) zero)) "list:nat[1,2]")
-;     (test-list-element "REPLACE(five)(l-4-2)(one)" (read-any (((REPLACE five) l-4-2) one)) "list:nat[4,5]")
-; ))
-
-; (show-results "REPLACE" REPLACE-tests)
-
-; ; ====================================================================
-
-; (define DROP-tests (list
-;     (test-list-element "DROP(zero)(l-5-4-2-0-4-2)" (read-any ((_DROP zero) l-5-4-2-0-4-2)) "list:nat[5,4,2,0,4,2]")
-;     (test-list-element "DROP(zero)(l-5-4-2-0-4-2)" (read-any ((_DROP two) l-5-4-2-0-4-2)) "list:nat[2,0,4,2]")
-;     (test-list-element "DROP(three)(l-t-f-f-t)" (read-any ((_DROP three) l-t-f-f-t)) "list:bool[TRUE]")
-;     (test-list-element "DROP(four)(l-t-f-f-t)" (read-any ((_DROP four) l-t-f-f-t)) "list[]")
-; ))
-
-; (show-results "DROP" DROP-tests)
+(show-results "DROP" DROP-tests)
