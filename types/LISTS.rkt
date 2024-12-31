@@ -14,13 +14,8 @@
 ;===================================================
 
 ; TYPED NILs
-(def make-NIL type = ((pair type) false))
 
-(def NIL-error = (make-NIL _error))
-(def NIL-bool = (make-NIL bool))
-(def NIL-nat = (make-NIL nat))
-(def NIL-int = (make-NIL int))
-(def NIL-list = (make-NIL _list))
+(def NIL-list = ((pair _list) false))
 
 ;===================================================
 
@@ -33,11 +28,21 @@
 ;===================================================
 
 ; have to use untype-elements because fully-type-f adds types to elements so sub elements cannot go in already typed
-(def IND L I = (((((((fully-type2 ind) "IND") _list) (untype-elements L)) nat) I) nat))
+(def IND L I = (((((((fully-type2 ind) "IND") _list) (untype-elements L)) nat) I) (type (head (val L)))))
 
 ;===================================================
 
-(def APP L1 L2 = (((((((fully-type2 app) "APP") _list) L1) _list) L2) _list))
+(def APP L1 L2 = 
+        (_let GOOD-SO-FAR = (((((((fully-type2 app) "APP") _list) L1) _list) L2) _list)
+        (_let DIFFERENT-LIST-TYPES = ((make-error _list) (wrap "APP" "err:lists must be same type"))
+        (_let L1-1st-Element-Type = (type (head (val L1)))
+        (_let L2-1st-Element-Type = (type (head (val L2)))
+                ; if either is nil or both have same type, good to go
+                (_if (val ((OR (IS-NIL L1)) (IS-NIL L2)))
+                    _then GOOD-SO-FAR
+                    _else (_if ((eq L1-1st-Element-Type) L2-1st-Element-Type)
+                            _then GOOD-SO-FAR
+                            _else DIFFERENT-LIST-TYPES)))))))
 
 ;===================================================
 
