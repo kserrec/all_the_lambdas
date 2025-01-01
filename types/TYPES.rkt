@@ -207,8 +207,11 @@
 ;   - Logic: maps over untyped list to make it typed
 (def _make-list type val = ((make-obj _list) ((_map (make-obj type)) val)))
 
-
-(def untype-elements L = ((make-obj _list) ((_map val) (val L))))
+; map through and untype each element, but only if its a list and return as list
+(def untype-elements L = 
+    (_if ((eq _list) (type L))
+        _then ((make-obj _list) ((_map val) (val L)))
+        _else L))
 
 ;===================================================
 
@@ -464,7 +467,14 @@
 (def read-bool B = (((val B) "bool:TRUE") "bool:FALSE"))
 (def read-nat N = (string-append "nat:" (n-read (val N))))
 (def read-int Z = (string-append "int:" (z-read (val Z))))
-(def read-list L = (transform-string (string-append "list" ((l-read (val L)) read-any))))
+; (def read-list L = (transform-string (string-append "list" ((l-read (val L)) read-any))))
+
+(def read-list L = 
+    (let ([result ((l-read (val L)) read-any)])
+        (if (string-contains? result "err")
+            ; (substring result 1 (- (string-length result) 1))
+            (string-append "list" result)
+            (transform-string (string-append "list" result)))))
 ; (def read-list L = (string-append "list" ((l-read (val L)) read-any)))
 
 (def read-any OBJ = 
