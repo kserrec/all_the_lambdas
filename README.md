@@ -29,7 +29,7 @@ Note: this is a work in progress and I don't know when it will be complete if ev
 - **Pairs** and **Lists** with operators for them
 - **Algorithms** (so far only Binary Search for church numerals and integers)
 - **Added Syntactic Sugar** to make things look good. Specifically, added def, let, and conditional sugar
-- **Added Types and Type Checking** defined types out of untyped lambda calculus - still work in progress - have error, bool, nat, and int types, and some functions for working with these - remaking everything typed at the moment
+- **Added Embedded Types and Type Checking** defined types out of untyped lambda calculus. This is an informal type system, a type-like system, probably best called an embedded type system. Everything built so far now has embedded typed versions!
 - **Integers** and basic operators for them
 
 #### How to Run:
