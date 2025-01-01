@@ -32,17 +32,7 @@
 
 ;===================================================
 
-(def APP L1 L2 = 
-        (_let GOOD-SO-FAR = (((((((fully-type2 app) "APP") _list) L1) _list) L2) _list)
-        (_let DIFFERENT-LIST-TYPES = ((make-error _list) (wrap "APP" "err:lists must be same type"))
-        (_let L1-1st-Element-Type = (type (head (val L1)))
-        (_let L2-1st-Element-Type = (type (head (val L2)))
-                ; if either is nil or both have same type, good to go
-                (_if (val ((OR (IS-NIL L1)) (IS-NIL L2)))
-                    _then GOOD-SO-FAR
-                    _else (_if ((eq L1-1st-Element-Type) L2-1st-Element-Type)
-                            _then GOOD-SO-FAR
-                            _else DIFFERENT-LIST-TYPES)))))))
+(def APP L1 L2 = (((((((fully-type2 app) "APP") _list) L1) _list) L2) _list))
 
 ;===================================================
 
@@ -60,9 +50,13 @@
     ((lst (lambda (x)
                 (lambda (y)
                     (lambda (z)
-                        (_if (val (g x))
-                            _then ((pair x) (((f g) y) n))
-                            _else (((f g) y) n)
+                        ; if an error occurs, put error into list - do NOT filter it, expose it
+                        (_if ((eq _error) (type (g x)))
+                            _then ((pair (g x)) (((f g) y) n))
+                            ; else do regular filter check and keep if passes, else remove
+                            _else (_if (val (g x))
+                                    _then ((pair x) (((f g) y) n))
+                                    _else (((f g) y) n))
                         )
                     )
                 )  
