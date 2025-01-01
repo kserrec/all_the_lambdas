@@ -179,6 +179,7 @@
     ; error cases
     (test-list-element "FOLD(EXP)(posONE)(LIST-2-3)" (read-any (((FOLD EXP) posONE) ((_make-list nat) (_cons two three)))) "FOLD(EXP(arg2(err:nat))->EXP(arg2(err:nat)))")
     (test-list-element "FOLD(EXP)(ONE)(LIST-p2-p3)" (read-any (((FOLD EXP) ONE) ((_make-list int) (_cons posTwo posThree)))) "FOLD(EXP(arg1(err:nat)))")
+    (test-list-element "FOLD(EXP)(ONE)(FALSE)" (read-any (((FOLD EXP) ONE) FALSE)) "FOLD(arg3(err:list))")
 ))
 
 (show-results "FOLD" FOLD-tests)
@@ -186,11 +187,16 @@
 ; ====================================================================
 
 (define TAKE-tests (list
+    ; normal cases
+    (test-list-element "TAKE(FOUR)(NIL-list)" (read-any ((TAKE FOUR) NIL-list)) "list[]")
     (test-list-element "TAKE(FOUR)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE FOUR) LIST-n2-p1-p2-n4-n5)) "list:int[-2,1,2,-4]")
     (test-list-element "TAKE(FIVE)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE (SUCC FOUR)) LIST-n2-p1-p2-n4-n5)) "list:int[-2,1,2,-4,-5]")
     (test-list-element "TAKE(ZERO)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE ZERO) LIST-n2-p1-p2-n4-n5)) "list[]")
     (test-list-element "TAKE(TWO)(LIST-1-3-4-2)" (read-any ((TAKE TWO) LIST-1-3-4-2)) "list:nat[1,3]")
     (test-list-element "TAKE(THREE)(LIST-T-F-F-T)" (read-any ((TAKE THREE) LIST-T-F-F-T)) "list:bool[TRUE,FALSE,FALSE]")
+    ; error cases
+    (test-list-element "TAKE(posTHREE)(LIST-T-F-F-T)" (read-any ((TAKE posTHREE) LIST-T-F-F-T)) "TAKE(arg1(err:nat))")
+    (test-list-element "TAKE(THREE)(FALSE)" (read-any ((TAKE THREE) FALSE)) "TAKE(arg2(err:list))")
 ))
 
 (show-results "TAKE" TAKE-tests)
@@ -198,11 +204,15 @@
 ; ====================================================================
 
 (define TAKE-TAIL-tests (list
+    ; normal cases
     (test-list-element "TAKE(FOUR)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE-TAIL FOUR) LIST-n2-p1-p2-n4-n5)) "list:int[1,2,-4,-5]")
     (test-list-element "TAKE(FIVE)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE-TAIL (SUCC FOUR)) LIST-n2-p1-p2-n4-n5)) "list:int[-2,1,2,-4,-5]")
     (test-list-element "TAKE(ZERO)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE-TAIL ZERO) LIST-n2-p1-p2-n4-n5)) "list[]")
     (test-list-element "TAKE(TWO)(LIST-1-3-4-2)" (read-any ((TAKE-TAIL TWO) LIST-1-3-4-2)) "list:nat[4,2]")
     (test-list-element "TAKE(THREE)(LIST-T-F-F-T)" (read-any ((TAKE-TAIL THREE) LIST-T-F-F-T)) "list:bool[FALSE,FALSE,TRUE]")
+    ; error cases
+    (test-list-element "TAKE-TAIL(posTHREE)(LIST-T-F-F-T)" (read-any ((TAKE-TAIL posTHREE) LIST-T-F-F-T)) "TAKE-TAIL(arg1(err:nat))")
+    (test-list-element "TAKE-TAIL(THREE)(FALSE)" (read-any ((TAKE-TAIL THREE) FALSE)) "TAKE-TAIL(arg2(err:list))")
 ))
 
 (show-results "TAKE-TAIL" TAKE-TAIL-tests)
@@ -210,11 +220,15 @@
 ; ====================================================================
 
 (define INSERT-tests (list
+    ; normal cases
     (test-list-element "INSERT(posFOUR)(LIST-n2-p1-p2-n4-n5)(ZERO)" (read-any (((INSERT posFOUR) LIST-n2-p1-p2-n4-n5) ZERO)) "list:int[4,-2,1,2,-4,-5]")
     (test-list-element "INSERT(negTHREE)(LIST-n2-p1-p2-n4-n5)(TWO)" (read-any (((INSERT negTHREE) LIST-n2-p1-p2-n4-n5) TWO)) "list:int[-2,1,-3,2,-4,-5]")
     (test-list-element "INSERT(FIVE)(LIST-1-3-4-2)(ONE)" (read-any (((INSERT FIVE) LIST-1-3-4-2) ONE)) "list:nat[1,5,3,4,2]")
     (test-list-element "INSERT(MULT(5)(2))(LIST-1-3-4-2)(FOUR)" (read-any (((INSERT ((MULT FIVE) TWO)) LIST-1-3-4-2) FOUR)) "list:nat[1,3,4,2,10]")
     (test-list-element "INSERT(TRUE)(LIST-T-F-F-T)(TWO)" (read-any (((INSERT TRUE) LIST-T-F-F-T) TWO)) "list:bool[TRUE,FALSE,TRUE,FALSE,TRUE]")
+    ; error cases
+    (test-list-element "INSERT(TRUE)(TRUE)(TWO)" (read-any (((INSERT TRUE) TRUE) TWO)) "INSERT(arg2(err:list))")
+    (test-list-element "INSERT(TRUE)(LIST-T-F-F-T)(posTWO)" (read-any (((INSERT TRUE) LIST-T-F-F-T) posTWO)) "INSERT(arg3(err:nat))")
 ))
 
 (show-results "INSERT" INSERT-tests)
@@ -222,11 +236,15 @@
 ; ====================================================================
 
 (define REPLACE-tests (list
+    ; normal cases
     (test-list-element "REPLACE(posFOUR)(LIST-n2-p1-p2-n4-n5)(ZERO)" (read-any (((REPLACE posFOUR) LIST-n2-p1-p2-n4-n5) ZERO)) "list:int[4,1,2,-4,-5]")
     (test-list-element "REPLACE(negTHREE)(LIST-n2-p1-p2-n4-n5)(TWO)" (read-any (((REPLACE negTHREE) LIST-n2-p1-p2-n4-n5) TWO)) "list:int[-2,1,-3,-4,-5]")
     (test-list-element "REPLACE(FIVE)(LIST-1-3-4-2)(ONE)" (read-any (((REPLACE FIVE) LIST-1-3-4-2) ONE)) "list:nat[1,5,4,2]")
     (test-list-element "REPLACE(MULT(5)(2))(LIST-1-3-4-2)(FOUR)" (read-any (((REPLACE ((MULT FIVE) TWO)) LIST-1-3-4-2) FOUR)) "list:nat[1,3,4,2,10]")
     (test-list-element "REPLACE(TRUE)(LIST-T-F-F-T)(TWO)" (read-any (((REPLACE TRUE) LIST-T-F-F-T) TWO)) "list:bool[TRUE,FALSE,TRUE,TRUE]")
+    ; error cases
+    (test-list-element "REPLACE(TRUE)(FALSE)(TWO)" (read-any (((REPLACE TRUE) FALSE) TWO)) "REPLACE(arg2(err:list))")
+    (test-list-element "REPLACE(TRUE)(LIST-T-F-F-T)(posTWO)" (read-any (((REPLACE TRUE) LIST-T-F-F-T) posTWO)) "REPLACE(arg3(err:nat))")
 ))
 
 (show-results "REPLACE" REPLACE-tests)
@@ -234,10 +252,14 @@
 ; ; ====================================================================
 
 (define DROP-tests (list
+    ; normal cases
     (test-list-element "DROP(ZERO)(LIST-T-F-F-T)" (read-any ((DROP ZERO) LIST-T-F-F-T)) "list:bool[TRUE,FALSE,FALSE,TRUE]")
     (test-list-element "DROP(TWO)(LIST-1-3-4-2)" (read-any ((DROP TWO) LIST-1-3-4-2)) "list:nat[4,2]")
     (test-list-element "DROP(FIVE)(LIST-n2-p1-p2-n4-n5)" (read-any ((DROP FIVE) LIST-n2-p1-p2-n4-n5)) "list[]")
     (test-list-element "DROP(THREE)(LIST-n2-p1-p2-n4-n5)" (read-any ((DROP THREE) LIST-n2-p1-p2-n4-n5)) "list:int[-4,-5]")
+    ; error cases
+    (test-list-element "DROP(posTHREE)(LIST-n2-p1-p2-n4-n5)" (read-any ((DROP posTHREE) LIST-n2-p1-p2-n4-n5)) "DROP(arg1(err:nat))")
+    (test-list-element "DROP(THREE)(FOUR)" (read-any ((DROP THREE) FOUR)) "DROP(arg2(err:list))")
 ))
 
 (show-results "DROP" DROP-tests)

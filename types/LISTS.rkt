@@ -1,5 +1,6 @@
 #lang lazy
 (provide (all-defined-out))
+(require racket/string)
 (require "../church.rkt"
          "../integers.rkt"
          "../lists.rkt"
@@ -66,10 +67,16 @@
 
 (def FOLD-HELPER G X L = (((((((((keep-typed3 _fold) "FOLD") bool) ((make-obj bool) G)) (type X)) ((make-obj (type X)) X)) _list) L) (type X)))
 
+(def wrap-FOLD-only-once res = 
+    ((lambda (msg)
+        ((lambda (x) (if x msg (wrap "FOLD" msg)))
+         (string-contains? msg "FOLD")))
+     (err-read res)))
+
 (def FOLD G X L = 
     (_let result = (((FOLD-HELPER G) X) L)
         (_if (is-error result)
-            _then ((make-error (head (val result))) (wrap "FOLD" (err-read result)))
+            _then ((make-error (head (val result))) (wrap-FOLD-only-once result))
             _else result
         )
     )
@@ -80,16 +87,25 @@
 
 (def TAKE-TAIL N L = (((((((fully-type2 takeTail) "TAKE-TAIL") nat) N) _list) L) _list))
 
-(def INSERT X L I = 
+;===================================================
+
+(def INSERT-HELPER X L I = 
     ((APP
         ((TAKE I) L))
         ((pair _list) ((pair X) (val ((TAKE-TAIL ((SUB (LEN L)) I)) L))))))
 
-(def REPLACE X L I = 
+(def INSERT X L I = ((((((((type-check3 INSERT-HELPER) "INSERT") (type X)) _list) nat) X) L) I))
+
+;===================================================
+
+(def REPLACE-HELPER X L I = 
     ((APP
         ((TAKE I) L))
         ((pair _list) ((pair X) (val ((TAKE-TAIL (PRED ((SUB (LEN L)) I))) L))))))
 
+(def REPLACE X L I = ((((((((type-check3 REPLACE-HELPER) "REPLACE") (type X)) _list) nat) X) L) I))
+
+;===================================================
 
 (def DROP N L = (((((((fully-type2 _drop) "DROP") nat) N) _list) L) _list))
 
