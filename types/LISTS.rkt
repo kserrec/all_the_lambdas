@@ -51,7 +51,7 @@
                 (lambda (y)
                     (lambda (z)
                         ; if an error occurs, put error into list - do NOT filter it, expose it
-                        (_if ((eq _error) (type (g x)))
+                        (_if (is-error (g x))
                             _then ((pair (g x)) (((f g) y) n))
                             ; else do regular filter check and keep if passes, else remove
                             _else (_if (val (g x))
@@ -64,7 +64,16 @@
 
 (def FILTER G L = (((((((fully-type2 _filter-helper-typed) "FILTER") bool) ((make-obj bool) G)) _list) L) _list))
 
-(def FOLD G X L = (((((((((keep-typed3 _fold) "FOLD") bool) ((make-obj bool) G)) (type X)) ((make-obj (type X)) X)) _list) L) (type X)))
+(def FOLD-HELPER G X L = (((((((((keep-typed3 _fold) "FOLD") bool) ((make-obj bool) G)) (type X)) ((make-obj (type X)) X)) _list) L) (type X)))
+
+(def FOLD G X L = 
+    (_let result = (((FOLD-HELPER G) X) L)
+        (_if (is-error result)
+            _then ((make-error (head (val result))) (wrap "FOLD" (err-read result)))
+            _else result
+        )
+    )
+)
 ;===================================================
 
 (def TAKE N L = (((((((fully-type2 _take) "TAKE") nat) N) _list) L) _list))

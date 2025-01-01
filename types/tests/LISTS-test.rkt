@@ -172,9 +172,13 @@
 ; ====================================================================
 
 (define FOLD-tests (list
+    ; normal cases
     (test-list-element "FOLD(ADDz)(0)(LIST-n2-p1-p2-n4-n5)" (read-any (((FOLD ADDz) posZERO) LIST-n2-p1-p2-n4-n5)) "int:-8")
     (test-list-element "FOLD(MULT)(1)(LIST-1-3-4-2)" (read-any (((FOLD MULT) ONE) LIST-1-3-4-2)) "nat:24")
-    (test-list-element "FOLD(EXP)(2)(LIST-2-3)" (read-any (((FOLD EXP) ONE) ((_make-list nat) (_cons two three)))) "nat:8")
+    (test-list-element "FOLD(EXP)(1)(LIST-2-3)" (read-any (((FOLD EXP) ONE) ((_make-list nat) (_cons two three)))) "nat:8")
+    ; error cases
+    (test-list-element "FOLD(EXP)(posONE)(LIST-2-3)" (read-any (((FOLD EXP) posONE) ((_make-list nat) (_cons two three)))) "FOLD(EXP(arg2(err:nat))->EXP(arg2(err:nat)))")
+    (test-list-element "FOLD(EXP)(ONE)(LIST-p2-p3)" (read-any (((FOLD EXP) ONE) ((_make-list int) (_cons posTwo posThree)))) "FOLD(EXP(arg1(err:nat)))")
 ))
 
 (show-results "FOLD" FOLD-tests)
