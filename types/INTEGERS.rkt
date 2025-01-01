@@ -40,6 +40,8 @@
 
 ;===================================================
 
+(def negFIVE = (make-int negFive))
+(def negFOUR = (make-int negFour))
 (def negTHREE = (make-int negThree))
 (def negTWO = (SUCCz negTHREE))
 (def negONE = (SUCCz negTWO))

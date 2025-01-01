@@ -217,12 +217,12 @@
 
 ;  Makes New Integer Number Type Objects 
 ;  - Idea: 
-;       - make-int above works to add the int type to a value,
-;           new-int creates a new INT object entirely.
+;       - make-int above works to add the int type to a value that is already implicitly an int,
+;           new-int creates a new INT object entirely from a sign and an implicit nat (a church numeral).
 ;       - This distinction is needed because ints are a pair 
 ;           themselves, not just a single value
-;  - Contract: (sign, val) => int
-(def new-int sign val = (make-int ((makeZ sign) val)))
+;  - Contract: (sign, nat) => int
+(def new-int sign nat = (make-int ((makeZ sign) nat)))
 
 ;===================================================
 

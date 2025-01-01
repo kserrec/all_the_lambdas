@@ -16,6 +16,7 @@
 ; ====================================================================
 ; ~ ALGORITHMS TESTS ~
 ; ====================================================================
+
 (def seven = (succ (succ five)))
 (def nine = ((mult three) three))
 (def ten = (succ nine))
@@ -46,6 +47,40 @@
 ))
 
 (show-results "BINARY-SEARCH-tests" BINARY-SEARCH-tests)
+
+; ====================================================================
+
+(def negTWENTY-TWO = ((new-int false) twenty-two))
+(def negFIFTEEN = ((new-int false) ((mult three) five)))
+(def negTEN = ((new-int false) (succ nine)))
+(def posSEVEN = ((new-int true) (succ (succ five))))
+(def posNINE = ((new-int true) ((mult three) three)))
+(def posTWELVE = ((new-int true) (succ (succ ten))))
+(def posFIFTEEN = ((new-int true) fifteen))
+(def posTWENTY-TWO = ((new-int true) (succ (succ ((mult ten) two)))))
+(def posTWENTY-THREE = ((new-int true) (succ twenty-two)))
+(def posTWENTY-FIVE = ((new-int true) ((mult five) five)))
+
+
+; LIST-n22-n15-n10-n5-n4-n3-n1-0-1-2-4--7--9--12--15--22--23--25
+    ;   0   1   2   3  4  5  6 7 8 9 10 11 12 13  14  15  16  17
+(def LONG-LISTz = ((pair _list) (_cons negTWENTY-TWO negFIFTEEN negTEN negFIVE negFOUR negTHREE negONE posZERO posONE posTWO posFOUR posSEVEN posNINE posTWELVE posFIFTEEN posTWENTY-TWO posTWENTY-THREE posTWENTY-FIVE)))
+
+(define BINARY-SEARCHz-tests (list 
+    ; normal cases
+    (test-list-element "BINARY-SEARCHz LONG-LISTz posZERO" (read-any ((BINARY-SEARCHz LONG-LISTz) posZERO)) "int:7")
+    (test-list-element "BINARY-SEARCHz LONG-LISTz posONE" (read-any ((BINARY-SEARCHz LONG-LISTz) posONE)) "int:8")
+    (test-list-element "BINARY-SEARCHz LONG-LISTz negFIFTEEN" (read-any ((BINARY-SEARCHz LONG-LISTz) negFIFTEEN)) "int:1")
+    (test-list-element "BINARY-SEARCHz LONG-LISTz negFIVE" (read-any ((BINARY-SEARCHz LONG-LISTz) negFIVE)) "int:3")
+    (test-list-element "BINARY-SEARCHz LONG-LISTz posTWENTY-TWO" (read-any ((BINARY-SEARCHz LONG-LISTz) posTWENTY-TWO)) "int:15")
+    (test-list-element "BINARY-SEARCHz LONG-LISTz posTHREE" (read-any ((BINARY-SEARCHz LONG-LISTz) posTHREE)) "int:-1")
+    (test-list-element "BINARY-SEARCHz LONG-LISTz negTWO" (read-any ((BINARY-SEARCHz LONG-LISTz) negTWO)) "int:-1")
+    ; error cases
+    (test-list-element "BINARY-SEARCHz LONG-LISTz FALSE" (read-any ((BINARY-SEARCHz LONG-LISTz) FALSE)) "BINARY-SEARCH(arg2(err:int))")
+    (test-list-element "BINARY-SEARCHz LONG-LISTz posTWO" (read-any ((BINARY-SEARCHz LONG-LISTz) TWO)) "BINARY-SEARCH(arg2(err:int))")
+))
+
+(show-results "BINARY-SEARCHz-tests" BINARY-SEARCHz-tests)
 
 ; ====================================================================
 
