@@ -1,22 +1,7 @@
 #lang lazy
 (require (for-syntax racket/base))
 (provide def _let _if _cons)
-
-(define _pair
-    (lambda (a)
-        (lambda (b)
-            (lambda (f) 
-                ((f a) b)
-            )
-        )
-    )
-)
-
-(define _nil 
-    (lambda (x) 
-        (lambda (y) y)
-    )
-)
+(require "../core.rkt")
 
 (define-syntax (def stx)
   (syntax-case stx (=)
@@ -98,8 +83,8 @@
 (define-syntax _cons
   (syntax-rules ()
     [(_)
-     _nil]
+     nil]
     [(_ head rest ...)
      ;; Construct the pair by partially applying _pair to head,
      ;; then recursively expand the remaining elements.
-     ((_pair head) (_cons rest ...))]))
+     ((pair head) (_cons rest ...))]))

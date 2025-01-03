@@ -2,6 +2,7 @@
 (require "macros/macros.rkt")
 (provide (all-defined-out))
 (require "church.rkt"
+         "core.rkt"
          "lists.rkt"
          "logic.rkt"
          "recursion.rkt")
@@ -33,19 +34,14 @@
     ~ FIRST FEW NUMBERS ~
 |#
 (def bin-zero = (_cons zero))
-; (def bin-one = (_cons one))
-; (def bin-two = (_cons one zero))
-(def bin-one = ((pair one) nil))
-(def bin-two = ((pair one) ((pair zero) nil)))
+(def bin-one = (_cons one))
+(def bin-two = (_cons one zero))
 (def bin-three = (_cons one one))
 (def bin-four = (_cons one zero zero))
 (def bin-five = (_cons one zero one))
 (def bin-ten = (_cons one zero one zero))
 (def bin-twenty = (_cons one zero one zero zero))
 (def bin-twenty-four = (_cons one one zero zero zero))
-
-(displayln ((l-read ((pair one) nil)) n-read))
-; (displayln ((l-read bin-one) n-read))
 
 ;===================================================
 
@@ -69,15 +65,6 @@
               (if (equal? (head lst) one)
                   (+ total (expt 2 (sub1 len-remaining)))
                   total)))))
-
-; (displayln (bin-read bin-zero))
-; (displayln (bin-read bin-one))
-; (displayln (bin-read bin-two))
-; (displayln (bin-read bin-three))
-; (displayln (bin-read bin-four))
-; (displayln (bin-read bin-five))
-
-
 
 (def bin-one-billion =
   (_cons one one one zero one one one zero 
@@ -116,8 +103,6 @@
 
 (displayln "binary digit list - one sextillion:")
 (displayln (bin-read bin-one-sextillion))
-
-
 
 ;===================================================
 
@@ -176,26 +161,44 @@
                 _then one
                 _else zero))))))
 
-
-(def bin-add-helper f l1 l2 carry =
-    (_if (isNil l1)
-      _then l2
-      _else 
-        (_if (isNil l2)
-          _then l1
-          _else
-            (_let place-val = (((get-place-val carry) (head l1)) (head l2))
-                (_let new-carry = (((get-new-carry carry) (head l1)) (head l2))
-                    ((pair place-val) (((f (tail l1)) (tail l2)) new-carry))
-                )
-            )
-        )
-    )
-)
+#|
+    ~ if one list is finished, this will add the carry to the other ~
+    if carry is zero, just return list, nothing to add
+    else if list is nil, write one for the carry and end it
+    else if head is zero, write one for the carry and append the rest (the carry has no more effect)
+    else if head is one, write zero - the carry did its work and must carry again so recurse
+|#
+(def handle-last-digits f l carry = 
+    (_if (isZero carry)
+        _then l
+        _else (_if (isNil l)
+                _then ((pair one) nil)
+                _else (_if (isZero (head l))
+                        _then ((pair one) (tail l))
+                        _else ((pair zero) ((f (tail l)) carry))))))
 
 #|
-    1. Reverse their lists since we add right to left and carry to the left
-    2. Pass to bin-add-helper with Y to do work on each digit and then reverse result
+    ~ main helper function ~
+    first check if either is nil...
+        - then we can just handle the last digits of the other with the carry
+    otherwise get the place value for that column and whether we need to carry,
+    then put the place value in place and recurse down the list
+|#
+(def bin-add-helper f l1 l2 carry =
+    (_if (isNil l1)
+      _then (((Y handle-last-digits) l2) carry)
+      _else 
+        (_if (isNil l2)
+          _then (((Y handle-last-digits) l1) carry)
+          _else
+            (_let place-val = (((get-place-val carry) (head l1)) (head l2))
+            (_let new-carry = (((get-new-carry carry) (head l1)) (head l2))
+            ((pair place-val) (((f (tail l1)) (tail l2)) new-carry)))))))
+
+#|
+    ~ BINARY DIGIT LIST ADDITION ~
+    First reverse their lists since we add right to left but want to traverse these left to right
+    Then pass to helper function along with a zero initial carry value for main work 
 |#
 (def bin-add l1 l2 = (rev ((((Y bin-add-helper) (rev l1)) (rev l2)) zero)))
 
@@ -221,20 +224,8 @@
 (displayln (n-read (((get-new-carry one) one) zero)))
 (displayln (n-read (((get-new-carry one) one) one)))
 
-(displayln "------------------------------")
+;===================================================
 
-(def sum-1-2 = ((bin-add bin-one) bin-two))
-
-(displayln "TESTING BIN ADD:")
-(displayln "bin-read sum-1-2")
-(displayln (bin-read sum-1-2))
-(displayln ((l-read sum-1-2) n-read))
-(displayln "len sum-1-2")
-(displayln (n-read (len sum-1-2)))
-(displayln "head of sum-1-2")
-(displayln (n-read (head sum-1-2)))
-(displayln "head of tail of sum-1-2")
-(displayln (n-read (head (tail sum-1-2))))
 
 
 

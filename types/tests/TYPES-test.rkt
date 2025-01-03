@@ -2,6 +2,7 @@
 (require "../../macros/macros.rkt")
 (require "../../logic.rkt"
          "../../church.rkt"
+        "../../core.rkt"
          "../../tests/helpers/test-helpers.rkt")
 (require "../CHURCH.rkt"
          "../INTEGERS.rkt"

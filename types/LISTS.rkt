@@ -2,6 +2,7 @@
 (provide (all-defined-out))
 (require racket/string)
 (require "../church.rkt"
+         "../core.rkt"
          "../integers.rkt"
          "../lists.rkt"
          "../logic.rkt"
@@ -16,7 +17,7 @@
 
 ; TYPED NILs
 
-(def NIL-list = ((pair _list) false))
+(def NIL-list = ((pair _list) nil))
 
 ;===================================================
 
