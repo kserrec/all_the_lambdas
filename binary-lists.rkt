@@ -197,8 +197,9 @@
 
 #|
     ~ BINARY DIGIT LIST ADDITION ~
-    First reverse their lists since we add right to left but want to traverse these left to right
-    Then pass to helper function along with a zero initial carry value for main work 
+    - First reverse their lists since we add right to left but want to traverse these left to right
+    - Then pass to helper function along with a zero initial carry value for main work 
+    - Reverse back on the way out
 |#
 (def bin-add l1 l2 = (rev ((((Y bin-add-helper) (rev l1)) (rev l2)) zero)))
 
@@ -226,16 +227,44 @@
 
 ;===================================================
 
+#|
+    ~ BINARY DIGIT LIST MULTIPLICATION BY 2 ~
+    Easy as can be - just append a zero
+|#
+(def bin-mult-2 bin-num = ((app bin-num) bin-zero))
 
+; Repeat multiplication by 2 for this - also easy as can be
+(def bin-mult-pow-2 bin-num n = ((n bin-mult-2) bin-num))
 
+#|
+    ~ BINARY DIGIT LIST MULTIPLICATION HELPER ~
+    - Assume l1 is greater or equal length (it goes on top for multiplication)
+    - If 
+    - If counter plus one is greater than len l1, break
+    - Check l2 first digit - if its one, mult l1 by pow 2 for place value alignment
+        and add to the running total
+    - Increase counter and repeat
+|#
+(def bin-mult-helper f l1 l2 l1-len counter running-total = 
+    (_if (isNil l2)
+        _then running-total
+        _else
+            (_let new-running-total = ((bin-add ((bin-mult-pow-2 (rev l1)) counter)) running-total)
+            (_let new-counter = ((add one) counter)
+            (_if ((gt ((add one) counter)) l1-len)
+                _then running-total
+                _else (_if (isOne (head l2))
+                        _then (((((f l1) (tail l2)) l1-len) new-counter) new-running-total)
+                        _else (((((f l1) (tail l2)) l1-len) new-counter) running-total)))))))
 
-
-
-
-
-
-
-
-
-
-
+#|
+    ~ BINARY DIGIT LIST MULTIPLICATION ~
+    - First find which is greater, then pass that as first list to helper for main work
+    - Also reverse lists since we multiply right to left 
+|#
+(def bin-mult l1 l2 = 
+    (_if ((gte (len l1)) (len l2))
+        _then ((((((Y bin-mult-helper) (rev l1)) (rev l2)) (len l1)) zero) bin-zero)
+        _else ((((((Y bin-mult-helper) (rev l2)) (rev l1)) (len l2)) zero) bin-zero)
+    )
+)
