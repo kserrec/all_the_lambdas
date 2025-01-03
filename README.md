@@ -31,6 +31,7 @@ Note: this is a work in progress and I don't know when it will be complete if ev
 - **Added Syntactic Sugar** to make things look good. Specifically, added def, let, and conditional sugar
 - **Added Embedded Types and Type Checking** defined types out of untyped lambda calculus. This is an informal type system, a type-like system, probably best called an embedded type system. Everything built so far now has embedded typed versions!
 - **Integers** and basic operators for them
+- **Binary Digit List Encodings of Natural Numbers** and add and multiplication operators for them - these are trillions of time more capable at representing numbers than Church Numerals in terms of size 
 
 #### How to Run:
 1. Download [Racket](https://racket-lang.org/) and the *lazy* package
