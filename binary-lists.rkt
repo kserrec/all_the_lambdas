@@ -226,7 +226,13 @@
 
 ;===================================================
 
+#|
+    ~ BINARY DIGIT LIST MULTIPLICATION BY 2 ~
+    Easy as can be - just append a zero
+|#
+(def bin-mult-2 bin-num = ((app bin-num) bin-zero))
 
+(def bin-mult-pow-2 bin-num n = ((n bin-mult-2) bin-num))
 
 
 
