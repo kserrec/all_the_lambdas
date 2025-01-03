@@ -2,6 +2,7 @@
 (provide (all-defined-out))
 (require "../algorithms.rkt"
          "../church.rkt"
+         "../core.rkt"
          "../integers.rkt"
          "../lists.rkt"
          "../logic.rkt"

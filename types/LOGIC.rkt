@@ -1,6 +1,7 @@
 #lang lazy
 (provide (all-defined-out))
-(require "../logic.rkt"
+(require "../core.rkt"
+         "../logic.rkt"
          "../macros/macros.rkt"
          "TYPES.rkt")
 

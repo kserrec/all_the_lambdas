@@ -1,7 +1,8 @@
 #lang s-exp "macros/lazy-with-macros.rkt"
 (require "macros/macros.rkt")
 (provide (all-defined-out))
-(require "church.rkt"
+(require "core.rkt"
+         "church.rkt"
          "logic.rkt"
          "recursion.rkt")
 
@@ -28,21 +29,6 @@
 |#
 
 ;===================================================
-
-#|
-    ~ PAIR ~
-    - Contract: (func,func) => {func,func}
-    - Logic: Takes two arguments and stores them together,
-                with both ready to be applied to by any function the pair applies to
-|#
-(def pair a b f = ((f a) b))
-
-#|
-    ~ NIL ~
-    - Contract: (func,func) => func
-    - Logic: This is a simple placeholder for building lists off of.
-|#
-(define nil zero)
 
 #|
     ~ HEAD ~

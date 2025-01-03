@@ -1,6 +1,7 @@
 #lang lazy
 (provide (all-defined-out))
 (require "../church.rkt"
+         "../core.rkt"
          "../integers.rkt"
          "../lists.rkt"
          "../logic.rkt"

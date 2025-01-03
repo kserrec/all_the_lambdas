@@ -3,6 +3,7 @@
 (require racket/string)
 (require "../macros/macros.rkt")
 (require "../church.rkt"
+         "../core.rkt"
          "../division.rkt"
          "../integers.rkt"
          "../lists.rkt"

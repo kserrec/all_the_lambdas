@@ -2,6 +2,7 @@
 (require "macros/macros.rkt")
 (provide (all-defined-out))
 (require "church.rkt"
+         "core.rkt"
          "division.rkt"
          "lists.rkt"
          "logic.rkt")

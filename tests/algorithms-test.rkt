@@ -1,6 +1,7 @@
 #lang s-exp "../macros/lazy-with-macros.rkt"
 (require "../macros/macros.rkt")
 (require "../algorithms.rkt"
+         "../core.rkt"
          "../integers.rkt"
          "../lists.rkt"
          "../logic.rkt"
