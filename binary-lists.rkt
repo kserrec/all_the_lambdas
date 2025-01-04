@@ -59,50 +59,12 @@
              [len-remaining (church-to-nat (len bin-list))]
              [total 0])
     (if (zero? len-remaining)
-        total
+        (number->string total)
         (loop (tail lst)
               (sub1 len-remaining)
               (if (equal? (head lst) one)
                   (+ total (expt 2 (sub1 len-remaining)))
                   total)))))
-
-(def bin-one-billion =
-  (_cons one one one zero one one one zero 
-         zero one one zero one zero one one 
-         zero zero one zero one zero zero zero 
-         zero zero zero zero zero zero)
-)
-
-(def bin-one-trillion = 
-    (_cons one one one zero one zero zero zero one one zero one zero one zero zero one zero one zero zero one zero one zero zero zero one zero zero zero zero zero zero zero zero zero zero zero zero)
-)
-
-(def bin-one-quadrillion = 
-    (_cons one one one zero zero zero one one zero one zero one one one one one one zero one zero one zero zero one zero zero one one zero zero zero one one zero one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero)
-)
-
-(def bin-one-quintillion = 
-    (_cons one one zero one one one one zero zero zero zero zero one zero one one zero one one zero one zero one one zero zero one one one zero one zero zero one one one zero one one zero zero one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero)
-)
-
-(def bin-one-sextillion = 
-    (_cons one one zero one one zero zero zero one one zero one zero one one one zero zero one zero zero one one zero one zero one one zero one one one zero zero zero one zero one one one zero one one one one zero one zero one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero)
-)
-
-(displayln "binary digit list - one billion:")
-(displayln (bin-read bin-one-billion))
-
-(displayln "binary digit list - one trillion:")
-(displayln (bin-read bin-one-trillion))
-
-(displayln "binary digit list - one quadrillion:")
-(displayln (bin-read bin-one-quadrillion))
-
-(displayln "binary digit list - one quintillion:")
-(displayln (bin-read bin-one-quintillion))
-
-(displayln "binary digit list - one sextillion:")
-(displayln (bin-read bin-one-sextillion))
 
 ;===================================================
 
@@ -111,7 +73,7 @@
 
 #|
     The next two functions, 
-    get-place and get-new-carry, 
+    get-place-val and get-new-carry, 
     are based entirely off this truth table:
     (zeroes are turned to false, ones to true)
     current-carry | dig1 | dig2 | place-val | new-carry
@@ -197,33 +159,14 @@
 
 #|
     ~ BINARY DIGIT LIST ADDITION ~
-    - First reverse their lists since we add right to left but want to traverse these left to right
-    - Then pass to helper function along with a zero initial carry value for main work 
-    - Reverse back on the way out
+    Contract: (bin-list, bin-list) => bin-list
+    Idea: The goal here is to make this algorithm as similar to the actual algorithm we use when we add numbers as possible.
+    Logic:
+        - First reverse their lists since we add right to left but want to traverse these left to right
+        - Then pass to helper function along with a zero initial carry value for main work 
+        - Reverse back on the way out
 |#
 (def bin-add l1 l2 = (rev ((((Y bin-add-helper) (rev l1)) (rev l2)) zero)))
-
-;===================================================
-
-(displayln "truth table for test get-place-val")
-(displayln (n-read (((get-place-val zero) zero) zero)))
-(displayln (n-read (((get-place-val zero) zero) one)))
-(displayln (n-read (((get-place-val zero) one) zero)))
-(displayln (n-read (((get-place-val zero) one) one)))
-(displayln (n-read (((get-place-val one) zero) zero)))
-(displayln (n-read (((get-place-val one) zero) one)))
-(displayln (n-read (((get-place-val one) one) zero)))
-(displayln (n-read (((get-place-val one) one) one)))
-
-(displayln "truth table for test get-new-carry")
-(displayln (n-read (((get-new-carry zero) zero) zero)))
-(displayln (n-read (((get-new-carry zero) zero) one)))
-(displayln (n-read (((get-new-carry zero) one) zero)))
-(displayln (n-read (((get-new-carry zero) one) one)))
-(displayln (n-read (((get-new-carry one) zero) zero)))
-(displayln (n-read (((get-new-carry one) zero) one)))
-(displayln (n-read (((get-new-carry one) one) zero)))
-(displayln (n-read (((get-new-carry one) one) one)))
 
 ;===================================================
 
@@ -259,8 +202,11 @@
 
 #|
     ~ BINARY DIGIT LIST MULTIPLICATION ~
-    - First find which is greater, then pass that as first list to helper for main work
-    - Also reverse lists since we multiply right to left 
+    Contract: (bin-list, bin-list) => bin-list
+    Idea: The goal here is to make this algorithm as similar to the actual algorithm we use when we add numbers as possible.
+    Logic:
+        - First find which is greater, then pass that as first list to helper for main work
+        - Also reverse lists since we multiply right to left 
 |#
 (def bin-mult l1 l2 = 
     (_if ((gte (len l1)) (len l2))
