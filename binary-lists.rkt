@@ -31,7 +31,7 @@
 ;===================================================
 
 #|
-    ~ FIRST FEW NUMBERS ~
+    ~ A FEW NUMBERS ~
 |#
 (def bin-zero = (_cons zero))
 (def bin-one = (_cons one))
@@ -39,9 +39,44 @@
 (def bin-three = (_cons one one))
 (def bin-four = (_cons one zero zero))
 (def bin-five = (_cons one zero one))
+(def bin-six = (_cons one one zero))
+(def bin-seven = (_cons one one one))
+(def bin-eight = (_cons one zero zero zero))
 (def bin-ten = (_cons one zero one zero))
+(def bin-twelve = (_cons one one zero zero))
+(def bin-fifteen = (_cons one one one one))
+(def bin-sixteen = (_cons one zero zero zero zero))
 (def bin-twenty = (_cons one zero one zero zero))
 (def bin-twenty-four = (_cons one one zero zero zero))
+(def bin-thirty-one = (_cons one one one one one))
+(def bin-thirty-two = (_cons one zero zero zero zero zero))
+(def bin-sixty-four = (_cons one zero zero zero zero zero zero))
+(def bin-one-hundred-twenty-seven = (_cons one one one one one one one))
+(def bin-one-hundred-twenty-eight = (_cons one zero zero zero zero zero zero zero))
+(def bin-two-hundred-fifty-five = (_cons one one one one one one one one))
+(def bin-five-hundred-twelve = (_cons one zero zero zero zero zero zero zero zero zero))
+(def bin-one-k-twenty-three = (_cons one one one one one one one one one one))
+(def bin-two-k-forty-eight = (_cons one zero zero zero zero zero zero zero zero zero zero zero))
+(def bin-sixty-five-k-five-hundred-thirty-six = (_cons one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero))
+(def bin-one-hundred-thirty-one-k-seventy-two = (_cons one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero))
+(def bin-one-billion =
+  (_cons one one one zero one one one zero 
+         zero one one zero one zero one one 
+         zero zero one zero one zero zero zero 
+         zero zero zero zero zero zero)
+)
+(def bin-one-trillion = 
+    (_cons one one one zero one zero zero zero one one zero one zero one zero zero one zero one zero zero one zero one zero zero zero one zero zero zero zero zero zero zero zero zero zero zero zero)
+)
+(def bin-one-quadrillion = 
+    (_cons one one one zero zero zero one one zero one zero one one one one one one zero one zero one zero zero one zero zero one one zero zero zero one one zero one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero)
+)
+(def bin-one-quintillion = 
+    (_cons one one zero one one one one zero zero zero zero zero one zero one one zero one one zero one zero one one zero zero one one one zero one zero zero one one one zero one one zero zero one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero)
+)
+(def bin-one-sextillion = 
+    (_cons one one zero one one zero zero zero one one zero one zero one one one zero zero one zero zero one one zero one zero one one zero one one one zero zero zero one zero one one one zero one one one one zero one zero one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero)
+)
 
 ;===================================================
 
@@ -193,8 +228,8 @@
         _then running-total
         _else
             (_let new-running-total = ((bin-add ((bin-mult-pow-2 (rev l1)) counter)) running-total)
-            (_let new-counter = ((add one) counter)
-            (_if ((gt ((add one) counter)) l1-len)
+            (_let new-counter = (succ counter)
+            (_if ((gt (succ counter)) l1-len)
                 _then running-total
                 _else (_if (isOne (head l2))
                         _then (((((f l1) (tail l2)) l1-len) new-counter) new-running-total)
@@ -211,6 +246,4 @@
 (def bin-mult l1 l2 = 
     (_if ((gte (len l1)) (len l2))
         _then ((((((Y bin-mult-helper) (rev l1)) (rev l2)) (len l1)) zero) bin-zero)
-        _else ((((((Y bin-mult-helper) (rev l2)) (rev l1)) (len l2)) zero) bin-zero)
-    )
-)
+        _else ((((((Y bin-mult-helper) (rev l2)) (rev l1)) (len l2)) zero) bin-zero)))
