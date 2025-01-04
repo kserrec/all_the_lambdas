@@ -182,11 +182,11 @@
 #|
     ~ BINARY DIGIT LIST MULTIPLICATION HELPER ~
     - Assume l1 is greater or equal length (it goes on top for multiplication)
-    - If 
-    - If counter plus one is greater than len l1, break
-    - Check l2 first digit - if its one, mult l1 by pow 2 for place value alignment
-        and add to the running total
-    - Increase counter and repeat
+    - If counter plus one is greater than len l1, break, we're at the end and have no more to multiply by
+    - Check l2 first digit - if its one, mult l1 by pow 2 for place value alignment 
+        (like adding zeroes when we multiply down each line)
+        and add to the running total (like adding up all the rows)
+    - Then increase counter and repeat
 |#
 (def bin-mult-helper f l1 l2 l1-len counter running-total = 
     (_if (isNil l2)
@@ -203,10 +203,10 @@
 #|
     ~ BINARY DIGIT LIST MULTIPLICATION ~
     Contract: (bin-list, bin-list) => bin-list
-    Idea: The goal here is to make this algorithm as similar to the actual algorithm we use when we add numbers as possible.
+    Idea: The goal here is to make this algorithm as similar to the actual algorithm we use when we multiply numbers as possible.
     Logic:
-        - First find which is greater, then pass that as first list to helper for main work
-        - Also reverse lists since we multiply right to left 
+        - First find which is greater, then pass that as first list to helper for main work (bigger number on top)
+        - Also reverse lists since we multiply right to left but want to traverse left to right
 |#
 (def bin-mult l1 l2 = 
     (_if ((gte (len l1)) (len l2))
