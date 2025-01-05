@@ -18,15 +18,15 @@
 
     NATURAL NUMBERS as BINARY DIGIT LISTS
 
-    These will be lists like this [1] and [1,1,0]
+    These will be lists like this [1] and [1,1,0], etc.
 
-        0: [0]
-        1: [1]
-        2: [1,0]
-        3: [1,1]
-        4: [1,0,0]
-        5: [1,0,1]
-
+    Some examples...
+        0: [0] = (zero, nil)
+        1: [1] = (one, nil)
+        2: [1,0] = (one, (zero, nil))
+        3: [1,1] = (one, (one, nil))
+        4: [1,0,0] = (one, (zero, (zero, nil)))
+        5: [1,0,1] = (one, (zero, (one, nil)))
 |#
 ;===================================================
 
@@ -247,3 +247,76 @@
     (_if ((gte (len l1)) (len l2))
         _then ((((((Y bin-mult-helper) (rev l1)) (rev l2)) (len l1)) zero) bin-zero)
         _else ((((((Y bin-mult-helper) (rev l2)) (rev l1)) (len l2)) zero) bin-zero)))
+
+
+;===================================================
+
+
+(def get-place-val-sub carry dig1 dig2 =
+  (_let dig1-bool = (isOne dig1)
+  (_let dig2-bool = (isOne dig2)
+  (_let carry-bool = (isOne carry)
+  ;; Directly implement the truth table:
+  (_if ((_and (_not carry-bool)) ((_and (_not dig1-bool)) (_not dig2-bool)))
+       _then zero                       ; (0,0,0)->0
+       _else (_if ((_and (_not carry-bool)) ((_and (_not dig1-bool)) dig2-bool))
+            _then one                  ; (0,0,1)->1
+            _else (_if ((_and (_not carry-bool)) ((_and dig1-bool) (_not dig2-bool)))
+                 _then one             ; (0,1,0)->1
+                 _else (_if ((_and (_not carry-bool)) ((_and dig1-bool) dig2-bool))
+                      _then zero       ; (0,1,1)->0
+                      _else (_if ((_and carry-bool) ((_and (_not dig1-bool)) (_not dig2-bool)))
+                           _then one   ; (1,0,0)->1
+                           _else (_if ((_and carry-bool) ((_and (_not dig1-bool)) dig2-bool))
+                                _then zero
+                                _else (_if ((_and carry-bool) ((_and dig1-bool) (_not dig2-bool)))
+                                     _then zero
+                                     _else one)))))))))))
+
+(def get-new-borrow-sub carry dig1 dig2 =
+  (_let dig1-bool = (isOne dig1)
+  (_let dig2-bool = (isOne dig2)
+  (_let carry-bool = (isOne carry)
+  ;; Implement new-borrow from the truth table:
+  (_if ((_and (_not carry-bool)) ((_and (_not dig1-bool)) dig2-bool))
+       _then one                       ; (0,0,1)
+       _else (_if ((_and carry-bool) ((_and (_not dig1-bool)) (_not dig2-bool)))
+            _then one                  ; (1,0,0)
+            _else (_if ((_and carry-bool) ((_and (_not dig1-bool)) dig2-bool))
+                 _then one             ; (1,0,1)
+                 _else (_if ((_and carry-bool) ((_and dig1-bool) dig2-bool))
+                      _then one        ; (1,1,1)
+                      _else zero))))))))
+
+(def handle-last-digits-sub f l borrow =
+  (_if (isZero borrow)
+      _then l
+      _else
+        (_if (isNil l)
+            ;; If no digits left, but borrow=1 => put "1" with sign. 
+            ;; Typically you'd decide if that means negative. For brevity, do a single 1:
+            _then ((pair one) nil)
+            ;; Otherwise subtract "borrow=1" from head:
+            _else (_if (isZero (head l))
+                ;; (0 - 1) => place=1, borrow=1 => keep borrowing
+                _then ((pair one) ((f (tail l)) one))
+                ;; (1 - 1) => place=0 => no more borrow
+                _else ((pair zero) (tail l))))))
+
+(def bin-sub-helper f l1 l2 borrow =
+  (_if (isNil l1)
+    ;; If l1 is empty, we apply leftover borrow to l2
+    _then (((Y handle-last-digits-sub) l2) borrow)
+    _else
+      (_if (isNil l2)
+        ;; If l2 is empty, we apply leftover borrow to l1
+        _then (((Y handle-last-digits-sub) l1) borrow)
+        _else
+          (_let place-val = (((get-place-val-sub borrow) (head l1)) (head l2))
+          (_let new-borrow = (((get-new-borrow-sub borrow) (head l1)) (head l2))
+          ((pair place-val) (((f (tail l1)) (tail l2)) new-borrow)))))))
+
+(def bin-sub l1 l2 =
+  (rev ((((Y bin-sub-helper) (rev l1)) (rev l2)) zero)))
+
+
