@@ -42,6 +42,7 @@
 (def bin-six = (_cons one one zero))
 (def bin-seven = (_cons one one one))
 (def bin-eight = (_cons one zero zero zero))
+(def bin-nine = (_cons one zero zero one))
 (def bin-ten = (_cons one zero one zero))
 (def bin-twelve = (_cons one one zero zero))
 (def bin-fifteen = (_cons one one one one))
@@ -54,6 +55,7 @@
 (def bin-one-hundred-twenty-seven = (_cons one one one one one one one))
 (def bin-one-hundred-twenty-eight = (_cons one zero zero zero zero zero zero zero))
 (def bin-two-hundred-fifty-five = (_cons one one one one one one one one))
+(def bin-two-hundred-fifty-six = (_cons one zero zero zero zero zero zero zero zero))
 (def bin-five-hundred-twelve = (_cons one zero zero zero zero zero zero zero zero zero))
 (def bin-one-k-twenty-three = (_cons one one one one one one one one one one))
 (def bin-two-k-forty-eight = (_cons one zero zero zero zero zero zero zero zero zero zero zero))
@@ -64,6 +66,12 @@
          zero one one zero one zero one one 
          zero zero one zero one zero zero zero 
          zero zero zero zero zero zero)
+)
+(def bin-two-billion =
+  (_cons one one one zero one one one zero 
+         zero one one zero one zero one one 
+         zero zero one zero one zero zero zero 
+         zero zero zero zero zero zero zero)
 )
 (def bin-one-trillion = 
     (_cons one one one zero one zero zero zero one one zero one zero one zero zero one zero one zero zero one zero one zero zero zero one zero zero zero zero zero zero zero zero zero zero zero zero)
@@ -76,6 +84,9 @@
 )
 (def bin-one-sextillion = 
     (_cons one one zero one one zero zero zero one one zero one zero one one one zero zero one zero zero one one zero one zero one one zero one one one zero zero zero one zero one one one zero one one one one zero one zero one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero)
+)
+(def bin-one-sextillion-and-three = 
+    (_cons one one zero one one zero zero zero one one zero one zero one one one zero zero one zero zero one one zero one zero one one zero one one one zero zero zero one zero one one one zero one one one one zero one zero one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero one one)
 )
 
 ;===================================================

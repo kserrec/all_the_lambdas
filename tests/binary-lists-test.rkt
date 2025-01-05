@@ -162,3 +162,61 @@
 (show-results "bin-mult" bin-mult-tests)
 
 ; ====================================================================
+
+(define bin-sub-tests (list
+  ;; trivial cases
+  (test-list-element "bin-sub(bin-zero)(bin-zero)"
+    (bin-read ((bin-sub bin-zero) bin-zero)) "0")
+  (test-list-element "bin-sub(bin-one)(bin-zero)"
+    (bin-read ((bin-sub bin-one) bin-zero)) "1")
+  (test-list-element "bin-sub(bin-two)(bin-zero)"
+    (bin-read ((bin-sub bin-two) bin-zero)) "2")
+  (test-list-element "bin-sub(bin-two)(bin-one)"
+    (bin-read ((bin-sub bin-two) bin-one)) "1")
+
+  ;; small numbers
+  (test-list-element "bin-sub(bin-three)(bin-two)"
+    (bin-read ((bin-sub bin-three) bin-two)) "1")
+  (test-list-element "bin-sub(bin-four)(bin-one)"
+    (bin-read ((bin-sub bin-four) bin-one)) "3")
+  (test-list-element "bin-sub(bin-seven)(bin-five)"
+    (bin-read ((bin-sub bin-seven) bin-five)) "2")
+  (test-list-element "bin-sub(bin-six)(bin-three)"
+    (bin-read ((bin-sub bin-six) bin-three)) "3")
+
+  ;; large numbers
+  (test-list-element "bin-sub(bin-thirty-two)(bin-one)"
+    (bin-read ((bin-sub bin-thirty-two) bin-one)) "31")
+  (test-list-element "bin-sub(bin-thirty-one)(bin-fifteen)"
+    (bin-read ((bin-sub bin-thirty-one) bin-fifteen)) "16")
+  (test-list-element "bin-sub(bin-five-hundred-twelve)(bin-five-hundred-twelve)"
+    (bin-read ((bin-sub bin-five-hundred-twelve) bin-five-hundred-twelve)) "0")
+  (test-list-element "bin-sub(bin-five-hundred-twelve)(bin-two-hundred-fifty-six)"
+    (bin-read ((bin-sub bin-five-hundred-twelve) bin-two-hundred-fifty-six)) "256")
+
+  ;; uneven list lengths
+  (test-list-element "bin-sub(bin-nine)(bin-one)"
+    (bin-read ((bin-sub bin-nine) bin-one)) "8")
+  (test-list-element "bin-sub(bin-sixty-four)(bin-fifteen)"
+    (bin-read ((bin-sub bin-sixty-four) bin-fifteen)) "49")
+  (test-list-element "bin-sub(bin-one-hundred-twenty-eight)(bin-seven)"
+    (bin-read ((bin-sub bin-one-hundred-twenty-eight) bin-seven)) "121")
+
+  ;; borrow propagation
+  (test-list-element "bin-sub(bin-five)(bin-one)"
+    (bin-read ((bin-sub bin-five) bin-one)) "4")
+  (test-list-element "bin-sub(bin-eight)(bin-one)"
+    (bin-read ((bin-sub bin-eight) bin-one)) "7")
+  (test-list-element "bin-sub(bin-fifteen)(bin-one)"
+    (bin-read ((bin-sub bin-fifteen) bin-one)) "14")
+  (test-list-element "bin-sub(bin-sixteen)(bin-one)"
+    (bin-read ((bin-sub bin-sixteen) bin-one)) "15")
+
+  ;; scalability
+  (test-list-element "bin-sub(bin-two-billion)(bin-one-billion)"
+    (bin-read ((bin-sub bin-two-billion) bin-one-billion)) "1000000000")
+  (test-list-element "bin-sub(bin-one-sextillion-and-three)(bin-one-sextillion)"
+    (bin-read ((bin-sub bin-one-sextillion-and-three) bin-one-sextillion)) "3")
+))
+
+(show-results "bin-sub" bin-sub-tests)
