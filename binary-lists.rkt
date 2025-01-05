@@ -262,72 +262,75 @@
 
 ;===================================================
 
+#|
+    The function get-new-borrow, 
+    is based entirely off this truth table:
+    (zeroes are turned to false, ones to true)
+    current-borrow | dig1 | dig2 | new-borrow
+          0           0      0        0
+          0           1      0        0
+          0           0      1        1
+          0           1      1        0
+          1           0      0        1
+          1           1      0        0
+          1           0      1        1
+          1           1      1        1
+|#
+(def get-new-borrow-sub carry dig1 dig2 = 
+    (_let dig1-bool = (isOne dig1)
+    (_let dig2-bool = (isOne dig2)
+    (_let carry-bool = (isOne carry)
+    (_if ((_and carry-bool) ((_or (_not dig1-bool)) dig2-bool))
+        _then one
+        _else (_if ((_and (_not carry-bool)) ((_and (_not dig1-bool)) dig2-bool))
+                _then one
+                _else zero))))))
 
-(def get-place-val-sub carry dig1 dig2 =
-  (_let dig1-bool = (isOne dig1)
-  (_let dig2-bool = (isOne dig2)
-  (_let carry-bool = (isOne carry)
-  ;; Directly implement the truth table:
-  (_if ((_and (_not carry-bool)) ((_and (_not dig1-bool)) (_not dig2-bool)))
-       _then zero                       ; (0,0,0)->0
-       _else (_if ((_and (_not carry-bool)) ((_and (_not dig1-bool)) dig2-bool))
-            _then one                  ; (0,0,1)->1
-            _else (_if ((_and (_not carry-bool)) ((_and dig1-bool) (_not dig2-bool)))
-                 _then one             ; (0,1,0)->1
-                 _else (_if ((_and (_not carry-bool)) ((_and dig1-bool) dig2-bool))
-                      _then zero       ; (0,1,1)->0
-                      _else (_if ((_and carry-bool) ((_and (_not dig1-bool)) (_not dig2-bool)))
-                           _then one   ; (1,0,0)->1
-                           _else (_if ((_and carry-bool) ((_and (_not dig1-bool)) dig2-bool))
-                                _then zero
-                                _else (_if ((_and carry-bool) ((_and dig1-bool) (_not dig2-bool)))
-                                     _then zero
-                                     _else one)))))))))))
-
-(def get-new-borrow-sub carry dig1 dig2 =
-  (_let dig1-bool = (isOne dig1)
-  (_let dig2-bool = (isOne dig2)
-  (_let carry-bool = (isOne carry)
-  ;; Implement new-borrow from the truth table:
-  (_if ((_and (_not carry-bool)) ((_and (_not dig1-bool)) dig2-bool))
-       _then one                       ; (0,0,1)
-       _else (_if ((_and carry-bool) ((_and (_not dig1-bool)) (_not dig2-bool)))
-            _then one                  ; (1,0,0)
-            _else (_if ((_and carry-bool) ((_and (_not dig1-bool)) dig2-bool))
-                 _then one             ; (1,0,1)
-                 _else (_if ((_and carry-bool) ((_and dig1-bool) dig2-bool))
-                      _then one        ; (1,1,1)
-                      _else zero))))))))
-
+#|
+    ~ if one list is finished, this will subtract the borrow from the other ~
+    if borrow is zero, just return list, nothing to sub
+    else if list is nil, write one for the borrow and end it
+    else if head is zero, write one for the borrow and must borrow again so recurse
+    else if head is one, write zero for the borrow and append the rest (the borrow has no more effect)
+|#
 (def handle-last-digits-sub f l borrow =
   (_if (isZero borrow)
       _then l
       _else
         (_if (isNil l)
-            ;; If no digits left, but borrow=1 => put "1" with sign. 
-            ;; Typically you'd decide if that means negative. For brevity, do a single 1:
             _then ((pair one) nil)
-            ;; Otherwise subtract "borrow=1" from head:
             _else (_if (isZero (head l))
-                ;; (0 - 1) => place=1, borrow=1 => keep borrowing
                 _then ((pair one) ((f (tail l)) one))
-                ;; (1 - 1) => place=0 => no more borrow
                 _else ((pair zero) (tail l))))))
 
+#|
+    ~ main helper function ~
+    first check if either is nil...
+        - then we can just handle the last digits of the other with the borrow
+    otherwise get the place value for that column and whether we need to borrow,
+    then put the place value in place and recurse down the list
+    note: get-place-val is same as for addition but with digits flipped
+    note: this function does not work if l1 < l2 - gets unpredictable results
+|#
 (def bin-sub-helper f l1 l2 borrow =
   (_if (isNil l1)
-    ;; If l1 is empty, we apply leftover borrow to l2
     _then (((Y handle-last-digits-sub) l2) borrow)
     _else
       (_if (isNil l2)
-        ;; If l2 is empty, we apply leftover borrow to l1
         _then (((Y handle-last-digits-sub) l1) borrow)
         _else
-          (_let place-val = (((get-place-val-sub borrow) (head l1)) (head l2))
+          (_let place-val = (((get-place-val borrow) (head l2)) (head l1))
           (_let new-borrow = (((get-new-borrow-sub borrow) (head l1)) (head l2))
           ((pair place-val) (((f (tail l1)) (tail l2)) new-borrow)))))))
 
+#|
+    ~ BINARY DIGIT LIST SUBTRACTION ~
+    Contract: (bin-list, bin-list) => bin-list
+    Idea: The goal here is to make this algorithm as similar to the actual algorithm we use when we subtract numbers as possible.
+    Logic:
+        - First reverse their lists since we sub right to left but want to traverse these left to right
+        - Then pass to helper function along with a zero initial carry value for main work 
+        - Reverse back on the way out
+|#
 (def bin-sub l1 l2 =
   (rev ((((Y bin-sub-helper) (rev l1)) (rev l2)) zero)))
-
-
