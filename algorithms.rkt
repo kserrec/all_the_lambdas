@@ -67,8 +67,20 @@
                             _else ((((f lst) target) (succ mid)) high)))   
             _else negOne)))
 
-
 ;===================================================
+
+; bubble sort
+(def bubble-sort lst = ((((Y bubble-sort-helper) lst) (len lst)) zero))
+
+; bubble passes up to each "resting-place" from final index on down
+(def bubble-sort-helper f lst lst-len for-i = 
+    (_if ((gte for-i) lst-len)
+        _then lst
+        _else (_let new-list = ((one-bubble-pass lst) ((for-i pred) lst-len))
+            (((f new-list) lst-len) (succ for-i)))))
+
+; bubble passes up to "resting-place"
+(def one-bubble-pass lst resting-place = ((((Y one-bubble-pass-helper) lst) zero) (pred resting-place)))
 
 ; returns a list with two passed elements swapped where left starts at index i
 (def swap-neighbors lst left i right = 
@@ -87,44 +99,30 @@
                     (((f swapped-list) (succ for-i)) resting-place))
                 _else (((f lst) (succ for-i)) resting-place))))))
 
-; bubble passes up to "resting-place"
-(def one-bubble-pass lst resting-place = ((((Y one-bubble-pass-helper) lst) zero) (pred resting-place)))
-
-; bubble passes up to each "resting-place" from final index on down
-(def bubble-sort-helper f lst for-i = 
-    (_let lst-len = (len lst)
-    (_if ((gte for-i) lst-len)
-        _then lst
-        _else (_let new-list = ((one-bubble-pass lst) ((for-i pred) lst-len))
-            ((f new-list) (succ for-i))))))
-
-; bubble sort
-(def bubble-sort lst = (((Y bubble-sort-helper) lst) zero))
-
 ;===================================================
 
-; inserts element at index j into sorted list to its left
+; insertion sort
+(def insertion-sort lst = ((((Y insertion-helper) lst) (len lst)) one))
+
+; inserts each element into sorted sublist to the left from index one to end
+(def insertion-helper f lst lst-len for-i = 
+    (_if ((gte for-i) lst-len)
+        _then lst
+        _else (_let new-list = ((insertion-pass lst) for-i)
+            (((f new-list) lst-len) (succ for-i)))))
+
+; runs each insertion pass
+(def insertion-pass lst j = 
+    (((((Y insertion-pass-helper) lst) zero) ((ind lst) j)) j))
+
+; if less than any of sorted list to its left,
+; inserts copy of element at index j,
+; then removes original
 (def insertion-pass-helper f lst for-i key j =
     (_let lst@i = ((ind lst) for-i)
     (_if ((gte for-i) j)
         _then lst
         _else (_if ((lte key) lst@i)
                 _then (_let new-list = (((insert key) lst) for-i)
-                      ((_remove new-list) (succ j))
-                )
+                      ((_remove new-list) (succ j)))
                 _else ((((f lst) (succ for-i)) key) j)))))
-
-; runs each insertion pass
-(def insertion-pass lst j = 
-    (((((Y insertion-pass-helper) lst) zero) ((ind lst) j)) j))
-
-; inserts each element into sorted sublist to the left from index one to end
-(def insertion-helper f lst for-i = 
-    (_let lst-len = (len lst)
-    (_if ((gte for-i) lst-len)
-        _then lst
-        _else (_let new-list = ((insertion-pass lst) for-i)
-            ((f new-list) (succ for-i))))))
-
-; insertion sort
-(def insertion-sort lst = (((Y insertion-helper) lst) one))
