@@ -1,8 +1,8 @@
 #lang s-exp "macros/lazy-with-macros.rkt"
 (require "macros/macros.rkt")
 (provide (all-defined-out))
-(require "core.rkt"
-         "church.rkt"
+(require "church.rkt"
+         "core.rkt"
          "division.rkt"
          "integers.rkt"
          "lists.rkt"
@@ -14,7 +14,7 @@
 ;===================================================
 
 #|
-    ~ BINARY SEARCH ~
+    ~ BINARY SEARCH ~q
 
     -Algorithm:
     ; binarySearch (lst) (target) (low) (high) = 
@@ -71,7 +71,7 @@
 ;===================================================
 
 ; returns a list with two passed elements swapped where left starts at index i
-(def swap lst left i right = 
+(def swap-neighbors lst left i right = 
     (_let new-lst = (((replace right) lst) i)
     (((replace left) new-lst) (succ i))))
 
@@ -83,7 +83,7 @@
             (_let left = ((ind lst) for-i)
             (_let right = ((ind lst) (succ for-i))
             (_if ((gt left) right)
-                _then (_let swapped-list = ((((swap lst) left) for-i) right)
+                _then (_let swapped-list = ((((swap-neighbors lst) left) for-i) right)
                     (((f swapped-list) (succ for-i)) resting-place))
                 _else (((f lst) (succ for-i)) resting-place))))))
 
@@ -101,5 +101,30 @@
 ; bubble sort
 (def bubble-sort lst = (((Y bubble-sort-helper) lst) zero))
 
+;===================================================
 
+; inserts element at index j into sorted list to its left
+(def insertion-pass-helper f lst for-i key j =
+    (_let lst@i = ((ind lst) for-i)
+    (_if ((gte for-i) j)
+        _then lst
+        _else (_if ((lte key) lst@i)
+                _then (_let new-list = (((insert key) lst) for-i)
+                      ((_remove new-list) (succ j))
+                )
+                _else ((((f lst) (succ for-i)) key) j)))))
 
+; runs each insertion pass
+(def insertion-pass lst j = 
+    (((((Y insertion-pass-helper) lst) zero) ((ind lst) j)) j))
+
+; inserts each element into sorted sublist to the left from index one to end
+(def insertion-helper f lst for-i = 
+    (_let lst-len = (len lst)
+    (_if ((gte for-i) lst-len)
+        _then lst
+        _else (_let new-list = ((insertion-pass lst) for-i)
+            ((f new-list) (succ for-i))))))
+
+; insertion sort
+(def insertion-sort lst = (((Y insertion-helper) lst) one))

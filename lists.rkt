@@ -121,7 +121,7 @@
 
 #|
     ~ INDEX ~
-    - Contract: (list, nat) => bool
+    - Contract: (list, nat) => val
     - Idea: Return value of list at index i
     - Logic: Take head at ith tail of list
 |#
@@ -287,4 +287,16 @@
             ((sub (len _list)) n))
             (rev _list))))
 
-;===================================================
+#|
+    ~ REMOVE ~
+    - Contract: (list, nat) => list
+    - Idea: Remove element at index i from list
+    - Logic: does take and take tail, then appends, leaving element out
+|#
+(def _remove lst i = 
+    (_if ((gt (succ i)) (len lst))
+        _then lst
+        _else 
+            (_let left-side = ((_take i) lst)
+            (_let right-side = ((takeTail ((sub (len lst)) (succ i))) lst)
+            ((app left-side) right-side)))))
