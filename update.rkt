@@ -8,12 +8,19 @@
          "recursion.rkt")
 
 ; setup
-(def a = zero)
-(def b = one)
-(def c = two)
+(def six = (succ five))
+(def seven = (succ six))
 (def ten = ((mult two) five))
 (def eleven = ((add one) ten))
 (def nine-nine-nine = (pred ((_exp ten) three)))
+
+(def a = zero)
+(def b = one)
+(def c = two)
+(def d = three)
+(def e = four)
+(def f = five)
+(def g = six)
 
 ; denotational semantics
 (displayln "semantics!")
@@ -66,18 +73,9 @@
 (def v4-q4 = ((q3 a) eleven))
 (def q4 = (tail v4-q4))
 
-
-(def q4-a-999 = ((q4 a) nine-nine-nine))
-(display (string-append (n-read (head q4-a-999)) ", "))  
-(displayln (tail q4-a-999)) ; 1, #<procedure:..._lambdas/update.rkt:38:4>
-
-(def q4-b-999 = ((q4 b) nine-nine-nine))
-(display (string-append (n-read (head q4-b-999)) ", ")) 
-(displayln (tail q4-b-999)) ; 2, #<procedure:..._lambdas/update.rkt:38:4>
-
-(def q4-c-999 = ((q4 c) nine-nine-nine))
-(display (string-append (n-read (head q4-c-999)) ", "))
-(displayln (tail q4-c-999)) ; 3, #<procedure:..._lambdas/update.rkt:38:4>
+(displayln (n-read (head ((q4 a) nine-nine-nine)))) ; 1
+(displayln (n-read (head ((q4 b) nine-nine-nine)))) ; 2
+(displayln (n-read (head ((q4 c) nine-nine-nine)))) ; 3
 
 ; ordered
 (displayln "ordered!")
@@ -128,24 +126,81 @@
     ((pair value) (((uUpdate f) key) value)))
 
 
-(def v1-o1 = ((oExtend zero) one))
+(def v1-o1 = ((oExtend a) one))
 (def o1 = (tail v1-o1))
 
-(def v2-o2 = ((o1 two) three))
+(def v2-o2 = ((o1 c) three))
 (def o2 = (tail v2-o2))
 
-(def v3-o3 = ((o2 one) two))
+(def v3-o3 = ((o2 b) two))
 (def o3 = (tail v3-o3))
 
+(displayln (n-read (head ((o3 a) nine-nine-nine)))) ; 1
+(displayln (n-read (head ((o3 b) nine-nine-nine)))) ; 2
+(displayln (n-read (head ((o3 c) nine-nine-nine)))) ; 3
 
-(def o3-a-999 = ((o3 a) nine-nine-nine))
-(display (string-append (n-read (head o3-a-999)) ", "))  
-(displayln (tail o3-a-999))
+; tree
+(displayln "tree!")
+(def tUpdate left right key value = 
+    (((((Y _tUpdate) left) right) key) value))
 
-(def o3-b-999 = ((o3 b) nine-nine-nine))
-(display (string-append (n-read (head o3-b-999)) ", "))  
-(displayln (tail o3-b-999))
+(def _tUpdate f left right key value = 
+    (lambda (k) (lambda (v) 
+    (_if ((eq k) key)
+        _then (_let rec-tUpdate = ((((f left) right) key) value)
+            ((pair value) rec-tUpdate))
+        _else (_if ((lt k) key)
+                _then (_let left-k-v = ((left k) v)
+                    ((((lChange left-k-v) right) key) value))
+                _else (_let right-k-v = ((right k) v)
+                    ((((rChange right-k-v) left) key) value)))))))
 
-(def o3-c-999 = ((o3 c) nine-nine-nine))
-(display (string-append (n-read (head o3-c-999)) ", "))  
-(displayln (tail o3-c-999))
+(def lChange new-value-new-left right key value = 
+    (_let newvalue = (head new-value-new-left)
+    (_let newleft = (tail new-value-new-left)
+    ((pair newvalue) ((((tUpdate newleft) right) key) value)))))
+
+(def rChange new-value-new-right left key value = 
+    (_let newvalue = (head new-value-new-right)
+    (_let newright = (tail new-value-new-right)
+    ((pair newvalue) ((((tUpdate left) newright) key) value)))))
+
+(def tExtend k v = (((Y _tExtend) k) v))
+
+(def _tExtend f k v = 
+    ((pair v) ((((tUpdate f) f) k) v)))
+
+
+(def v1-t1 = ((tExtend d) four))
+(def t1 = (tail v1-t1))
+
+(def v2-t2 = ((t1 b) two))
+(def t2 = (tail v2-t2))
+
+(def v3-t3 = ((t2 a) one))
+(def t3 = (tail v3-t3))
+
+(def v4-t4 = ((t3 c) three))
+(def t4 = (tail v4-t4))
+
+(def v5-t5 = ((t4 f) six))
+(def t5 = (tail v5-t5))
+
+(def v6-t6 = ((t5 e) five))
+(def t6 = (tail v6-t6))
+
+(def v7-t7 = ((t6 g) seven))
+(def t7 = (tail v7-t7))
+
+
+(displayln (n-read (head ((t7 a) nine-nine-nine)))) ; 1
+(displayln (n-read (head ((t7 b) nine-nine-nine)))) ; 2
+(displayln (n-read (head ((t7 c) nine-nine-nine)))) ; 3
+(displayln (n-read (head ((t7 d) nine-nine-nine)))) ; 4
+(displayln (n-read (head ((t7 e) nine-nine-nine)))) ; 5
+(displayln (n-read (head ((t7 f) nine-nine-nine)))) ; 6
+(displayln (n-read (head ((t7 g) nine-nine-nine)))) ; 7
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+()
