@@ -1,19 +1,19 @@
-#lang s-exp "macros/lazy-with-macros.rkt"
-(require "macros/macros.rkt")
-(provide (all-defined-out))
-(require "logic.rkt"
-         "church.rkt"
-         "core.rkt"
-         "lists.rkt"
-         "recursion.rkt")
+#lang s-exp "../macros/lazy-with-macros.rkt"
+(require "../macros/macros.rkt")
+(require "../logic.rkt"
+         "../church.rkt"
+         "../core.rkt"
+         "../lists.rkt"
+         "../recursion.rkt")
 
 ; setup
+; number setup
 (def six = (succ five))
 (def seven = (succ six))
 (def ten = ((mult two) five))
 (def eleven = ((add one) ten))
 (def nine-nine-nine = (pred ((_exp ten) three)))
-
+; alphabet setup
 (def a = zero)
 (def b = one)
 (def c = two)
@@ -203,4 +203,38 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-()
+
+; more setup 
+(def h = seven)
+(def i = (succ h))
+(def j = (succ i))
+(def k = (succ j))
+(def l = (succ k))
+(def m = (succ l))
+
+(def fourteen = ((mult two) seven))
+(def twenty = ((mult two) ten))
+(def thirty-six = ((mult six) six))
+(def fifty = ((mult ten) five))
+(def seventy-seven = ((mult eleven) seven))
+
+; more tree building - random values now for fun
+(def t8 = (tail ((t7 h) fourteen)))
+(def t9 = (tail ((t8 i) twenty)))
+(def t10 = (tail ((t9 j) thirty-six)))
+(def t11 = (tail ((t10 k) fifty)))
+(def t12 = (tail ((t11 l) seventy-seven)))
+(def t13 = (tail ((t12 m) eleven)))
+
+; called at random and calling previously called values
+(displayln "calling random tree values")
+(displayln (n-read (head ((t13 m) nine-nine-nine)))) ; 11
+(displayln (n-read (head ((t13 d) nine-nine-nine)))) ; 4
+(displayln (n-read (head ((t13 h) nine-nine-nine)))) ; 14
+(displayln (n-read (head ((t13 f) nine-nine-nine)))) ; 6
+(displayln (n-read (head ((t13 a) nine-nine-nine)))) ; 1
+(displayln (n-read (head ((t13 b) nine-nine-nine)))) ; 2
+(displayln (n-read (head ((t13 k) nine-nine-nine)))) ; 50
+(displayln (n-read (head ((t13 l) nine-nine-nine)))) ; 77
+(displayln (n-read (head ((t13 i) nine-nine-nine)))) ; 20
+(displayln (n-read (head ((t13 j) nine-nine-nine)))) ; 36
