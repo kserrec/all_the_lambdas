@@ -69,6 +69,11 @@
 
 ;===================================================
 
+#|
+    ~ BUBBLE SORT NATURALS ~
+    - Contract: list => list
+|#
+
 ; bubble sort
 (def bubble-sort lst = ((((Y bubble-sort-helper) lst) (len lst)) zero))
 
@@ -101,6 +106,11 @@
 
 ;===================================================
 
+#|
+    ~ BUBBLE SORT NATURALS ~
+    - Contract: list => list
+|#
+
 ; insertion sort
 (def insertion-sort lst = ((((Y insertion-helper) lst) (len lst)) one))
 
@@ -126,3 +136,20 @@
                 _then (_let new-list = (((insert key) lst) for-i)
                       ((_remove new-list) (succ j)))
                 _else ((((f lst) (succ for-i)) key) j)))))
+
+;===================================================
+
+
+(def select-min lst for-i sub-len working-min min-i = 
+    ((((((Y select-min-helper) lst) for-i) sub-len) working-min) min-i))
+
+(def select-min-helper f lst for-i sub-len working-min min-i =
+    (_let lst@i = ((ind lst) for-i)
+    (_if ((gte for-i) sub-len)
+        _then ((pair min-i) working-min)
+        _else (_if ((lte working-min) lst@i)
+                _then (((((f lst) (succ for-i)) sub-len) working-min) min-i)
+                _else (((((f lst) (succ for-i)) sub-len) lst@i) for-i)))))
+
+
+
