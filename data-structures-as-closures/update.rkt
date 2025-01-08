@@ -6,6 +6,9 @@
          "../lists.rkt"
          "../recursion.rkt")
 
+; All credit for this goes to Greg Michaelson 
+; - this is a translation of his work in python into pure lambda calculus in Racket using my macros for syntactic sugar
+
 ; setup
 ; number setup
 (def six = (succ five))
@@ -38,6 +41,7 @@
 (displayln (n-read (m4 a))) ; 11
 (displayln (n-read (m4 b)))  ; 2
 (displayln (n-read (m4 c)))  ; 3
+
 
 ; queue
 (displayln "queue!")
@@ -76,6 +80,7 @@
 (displayln (n-read (head ((q4 a) nine-nine-nine)))) ; 1
 (displayln (n-read (head ((q4 b) nine-nine-nine)))) ; 2
 (displayln (n-read (head ((q4 c) nine-nine-nine)))) ; 3
+
 
 ; ordered
 (displayln "ordered!")
@@ -138,6 +143,7 @@
 (displayln (n-read (head ((o3 a) nine-nine-nine)))) ; 1
 (displayln (n-read (head ((o3 b) nine-nine-nine)))) ; 2
 (displayln (n-read (head ((o3 c) nine-nine-nine)))) ; 3
+
 
 ; tree
 (displayln "tree!")
