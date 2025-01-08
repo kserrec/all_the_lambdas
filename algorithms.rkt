@@ -151,5 +151,28 @@
                 _then (((((f lst) (succ for-i)) sub-len) working-min) min-i)
                 _else (((((f lst) (succ for-i)) sub-len) lst@i) for-i)))))
 
+; (def test-list = (_cons zero two three five one four))
+
+(def min-i = (tail (((((select-min test-list) one) (succ five)) ((ind test-list) zero)) zero)))
+
+; (displayln (n-read min-i))
+
+(def selection-helper f lst for-i lst-len =
+    (_if ((gte for-i) lst-len)
+        _then lst
+        _else (_let sub-len = ((sub lst-len) for-i)
+              (_let working-min = ((ind test-list) for-i)
+              (_let min-pair = (((((select-min lst) (succ for-i)) sub-len) working-min) for-i)
+              (_let min-val = (tail min-pair)
+              (_let min-i = (head min-pair)
+              (_if ((eq min-i) for-i)
+                _then (((f lst) (succ for-i)) (pred lst-len))
+                _else (_let swapped-list = ...
+
+                )
+              )
+        )))))
+    )
+)
 
 
