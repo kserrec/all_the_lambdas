@@ -69,6 +69,11 @@
 
 ;===================================================
 
+#|
+    ~ BUBBLE SORT NATURALS ~
+    - Contract: list => list
+|#
+
 ; bubble sort
 (def bubble-sort lst = ((((Y bubble-sort-helper) lst) (len lst)) zero))
 
@@ -101,6 +106,11 @@
 
 ;===================================================
 
+#|
+    ~ INSERTION SORT NATURALS ~
+    - Contract: list => list
+|#
+
 ; insertion sort
 (def insertion-sort lst = ((((Y insertion-helper) lst) (len lst)) one))
 
@@ -126,3 +136,46 @@
                 _then (_let new-list = (((insert key) lst) for-i)
                       ((_remove new-list) (succ j)))
                 _else ((((f lst) (succ for-i)) key) j)))))
+
+;===================================================
+
+#|
+    ~ SELECTION SORT NATURALS ~
+    - Contract: list => list
+|#
+
+; selection sort
+(def selection-sort lst = 
+    ((((Y selection-helper) lst) zero) (len lst)))
+
+; select min value from sublist going up and swap if needed
+(def selection-helper f lst for-i lst-len =
+    (_if ((gte for-i) lst-len)
+        _then lst
+        _else (_let lst@i = ((ind lst) for-i)
+              (_let min-pair = (((((select-min lst) (succ for-i)) lst-len) lst@i) for-i)
+              (_let min-val = (tail min-pair)
+              (_let min-i = (head min-pair)
+              (_if ((gt min-val) lst@i)
+                _then (((f lst) (succ for-i)) lst-len)
+                _else (_let swapped-list = (((((swap lst) lst@i) for-i) min-val) min-i)
+                    (((f swapped-list) (succ for-i)) lst-len)))))))))
+
+; run each selection of min pass
+(def select-min lst for-i lst-len working-min min-i = 
+    ((((((Y select-min-helper) lst) for-i) lst-len) working-min) min-i))
+
+; selects and returns minimum value and its index searching through list
+(def select-min-helper f lst for-i lst-len working-min min-i =
+    (_let lst@i = ((ind lst) for-i)
+    (_if ((gte for-i) lst-len)
+        _then ((pair min-i) working-min)
+        _else (_if ((lte working-min) lst@i)
+                _then (((((f lst) (succ for-i)) lst-len) working-min) min-i)
+                _else (((((f lst) (succ for-i)) lst-len) lst@i) for-i)))))
+
+; swaps any two values in a list with their values and indices
+(def swap lst left i right j = 
+    (_let new-lst = (((replace right) lst) i)
+    (((replace left) new-lst) j)))
+
