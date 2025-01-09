@@ -107,7 +107,7 @@
 ;===================================================
 
 #|
-    ~ BUBBLE SORT NATURALS ~
+    ~ INSERTION SORT NATURALS ~
     - Contract: list => list
 |#
 
@@ -139,40 +139,43 @@
 
 ;===================================================
 
+#|
+    ~ SELECTION SORT NATURALS ~
+    - Contract: list => list
+|#
 
-(def select-min lst for-i sub-len working-min min-i = 
-    ((((((Y select-min-helper) lst) for-i) sub-len) working-min) min-i))
+; selection sort
+(def selection-sort lst = 
+    ((((Y selection-helper) lst) zero) (len lst)))
 
-(def select-min-helper f lst for-i sub-len working-min min-i =
-    (_let lst@i = ((ind lst) for-i)
-    (_if ((gte for-i) sub-len)
-        _then ((pair min-i) working-min)
-        _else (_if ((lte working-min) lst@i)
-                _then (((((f lst) (succ for-i)) sub-len) working-min) min-i)
-                _else (((((f lst) (succ for-i)) sub-len) lst@i) for-i)))))
-
-; (def test-list = (_cons zero two three five one four))
-
-(def min-i = (tail (((((select-min test-list) one) (succ five)) ((ind test-list) zero)) zero)))
-
-; (displayln (n-read min-i))
-
+; select min value from sublist going up and swap if needed
 (def selection-helper f lst for-i lst-len =
     (_if ((gte for-i) lst-len)
         _then lst
-        _else (_let sub-len = ((sub lst-len) for-i)
-              (_let working-min = ((ind test-list) for-i)
-              (_let min-pair = (((((select-min lst) (succ for-i)) sub-len) working-min) for-i)
+        _else (_let lst@i = ((ind lst) for-i)
+              (_let min-pair = (((((select-min lst) (succ for-i)) lst-len) lst@i) for-i)
               (_let min-val = (tail min-pair)
               (_let min-i = (head min-pair)
-              (_if ((eq min-i) for-i)
-                _then (((f lst) (succ for-i)) (pred lst-len))
-                _else (_let swapped-list = ...
+              (_if ((gt min-val) lst@i)
+                _then (((f lst) (succ for-i)) lst-len)
+                _else (_let swapped-list = (((((swap lst) lst@i) for-i) min-val) min-i)
+                    (((f swapped-list) (succ for-i)) lst-len)))))))))
 
-                )
-              )
-        )))))
-    )
-)
+; run each selection of min pass
+(def select-min lst for-i lst-len working-min min-i = 
+    ((((((Y select-min-helper) lst) for-i) lst-len) working-min) min-i))
 
+; selects and returns minimum value and its index searching through list
+(def select-min-helper f lst for-i lst-len working-min min-i =
+    (_let lst@i = ((ind lst) for-i)
+    (_if ((gte for-i) lst-len)
+        _then ((pair min-i) working-min)
+        _else (_if ((lte working-min) lst@i)
+                _then (((((f lst) (succ for-i)) lst-len) working-min) min-i)
+                _else (((((f lst) (succ for-i)) lst-len) lst@i) for-i)))))
+
+; swaps any two values in a list with their values and indices
+(def swap lst left i right j = 
+    (_let new-lst = (((replace right) lst) i)
+    (((replace left) new-lst) j)))
 
