@@ -27,15 +27,16 @@ Note: this is a work in progress and I don't know when it will be complete if ev
 - **Recursion** using the Y-Combinator and some recursive functions
 - **More Advanced Arithmetic** (like division and the creation of integers and operators for them)
 - **Pairs** and **Lists** with operators for them
-- **Algorithms** (so far only Binary Search for church numerals and integers)
+- **Algorithms** binary Search for church numerals and integers and a few sorting algorithms
 - **Added Syntactic Sugar** to make things look good. Specifically, added def, let, and conditional sugar
-- **Added Embedded Types and Type Checking** defined types out of untyped lambda calculus. This is an informal type system, a type-like system, probably best called an embedded type system. Everything built so far now has embedded typed versions!
+- **Added Embedded Types and Type Checking** defined types out of untyped lambda calculus. This is an informal type system, a type-like system, probably best called an embedded type system. Most everything built so far now has embedded typed versions!
 - **Integers** and basic operators for them
-- **Binary Digit List Encodings of Natural Numbers** and add and multiplication operators for them - these are trillions of time more capable at representing numbers than Church Numerals in terms of size 
+- **Binary Digit List Encodings of Natural Numbers** and add and multiplication operators for them - these are hundreds of orders of magnitude more capable at representing numbers than Church Numerals in terms of size
+- **Data Structures as Closures** using closures to represent key/value pairs in a few ways (translating Greg Michaelson's code into pure lambda calculus)
 
-#### How to Run:
+#### How to Run Tests:
 1. Download [Racket](https://racket-lang.org/) and the *lazy* package
-2. From bitter or sweet, run `racket test.rkt`
+2. From root, run `./run-all-tests.sh`
 
 
 #### How to Dissect:
@@ -45,4 +46,4 @@ Note: this is a work in progress and I don't know when it will be complete if ev
 - Then go to church. Because after logic comes numbers. 
 - Then recursion.rkt. We need this. 
 - From there you can branch out to division or lists or integers.
-- Then algorithms.
+- Then algorithms, binary-lists, wherever
