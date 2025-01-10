@@ -499,3 +499,68 @@
 
 
 ;===================================================
+
+; DYNAMIC
+
+(def convert-to-bool OBJ = 
+    ; if is bool, return as is
+    (_if (is-bool OBJ)
+        _then OBJ
+        _else 
+        (_let value = (val OBJ)
+        (_let res = (
+            ; if nat eq
+            _if (is-nat OBJ)
+                _then (_not (isZero value))
+                _else (
+                    _if (is-int OBJ)
+                    _then (_not (isZeroZ value))
+                    _else (
+                        _if (is-list OBJ)
+                        _then (_not (isNil value))
+                        _else false)))  
+        ; output          
+        (make-bool res)))))
+
+(def bool-to-nat b = 
+    (_if b 
+        _then one 
+        _else zero)
+)
+
+(def absValue z = 
+    ((pair one) (tail z))
+)
+
+(def convert-to-nat OBJ = 
+    ; if is nat, return as is
+    (_if (is-nat OBJ)
+        _then OBJ
+        _else 
+        (_let value = (val OBJ)
+        (_let res = (
+            ; if bool eq
+            _if (is-bool OBJ)
+                _then (bool-to-nat value)
+                _else (
+                    _if (is-int OBJ)
+                    _then (absValue value)
+                    _else (
+                        _if (is-list OBJ)
+                        _then (len value)
+                        _else zero)))  
+        ; output          
+        (make-nat res)))))
+
+(def DYNAMIC-1 func convert-func OBJ =
+    (_let coerced-OBJ = (convert-func OBJ)
+    (_let type-of = (type coerced-OBJ)
+    (_let res = (func (val coerced-OBJ))
+    ((pair type-of) res)))))
+
+(def DYNAMIC-2 func convert-func OBJ1 OBJ2 =
+    (_let coerced-OBJ1 = (convert-func OBJ1)
+    (_let coerced-OBJ2 = (convert-func OBJ2)
+    (_let type-of = (type coerced-OBJ1)
+    (_let res = ((func (val coerced-OBJ1)) (val coerced-OBJ2))
+    ((pair type-of) res))))))
