@@ -525,12 +525,17 @@
 (def bool-to-nat b = 
     (_if b 
         _then one 
-        _else zero)
-)
+        _else zero))
 
-(def absValue z = 
-    ((pair one) (tail z))
-)
+(def bool-to-int b = 
+    (_if b 
+        _then ((makeZ true) one)
+        _else ((makeZ true) zero)))
+
+
+(def nat-to-int n = ((makeZ true) n))
+
+(def absValue z = ((pair one) (tail z)))
 
 (def convert-to-nat OBJ = 
     ; if is nat, return as is
@@ -551,6 +556,26 @@
                         _else zero)))  
         ; output          
         (make-nat res)))))
+
+(def convert-to-int OBJ = 
+    ; if is int, return as is
+    (_if (is-int OBJ)
+        _then OBJ
+        _else 
+        (_let value = (val OBJ)
+        (_let res = (
+            ; if bool eq
+            _if (is-bool OBJ)
+                _then (bool-to-int value)
+                _else (
+                    _if (is-nat OBJ)
+                    _then (nat-to-int value)
+                    _else (
+                        _if (is-list OBJ)
+                        _then (nat-to-int (len value))
+                        _else (nat-to-int zero))))  
+        ; output          
+        (make-int res)))))
 
 (def DYNAMIC-1 func convert-func OBJ =
     (_let coerced-OBJ = (convert-func OBJ)
