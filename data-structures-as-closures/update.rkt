@@ -33,7 +33,8 @@
     (lambda (id)
     (_if ((eq id) i) _then v _else (f id))))
 
-(def m1 = (((update _identity) a) one))
+(def m0 = _identity) ; minor update to setup from Michaelson so that update - instead of passing identity to define m1, make an empty map first, that way update is always called from start to finish on a map
+(def m1 = (((update m0) a) one))
 (def m2 = (((update m1) b) two))
 (def m3 = (((update m2) c) three))
 (def m4 = (((update m3) a) eleven))
