@@ -577,15 +577,13 @@
         ; output          
         (make-int res)))))
 
-(def DYNAMIC-1 func convert-func OBJ =
+(def DYNAMIC-1 func convert-func OBJ out-type =
     (_let coerced-OBJ = (convert-func OBJ)
-    (_let type-of = (type coerced-OBJ)
     (_let res = (func (val coerced-OBJ))
-    ((pair type-of) res)))))
+    ((pair out-type) res))))
 
-(def DYNAMIC-2 func convert-func OBJ1 OBJ2 =
+(def DYNAMIC-2 func convert-func OBJ1 OBJ2 out-type =
     (_let coerced-OBJ1 = (convert-func OBJ1)
     (_let coerced-OBJ2 = (convert-func OBJ2)
-    (_let type-of = (type coerced-OBJ1)
     (_let res = ((func (val coerced-OBJ1)) (val coerced-OBJ2))
-    ((pair type-of) res))))))
+    ((pair out-type) res)))))
