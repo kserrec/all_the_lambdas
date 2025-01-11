@@ -500,7 +500,7 @@
 
 ;===================================================
 
-; DYNAMIC
+; COERCIVE
 
 (def convert-to-bool OBJ = 
     ; if is bool, return as is
@@ -577,12 +577,12 @@
         ; output          
         (make-int res)))))
 
-(def DYNAMIC-1 func convert-func OBJ out-type =
+(def COERCE-1 func convert-func OBJ out-type =
     (_let coerced-OBJ = (convert-func OBJ)
     (_let res = (func (val coerced-OBJ))
     ((pair out-type) res))))
 
-(def DYNAMIC-2 func convert-func OBJ1 OBJ2 out-type =
+(def COERCE-2 func convert-func OBJ1 OBJ2 out-type =
     (_let coerced-OBJ1 = (convert-func OBJ1)
     (_let coerced-OBJ2 = (convert-func OBJ2)
     (_let res = ((func (val coerced-OBJ1)) (val coerced-OBJ2))
