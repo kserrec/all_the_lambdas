@@ -334,3 +334,35 @@
 |#
 (def bin-sub l1 l2 =
   (rev ((((Y bin-sub-helper) (rev l1)) (rev l2)) zero)))
+
+
+
+; pre-checks - do later
+    ; divisor dne 0
+    ; dividend gt divisor
+
+(def bin-is-zero bin-num = 
+    (_if (isNil bin-num)
+        _then true
+        _else (_let fold-sum = (((_fold add) zero) bin-num)
+            (isZero fold-sum))))
+
+(def bin-gte l1 l2 = (bin-is-zero ((bin-sub l1) l2)))
+
+
+(def div-helper f dividend divisor sub-divisor dividend-len running-q place-vals latest-val =
+    (_if ((gte place-vals) dividend-len)
+        _then running-q
+        _else 
+        (_let _place-vals = (_if (isNil running-q)
+            _then ((pred (len divisor)))
+            _else place-vals)
+        (_let take-dividend = ((_take (len dividend) sub-divisor))
+        (_if ((bin-gte take-dividend) divisor)
+            _then ()
+            _else ()
+        )
+        )
+        )
+    )
+)
