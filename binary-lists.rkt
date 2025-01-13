@@ -263,6 +263,50 @@
 
 ;===================================================
 
+
+(def rem-head-zeroes bin-num = 
+    (_if (isZero (pred (len bin-num)))
+        _then bin-num
+        _else ((Y rem-head-zeroes-helper) bin-num))
+)
+
+
+; pre-checks - do later
+    ; divisor dne 0
+    ; dividend gt divisor
+
+(def bin-is-zero bin-num = 
+    (_if (isNil bin-num)
+        _then true
+        _else (_let fold-sum = (((_fold add) zero) bin-num)
+            (isZero fold-sum))))
+
+
+(def rem-head-zeroes-helper f bin-num = 
+    (_if (isZero (head bin-num))
+        _then (f (tail bin-num))
+        _else bin-num))
+
+(def bin-gte l1 l2 = 
+    (_let l1-cut = (rem-head-zeroes l1)
+    (_let l2-cut = (rem-head-zeroes l2)
+    (_let l1-len = (len l1-cut)
+    (_let l2-len = (len l2-cut)
+    (_if ((gt l1-len) l2-len)
+        _then true
+        _else (
+            _if ((lt l1-len) l2-len)
+                _then false
+                _else (((Y bin-gte-helper) l1) l2))))))))
+
+; assume l1, l2 same length
+(def bin-gte-helper f l1 l2 = 
+    (_if ((_and (isNil l1)) (isNil l2))
+        _then true
+        _else (_if ((eq (head l1)) (head l2))
+            _then ((f (tail l1)) (tail l2))
+            _else (isZero (head l2)))))
+
 #|
     The function get-new-borrow, 
     is based entirely off this truth table:
@@ -334,85 +378,52 @@
         - Reverse back on the way out
 |#
 (def bin-sub l1 l2 =
-  (rem-head-zeroes (rev ((((Y bin-sub-helper) (rev l1)) (rev l2)) zero))))
-
-(def rem-head-zeroes bin-num = 
-    (_if (isZero (pred (len bin-num)))
-        _then bin-num
-        _else ((Y rem-head-zeroes-helper) bin-num))
-)
-
-(def rem-head-zeroes-helper f bin-num = 
-    (_if (isZero (head bin-num))
-        _then (f (tail bin-num))
-        _else bin-num))
-
-; pre-checks - do later
-    ; divisor dne 0
-    ; dividend gt divisor
-
-(def bin-is-zero bin-num = 
-    (_if (isNil bin-num)
-        _then true
-        _else (_let fold-sum = (((_fold add) zero) bin-num)
-            (isZero fold-sum))))
-
-(def bin-gte f l1 l2 = (bin-is-zero ((bin-sub l1) l2))
-
-)
-
+    (_if (_not ((bin-gte l1) l2))
+        _then bin-zero
+        _else (rem-head-zeroes (rev ((((Y bin-sub-helper) (rev l1)) (rev l2)) zero)))))
 
 
 
 ;---------------------------------------------------
-; Division helper: processes each bit from dividend
-;  left→right (after reversal), building a quotient
-;  in accum-q (also reversed).
+; bin-div-helper:
+;   i = how many bits we've processed from the LEFT
+;   partialRem = the current partial remainder (LSB-at-head form)
+;   accumQ = the accumulating quotient bits, built left→right,
+;            so eventually we do (rev accumQ) to get LSB-at-head.
 ;---------------------------------------------------
-(def bin-div-helper f divisor partial-rem dividend accum-q =
-  (_if (isNil dividend)
+(def bin-div-helper rec dividend divisor i partialRem accumQ =
+  (_if ((gte i) (len dividend))     ;; 1) If i >= len(dividend), we're done
     _then
-      ; No more bits -> return the accumulated quotient,
-      ; but it's reversed, so we also reverse accum-q
-      (rev accum-q)
+      (rev accumQ)                        ;; Return the accumulated quotient bits (reversed)
     _else
-      ; SHIFT partial-rem left by 1 bit (bin-mult-2),
-      ; then ADD the next bit from dividend.
-      (_let next-partial-rem = ((bin-add
-                                 (bin-mult-2 partial-rem))
-                                 ((pair (head dividend)) nil))
-      (_if ((bin-gte next-partial-rem) divisor)
+      (_let leftIndex = ((sub (pred (len dividend))) i)  
+      (_let thisBit   = ((ind dividend) leftIndex)
+      (_let shiftedRem = (bin-mult-2 partialRem)
+      (_let newRem =
+        (_if (isZero thisBit)
+          _then shiftedRem
+          _else ((bin-add shiftedRem) bin-one))       ;; add 1 if current bit=1
+
+      (_if ((bin-gte newRem) divisor)
         _then
-          ; If partial-rem >= divisor,
-          ; subtract divisor and record a '1' in quotient
-          (_let new-partial-rem = ((bin-sub next-partial-rem) divisor)
-          ((((f divisor) new-partial-rem) (tail dividend)) ((pair one) accum-q)))
+          (_let updatedRem = ((bin-sub newRem) divisor)
+          ; Recurse, adding bit=1 to the front of accumQ
+          (((((rec dividend) divisor) (succ i)) updatedRem) ((pair one) accumQ)))
         _else
-          ; Otherwise record '0' in quotient
-          ((((f divisor) next-partial-rem) (tail dividend)) ((pair zero) accum-q))))))
+          ; Recurse, adding bit=0
+          (((((rec dividend) divisor) (succ i)) newRem) ((pair zero) accumQ)))))))))
 
 ;---------------------------------------------------
-; Main division function
-;   bin-div : (bin-list dividend, bin-list divisor)
-;           -> bin-list quotient
+; Main bin-div function
+;   Returns floor(dividend/divisor) in LSB-at-head form.
+;   If either is zero, return bin-zero.
 ;---------------------------------------------------
 (def bin-div dividend divisor =
-  (_if (bin-is-zero divisor)
-    _then
-      ; If divisor == 0, return 0
-      bin-zero
+  (_if ((_or (bin-is-zero dividend)) (bin-is-zero divisor))
+    _then bin-zero
     _else
-      (_if (bin-is-zero dividend)
-        _then
-          ; If dividend == 0, return 0
-          bin-zero
-        _else
-          (_let dividend-rev = (rev dividend)
-          (_let divisor-rev  = (rev divisor)
-            ; Use Y combinator for recursion on bin-div-helper
-            ; Start partial-rem at nil (zero),
-            ; Start accum-q at nil (empty),
-            ; Then reverse the result so we get LSB-at-head at the end
-            (rev
-              (((((Y bin-div-helper) divisor-rev) nil) dividend-rev) nil)))))))
+      ; Start i = 0 (LSB-style numeric zero),
+      ; partialRem = bin-zero,
+      ; accumQ = nil
+      ((((((Y bin-div-helper) dividend) divisor) zero) bin-zero) nil)))
 
