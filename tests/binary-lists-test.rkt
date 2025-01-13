@@ -220,3 +220,51 @@
 ))
 
 (show-results "bin-sub" bin-sub-tests)
+
+
+
+(define bin-div-tests (list
+    ;; trivial cases
+    (test-list-element "bin-div(bin-zero)(bin-one)"
+        (bin-read ((bin-div bin-zero) bin-one)) "0")
+    (test-list-element "bin-div(bin-one)(bin-one)"
+        (bin-read ((bin-div bin-one) bin-one)) "1")
+    (test-list-element "bin-div(bin-two)(bin-one)"
+        (bin-read ((bin-div bin-two) bin-one)) "2")
+
+    ;; small numbers
+    (test-list-element "bin-div(bin-three)(bin-two)"
+        (bin-read ((bin-div bin-three) bin-two)) "1")
+    (test-list-element "bin-div(bin-four)(bin-two)"
+        (bin-read ((bin-div bin-four) bin-two)) "2")
+    (test-list-element "bin-div(bin-seven)(bin-three)"
+        (bin-read ((bin-div bin-seven) bin-three)) "2")
+    (test-list-element "bin-div(bin-nine)(bin-three)"
+        (bin-read ((bin-div bin-nine) bin-three)) "3")
+
+    ;; large numbers
+    (test-list-element "bin-div(bin-thirty-two)(bin-four)"
+        (bin-read ((bin-div bin-thirty-two) bin-four)) "8")
+    (test-list-element "bin-div(bin-thirty-two)(bin-eight)"
+        (bin-read ((bin-div bin-thirty-two) bin-eight)) "4")
+    (test-list-element "bin-div(bin-sixty-four)(bin-four)"
+        (bin-read ((bin-div bin-sixty-four) bin-four)) "16")
+    (test-list-element "bin-div(bin-five-hundred-twelve)(bin-four)"
+        (bin-read ((bin-div bin-five-hundred-twelve) bin-four)) "128")
+
+    ;; uneven list lengths
+    (test-list-element "bin-div(bin-ten)(bin-two)"
+        (bin-read ((bin-div bin-ten) bin-two)) "5")
+    (test-list-element "bin-div(bin-twelve)(bin-three)"
+        (bin-read ((bin-div bin-twelve) bin-three)) "4")
+    (test-list-element "bin-div(bin-sixteen)(bin-two)"
+        (bin-read ((bin-div bin-sixteen) bin-two)) "8")
+
+    ;; scalability
+    (test-list-element "bin-div(bin-one-billion)(bin-one-hundred-thousand)"
+        (bin-read ((bin-div bin-one-billion) bin-one-hundred-thousand)) "10000")
+    (test-list-element "bin-div(bin-one-sextillion)(bin-one-trillion)"
+        (bin-read ((bin-div bin-one-sextillion) bin-one-trillion)) "1000000")
+))
+
+(show-results "bin-div" bin-div-tests)
