@@ -413,18 +413,12 @@
     (_if ((bin-gte sub-dividend) divisor)
         _then 
             (_let new-running-q = ((app running-q) bin-one)
-            (_let diff = ((bin-sub sub-dividend) divisor) 
             (_if (isNil tail-dividend)
                 _then new-running-q
                 _else 
-                    (_let new-dividend = 
-                        (_if (bin-is-zero diff)
-                            _then tail-dividend
-                            _else ((app diff) tail-dividend)
-                        )
-                    (_let new-take-n = (_if (bin-is-zero diff)
-                                        _then one
-                                        _else (succ (len diff)))
+                    (_let diff = ((bin-sub sub-dividend) divisor) 
+                    (_let new-dividend = ((app diff) tail-dividend)
+                    (_let new-take-n = (succ (len diff))
                     ((((f new-dividend) divisor) new-take-n) new-running-q))))))
         _else
             (_let new-running-q = ((app running-q) bin-zero)
