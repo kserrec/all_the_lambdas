@@ -289,15 +289,25 @@
 ; ====================================================================
 
 (define bin-div-tests (list
-    ;; trivial cases
+    ; trivial zero cases
     (test-list-element "bin-div(bin-zero)(bin-one)"
         (bin-read ((bin-div bin-zero) bin-one)) "0")
+    (test-list-element "bin-div(bin-one)(bin-zero)"
+        (bin-read ((bin-div bin-one) bin-zero)) "0")
+    (test-list-element "bin-div(bin-zero)(bin-zero)"
+        (bin-read ((bin-div bin-zero) bin-zero)) "0")
+    (test-list-element "bin-div(bin-one)(bin-two)"
+        (bin-read ((bin-div bin-one) bin-two)) "0")
+    (test-list-element "bin-div(bin-two)(bin-three)"
+        (bin-read ((bin-div bin-two) bin-three)) "0")
+
+    ; trivial cases
     (test-list-element "bin-div(bin-one)(bin-one)"
         (bin-read ((bin-div bin-one) bin-one)) "1")
     (test-list-element "bin-div(bin-two)(bin-one)"
         (bin-read ((bin-div bin-two) bin-one)) "2")
 
-    ;; small numbers
+    ; small numbers
     (test-list-element "bin-div(bin-three)(bin-two)"
         (bin-read ((bin-div bin-three) bin-two)) "1")
     (test-list-element "bin-div(bin-four)(bin-two)"
@@ -329,7 +339,7 @@
     (test-list-element "bin-div(bin-one-billion)(bin-one-hundred-thousand)"
         (bin-read ((bin-div bin-one-billion) bin-one-hundred-thousand)) "10000")
     (test-list-element "bin-div(bin-one-sextillion)(bin-one-trillion)"
-        (bin-read ((bin-div bin-one-sextillion) bin-one-trillion)) "1000000")
+        (bin-read ((bin-div bin-one-sextillion) bin-one-trillion)) "1000000000")
 ))
 
 (show-results "bin-div" bin-div-tests)
