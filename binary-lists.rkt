@@ -60,6 +60,7 @@
 (def bin-one-k-twenty-three = (_cons one one one one one one one one one one))
 (def bin-two-k-forty-eight = (_cons one zero zero zero zero zero zero zero zero zero zero zero))
 (def bin-sixty-five-k-five-hundred-thirty-six = (_cons one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero))
+(def bin-one-hundred-thousand = (_cons one one zero zero zero zero one one zero one zero one zero zero zero zero zero))
 (def bin-one-hundred-thirty-one-k-seventy-two = (_cons one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero))
 (def bin-one-billion =
   (_cons one one one zero one one one zero 
@@ -212,7 +213,7 @@
         - Then pass to helper function along with a zero initial carry value for main work 
         - Reverse back on the way out
 |#
-(def bin-add l1 l2 = (rev ((((Y bin-add-helper) (rev l1)) (rev l2)) zero)))
+(def bin-add l1 l2 = (rem-head-zeroes (rev ((((Y bin-add-helper) (rev l1)) (rev l2)) zero))))
 
 ;===================================================
 
@@ -255,12 +256,58 @@
         - Also reverse lists since we multiply right to left but want to traverse left to right
 |#
 (def bin-mult l1 l2 = 
-    (_if ((gte (len l1)) (len l2))
+    (rem-head-zeroes (_if ((gte (len l1)) (len l2))
         _then ((((((Y bin-mult-helper) (rev l1)) (rev l2)) (len l1)) zero) bin-zero)
-        _else ((((((Y bin-mult-helper) (rev l2)) (rev l1)) (len l2)) zero) bin-zero)))
+        _else ((((((Y bin-mult-helper) (rev l2)) (rev l1)) (len l2)) zero) bin-zero))))
 
 
 ;===================================================
+
+
+(def rem-head-zeroes bin-num = 
+    (_if (isZero (pred (len bin-num)))
+        _then bin-num
+        _else ((Y rem-head-zeroes-helper) bin-num))
+)
+
+
+; pre-checks - do later
+    ; divisor dne 0
+    ; dividend gt divisor
+
+(def bin-is-zero bin-num = 
+    (_if (isNil bin-num)
+        _then true
+        _else (_let fold-sum = (((_fold add) zero) bin-num)
+            (isZero fold-sum))))
+
+
+(def rem-head-zeroes-helper f bin-num = 
+    (_if (isZero (head bin-num))
+        _then (f (tail bin-num))
+        _else bin-num))
+
+(def bin-gte l1 l2 = 
+    (_let l1-cut = (rem-head-zeroes l1)
+    (_let l2-cut = (rem-head-zeroes l2)
+    (_let l1-len = (len l1-cut)
+    (_let l2-len = (len l2-cut)
+    (_if ((gt l1-len) l2-len)
+        _then true
+        _else (
+            _if ((lt l1-len) l2-len)
+                _then false
+                _else (((Y bin-gte-helper) l1) l2))))))))
+
+; assume l1, l2 same length
+(def bin-gte-helper f l1 l2 = 
+    (_if ((_and (isNil l1)) (isNil l2))
+        _then true
+        _else (_if ((eq (head l1)) (head l2))
+            _then ((f (tail l1)) (tail l2))
+            _else (isZero (head l2)))))
+
+(def bin-lt l1 l2 = (_not ((bin-gte l1) l2)))
 
 #|
     The function get-new-borrow, 
@@ -333,4 +380,50 @@
         - Reverse back on the way out
 |#
 (def bin-sub l1 l2 =
-  (rev ((((Y bin-sub-helper) (rev l1)) (rev l2)) zero)))
+    (_if (_not ((bin-gte l1) l2))
+        _then bin-zero
+        _else (rem-head-zeroes (rev ((((Y bin-sub-helper) (rev l1)) (rev l2)) zero)))))
+
+
+;===================================================
+
+
+(def pair-zero = (pair zero))
+
+(def n-zeros-list n = ((n pair-zero) nil))
+
+(def prepend-zeroes n bin-num = ((app (n-zeros-list n)) bin-num))
+
+
+;===================================================   
+
+
+(def bin-div l1 l2 = 
+    (_let both-zero = ((_or (bin-is-zero l1)) (bin-is-zero l2))
+    (_if ((_or both-zero) ((bin-lt l1) l2))
+        _then bin-zero
+        _else (((((Y bin-div-helper) l1) l2) one) nil))))
+
+(def bin-div-helper f dividend divisor take-n running-q = 
+    (_let len-dividend = (len dividend)
+    (_let sub-dividend = ((_take take-n) dividend)
+    (_let tail-dividend = ((takeTail ((sub len-dividend) take-n)) dividend)
+    (_if ((bin-gte sub-dividend) divisor)
+        _then 
+            (_let new-running-q = ((app running-q) bin-one)
+            (_if (isNil tail-dividend)
+                _then new-running-q
+                _else 
+                    (_let diff = ((bin-sub sub-dividend) divisor) 
+                    (_let new-dividend = ((app diff) tail-dividend)
+                    (_let new-take-n = (succ (len diff))
+                    ((((f new-dividend) divisor) new-take-n) new-running-q))))))
+        _else
+            (_let new-running-q = ((app running-q) bin-zero)
+            (_if (isNil tail-dividend)
+                _then new-running-q
+                _else ((((f dividend) divisor) (succ take-n)) new-running-q))))))))
+
+
+
+
