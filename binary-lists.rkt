@@ -57,8 +57,10 @@
 (def bin-two-hundred-fifty-five = (_cons one one one one one one one one))
 (def bin-two-hundred-fifty-six = (_cons one zero zero zero zero zero zero zero zero))
 (def bin-five-hundred-twelve = (_cons one zero zero zero zero zero zero zero zero zero))
+(def bin-one-thousand = (_cons one one one one one zero one zero zero zero))
 (def bin-one-k-twenty-three = (_cons one one one one one one one one one one))
 (def bin-two-k-forty-eight = (_cons one zero zero zero zero zero zero zero zero zero zero zero))
+(def bin-ten-thousand = (_cons one zero zero one one one zero zero zero one zero zero zero zero))
 (def bin-sixty-five-k-five-hundred-thirty-six = (_cons one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero))
 (def bin-one-hundred-thousand = (_cons one one zero zero zero zero one one zero one zero one zero zero zero zero zero))
 (def bin-one-hundred-thirty-one-k-seventy-two = (_cons one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero))
@@ -297,7 +299,7 @@
         _else (
             _if ((lt l1-len) l2-len)
                 _then false
-                _else (((Y bin-gte-helper) l1) l2))))))))
+                _else (((Y bin-gte-helper) l1-cut) l2-cut))))))))
 
 ; assume l1, l2 same length
 (def bin-gte-helper f l1 l2 = 
@@ -423,7 +425,3 @@
             (_if (isNil tail-dividend)
                 _then new-running-q
                 _else ((((f dividend) divisor) (succ take-n)) new-running-q))))))))
-
-
-
-
