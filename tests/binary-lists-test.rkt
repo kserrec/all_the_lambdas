@@ -340,6 +340,21 @@
         (bin-read ((bin-div bin-one-billion) bin-one-hundred-thousand)) "10000")
     (test-list-element "bin-div(bin-one-sextillion)(bin-one-trillion)"
         (bin-read ((bin-div bin-one-sextillion) bin-one-trillion)) "1000000000")
+    (test-list-element "bin-div(bin-one-thousand)(bin-one-two)"
+        (bin-read ((bin-div bin-one-thousand) bin-two)) "500")
+    (test-list-element "bin-div(bin-two-k-forty-eight)(bin-one-two)"
+        (bin-read ((bin-div bin-two-k-forty-eight) bin-two)) "1024")
+    (test-list-element "bin-div(bin-two-k-forty-eight)(bin-one-three)"
+        (bin-read ((bin-div bin-two-k-forty-eight) bin-three)) "682")
+
+    (test-list-element "bin-div(bin-ten-thousand)(bin-one-two)"
+        (bin-read ((bin-div bin-ten-thousand) bin-two)) "5000")
+    (test-list-element "bin-div(bin-one-hundred-thousand)(bin-one-two)"
+        (bin-read ((bin-div bin-one-hundred-thousand) bin-two)) "50000")
+    (test-list-element "bin-div(bin-one-trillion)(bin-one-two)"
+        (bin-read ((bin-div bin-one-trillion) bin-two)) "500000000000")
+    (test-list-element "bin-div(bin-one-sextillion)(bin-one-two)"
+        (bin-read ((bin-div bin-one-sextillion) bin-two)) "500000000000000000000")
 ))
 
 (show-results "bin-div" bin-div-tests)
