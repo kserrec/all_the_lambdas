@@ -5,7 +5,8 @@
          "core.rkt"
          "division.rkt"
          "lists.rkt"
-         "logic.rkt")
+         "logic.rkt"
+         "recursion.rkt")
 
 ;===================================================
 ; RATIONAL NUMBEERS
@@ -49,4 +50,35 @@
 (def makeR r-sign numer denom = (((triple r-sign) numer) denom))
 
 
-; (def gcd-func r1 r2 = )
+(def euclidean a b = 
+    (_if ((gte a) b)
+        _then (((Y euclidean-helper) a) b)
+        _else (((Y euclidean-helper) b) a)))
+
+(def euclidean-helper f a b = 
+    (_let r = ((mod a) b)
+    (_if ((eq zero) r)
+        _then b
+        _else ((f b) r))))
+
+
+(def least-common-mult a b = 
+    (_let a*b = ((mult a) b)
+    (_let _gcd = ((euclidean a) b)
+    ((div a*b) _gcd))))
+
+
+; (def addR r1 r2 = 
+;     (_let r1-sign = (r-sign r1)
+;     (_let r2-sign = (r-sign r2)
+;     (_let r1-numer = (numer r1)
+;     (_let r2-numer = (numer r2)
+;     (_let r1-denom = (denom r1)
+;     (_let r2-denom = (denom r2)
+;     (_let lcd = ((least-common-mult r1-denom) r2-denom)
+;     (_if ((_and r1-sign) r2-sign) ; if both positive
+;         _then ()
+;         _else ()
+
+;     ))))))))
+; )

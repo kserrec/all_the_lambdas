@@ -2,6 +2,7 @@
 (require "macros/macros.rkt")
 (provide (all-defined-out))
 (require "church.rkt"
+         "core.rkt"
          "logic.rkt"
          "recursion.rkt")
 
@@ -25,6 +26,17 @@
     (_if ((gt b) ((sub a) ((mult n) b))) 
         _then n
         _else (((f a) b) (succ n))))
+
+        
+        
+(def div-n-mod dividend divisor = ((((Y div-n-mod-helper) dividend) divisor) zero))
+
+(def div-n-mod-helper f dividend divisor _quotient =
+    (_let _remainder = ((sub dividend) ((mult _quotient) divisor))
+    (_if ((gt divisor) _remainder) 
+        _then ((pair _quotient) _remainder) 
+        _else (((f dividend) divisor) (succ _quotient)))))
+
 
 ;===================================================
 
