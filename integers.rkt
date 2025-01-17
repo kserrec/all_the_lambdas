@@ -153,8 +153,15 @@
     - Logic: Use addZ by reframing z1-z2 as z1+(-z2)
 |#
 
-(def subZ z1 z2 = 
+(def _subZ z1 z2 = 
     ((addZ z1) ((multZ z2) negOne)))
+
+(def invertZ z = 
+    (_let z-sign = (head z)
+    (_let z-val = (tail z)
+    ((makeZ (_not z-sign) z-val)))))
+
+(def subZ z1 z2 = ((addZ z1) (invertZ z2)))
 
 #|
     ~ PREDECESSOR ~
