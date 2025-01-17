@@ -139,11 +139,9 @@
         ; else if different signs and |z1| > |z2|
                 _then ((makeZ z1Sign) ((sub z1Val) z2Val))
                 ; then take sign of larger and do regular diff
-                _else ((makeZ z2Sign) ((sub z2Val) z1Val))
+                _else ((makeZ z2Sign) ((sub z2Val) z1Val)))))))))
                 ; else take sign of larger and do reverse diff
-            )
-    )
-)))))
+            
                 
 
 #|
@@ -153,13 +151,13 @@
     - Logic: Use addZ by reframing z1-z2 as z1+(-z2)
 |#
 
-(def _subZ z1 z2 = 
-    ((addZ z1) ((multZ z2) negOne)))
+; (def subZ z1 z2 = 
+;     ((addZ z1) ((multZ z2) negOne)))
 
 (def invertZ z = 
     (_let z-sign = (head z)
     (_let z-val = (tail z)
-    ((makeZ (_not z-sign) z-val)))))
+    ((makeZ (_not z-sign)) z-val))))
 
 (def subZ z1 z2 = ((addZ z1) (invertZ z2)))
 
@@ -228,12 +226,9 @@
         ; else if z1 positive
                 _then ((makeZ true) ((_exp z1Val) z2Val))
                 ; then make positive and do regular exponent
-                _else ((makeZ (isEven z2Val)) ((_exp z1Val) z2Val))
+                _else ((makeZ (isEven z2Val)) ((_exp z1Val) z2Val)))))))))
                 ; else flip sign based on even or odd power
-            )
-    )
-)))))
-
+            
 ;===================================================
 
 ; EQUALITIES AND INEQUALITIES
@@ -269,10 +264,7 @@
         _then ((gte z1Val) z2Val)
         _else (_if ((_and (_not z1Sign)) (_not z2Sign))
                 _then ((lte z1Val) z2Val)
-                _else ((_or z1Sign) ((_and (isZeroZ z1)) (isZeroZ z2)))
-            )
-    )
-)))))
+                _else ((_or z1Sign) ((_and (isZeroZ z1)) (isZeroZ z2))))))))))
 
 #|
     ~ LESS THAN OR EQUAL ~
@@ -297,10 +289,7 @@
         _then ((lte z1Val) z2Val)
         _else (_if ((_and (_not z1Sign)) (_not z2Sign))
                 _then ((gte z1Val) z2Val)
-                _else ((_or z2Sign) ((_and (isZeroZ z1)) (isZeroZ z2)))
-            )
-    )
-)))))
+                _else ((_or z2Sign) ((_and (isZeroZ z1)) (isZeroZ z2))))))))))
 
 #|
     ~ EQUAL ~
