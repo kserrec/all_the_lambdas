@@ -272,6 +272,9 @@
         "false")
 
     ;; scalability
+    (test-list-element "bin-gte(bin-one-billion)(bin-two)"
+        (b-read ((bin-gte bin-one-billion) bin-two))
+        "true")
     (test-list-element "bin-gte(bin-one-billion)(bin-one-hundred-thousand)"
         (b-read ((bin-gte bin-one-billion) bin-one-hundred-thousand))
         "true")

@@ -44,6 +44,52 @@
 ;===================================================
 
 #|
+    ~ RAT ZERO ~
+    - Structure: {{bool, zero}, nat}
+    - Logic: 0 int for numerator is a 0 rat
+    - Note: bool true or false, thus -0 == +0
+        also, the denominator can be ANY value and it is zero
+        - Thus -0/0 == +0/0 == -0/1 == +0/1 == -0/2 == ...
+|#
+(def r-pos-0 = ((makeR2 posZero) one))
+
+#|
+    ~ CHURCH RAT READER ~
+    - Note: this is a helper function for viewing lambda calculus - not pure LC
+    - Contract: rat => readable(rat)
+    - Logic: Outputs r for user 
+                If numerator is zero or denominator is one,
+                don't show fraction sign, otherwise do
+|#
+(def r-read r =
+   (displayln 
+   (_let r-s-numer = (s-numer r)
+   (_let r-denom = (denom r)
+   (_if ((_or (isZeroR r)) (isZero (pred r-denom)))
+    _then (z-read r-s-numer)
+    _else 
+        (string-append 
+            (z-read r-s-numer) 
+            "/" 
+            (n-read r-denom)))))))
+
+
+#|
+    ~ A FEW RATIONALS ~
+    - Logic: As created by makeR2
+|#
+(def r-neg1-2 = ((makeR2 negOne) two))
+(def r-neg1 = ((makeR2 negOne) one))
+(def r-neg0-2 = ((makeR2 negZero) one))
+(def r-pos1 = ((makeR2 posOne) one))
+(def r-pos1-2 = ((makeR2 posOne) two))
+(def r-pos1-3 = ((makeR2 posOne) three))
+(def r-pos2-1 = ((makeR2 posTwo) one))
+(def r-pos2-3 = ((makeR2 posTwo) three))
+
+
+;===================================================
+#|
     ~ EUCLIDEAN ALGORITHM ~
     - Contract: (nat,nat) => nat
     - Idea: Use euclid's algorithm
@@ -92,8 +138,8 @@
     - Logic: Sign is unchanged, just swap numerator and denominator
 |#
 (def reciprocal r = 
-    (_let r-sign = (head (head r)))
-    (((makeR r-sign) (denom r)) (numer r)))
+    (_let r-sign = (head (head r))
+    (((makeR r-sign) (denom r)) (numer r))))
 
 ;===================================================
 
@@ -155,8 +201,8 @@
                 (_let new-r1-s-numer = ((convert-s-numer r1) lcd)
                 (_let new-r2-s-numer = ((convert-s-numer r2) lcd)
                 (_let new-s-numer = ((addZ new-r1-s-numer) new-r2-s-numer)
-                ((makeR2 new-s-numer) lcd)))))))))))
-    (reduce new-rational))
+                ((makeR2 new-s-numer) lcd))))))))))
+    (reduce new-rational)))
 
 #|
     ~ MULTIPLICATION ~
@@ -191,3 +237,27 @@
     (_let reciprocal-r2 = (reciprocal r2)
     ((multR r1) reciprocal-r2)))
 
+
+;===================================================
+
+; EQUALITIES AND INEQUALITIES
+
+#|
+    ~ IS-ZERO ~
+    - Contract: rat => bool
+    - Logic: Check if (int part of r is zero)
+                true, else false
+|#
+(def isZeroR r = (isZeroZ (head r)))
+
+
+
+
+(r-read r-neg0-2)
+(r-read r-pos1-2)
+(r-read r-pos1-3)
+(r-read r-pos2-1)
+(r-read r-pos2-3)
+(r-read r-neg1)
+
+(r-read ((addR r-pos1-2) r-pos1-3))
