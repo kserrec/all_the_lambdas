@@ -89,6 +89,10 @@
 (def r-pos1-3 = ((makeR2 posOne) three))
 (def r-pos2-1 = ((makeR2 posTwo) one))
 (def r-pos2-3 = ((makeR2 posTwo) three))
+(def r-neg2-4 = ((makeR2 negTwo) four))
+(def r-neg3-3 = ((makeR2 negThree) three))
+(def r-pos4-2 = ((makeR2 posFour) two))
+(def r-pos8 = ((makeR2 ((multZ posTwo) posFour)) one))
 
 ;===================================================
 

@@ -83,11 +83,6 @@
 
 ; ====================================================================
 
-(def r-neg2-4 = ((makeR2 negTwo) four))
-(def r-neg3-3 = ((makeR2 negThree) three))
-(def r-pos4-2 = ((makeR2 posFour) two))
-(def r-pos8 = ((makeR2 ((multZ posTwo) posFour)) one))
-
 (define reduce-tests (list
     (test-list-element "reduce(one)(one)" (r-read (reduce r-neg0-1)) "0")
     (test-list-element "reduce(two)(one)" (r-read (reduce r-neg1)) "-1")
@@ -102,3 +97,43 @@
 ))
 
 (show-results "reduce" reduce-tests)
+
+; ====================================================================
+
+
+(define addR-tests (list
+    (test-list-element "addR(r-neg1-2)(r-neg1-2)" (r-read ((addR r-neg1-2) r-neg1-2)) "-1")
+    (test-list-element "addR(r-neg1)(r-neg1)" (r-read ((addR r-neg1) r-neg1)) "-2")
+    (test-list-element "addR(r-neg0-1)(r-neg0-1)" (r-read ((addR r-neg0-1) r-neg0-1)) "0")
+    (test-list-element "addR(r-pos1)(r-pos1)" (r-read ((addR r-pos1) r-pos1)) "2")
+    (test-list-element "addR(r-pos1-2)(r-pos1)" (r-read ((addR r-pos1-2) r-pos1)) "3/2")
+    (test-list-element "addR(r-pos1-3)(r-pos1)" (r-read ((addR r-pos1-3) r-pos1)) "4/3")
+    (test-list-element "addR(r-pos2-1)(r-pos1)" (r-read ((addR r-pos2-1) r-pos1)) "3")
+    (test-list-element "addR(r-pos2-3)(r-pos1)" (r-read ((addR r-pos2-3) r-pos1)) "5/3")
+    (test-list-element "addR(r-neg2-4)(r-pos1)" (r-read ((addR r-neg2-4) r-pos1)) "1/2")
+    (test-list-element "addR(r-neg3-3)(r-pos1)" (r-read ((addR r-neg3-3) r-pos1)) "0")
+    (test-list-element "addR(r-pos4-2)(r-pos1)" (r-read ((addR r-pos4-2) r-pos1)) "3")
+    (test-list-element "addR(r-pos8)(r-pos1)" (r-read ((addR r-pos8) r-pos1)) "9")
+))
+
+(show-results "addR" addR-tests)
+
+; ====================================================================
+
+
+(define subR-tests (list
+    (test-list-element "subR(r-neg1-2)(r-neg1-2)" (r-read ((subR r-neg1-2) r-neg1-2)) "0")
+    (test-list-element "subR(r-neg1)(r-neg1)" (r-read ((subR r-neg1) r-neg1)) "0")
+    (test-list-element "subR(r-neg0-1)(r-neg0-1)" (r-read ((subR r-neg0-1) r-neg0-1)) "0")
+    (test-list-element "subR(r-pos1)(r-pos1)" (r-read ((subR r-pos1) r-pos1)) "0")
+    (test-list-element "subR(r-pos1-2)(r-pos1)" (r-read ((subR r-pos1-2) r-pos1)) "-1/2")
+    (test-list-element "subR(r-pos1-3)(r-pos1)" (r-read ((subR r-pos1-3) r-pos1)) "-2/3")
+    (test-list-element "subR(r-pos2-1)(r-pos1)" (r-read ((subR r-pos2-1) r-pos1)) "1")
+    (test-list-element "subR(r-pos2-3)(r-pos1)" (r-read ((subR r-pos2-3) r-pos1)) "-1/3")
+    (test-list-element "subR(r-neg2-4)(r-pos1)" (r-read ((subR r-neg2-4) r-pos1)) "-5/2")
+    (test-list-element "subR(r-neg3-3)(r-pos1)" (r-read ((subR r-neg3-3) r-pos1)) "-1")
+    (test-list-element "subR(r-pos4-2)(r-pos1)" (r-read ((subR r-pos4-2) r-pos1)) "1")
+    (test-list-element "subR(r-pos8)(r-pos1)" (r-read ((subR r-pos8) r-pos1)) "7")
+))
+
+(show-results "subR" subR-tests)
