@@ -62,17 +62,20 @@
                 don't show fraction sign, otherwise do
 |#
 (def r-read r =
-   (displayln 
    (_let r-s-numer = (s-numer r)
    (_let r-denom = (denom r)
-   (_if ((_or (isZeroR r)) (isZero (pred r-denom)))
-    _then (z-read r-s-numer)
+   (_if (isZero r-denom)
+    _then "0"
     _else 
-        (string-append 
-            (z-read r-s-numer) 
-            "/" 
-            (n-read r-denom)))))))
+    (_if ((_or (isZeroR r)) (isZero (pred r-denom)))
+        _then (z-read r-s-numer)
+        _else 
+            (string-append 
+                (z-read r-s-numer)
+                "/" 
+                (n-read r-denom)))))))
 
+;===================================================
 
 #|
     ~ A FEW RATIONALS ~
@@ -80,15 +83,15 @@
 |#
 (def r-neg1-2 = ((makeR2 negOne) two))
 (def r-neg1 = ((makeR2 negOne) one))
-(def r-neg0-2 = ((makeR2 negZero) one))
+(def r-neg0-1 = ((makeR2 negZero) one))
 (def r-pos1 = ((makeR2 posOne) one))
 (def r-pos1-2 = ((makeR2 posOne) two))
 (def r-pos1-3 = ((makeR2 posOne) three))
 (def r-pos2-1 = ((makeR2 posTwo) one))
 (def r-pos2-3 = ((makeR2 posTwo) three))
 
-
 ;===================================================
+
 #|
     ~ EUCLIDEAN ALGORITHM ~
     - Contract: (nat,nat) => nat
@@ -103,10 +106,13 @@
         _else (((Y euclid-helper) b) a)))
 
 (def euclid-helper f a b = 
-    (_let r = ((mod a) b)
-    (_if ((eq zero) r)
-        _then b
-        _else ((f b) r))))
+    (_if ((eq zero) b)
+        _then a
+        _else
+        (_let r = ((mod a) b)
+        (_if ((eq zero) r)
+            _then b
+            _else ((f b) r)))))
 
 #|
     ~ LEAST COMMON MULTIPLE ~
@@ -115,9 +121,9 @@
     - Logic: Get direct multiple a*b, then divide by gcd for lcm
 |#
 (def least-common-mult a b = 
-    (_let a*b = ((mult a) b)
-    (_let _gcd = ((euclidean a) b)
-    ((div a*b) _gcd))))
+    (_let ab = ((mult a) b)
+    (_let greatest-common-div = ((euclidean a) b)
+    ((div ab) greatest-common-div))))
 
 ;===================================================
 
@@ -187,7 +193,7 @@
         Then reduce.
 |#
 (def addR r1 r2 = 
-    (_let new-rational =
+    (reduce
         (_let r1-s-numer = (s-numer r1)
         (_let r2-s-numer = (s-numer r2)
         (_let r1-denom = (denom r1)
@@ -196,13 +202,12 @@
             _then 
                 (_let new-s-numer = ((addZ r1-s-numer) r2-s-numer)
                 ((makeR2 new-s-numer) r1-denom))
-            _else 
+            _else
                 (_let lcd = ((least-common-mult r1-denom) r2-denom)
                 (_let new-r1-s-numer = ((convert-s-numer r1) lcd)
                 (_let new-r2-s-numer = ((convert-s-numer r2) lcd)
                 (_let new-s-numer = ((addZ new-r1-s-numer) new-r2-s-numer)
-                ((makeR2 new-s-numer) lcd))))))))))
-    (reduce new-rational)))
+                ((makeR2 new-s-numer) lcd))))))))))))
 
 #|
     ~ MULTIPLICATION ~
@@ -213,11 +218,10 @@
         Then reduce.
 |#
 (def multR r1 r2 = 
-    (_let new-rational = 
+    (reduce 
         (_let new-s-numer = ((multZ (s-numer r1)) (s-numer r2))
         (_let new-denom = ((mult (denom r1)) (denom r2))
-        ((makeR2 new-s-numer) new-denom)))
-    (reduce new-rational)))
+        ((makeR2 new-s-numer) new-denom)))))
 
 #|
     ~ SUBTRACTION ~
@@ -233,9 +237,8 @@
     - Idea: r1,r2 => r1/r2
     - Logic: Take reciprocal of second arg and multiply
 |#
-(def div r1 r2 = 
-    (_let reciprocal-r2 = (reciprocal r2)
-    ((multR r1) reciprocal-r2)))
+(def divR r1 r2 = 
+    ((multR r1) (reciprocal r2)))
 
 
 ;===================================================
@@ -248,16 +251,4 @@
     - Logic: Check if (int part of r is zero)
                 true, else false
 |#
-(def isZeroR r = (isZeroZ (head r)))
-
-
-
-
-(r-read r-neg0-2)
-(r-read r-pos1-2)
-(r-read r-pos1-3)
-(r-read r-pos2-1)
-(r-read r-pos2-3)
-(r-read r-neg1)
-
-(r-read ((addR r-pos1-2) r-pos1-3))
+(def isZeroR r = ((_or (isZeroZ (head r))) (isZero (denom r))))
