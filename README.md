@@ -29,8 +29,9 @@ Note: this is a work in progress and I don't know when it will be complete if ev
 - **Pairs** and **Lists** with operators for them
 - **Algorithms** binary Search for church numerals and integers and a few sorting algorithms
 - **Added Syntactic Sugar** to make things look good. Specifically, added def, let, and conditional sugar
-- **Added Embedded Types and Type Checking** defined types out of untyped lambda calculus. This is an informal type system, a type-like system, probably best called an embedded type system. Most everything built so far now has embedded typed versions!
+- **Added Embedded Types and Type Checking** defined types out of untyped lambda calculus. This is an informal type system, a type-like system, probably best called an embedded type system. Most everything built so far now has embedded typed versions! Have strict typing system, but also defining coercive alternate (wip)
 - **Integers** and basic operators for them
+- **Rationals** and basic operators for them
 - **Binary Digit List Encodings of Natural Numbers** and add and multiplication operators for them - these are hundreds of orders of magnitude more capable at representing numbers than Church Numerals in terms of size
 - **Data Structures as Closures** using closures to represent key/value pairs in a few ways (translating Greg Michaelson's code into pure lambda calculus)
 
