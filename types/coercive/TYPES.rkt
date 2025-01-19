@@ -214,4 +214,18 @@
     (_let res = ((func (val coerced-OBJ1)) (val coerced-OBJ2))
     ((pair out-type) res)))))
 
-    
+(def COERCE-3 func convert-func OBJ1 OBJ2 OBJ3 out-type =
+    (_let coerced-OBJ1 = (convert-func OBJ1)
+    (_let coerced-OBJ2 = (convert-func OBJ2)
+    (_let coerced-OBJ3 = (convert-func OBJ3)
+    (_let res = (((func (val coerced-OBJ1)) (val coerced-OBJ2)) (val coerced-OBJ3))
+    ((pair out-type) res))))))
+
+(def COERCE-4 func convert-func OBJ1 OBJ2 OBJ3 out-type =
+    (_let coerced-OBJ1 = (convert-func OBJ1)
+    (_let coerced-OBJ2 = (convert-func OBJ2)
+    (_let coerced-OBJ3 = (convert-func OBJ3)
+    (_let coerced-OBJ4 = (convert-func OBJ4)
+    (_let res = ((((func (val coerced-OBJ1)) (val coerced-OBJ2)) (val coerced-OBJ3)) (val coerced-OBJ4))
+    ((pair out-type) res)))))))
+
