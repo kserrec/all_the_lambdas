@@ -38,11 +38,11 @@
     (test-list-element "ADD(FOUR)(THREE)" (read-any ((ADD FOUR) THREE)) "nat:7")
     (test-list-element "ADD(TWO)(TWO)" (read-any ((ADD TWO) TWO)) "nat:4")
     (test-list-element "ADD(FIVE)(FIVE)" (read-any ((ADD FIVE) FIVE)) "nat:10")
-    ; ; type fails
-    ; (test-list-element "ADD(TRUE)(FIVE)" (read-any ((ADD TRUE) FIVE)) "ADD(arg1(err:nat))")
-    ; (test-list-element "ADD(negTWO)(FIVE)" (read-any ((ADD negTWO) FIVE)) "ADD(arg1(err:nat))")
-    ; (test-list-element "ADD(FIVE)(FALSE)" (read-any ((ADD FIVE) FALSE)) "ADD(arg2(err:nat))")
-    ; (test-list-element "ADD(FIVE)(ERROR)" (read-any ((ADD FIVE) ERROR)) "err:err->ADD(arg2(err:nat))")
+    ; coercing
+    (test-list-element "ADD(TRUE)(FIVE)" (read-any ((ADD TRUE) FIVE)) "nat:6")
+    (test-list-element "ADD(negTWO)(FIVE)" (read-any ((ADD negTWO) FIVE)) "nat:7")
+    (test-list-element "ADD(FIVE)(FALSE)" (read-any ((ADD FIVE) FALSE)) "nat:5")
+    (test-list-element "ADD(FIVE)(ERROR)" (read-any ((ADD FIVE) ERROR)) "nat:5")
 ))
 
 (show-results "ADD" ADD-tests)
@@ -59,11 +59,12 @@
     (test-list-element "SUB(FOUR)(THREE)" (read-any ((SUB FOUR) THREE)) "nat:1")
     (test-list-element "SUB(TWO)(TWO)" (read-any ((SUB TWO) TWO)) "nat:0")
     (test-list-element "SUB(FIVE)(FIVE)" (read-any ((SUB FIVE) TWO)) "nat:3")
-    ; ; type fails
-    ; (test-list-element "SUB(TRUE)(FIVE)" (read-any ((SUB TRUE) FIVE)) "SUB(arg1(err:nat))")
-    ; (test-list-element "SUB(negTWO)(FIVE)" (read-any ((SUB negTWO) FIVE)) "SUB(arg1(err:nat))")
-    ; (test-list-element "SUB(FIVE)(FALSE)" (read-any ((SUB FIVE) FALSE)) "SUB(arg2(err:nat))")
-    ; (test-list-element "SUB(FIVE)(ERROR)" (read-any ((SUB FIVE) ERROR)) "err:err->SUB(arg2(err:nat))")
+    ; coercing
+    (test-list-element "SUB(TRUE)(FIVE)" (read-any ((SUB TRUE) FIVE)) "nat:0")
+    (test-list-element "SUB(negTWO)(FIVE)" (read-any ((SUB negTWO) FIVE)) "nat:0")
+    (test-list-element "SUB(posFOUR)(TWO)" (read-any ((SUB posFOUR) TWO)) "nat:2")
+    (test-list-element "SUB(FIVE)(FALSE)" (read-any ((SUB FIVE) FALSE)) "nat:5")
+    (test-list-element "SUB(FOUR)(ERROR)" (read-any ((SUB FOUR) ERROR)) "nat:4")
 ))
 
 (show-results "SUB" SUB-tests)
@@ -80,11 +81,11 @@
     (test-list-element "MULT(FOUR)(THREE)" (read-any ((MULT FOUR) THREE)) "nat:12")
     (test-list-element "MULT(TWO)(TWO)" (read-any ((MULT TWO) TWO)) "nat:4")
     (test-list-element "MULT(FIVE)(FIVE)" (read-any ((MULT FIVE) TWO)) "nat:10")
-    ; type fails
-    ; (test-list-element "MULT(TRUE)(FIVE)" (read-any ((MULT TRUE) FIVE)) "MULT(arg1(err:nat))")
-    ; (test-list-element "MULT(negTWO)(FIVE)" (read-any ((MULT negTWO) FIVE)) "MULT(arg1(err:nat))")
-    ; (test-list-element "MULT(FIVE)(FALSE)" (read-any ((MULT FIVE) FALSE)) "MULT(arg2(err:nat))")
-    ; (test-list-element "MULT(FIVE)(ERROR)" (read-any ((MULT FIVE) ERROR)) "err:err->MULT(arg2(err:nat))")
+    ; coercing
+    (test-list-element "MULT(TRUE)(FIVE)" (read-any ((MULT TRUE) FIVE)) "nat:5")
+    (test-list-element "MULT(negTWO)(FIVE)" (read-any ((MULT negTWO) FIVE)) "nat:10")
+    (test-list-element "MULT(FIVE)(FALSE)" (read-any ((MULT FIVE) FALSE)) "nat:0")
+    (test-list-element "MULT(FOUR)(ERROR)" (read-any ((MULT FIVE) ERROR)) "nat:0")
 ))
 
 (show-results "MULT" MULT-tests)
@@ -102,11 +103,14 @@
     (test-list-element "DIV(FIVE)(FIVE)" (read-any ((DIV FIVE) FIVE)) "nat:1")
     (test-list-element "DIV(FOUR)(TWO)" (read-any ((DIV FOUR) TWO)) "nat:2")
     (test-list-element "DIV(SUCC(FIVE))(TWO)" (read-any ((DIV (SUCC FIVE)) TWO)) "nat:3")
-    ; type fails
-    ; (test-list-element "DIV(TRUE)(FIVE)" (read-any ((DIV TRUE) FIVE)) "DIV(arg1(err:nat))")
-    ; (test-list-element "DIV(negTWO)(FIVE)" (read-any ((DIV negTWO) FIVE)) "DIV(arg1(err:nat))")
-    ; (test-list-element "DIV(FIVE)(FALSE)" (read-any ((DIV FIVE) FALSE)) "DIV(arg2(err:nat))")
-    ; (test-list-element "DIV(FIVE)(ERROR)" (read-any ((DIV FIVE) ERROR)) "err:err->DIV(arg2(err:nat))")
+    ; coercing
+    (test-list-element "DIV(TRUE)(FIVE)" (read-any ((DIV TRUE) FIVE)) "nat:0")
+    (test-list-element "DIV(posFOUR)(TWO)" (read-any ((DIV posFOUR) TWO)) "nat:2")
+    (test-list-element "DIV(posFOUR)(negTWO)" (read-any ((DIV negTWO) negTWO)) "nat:1")
+    ; fails
+    (test-list-element "DIV(TWO)(ZERO)" (read-any ((DIV TWO) ZERO)) "err:div by 0")
+    (test-list-element "DIV(FIVE)(FALSE)" (read-any ((DIV FIVE) FALSE)) "err:div by 0")
+    (test-list-element "DIV(FOUR)(ERROR)" (read-any ((DIV FOUR) ERROR)) "err:div by 0")
 ))
 
 (show-results "DIV" DIV-tests)
@@ -124,11 +128,13 @@
     (test-list-element "MOD(FIVE)(FIVE)" (read-any ((MOD FIVE) FOUR)) "nat:1")
     (test-list-element "MOD(FOUR)(TWO)" (read-any ((MOD FOUR) TWO)) "nat:0")
     (test-list-element "MOD(SUCC(FIVE))(TWO)" (read-any ((MOD (SUCC FIVE)) TWO)) "nat:0")
-;     ; type fails
-;     ; (test-list-element "MOD(TRUE)(FIVE)" (read-any ((MOD TRUE) FIVE)) "MOD(arg1(err:nat))")
-;     ; (test-list-element "MOD(negTWO)(FIVE)" (read-any ((MOD negTWO) FIVE)) "MOD(arg1(err:nat))")
-;     ; (test-list-element "MOD(FIVE)(FALSE)" (read-any ((MOD FIVE) FALSE)) "MOD(arg2(err:nat))")
-;     ; (test-list-element "MOD(FIVE)(ERROR)" (read-any ((MOD FIVE) ERROR)) "err:err->MOD(arg2(err:nat))")
+    ; coercing
+    (test-list-element "MOD(TRUE)(FIVE)" (read-any ((MOD TRUE) FIVE)) "nat:1")
+    (test-list-element "MOD(negTWO)(FIVE)" (read-any ((MOD negTWO) FIVE)) "nat:2")
+    ; fails
+    (test-list-element "MOD(FIVE)(ZERO)" (read-any ((MOD FIVE) ZERO)) "err:div by 0")
+    (test-list-element "MOD(FIVE)(FALSE)" (read-any ((MOD FIVE) FALSE)) "err:div by 0")
+    (test-list-element "MOD(posFOUR)(ERROR)" (read-any ((MOD posFOUR) ERROR)) "err:div by 0")
 ))
 
 (show-results "MOD" MOD-tests)
@@ -140,9 +146,9 @@
     (test-list-element "IS_EVEN(ONE)" (read-any (IS_EVEN ONE)) "bool:FALSE")
     (test-list-element "IS_EVEN(THREE)" (read-any (IS_EVEN THREE)) "bool:FALSE")
     (test-list-element "IS_EVEN(FOUR)" (read-any (IS_EVEN FOUR)) "bool:TRUE")
-;     ; type fails
-;     ; (test-list-element "IS_EVEN(TRUE)" (read-any (IS_EVEN TRUE)) "IS_EVEN(err:nat)")
-;     ; (test-list-element "IS_EVEN(negTWO)" (read-any (IS_EVEN negTWO)) "IS_EVEN(err:nat)")
+    ; coercing
+    (test-list-element "IS_EVEN(TRUE)" (read-any (IS_EVEN TRUE)) "bool:FALSE")
+    (test-list-element "IS_EVEN(negTWO)" (read-any (IS_EVEN negTWO)) "bool:TRUE")
 ))
 
 (show-results "IS_EVEN" IS_EVEN-tests)
@@ -156,9 +162,9 @@
     (test-list-element "IS_ODD(THREE)" (read-any (IS_ODD THREE)) "bool:TRUE")
     (test-list-element "IS_ODD(FOUR)" (read-any (IS_ODD FOUR)) "bool:FALSE")
     (test-list-element "IS_ODD(SUCC(FIVE))" (read-any (IS_ODD (SUCC FIVE))) "bool:FALSE")
-;     ; type fails
-;     ; (test-list-element "IS_ODD(TRUE)" (read-any (IS_ODD TRUE)) "IS_ODD(err:nat)")
-;     ; (test-list-element "IS_ODD(negTWO)" (read-any (IS_ODD negTWO)) "IS_ODD(err:nat)")
+    ; coercing
+    (test-list-element "IS_ODD(TRUE)" (read-any (IS_ODD TRUE)) "bool:TRUE")
+    (test-list-element "IS_ODD(negTWO)" (read-any (IS_ODD negTWO)) "bool:FALSE")
 ))
 
 (show-results "IS_ODD" IS_ODD-tests)
@@ -171,9 +177,9 @@
     (test-list-element "GTE(FIVE)(TWO)" (read-any ((GTE FIVE) TWO)) "bool:TRUE")
     (test-list-element "GTE(THREE)(FOUR)" (read-any ((GTE THREE) FOUR)) "bool:FALSE")
     (test-list-element "GTE(FOUR)(FOUR)" (read-any ((GTE FOUR) FOUR)) "bool:TRUE")
-;     ; type fails
-;     ; (test-list-element "GTE(TRUE)(FIVE)" (read-any ((GTE TRUE) FIVE)) "GTE(arg1(err:nat))")
-;     ; (test-list-element "GTE(FIVE)(FALSE)" (read-any ((GTE FIVE) FALSE)) "GTE(arg2(err:nat))")
+    ; coercing
+    (test-list-element "GTE(TRUE)(FIVE)" (read-any ((GTE TRUE) FIVE)) "bool:FALSE")
+    (test-list-element "GTE(FIVE)(FALSE)" (read-any ((GTE FIVE) FALSE)) "bool:TRUE")
 ))
 
 (show-results "GTE" GTE-tests)
@@ -187,9 +193,9 @@
     (test-list-element "LTE(TWO)(FIVE)" (read-any ((LTE TWO) FIVE)) "bool:TRUE")
     (test-list-element "LTE(FOUR)(THREE)" (read-any ((LTE FOUR) THREE)) "bool:FALSE")
     (test-list-element "LTE(THREE)(THREE)" (read-any ((LTE THREE) THREE)) "bool:TRUE")
-;     ; type fails
-;     ; (test-list-element "LTE(TRUE)(FIVE)" (read-any ((LTE TRUE) FIVE)) "LTE(arg1(err:nat))")
-;     ; (test-list-element "LTE(FIVE)(FALSE)" (read-any ((LTE FIVE) FALSE)) "LTE(arg2(err:nat))")
+    ; coercing
+    (test-list-element "LTE(TRUE)(FIVE)" (read-any ((LTE TRUE) FIVE)) "bool:TRUE")
+    (test-list-element "LTE(FIVE)(FALSE)" (read-any ((LTE FIVE) FALSE)) "bool:FALSE")
 ))
 
 (show-results "LTE" LTE-tests)
@@ -202,9 +208,10 @@
     (test-list-element "EQ(ZERO)(ONE)" (read-any ((EQ ZERO) ONE)) "bool:FALSE")
     (test-list-element "EQ(FIVE)(FIVE)" (read-any ((EQ FIVE) FIVE)) "bool:TRUE")
     (test-list-element "EQ(THREE)(FOUR)" (read-any ((EQ THREE) FOUR)) "bool:FALSE")
-;     ; type fails
-;     ; (test-list-element "EQ(TRUE)(FIVE)" (read-any ((EQ TRUE) FIVE)) "EQ(arg1(err:nat))")
-;     ; (test-list-element "EQ(FIVE)(FALSE)" (read-any ((EQ FIVE) FALSE)) "EQ(arg2(err:nat))")
+    ; coercing
+    (test-list-element "EQ(TRUE)(posONE)" (read-any ((EQ TRUE) posONE)) "bool:TRUE")
+    (test-list-element "EQ(TRUE)(FIVE)" (read-any ((EQ TRUE) FIVE)) "bool:FALSE")
+    (test-list-element "EQ(FIVE)(FALSE)" (read-any ((EQ FIVE) FALSE)) "bool:FALSE")
 ))
 
 (show-results "EQ" EQ-tests)
@@ -218,9 +225,9 @@
     (test-list-element "GT(FIVE)(TWO)" (read-any ((GT FIVE) TWO)) "bool:TRUE")
     (test-list-element "GT(THREE)(FOUR)" (read-any ((GT THREE) FOUR)) "bool:FALSE")
     (test-list-element "GT(FOUR)(FOUR)" (read-any ((GT FOUR) FOUR)) "bool:FALSE")
-;     ; type fails
-;     ; (test-list-element "GT(TRUE)(FIVE)" (read-any ((GT TRUE) FIVE)) "GT(arg1(err:nat))")
-;     ; (test-list-element "GT(FIVE)(FALSE)" (read-any ((GT FIVE) FALSE)) "GT(arg2(err:nat))")
+    ; coercing
+    (test-list-element "GT(TRUE)(FIVE)" (read-any ((GT TRUE) FIVE)) "bool:FALSE")
+    (test-list-element "GT(FIVE)(FALSE)" (read-any ((GT FIVE) FALSE)) "bool:TRUE")
 ))
 
 (show-results "GT" GT-tests)
@@ -234,9 +241,9 @@
     (test-list-element "LT(TWO)(FIVE)" (read-any ((LT TWO) FIVE)) "bool:TRUE")
     (test-list-element "LT(FOUR)(THREE)" (read-any ((LT FOUR) THREE)) "bool:FALSE")
     (test-list-element "LT(THREE)(THREE)" (read-any ((LT THREE) THREE)) "bool:FALSE")
-;     ; type fails
-;     ; (test-list-element "LT(TRUE)(FIVE)" (read-any ((LT TRUE) FIVE)) "LT(arg1(err:nat))")
-;     ; (test-list-element "LT(FIVE)(FALSE)" (read-any ((LT FIVE) FALSE)) "LT(arg2(err:nat))")
+    ; coercing
+    (test-list-element "LT(TRUE)(FIVE)" (read-any ((LT TRUE) FIVE)) "bool:TRUE")
+    (test-list-element "LT(FIVE)(FALSE)" (read-any ((LT FIVE) FALSE)) "bool:FALSE")
 ))
 
 (show-results "LT" LT-tests)

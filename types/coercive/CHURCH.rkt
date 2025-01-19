@@ -42,7 +42,10 @@
         THEN (make-nat-err "err:div by 0")
         ELSE (((((COERCE-2 div) convert-to-nat) N1) N2) nat)))
 
-(def MOD N1 N2 = (((((COERCE-2 mod) convert-to-nat) N1) N2) nat))
+(def MOD N1 N2 = 
+    (IF (IS_ZERO N2)
+        THEN (make-nat-err "err:div by 0")
+        ELSE (((((COERCE-2 mod) convert-to-nat) N1) N2) nat)))
 
 (def IS_ODD N = ((((COERCE-1 isOdd) convert-to-nat) N) bool))
 
