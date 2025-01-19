@@ -27,18 +27,18 @@
 ; ====================================================================
 
 (define least-common-mult-tests (list
-    (test-list-element "least-common-mult(one)(one)" (n-read ((least-common-mult one) one)) "1")
-    (test-list-element "least-common-mult(two)(one)" (n-read ((least-common-mult two) one)) "2")
-    (test-list-element "least-common-mult(two)(two)" (n-read ((least-common-mult two) two)) "2")
-    (test-list-element "least-common-mult(three)(two)" (n-read ((least-common-mult three) two)) "6")
-    (test-list-element "least-common-mult(three)(three)" (n-read ((least-common-mult three) three)) "3")
-    (test-list-element "least-common-mult(four)(two)" (n-read ((least-common-mult four) two)) "4")
-    (test-list-element "least-common-mult(four)(three)" (n-read ((least-common-mult four) three)) "12")
-    (test-list-element "least-common-mult(five)(four)" (n-read ((least-common-mult five) four)) "20")
-    (test-list-element "least-common-mult(five)(five)" (n-read ((least-common-mult five) five)) "5")
+    (test-list-element "_lcm(one)(one)" (n-read ((_lcm one) one)) "1")
+    (test-list-element "_lcm(two)(one)" (n-read ((_lcm two) one)) "2")
+    (test-list-element "_lcm(two)(two)" (n-read ((_lcm two) two)) "2")
+    (test-list-element "_lcm(three)(two)" (n-read ((_lcm three) two)) "6")
+    (test-list-element "_lcm(three)(three)" (n-read ((_lcm three) three)) "3")
+    (test-list-element "_lcm(four)(two)" (n-read ((_lcm four) two)) "4")
+    (test-list-element "_lcm(four)(three)" (n-read ((_lcm four) three)) "12")
+    (test-list-element "_lcm(five)(four)" (n-read ((_lcm five) four)) "20")
+    (test-list-element "_lcm(five)(five)" (n-read ((_lcm five) five)) "5")
 ))
 
-(show-results "least-common-mult" least-common-mult-tests)
+(show-results "_lcm" least-common-mult-tests)
 
 ; ====================================================================
 
@@ -158,6 +158,7 @@
 ; ====================================================================
 
 (define divR-tests (list
+    (test-list-element "divR(r-pos-0)(r-neg1-2)" (r-read ((divR r-pos-0) r-neg1-2)) "0")
     (test-list-element "divR(r-neg1-2)(r-neg1-2)" (r-read ((divR r-neg1-2) r-neg1-2)) "1")
     (test-list-element "divR(r-neg1)(r-neg1)" (r-read ((divR r-neg1) r-neg1)) "1")
     (test-list-element "divR(r-neg0-1)(r-neg0-1)" (r-read ((divR r-neg0-1) r-neg0-1)) "0")
@@ -173,3 +174,83 @@
 ))
 
 (show-results "divR" divR-tests)
+
+; ====================================================================
+
+(define gteR-tests (list
+    (test-list-element "gteR(r-pos-0)(r-neg1-2)" (b-read ((gteR r-pos-0) r-neg1-2)) "true")
+    (test-list-element "gteR(r-neg1-2)(r-neg1-2)" (b-read ((gteR r-neg1-2) r-neg1-2)) "true")
+    (test-list-element "gteR(r-neg1)(r-neg1)" (b-read ((gteR r-neg1) r-neg1)) "true")
+    (test-list-element "gteR(r-neg0-1)(r-neg0-1)" (b-read ((gteR r-neg0-1) r-neg0-1)) "true")
+    (test-list-element "gteR(r-pos1)(r-pos1)" (b-read ((gteR r-pos1) r-pos1)) "true")
+    (test-list-element "gteR(r-pos1-2)(r-pos1)" (b-read ((gteR r-pos1-2) r-pos1)) "false")
+    (test-list-element "gteR(r-pos1-3)(r-pos1)" (b-read ((gteR r-pos1-3) r-pos1)) "false")
+    (test-list-element "gteR(r-pos2-1)(r-pos1)" (b-read ((gteR r-pos2-1) r-pos1)) "true")
+    (test-list-element "gteR(r-pos2-3)(r-pos1)" (b-read ((gteR r-pos2-3) r-pos1)) "false")
+    (test-list-element "gteR(r-neg2-4)(r-pos1)" (b-read ((gteR r-neg2-4) r-pos1)) "false")
+    (test-list-element "gteR(r-neg3-3)(r-pos1)" (b-read ((gteR r-neg3-3) r-pos1)) "false")
+    (test-list-element "gteR(r-pos4-2)(r-pos1)" (b-read ((gteR r-pos4-2) r-pos1)) "true")
+    (test-list-element "gteR(r-pos8)(r-pos1)" (b-read ((gteR r-pos8) r-pos1)) "true")
+))
+
+(show-results "gteR" gteR-tests)
+
+; ====================================================================
+
+(define gtR-tests (list
+    (test-list-element "gtR(r-pos-0)(r-neg1-2)" (b-read ((gtR r-pos-0) r-neg1-2)) "true")
+    (test-list-element "gtR(r-neg1-2)(r-neg1-2)" (b-read ((gtR r-neg1-2) r-neg1-2)) "false")
+    (test-list-element "gtR(r-neg1)(r-neg1)" (b-read ((gtR r-neg1) r-neg1)) "false")
+    (test-list-element "gtR(r-neg0-1)(r-neg0-1)" (b-read ((gtR r-neg0-1) r-neg0-1)) "false")
+    (test-list-element "gtR(r-pos1)(r-pos1)" (b-read ((gtR r-pos1) r-pos1)) "false")
+    (test-list-element "gtR(r-pos1-2)(r-pos1)" (b-read ((gtR r-pos1-2) r-pos1)) "false")
+    (test-list-element "gtR(r-pos1-3)(r-pos1)" (b-read ((gtR r-pos1-3) r-pos1)) "false")
+    (test-list-element "gtR(r-pos2-1)(r-pos1)" (b-read ((gtR r-pos2-1) r-pos1)) "true")
+    (test-list-element "gtR(r-pos2-3)(r-pos1)" (b-read ((gtR r-pos2-3) r-pos1)) "false")
+    (test-list-element "gtR(r-neg2-4)(r-pos1)" (b-read ((gtR r-neg2-4) r-pos1)) "false")
+    (test-list-element "gtR(r-neg3-3)(r-pos1)" (b-read ((gtR r-neg3-3) r-pos1)) "false")
+    (test-list-element "gtR(r-pos4-2)(r-pos1)" (b-read ((gtR r-pos4-2) r-pos1)) "true")
+    (test-list-element "gtR(r-pos8)(r-pos1)" (b-read ((gtR r-pos8) r-pos1)) "true")
+))
+
+(show-results "gtR" gtR-tests)
+
+; ====================================================================
+
+(define lteR-tests (list
+    (test-list-element "lteR(r-pos-0)(r-neg1-2)" (b-read ((lteR r-pos-0) r-neg1-2)) "false")
+    (test-list-element "lteR(r-neg1-2)(r-neg1-2)" (b-read ((lteR r-neg1-2) r-neg1-2)) "true")
+    (test-list-element "lteR(r-neg1)(r-neg1)" (b-read ((lteR r-neg1) r-neg1)) "true")
+    (test-list-element "lteR(r-neg0-1)(r-neg0-1)" (b-read ((lteR r-neg0-1) r-neg0-1)) "true")
+    (test-list-element "lteR(r-pos1)(r-pos1)" (b-read ((lteR r-pos1) r-pos1)) "true")
+    (test-list-element "lteR(r-pos1-2)(r-pos1)" (b-read ((lteR r-pos1-2) r-pos1)) "true")
+    (test-list-element "lteR(r-pos1-3)(r-pos1)" (b-read ((lteR r-pos1-3) r-pos1)) "true")
+    (test-list-element "lteR(r-pos2-1)(r-pos1)" (b-read ((lteR r-pos2-1) r-pos1)) "false")
+    (test-list-element "lteR(r-pos2-3)(r-pos1)" (b-read ((lteR r-pos2-3) r-pos1)) "true")
+    (test-list-element "lteR(r-neg2-4)(r-pos1)" (b-read ((lteR r-neg2-4) r-pos1)) "true")
+    (test-list-element "lteR(r-neg3-3)(r-pos1)" (b-read ((lteR r-neg3-3) r-pos1)) "true")
+    (test-list-element "lteR(r-pos4-2)(r-pos1)" (b-read ((lteR r-pos4-2) r-pos1)) "false")
+    (test-list-element "lteR(r-pos8)(r-pos1)" (b-read ((lteR r-pos8) r-pos1)) "false")
+))
+
+(show-results "lteR" lteR-tests)
+
+; ====================================================================
+
+(define ltR-tests (list
+    (test-list-element "ltR(r-pos-0)(r-neg1-2)" (b-read ((ltR r-pos-0) r-neg1-2)) "false")
+    (test-list-element "ltR(r-neg1-2)(r-neg1-2)" (b-read ((ltR r-neg1-2) r-neg1-2)) "false")
+    (test-list-element "ltR(r-neg1)(r-neg1)" (b-read ((ltR r-neg1) r-neg1)) "false")
+    (test-list-element "ltR(r-neg0-1)(r-neg0-1)" (b-read ((ltR r-neg0-1) r-neg0-1)) "false")
+    (test-list-element "ltR(r-pos1)(r-pos1)" (b-read ((ltR r-pos1) r-pos1)) "false")
+    (test-list-element "ltR(r-pos1-2)(r-pos1)" (b-read ((ltR r-pos1-2) r-pos1)) "true")
+    (test-list-element "ltR(r-pos1-3)(r-pos1)" (b-read ((ltR r-pos1-3) r-pos1)) "true")
+    (test-list-element "ltR(r-pos2-1)(r-pos1)" (b-read ((ltR r-pos2-1) r-pos1)) "false")
+    (test-list-element "ltR(r-pos2-3)(r-pos1)" (b-read ((ltR r-pos2-3) r-pos1)) "true")
+    (test-list-element "ltR(r-neg2-4)(r-pos1)" (b-read ((ltR r-neg2-4) r-pos1)) "true")
+    (test-list-element "ltR(r-neg3-3)(r-pos1)" (b-read ((ltR r-neg3-3) r-pos1)) "true")
+    (test-list-element "ltR(r-pos4-2)(r-pos1)" (b-read ((ltR r-pos4-2) r-pos1)) "false")
+    (test-list-element "ltR(r-pos8)(r-pos1)" (b-read ((ltR r-pos8) r-pos1)) "false")
+))
+
+(show-results "ltR" ltR-tests)

@@ -37,8 +37,9 @@
 (def makeR2 s-numer denom = ((pair s-numer) denom))
 
 ; These are "get" functions
-(def s-numer r = (head r))
-(def numer r = (tail (head r)))
+(def r-sign r = (head (head r)))
+(def s-numer r = (head r)) ; as in "signed numerator"
+(def numer r = (tail (head r))) ; raw numerator value without sign
 (def denom r = (tail r))
 
 ;===================================================
@@ -124,7 +125,7 @@
     - Idea: a,b => (a*b)/gcd(a,b)
     - Logic: Get direct multiple a*b, then divide by gcd for lcm
 |#
-(def least-common-mult a b = 
+(def _lcm a b = 
     (_let ab = ((mult a) b)
     (_let greatest-common-div = ((euclidean a) b)
     ((div ab) greatest-common-div))))
@@ -148,14 +149,13 @@
     - Logic: Sign is unchanged, just swap numerator and denominator
 |#
 (def reciprocal r = 
-    (_let r-sign = (head (head r))
-    (((makeR r-sign) (denom r)) (numer r))))
+    (((makeR (r-sign r)) (denom r)) (numer r)))
 
 ;===================================================
 
 #|
     ~ FRACTION CONVERSION ~
-    - Contract: rat => rat
+    - Contract: rat => int
     - Idea: a/b => n where n/m where m is lcd 
     - Logic: Divide lcd by denominator to find value to
         multiply signed numerator by to get new signed numerator
@@ -180,10 +180,9 @@
         (_let _gcd = ((euclidean (numer r)) (denom r))
         (_if ((gt _gcd) one)
             _then 
-                (_let r-sign = (head (head r))
                 (_let new-numer = ((div (numer r)) _gcd)
                 (_let new-denom = ((div (denom r)) _gcd)
-                (((makeR r-sign) new-numer) new-denom))))
+                (((makeR (r-sign r)) new-numer) new-denom)))
             _else r))))
 
 ;===================================================
@@ -207,7 +206,7 @@
                 (_let new-s-numer = ((addZ r1-s-numer) r2-s-numer)
                 ((makeR2 new-s-numer) r1-denom))
             _else
-                (_let lcd = ((least-common-mult r1-denom) r2-denom)
+                (_let lcd = ((_lcm r1-denom) r2-denom)
                 (_let new-r1-s-numer = ((convert-s-numer r1) lcd)
                 (_let new-r2-s-numer = ((convert-s-numer r2) lcd)
                 (_let new-s-numer = ((addZ new-r1-s-numer) new-r2-s-numer)
@@ -244,7 +243,6 @@
 (def divR r1 r2 = 
     ((multR r1) (reciprocal r2)))
 
-
 ;===================================================
 
 ; EQUALITIES AND INEQUALITIES
@@ -256,3 +254,69 @@
                 true, else false
 |#
 (def isZeroR r = ((_or (isZeroZ (head r))) (isZero (denom r))))
+
+#|
+    ~ EQUALS ~
+    - Contract: (rat,rat) => bool
+    - Logic: If both zero, equals true,
+        else reduce and checks for equality of numerator and denominator
+|#
+(def eqR r1 r2 = 
+    (_if ((_and (isZeroR r1)) (isZeroR r2))
+        _then true
+        _else
+        (_let reduced-r1 = (reduce r1)
+        (_let reduced-r2 = (reduce r2)
+        (_let r1-s-numer = (s-numer reduced-r1)
+        (_let r2-s-numer = (s-numer reduced-r2)
+        (_let r1-denom = (denom reduced-r1)
+        (_let r2-denom = (denom reduced-r2)
+        ((_and 
+            ((eqZ r1-s-numer) r2-s-numer)) 
+            ((eq r1-denom) r2-denom))))))))))
+
+#|
+    ~ GTE ~
+    - Contract: (rat,rat) => bool
+    - Logic: If both equal, equals true,
+        else reduce and convert for common denominators
+        and compare signed numerators
+|#
+(def gteR r1 r2 = 
+    (_if ((eqR r1) r2)
+        _then true
+        _else
+        (_let reduced-r1 = (reduce r1)
+        (_let reduced-r2 = (reduce r2)
+        (_let lcd = ((_lcm (denom reduced-r1)) (denom reduced-r2))
+        (_let new-r1-s-numer = ((convert-s-numer reduced-r1) lcd)
+        (_let new-r2-s-numer = ((convert-s-numer reduced-r2) lcd)
+        ((gteZ new-r1-s-numer) new-r2-s-numer))))))))
+
+#|
+    ~ GT ~
+    - Contract: (rat,rat) => bool
+    - Logic: If both equal, equals false,
+        else reduce and convert for common denominators
+        and compare signed numerators
+|#
+(def gtR r1 r2 = 
+    (_if ((eqR r1) r2)
+        _then false
+        _else ((gteR r1) r2)))
+
+#|
+    ~ LT ~
+    - Contract: (rat,rat) => bool
+    - Logic: If not gte, then lt
+|#
+(def ltR r1 r2 = (_not ((gteR r1) r2)))
+
+#|
+    ~ LTE ~
+    - Contract: (rat,rat) => bool
+    - Logic: If not gt, then lte
+|#
+(def lteR r1 r2 = (_not ((gtR r1) r2)))
+
+;===================================================
