@@ -71,8 +71,11 @@
     - BOOL - an untyped bool 
     - NAT - an untyped natural number
     - INT - an untyped integer
-        - note: integers are pairs themselves, so they will be a pair of a sign and a natural number
+        - note: integers are pairs themselves, they will be a pair of a sign and a natural number
         - {sign, nat}
+    - RAT - an untyped rational
+        - note: rationals are pairs themselves, they will be a pair of a signed natural number as numerator (an int) and a natural number as denominator
+        - {int, nat} == {{sign, nat}, nat}
 
     ~ TYPED OBJECT ~
     Examples
@@ -88,6 +91,12 @@
         - INT-OBJECTS:
             - {three, {true, one}}   - TYPED +1
             - {three, {false, five}} - TYPED -5
+        - INT-OBJECTS:
+            - []   - TYPED nil list
+            - {four, [...]} - TYPED list
+        - RAT-OBJECTS:
+            - {five, {{true, one}, one}}   - TYPED +1
+            - {five, {{false, two}, three}} - TYPED -2/3
 |#
 
 #|
@@ -127,6 +136,8 @@
 (def int = three)
 ;   LIST 
 (def _list = four)
+;   RAT 
+(def rat = five)
 
 ;===================================================
 
@@ -161,6 +172,8 @@
 
 (def make-list-err err-msg = ((make-error _list) err-msg))
 
+(def make-rat-err err-msg = ((make-error rat) err-msg))
+
 ;===================================================
 
 #|
@@ -181,12 +194,16 @@
 (def NAT-ERROR = (make-nat-err "err:nat"))
 
 ;   Int Error Type Object
-;   - Idea: has type error and val as nat
+;   - Idea: has type error and val as int
 (def INT-ERROR = (make-int-err "err:int"))
 
 ;   List Error Type Object
-;   - Idea: has type error and val as nat
+;   - Idea: has type error and val as list
 (def LIST-ERROR = (make-list-err "err:list"))
+
+;   Rat Error Type Object
+;   - Idea: has type error and val as rat
+(def LIST-ERROR = (make-list-err "err:rat"))
 
 ;===================================================
 
@@ -214,16 +231,22 @@
         _then ((make-obj _list) ((_map val) (val L)))
         _else L))
 
+;   Makes Rational Number Type Objects
+;   - Contract: val => RAT
+(def make-rat val = ((make-obj rat) val))
+
 ;===================================================
 
-;  Makes New Integer Number Type Objects 
+;  Makes New Integer and Rational Number Type Objects 
 ;  - Idea: 
-;       - make-int above works to add the int type to a value that is already implicitly an int,
-;           new-int creates a new INT object entirely from a sign and an implicit nat (a church numeral).
-;       - This distinction is needed because ints are a pair 
+;       - make-int and make-rat above work to add the int type to a value that is already implicitly an int or rat,
+;           new-int and new-rat create new objects entirely from a sign and implicit nat values.
+;       - This distinction is needed because ints and rats are pair s
 ;           themselves, not just a single value
 ;  - Contract: (sign, nat) => int
 (def new-int sign nat = (make-int ((makeZ sign) nat)))
+
+(def new-rat sign num den = (make-rat (((makeR sign) num) den)))
 
 ;===================================================
 
@@ -273,6 +296,12 @@
 |#
 (def is-list obj = ((is-type _list) obj))
 
+#|
+    ~ IS RAT ~
+    - Idea: use is-type
+    - Structure: obj => list
+|#
+(def is-rat obj = ((is-type rat) obj))
 ;===================================================
 
 #|
@@ -468,8 +497,9 @@
 (def read-bool B = (((val B) "bool:TRUE") "bool:FALSE"))
 (def read-nat N = (string-append "nat:" (n-read (val N))))
 (def read-int Z = (string-append "int:" (z-read (val Z))))
-; (def read-list L = (transform-string (string-append "list" ((l-read (val L)) read-any))))
 
+; can't decide on how to read lists - going with second version for now
+; (def read-list L = (transform-string (string-append "list" ((l-read (val L)) read-any))))
 (def read-list L = 
     (let ([result ((l-read (val L)) read-any)])
         (if (string-contains? result "err")
@@ -478,24 +508,24 @@
             (transform-string (string-append "list" result)))))
 ; (def read-list L = (string-append "list" ((l-read (val L)) read-any)))
 
+(def read-rat R = (string-append "rat:" (r-read (val R))))
+
 (def read-any OBJ = 
     (_if (is-bool OBJ)
-        _then (read-bool OBJ)
+     _then (read-bool OBJ)
+    _else (
+        _if (is-nat OBJ)
+        _then (read-nat OBJ)
         _else (
-            _if (is-nat OBJ)
-            _then (read-nat OBJ)
+            _if (is-int OBJ)
+            _then (read-int OBJ)
             _else (
-                _if (is-int OBJ)
-                _then (read-int OBJ)
+                _if (is-list OBJ)
+                _then (read-list OBJ)
                 _else (
-                    _if (is-list OBJ)
-                    _then (read-list OBJ)
-                    _else (read-error OBJ)
-                )
-            )
-        )
-    )
-)
+                    _if (is-rat OBJ)
+                    _then (read-rat OBJ)
+                    _else (read-error OBJ)))))))
 
 
 ;===================================================
@@ -544,16 +574,18 @@
         _else 
         (_let value = (val OBJ)
         (_let res = (
-            ; if bool eq
             _if (is-bool OBJ)
-                _then (bool-to-nat value)
+            _then (bool-to-nat value)
+            _else (
+                _if (is-int OBJ)
+                _then (absValue value)
                 _else (
-                    _if (is-int OBJ)
-                    _then (absValue value)
+                    _if (is-rat OBJ)
+                    _then (rat-to-nat value)
                     _else (
                         _if (is-list OBJ)
                         _then (len value)
-                        _else zero)))  
+                        _else zero)))) 
         ; output          
         (make-nat res)))))
 
