@@ -6,6 +6,7 @@
          "../../lists.rkt"
          "../../logic.rkt"
          "../../macros/macros.rkt"
+         "TYPES.rkt"
          "../TYPES.rkt")
 
 (def NOT B = ((((COERCE-1 _not) convert-to-bool) B) bool))

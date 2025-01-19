@@ -7,7 +7,8 @@
          "../division.rkt"
          "../integers.rkt"
          "../lists.rkt"
-         "../logic.rkt")
+         "../logic.rkt"
+         "../rationals.rkt")
 
 ;===================================================
 
@@ -203,7 +204,7 @@
 
 ;   Rat Error Type Object
 ;   - Idea: has type error and val as rat
-(def LIST-ERROR = (make-list-err "err:rat"))
+(def RAT-ERROR = (make-rat-err "err:rat"))
 
 ;===================================================
 

@@ -2,13 +2,25 @@
 (provide (all-defined-out))
 (require "../../church.rkt"
          "../../core.rkt"
+         "../../division.rkt"
          "../../integers.rkt"
          "../../lists.rkt"
          "../../logic.rkt"
          "../../macros/macros.rkt"
-         "../TYPES.rkt"
-         "/TYPES.rkt")
+         "TYPES.rkt"
+         "../TYPES.rkt")
 
+#|
+    ~ NAT OBJECTS ~
+;   - Idea: Typed Church Numerals
+|#
+
+(def ZERO = (make-nat zero))
+(def ONE = (make-nat one))
+(def TWO = (make-nat two))
+(def THREE = (make-nat three))
+(def FOUR = (make-nat four))
+(def FIVE = (make-nat five))
 
 (def IS_ZERO N = ((((COERCE-1 isZero) convert-to-nat) N) bool))
 
@@ -28,6 +40,8 @@
     (_if (IS_ZERO N2)
         _then (make-nat-err "err:div by 0")
         _else (((((COERCE-2 div) convert-to-nat) N1) N2) nat)))
+
+(def MOD N = ((((COERCE-1 mod) convert-to-nat) N) nat))
 
 (def IS_ODD N = ((((COERCE-1 isOdd) convert-to-nat) N) bool))
 

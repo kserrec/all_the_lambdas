@@ -8,7 +8,8 @@
          "../../integers.rkt"
          "../../lists.rkt"
          "../../logic.rkt"
-         "../../rationals.rkt")
+         "../../rationals.rkt"
+         "../TYPES.rkt")
 
 
 ;===================================================
@@ -57,10 +58,10 @@
 
 ; CONVERT TO bool
 (def bool-to-bool b = b)
-(def nat-to-bool n = (_not (isZero value)))
-(def int-to-bool z = (_not (isZeroZ value)))
+(def nat-to-bool n = (_not (isZero n)))
+(def int-to-bool z = (_not (isZeroZ z)))
 (def list-to-bool lst = (_not (isNil lst)))
-(def rat-to-bool r = (_not (isZeroR value)))
+(def rat-to-bool r = (_not (isZeroR r)))
 
 ; CONVERT TO nat
 (def bool-to-nat b = ((b one) zero))
@@ -78,10 +79,10 @@
 
 ; CONVERT TO list
 (def bool-to-list b = ((b (_cons true)) nil))
-(def nat-to-list n = ((isZero n) nil) (_cons n))
-(def int-to-list z = ((isZeroZ z) nil) (_cons z))
+(def nat-to-list n = (((isZero n) nil) (_cons n)))
+(def int-to-list z = (((isZeroZ z) nil) (_cons z)))
 (def list-to-list lst = lst)
-(def rat-to-list r = ((isZeroR r) nil) (_cons r))
+(def rat-to-list r = (((isZeroR r) nil) (_cons r)))
 
 ; CONVERT TO rat
 (def bool-to-rat b = ((makeR2 (bool-to-int b)) one))
@@ -221,7 +222,7 @@
     (_let res = (((func (val coerced-OBJ1)) (val coerced-OBJ2)) (val coerced-OBJ3))
     ((pair out-type) res))))))
 
-(def COERCE-4 func convert-func OBJ1 OBJ2 OBJ3 out-type =
+(def COERCE-4 func convert-func OBJ1 OBJ2 OBJ3 OBJ4 out-type =
     (_let coerced-OBJ1 = (convert-func OBJ1)
     (_let coerced-OBJ2 = (convert-func OBJ2)
     (_let coerced-OBJ3 = (convert-func OBJ3)

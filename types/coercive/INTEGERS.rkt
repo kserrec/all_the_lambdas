@@ -6,8 +6,8 @@
          "../../lists.rkt"
          "../../logic.rkt"
          "../../macros/macros.rkt"
+         "TYPES.rkt"
          "../TYPES.rkt")
-
 
 (def IS_ZEROz Z = ((((COERCE-1 isZeroZ) convert-to-int) Z) bool))
 

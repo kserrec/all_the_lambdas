@@ -340,6 +340,20 @@
 |#
 (def absValZ z = ((makeZ true) (tail z)))
 
+#|
+    ~ IS ODD z ~
+    - Contract: int => bool
+    - Idea: check if nat part is odd
+|#
+(def isOddZ z = (isOdd (tail z)))
+
+#|
+    ~ IS EVEN z ~
+    - Contract: int => bool
+    - Idea: check if nat part is even
+|#
+(def isEvenZ z = (isEven (tail z)))
+
 
 
 
