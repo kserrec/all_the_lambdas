@@ -320,3 +320,13 @@
 (def lteR r1 r2 = (_not ((gtR r1) r2)))
 
 ;===================================================
+
+(def floorR r = 
+    (_let reduced-r = (reduce r)
+    (_let sign-of-r = (r-sign r)
+    (_let divided = ((div (numer r)) (denom r))
+    (_let new-numer = 
+        (_if (sign-of-r)
+            _then divided
+            _else (succ divided))
+    (((makeR sign-of-r) new-numer) one))))))

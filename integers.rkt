@@ -332,7 +332,13 @@
 
 ;===================================================
 
-
+#|
+    ~ ABSOLUTE VALUE ~
+    - Contract: int => int
+    - Idea: force sign to be positive
+    - Logic: make new int with positive sign
+|#
+(def absValZ z = ((makeZ true) (tail z)))
 
 
 

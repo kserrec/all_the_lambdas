@@ -6,7 +6,8 @@
          "../../lists.rkt"
          "../../logic.rkt"
          "../../macros/macros.rkt"
-         "../TYPES.rkt")
+         "../TYPES.rkt"
+         "/TYPES.rkt")
 
 
 (def IS_ZERO N = ((((COERCE-1 isZero) convert-to-nat) N) bool))

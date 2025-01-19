@@ -50,7 +50,7 @@
                     (substring removed list-end)))))
 
 ;===================================================
-; TYPES
+; TYPES - strict
 ;===================================================
 
 #|  
@@ -91,7 +91,7 @@
         - INT-OBJECTS:
             - {three, {true, one}}   - TYPED +1
             - {three, {false, five}} - TYPED -5
-        - INT-OBJECTS:
+        - LIST-OBJECTS:
             - []   - TYPED nil list
             - {four, [...]} - TYPED list
         - RAT-OBJECTS:
@@ -529,93 +529,3 @@
 
 
 ;===================================================
-
-; COERCIVE
-
-(def convert-to-bool OBJ = 
-    ; if is bool, return as is
-    (_if (is-bool OBJ)
-        _then OBJ
-        _else 
-        (_let value = (val OBJ)
-        (_let res = (
-            ; if nat eq
-            _if (is-nat OBJ)
-                _then (_not (isZero value))
-                _else (
-                    _if (is-int OBJ)
-                    _then (_not (isZeroZ value))
-                    _else (
-                        _if (is-list OBJ)
-                        _then (_not (isNil value))
-                        _else false)))  
-        ; output          
-        (make-bool res)))))
-
-(def bool-to-nat b = 
-    (_if b 
-        _then one 
-        _else zero))
-
-(def bool-to-int b = 
-    (_if b 
-        _then ((makeZ true) one)
-        _else ((makeZ true) zero)))
-
-
-(def nat-to-int n = ((makeZ true) n))
-
-(def absValue z = ((pair one) (tail z)))
-
-(def convert-to-nat OBJ = 
-    ; if is nat, return as is
-    (_if (is-nat OBJ)
-        _then OBJ
-        _else 
-        (_let value = (val OBJ)
-        (_let res = (
-            _if (is-bool OBJ)
-            _then (bool-to-nat value)
-            _else (
-                _if (is-int OBJ)
-                _then (absValue value)
-                _else (
-                    _if (is-rat OBJ)
-                    _then (rat-to-nat value)
-                    _else (
-                        _if (is-list OBJ)
-                        _then (len value)
-                        _else zero)))) 
-        ; output          
-        (make-nat res)))))
-
-(def convert-to-int OBJ = 
-    ; if is int, return as is
-    (_if (is-int OBJ)
-        _then OBJ
-        _else 
-        (_let value = (val OBJ)
-        (_let res = (
-            ; if bool eq
-            _if (is-bool OBJ)
-                _then (bool-to-int value)
-                _else (
-                    _if (is-nat OBJ)
-                    _then (nat-to-int value)
-                    _else (
-                        _if (is-list OBJ)
-                        _then (nat-to-int (len value))
-                        _else (nat-to-int zero))))  
-        ; output          
-        (make-int res)))))
-
-(def COERCE-1 func convert-func OBJ out-type =
-    (_let coerced-OBJ = (convert-func OBJ)
-    (_let res = (func (val coerced-OBJ))
-    ((pair out-type) res))))
-
-(def COERCE-2 func convert-func OBJ1 OBJ2 out-type =
-    (_let coerced-OBJ1 = (convert-func OBJ1)
-    (_let coerced-OBJ2 = (convert-func OBJ2)
-    (_let res = ((func (val coerced-OBJ1)) (val coerced-OBJ2))
-    ((pair out-type) res)))))
