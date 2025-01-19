@@ -7,6 +7,7 @@
          "../../lists.rkt"
          "../../logic.rkt"
          "../../macros/macros.rkt"
+         "../../macros/more-macros.rkt"
          "TYPES.rkt"
          "../TYPES.rkt")
 
@@ -37,9 +38,9 @@
 (def EXP N1 N2 = (((((COERCE-2 _exp) convert-to-nat) N1) N2) nat))
 
 (def DIV N1 N2 = 
-    (_if (IS_ZERO N2)
-        _then (make-nat-err "err:div by 0")
-        _else (((((COERCE-2 div) convert-to-nat) N1) N2) nat)))
+    (IF (IS_ZERO N2)
+        THEN (make-nat-err "err:div by 0")
+        ELSE (((((COERCE-2 div) convert-to-nat) N1) N2) nat)))
 
 (def MOD N = ((((COERCE-1 mod) convert-to-nat) N) nat))
 

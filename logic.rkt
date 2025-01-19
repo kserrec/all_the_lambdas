@@ -12,7 +12,7 @@
     - Logic: Returns same function passed
 |#
 
-(def identity x = x)
+(def _identity x = x)
 
 #|
     ~ TRUE ~

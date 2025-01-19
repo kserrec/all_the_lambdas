@@ -230,3 +230,7 @@
     (_let res = ((((func (val coerced-OBJ1)) (val coerced-OBJ2)) (val coerced-OBJ3)) (val coerced-OBJ4))
     ((pair out-type) res)))))))
 
+
+(def COND B = ((((COERCE-1 _identity) convert-to-bool) B) bool))
+
+
