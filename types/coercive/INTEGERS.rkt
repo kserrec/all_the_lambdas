@@ -9,6 +9,20 @@
          "TYPES.rkt"
          "../TYPES.rkt")
 
+
+(def posZERO = (make-int posZero))
+(def negZERO = (make-int negZero))
+(def negFIVE = (make-int negFive))
+(def negFOUR = (make-int negFour))
+(def negTHREE = (make-int negThree))
+(def negTWO = (SUCCz negTHREE))
+(def negONE = (SUCCz negTWO))
+(def posONE = (SUCCz posZERO))
+(def posTWO = (SUCCz posONE))
+(def posTHREE = (SUCCz posTWO))
+(def posFOUR = (SUCCz posTHREE))
+(def posFIVE = (SUCCz posFOUR))
+
 (def IS_ZEROz Z = ((((COERCE-1 isZeroZ) convert-to-int) Z) bool))
 
 (def SUCCz Z = ((((COERCE-1 succZ) convert-to-int) Z) int))

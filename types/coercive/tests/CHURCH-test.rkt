@@ -17,9 +17,10 @@
     (test-list-element "IS_ZERO(ONE)" (read-any (IS_ZERO ONE)) "bool:FALSE")
     (test-list-element "IS_ZERO(TWO)" (read-any (IS_ZERO TWO)) "bool:FALSE")
     (test-list-element "IS_ZERO(FIVE)" (read-any (IS_ZERO FIVE)) "bool:FALSE")
-    ; type fails
-    ; (test-list-element "IS_ZERO(negTHREE)" (read-any (IS_ZERO negTHREE)) "IS_ZERO(err:nat)")
-    ; (test-list-element "IS_ZERO(TRUE)" (read-any (IS_ZERO negTHREE)) "IS_ZERO(err:nat)")
+    ; coercing
+    (test-list-element "IS_ZERO(negTHREE)" (read-any (IS_ZERO negTHREE)) "bool:FALSE")
+    (test-list-element "IS_ZERO(TRUE)" (read-any (IS_ZERO TRUE)) "bool:FALSE")
+    (test-list-element "IS_ZERO(TRUE)" (read-any (IS_ZERO FALSE)) "bool:TRUE")
 ))
 
 (show-results "IS_ZERO" IS_ZERO-tests)
@@ -113,16 +114,16 @@
 ; ====================================================================
 
 (define MOD-tests (list
-;     (test-list-element "MOD(ZERO)(ONE)" (read-any ((MOD ZERO) ONE)) "nat:0")
-;     (test-list-element "MOD(ZERO)(FOUR)" (read-any ((MOD ZERO) ONE)) "nat:0")
-;     (test-list-element "MOD(FIVE)(ONE)" (read-any ((MOD FIVE) ONE)) "nat:0")
-;     (test-list-element "MOD(ONE)(TWO)" (read-any ((MOD ONE) TWO)) "nat:1")
-;     (test-list-element "MOD(THREE)(FOUR)" (read-any ((MOD THREE) FOUR)) "nat:3")
-;     (test-list-element "MOD(FOUR)(THREE)" (read-any ((MOD FOUR) THREE)) "nat:1")
-;     (test-list-element "MOD(TWO)(TWO)" (read-any ((MOD TWO) TWO)) "nat:0")
-;     (test-list-element "MOD(FIVE)(FIVE)" (read-any ((MOD FIVE) FOUR)) "nat:1")
-;     (test-list-element "MOD(FOUR)(TWO)" (read-any ((MOD FOUR) TWO)) "nat:0")
-;     (test-list-element "MOD(SUCC(FIVE))(TWO)" (read-any ((MOD (SUCC FIVE)) TWO)) "nat:0")
+    (test-list-element "MOD(ZERO)(ONE)" (read-any ((MOD ZERO) ONE)) "nat:0")
+    (test-list-element "MOD(ZERO)(FOUR)" (read-any ((MOD ZERO) ONE)) "nat:0")
+    (test-list-element "MOD(FIVE)(ONE)" (read-any ((MOD FIVE) ONE)) "nat:0")
+    (test-list-element "MOD(ONE)(TWO)" (read-any ((MOD ONE) TWO)) "nat:1")
+    (test-list-element "MOD(THREE)(FOUR)" (read-any ((MOD THREE) FOUR)) "nat:3")
+    (test-list-element "MOD(FOUR)(THREE)" (read-any ((MOD FOUR) THREE)) "nat:1")
+    (test-list-element "MOD(TWO)(TWO)" (read-any ((MOD TWO) TWO)) "nat:0")
+    (test-list-element "MOD(FIVE)(FIVE)" (read-any ((MOD FIVE) FOUR)) "nat:1")
+    (test-list-element "MOD(FOUR)(TWO)" (read-any ((MOD FOUR) TWO)) "nat:0")
+    (test-list-element "MOD(SUCC(FIVE))(TWO)" (read-any ((MOD (SUCC FIVE)) TWO)) "nat:0")
 ;     ; type fails
 ;     ; (test-list-element "MOD(TRUE)(FIVE)" (read-any ((MOD TRUE) FIVE)) "MOD(arg1(err:nat))")
 ;     ; (test-list-element "MOD(negTWO)(FIVE)" (read-any ((MOD negTWO) FIVE)) "MOD(arg1(err:nat))")
@@ -133,109 +134,109 @@
 (show-results "MOD" MOD-tests)
 ; ; ====================================================================
 
-; (define IS_EVEN-tests (list
-;     (test-list-element "IS_EVEN(ZERO)" (read-any (IS_EVEN ZERO)) "bool:TRUE")
-;     (test-list-element "IS_EVEN(FIVE)" (read-any (IS_EVEN FIVE)) "bool:FALSE")
-;     (test-list-element "IS_EVEN(ONE)" (read-any (IS_EVEN ONE)) "bool:FALSE")
-;     (test-list-element "IS_EVEN(THREE)" (read-any (IS_EVEN THREE)) "bool:FALSE")
-;     (test-list-element "IS_EVEN(FOUR)" (read-any (IS_EVEN FOUR)) "bool:TRUE")
+(define IS_EVEN-tests (list
+    (test-list-element "IS_EVEN(ZERO)" (read-any (IS_EVEN ZERO)) "bool:TRUE")
+    (test-list-element "IS_EVEN(FIVE)" (read-any (IS_EVEN FIVE)) "bool:FALSE")
+    (test-list-element "IS_EVEN(ONE)" (read-any (IS_EVEN ONE)) "bool:FALSE")
+    (test-list-element "IS_EVEN(THREE)" (read-any (IS_EVEN THREE)) "bool:FALSE")
+    (test-list-element "IS_EVEN(FOUR)" (read-any (IS_EVEN FOUR)) "bool:TRUE")
 ;     ; type fails
 ;     ; (test-list-element "IS_EVEN(TRUE)" (read-any (IS_EVEN TRUE)) "IS_EVEN(err:nat)")
 ;     ; (test-list-element "IS_EVEN(negTWO)" (read-any (IS_EVEN negTWO)) "IS_EVEN(err:nat)")
-; ))
+))
 
-; (show-results "IS_EVEN" IS_EVEN-tests)
+(show-results "IS_EVEN" IS_EVEN-tests)
 
 ; ; ====================================================================
 
-; (define IS_ODD-tests (list
-;     (test-list-element "IS_ODD(ZERO)" (read-any (IS_ODD ZERO)) "bool:FALSE")
-;     (test-list-element "IS_ODD(FIVE)" (read-any (IS_ODD FIVE)) "bool:TRUE")
-;     (test-list-element "IS_ODD(ONE)" (read-any (IS_ODD ONE)) "bool:TRUE")
-;     (test-list-element "IS_ODD(THREE)" (read-any (IS_ODD THREE)) "bool:TRUE")
-;     (test-list-element "IS_ODD(FOUR)" (read-any (IS_ODD FOUR)) "bool:FALSE")
-;     (test-list-element "IS_ODD(SUCC(FIVE))" (read-any (IS_ODD (SUCC FIVE))) "bool:FALSE")
+(define IS_ODD-tests (list
+    (test-list-element "IS_ODD(ZERO)" (read-any (IS_ODD ZERO)) "bool:FALSE")
+    (test-list-element "IS_ODD(FIVE)" (read-any (IS_ODD FIVE)) "bool:TRUE")
+    (test-list-element "IS_ODD(ONE)" (read-any (IS_ODD ONE)) "bool:TRUE")
+    (test-list-element "IS_ODD(THREE)" (read-any (IS_ODD THREE)) "bool:TRUE")
+    (test-list-element "IS_ODD(FOUR)" (read-any (IS_ODD FOUR)) "bool:FALSE")
+    (test-list-element "IS_ODD(SUCC(FIVE))" (read-any (IS_ODD (SUCC FIVE))) "bool:FALSE")
 ;     ; type fails
 ;     ; (test-list-element "IS_ODD(TRUE)" (read-any (IS_ODD TRUE)) "IS_ODD(err:nat)")
 ;     ; (test-list-element "IS_ODD(negTWO)" (read-any (IS_ODD negTWO)) "IS_ODD(err:nat)")
-; ))
+))
 
-; (show-results "IS_ODD" IS_ODD-tests)
+(show-results "IS_ODD" IS_ODD-tests)
 ; ; ====================================================================
 
-; (define GTE-tests (list
-;     (test-list-element "GTE(ZERO)(ZERO)" (read-any ((GTE ZERO) ZERO)) "bool:TRUE")
-;     (test-list-element "GTE(ONE)(ZERO)" (read-any ((GTE ONE) ZERO)) "bool:TRUE")
-;     (test-list-element "GTE(ZERO)(ONE)" (read-any ((GTE ZERO) ONE)) "bool:FALSE")
-;     (test-list-element "GTE(FIVE)(TWO)" (read-any ((GTE FIVE) TWO)) "bool:TRUE")
-;     (test-list-element "GTE(THREE)(FOUR)" (read-any ((GTE THREE) FOUR)) "bool:FALSE")
-;     (test-list-element "GTE(FOUR)(FOUR)" (read-any ((GTE FOUR) FOUR)) "bool:TRUE")
+(define GTE-tests (list
+    (test-list-element "GTE(ZERO)(ZERO)" (read-any ((GTE ZERO) ZERO)) "bool:TRUE")
+    (test-list-element "GTE(ONE)(ZERO)" (read-any ((GTE ONE) ZERO)) "bool:TRUE")
+    (test-list-element "GTE(ZERO)(ONE)" (read-any ((GTE ZERO) ONE)) "bool:FALSE")
+    (test-list-element "GTE(FIVE)(TWO)" (read-any ((GTE FIVE) TWO)) "bool:TRUE")
+    (test-list-element "GTE(THREE)(FOUR)" (read-any ((GTE THREE) FOUR)) "bool:FALSE")
+    (test-list-element "GTE(FOUR)(FOUR)" (read-any ((GTE FOUR) FOUR)) "bool:TRUE")
 ;     ; type fails
 ;     ; (test-list-element "GTE(TRUE)(FIVE)" (read-any ((GTE TRUE) FIVE)) "GTE(arg1(err:nat))")
 ;     ; (test-list-element "GTE(FIVE)(FALSE)" (read-any ((GTE FIVE) FALSE)) "GTE(arg2(err:nat))")
-; ))
+))
 
-; (show-results "GTE" GTE-tests)
+(show-results "GTE" GTE-tests)
 
 ; ; ====================================================================
 
-; (define LTE-tests (list
-;     (test-list-element "LTE(ZERO)(ZERO)" (read-any ((LTE ZERO) ZERO)) "bool:TRUE")
-;     (test-list-element "LTE(ONE)(ZERO)" (read-any ((LTE ONE) ZERO)) "bool:FALSE")
-;     (test-list-element "LTE(ZERO)(ONE)" (read-any ((LTE ZERO) ONE)) "bool:TRUE")
-;     (test-list-element "LTE(TWO)(FIVE)" (read-any ((LTE TWO) FIVE)) "bool:TRUE")
-;     (test-list-element "LTE(FOUR)(THREE)" (read-any ((LTE FOUR) THREE)) "bool:FALSE")
-;     (test-list-element "LTE(THREE)(THREE)" (read-any ((LTE THREE) THREE)) "bool:TRUE")
+(define LTE-tests (list
+    (test-list-element "LTE(ZERO)(ZERO)" (read-any ((LTE ZERO) ZERO)) "bool:TRUE")
+    (test-list-element "LTE(ONE)(ZERO)" (read-any ((LTE ONE) ZERO)) "bool:FALSE")
+    (test-list-element "LTE(ZERO)(ONE)" (read-any ((LTE ZERO) ONE)) "bool:TRUE")
+    (test-list-element "LTE(TWO)(FIVE)" (read-any ((LTE TWO) FIVE)) "bool:TRUE")
+    (test-list-element "LTE(FOUR)(THREE)" (read-any ((LTE FOUR) THREE)) "bool:FALSE")
+    (test-list-element "LTE(THREE)(THREE)" (read-any ((LTE THREE) THREE)) "bool:TRUE")
 ;     ; type fails
 ;     ; (test-list-element "LTE(TRUE)(FIVE)" (read-any ((LTE TRUE) FIVE)) "LTE(arg1(err:nat))")
 ;     ; (test-list-element "LTE(FIVE)(FALSE)" (read-any ((LTE FIVE) FALSE)) "LTE(arg2(err:nat))")
-; ))
+))
 
-; (show-results "LTE" LTE-tests)
+(show-results "LTE" LTE-tests)
 
 ; ; ====================================================================
 
-; (define EQ-tests (list
-;     (test-list-element "EQ(ZERO)(ZERO)" (read-any ((EQ ZERO) ZERO)) "bool:TRUE")
-;     (test-list-element "EQ(ONE)(ZERO)" (read-any ((EQ ONE) ZERO)) "bool:FALSE")
-;     (test-list-element "EQ(ZERO)(ONE)" (read-any ((EQ ZERO) ONE)) "bool:FALSE")
-;     (test-list-element "EQ(FIVE)(FIVE)" (read-any ((EQ FIVE) FIVE)) "bool:TRUE")
-;     (test-list-element "EQ(THREE)(FOUR)" (read-any ((EQ THREE) FOUR)) "bool:FALSE")
+(define EQ-tests (list
+    (test-list-element "EQ(ZERO)(ZERO)" (read-any ((EQ ZERO) ZERO)) "bool:TRUE")
+    (test-list-element "EQ(ONE)(ZERO)" (read-any ((EQ ONE) ZERO)) "bool:FALSE")
+    (test-list-element "EQ(ZERO)(ONE)" (read-any ((EQ ZERO) ONE)) "bool:FALSE")
+    (test-list-element "EQ(FIVE)(FIVE)" (read-any ((EQ FIVE) FIVE)) "bool:TRUE")
+    (test-list-element "EQ(THREE)(FOUR)" (read-any ((EQ THREE) FOUR)) "bool:FALSE")
 ;     ; type fails
 ;     ; (test-list-element "EQ(TRUE)(FIVE)" (read-any ((EQ TRUE) FIVE)) "EQ(arg1(err:nat))")
 ;     ; (test-list-element "EQ(FIVE)(FALSE)" (read-any ((EQ FIVE) FALSE)) "EQ(arg2(err:nat))")
-; ))
+))
 
-; (show-results "EQ" EQ-tests)
+(show-results "EQ" EQ-tests)
 
 ; ; ====================================================================
 
-; (define GT-tests (list
-;     (test-list-element "GT(ZERO)(ZERO)" (read-any ((GT ZERO) ZERO)) "bool:FALSE")
-;     (test-list-element "GT(ONE)(ZERO)" (read-any ((GT ONE) ZERO)) "bool:TRUE")
-;     (test-list-element "GT(ZERO)(ONE)" (read-any ((GT ZERO) ONE)) "bool:FALSE")
-;     (test-list-element "GT(FIVE)(TWO)" (read-any ((GT FIVE) TWO)) "bool:TRUE")
-;     (test-list-element "GT(THREE)(FOUR)" (read-any ((GT THREE) FOUR)) "bool:FALSE")
-;     (test-list-element "GT(FOUR)(FOUR)" (read-any ((GT FOUR) FOUR)) "bool:FALSE")
+(define GT-tests (list
+    (test-list-element "GT(ZERO)(ZERO)" (read-any ((GT ZERO) ZERO)) "bool:FALSE")
+    (test-list-element "GT(ONE)(ZERO)" (read-any ((GT ONE) ZERO)) "bool:TRUE")
+    (test-list-element "GT(ZERO)(ONE)" (read-any ((GT ZERO) ONE)) "bool:FALSE")
+    (test-list-element "GT(FIVE)(TWO)" (read-any ((GT FIVE) TWO)) "bool:TRUE")
+    (test-list-element "GT(THREE)(FOUR)" (read-any ((GT THREE) FOUR)) "bool:FALSE")
+    (test-list-element "GT(FOUR)(FOUR)" (read-any ((GT FOUR) FOUR)) "bool:FALSE")
 ;     ; type fails
 ;     ; (test-list-element "GT(TRUE)(FIVE)" (read-any ((GT TRUE) FIVE)) "GT(arg1(err:nat))")
 ;     ; (test-list-element "GT(FIVE)(FALSE)" (read-any ((GT FIVE) FALSE)) "GT(arg2(err:nat))")
-; ))
+))
 
-; (show-results "GT" GT-tests)
+(show-results "GT" GT-tests)
 
 ; ; ====================================================================
 
-; (define LT-tests (list
-;     (test-list-element "LT(ZERO)(ZERO)" (read-any ((LT ZERO) ZERO)) "bool:FALSE")
-;     (test-list-element "LT(ONE)(ZERO)" (read-any ((LT ONE) ZERO)) "bool:FALSE")
-;     (test-list-element "LT(ZERO)(ONE)" (read-any ((LT ZERO) ONE)) "bool:TRUE")
-;     (test-list-element "LT(TWO)(FIVE)" (read-any ((LT TWO) FIVE)) "bool:TRUE")
-;     (test-list-element "LT(FOUR)(THREE)" (read-any ((LT FOUR) THREE)) "bool:FALSE")
-;     (test-list-element "LT(THREE)(THREE)" (read-any ((LT THREE) THREE)) "bool:FALSE")
+(define LT-tests (list
+    (test-list-element "LT(ZERO)(ZERO)" (read-any ((LT ZERO) ZERO)) "bool:FALSE")
+    (test-list-element "LT(ONE)(ZERO)" (read-any ((LT ONE) ZERO)) "bool:FALSE")
+    (test-list-element "LT(ZERO)(ONE)" (read-any ((LT ZERO) ONE)) "bool:TRUE")
+    (test-list-element "LT(TWO)(FIVE)" (read-any ((LT TWO) FIVE)) "bool:TRUE")
+    (test-list-element "LT(FOUR)(THREE)" (read-any ((LT FOUR) THREE)) "bool:FALSE")
+    (test-list-element "LT(THREE)(THREE)" (read-any ((LT THREE) THREE)) "bool:FALSE")
 ;     ; type fails
 ;     ; (test-list-element "LT(TRUE)(FIVE)" (read-any ((LT TRUE) FIVE)) "LT(arg1(err:nat))")
 ;     ; (test-list-element "LT(FIVE)(FALSE)" (read-any ((LT FIVE) FALSE)) "LT(arg2(err:nat))")
-; ))
+))
 
-; (show-results "LT" LT-tests)
+(show-results "LT" LT-tests)

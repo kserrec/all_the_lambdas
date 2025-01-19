@@ -209,9 +209,17 @@
     (_let res = (func (val coerced-OBJ))
     ((pair out-type) res))))
 
+; function of two arguments of same type
 (def COERCE-2 func convert-func OBJ1 OBJ2 out-type =
     (_let coerced-OBJ1 = (convert-func OBJ1)
     (_let coerced-OBJ2 = (convert-func OBJ2)
+    (_let res = ((func (val coerced-OBJ1)) (val coerced-OBJ2))
+    ((pair out-type) res)))))
+
+; function of two arguments of different type
+(def COERCE-2-diff func convert-func1 OBJ1 convert-func2 OBJ2 out-type =
+    (_let coerced-OBJ1 = (convert-func1 OBJ1)
+    (_let coerced-OBJ2 = (convert-func2 OBJ2)
     (_let res = ((func (val coerced-OBJ1)) (val coerced-OBJ2))
     ((pair out-type) res)))))
 

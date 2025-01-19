@@ -9,6 +9,9 @@
          "TYPES.rkt"
          "../TYPES.rkt")
 
+(def TRUE = (make-bool true))
+(def FALSE = (make-bool false))
+
 (def NOT B = ((((COERCE-1 _not) convert-to-bool) B) bool))
 
 (def AND B1 B2 = (((((COERCE-2 _and) convert-to-bool) B1) B2) bool))
