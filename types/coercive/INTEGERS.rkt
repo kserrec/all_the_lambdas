@@ -6,9 +6,9 @@
          "../../lists.rkt"
          "../../logic.rkt"
          "../../macros/macros.rkt"
+         "../../macros/more-macros.rkt"
          "TYPES.rkt"
          "../TYPES.rkt")
-
 
 (def posZERO = (make-int posZero))
 (def negZERO = (make-int negZero))
@@ -38,9 +38,9 @@
 (def EXPz Z1 Z2 = (((((COERCE-2 expZ) convert-to-int) Z1) Z2) int))
 
 (def DIVz Z1 Z2 = 
-    (_if (IS_ZEROz Z2)
-        _then (make-int-err "err:div by 0")
-        _else (((((COERCE-2 divZ) convert-to-int) Z1) Z2) int)))
+    (IF (IS_ZEROz Z2)
+        THEN (make-int-err "err:div by 0")
+        ELSE (((((COERCE-2 divZ) convert-to-int) Z1) Z2) int)))
 
 (def IS_ODDz Z = ((((COERCE-1 isOddZ) convert-to-int) Z) bool))
 
