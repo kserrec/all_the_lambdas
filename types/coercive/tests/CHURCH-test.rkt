@@ -138,7 +138,8 @@
 ))
 
 (show-results "MOD" MOD-tests)
-; ; ====================================================================
+
+; ====================================================================
 
 (define IS_EVEN-tests (list
     (test-list-element "IS_EVEN(ZERO)" (read-any (IS_EVEN ZERO)) "bool:TRUE")
@@ -153,7 +154,7 @@
 
 (show-results "IS_EVEN" IS_EVEN-tests)
 
-; ; ====================================================================
+; ====================================================================
 
 (define IS_ODD-tests (list
     (test-list-element "IS_ODD(ZERO)" (read-any (IS_ODD ZERO)) "bool:FALSE")
@@ -168,7 +169,8 @@
 ))
 
 (show-results "IS_ODD" IS_ODD-tests)
-; ; ====================================================================
+
+; ====================================================================
 
 (define GTE-tests (list
     (test-list-element "GTE(ZERO)(ZERO)" (read-any ((GTE ZERO) ZERO)) "bool:TRUE")
@@ -184,7 +186,7 @@
 
 (show-results "GTE" GTE-tests)
 
-; ; ====================================================================
+; ====================================================================
 
 (define LTE-tests (list
     (test-list-element "LTE(ZERO)(ZERO)" (read-any ((LTE ZERO) ZERO)) "bool:TRUE")
@@ -200,7 +202,7 @@
 
 (show-results "LTE" LTE-tests)
 
-; ; ====================================================================
+; ====================================================================
 
 (define EQ-tests (list
     (test-list-element "EQ(ZERO)(ZERO)" (read-any ((EQ ZERO) ZERO)) "bool:TRUE")
@@ -216,7 +218,7 @@
 
 (show-results "EQ" EQ-tests)
 
-; ; ====================================================================
+; ====================================================================
 
 (define GT-tests (list
     (test-list-element "GT(ZERO)(ZERO)" (read-any ((GT ZERO) ZERO)) "bool:FALSE")
@@ -232,7 +234,7 @@
 
 (show-results "GT" GT-tests)
 
-; ; ====================================================================
+; ====================================================================
 
 (define LT-tests (list
     (test-list-element "LT(ZERO)(ZERO)" (read-any ((LT ZERO) ZERO)) "bool:FALSE")
