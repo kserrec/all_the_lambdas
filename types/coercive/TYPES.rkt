@@ -78,11 +78,11 @@
 (def rat-to-int r = ((makeZ (r-sign r)) (rat-to-nat r)))
 
 ; CONVERT TO list
-(def bool-to-list b = ((b (_cons true)) nil))
-(def nat-to-list n = (((isZero n) nil) (_cons n)))
-(def int-to-list z = (((isZeroZ z) nil) (_cons z)))
+(def bool-to-list b = ((b (_cons (make-bool b))) nil))
+(def nat-to-list n = (((isZero n) nil) (_cons (make-nat n))))
+(def int-to-list z = (((isZeroZ z) nil) (_cons (make-int z))))
 (def list-to-list lst = lst)
-(def rat-to-list r = (((isZeroR r) nil) (_cons r)))
+(def rat-to-list r = (((isZeroR r) nil) (_cons (make-rat r))))
 
 ; CONVERT TO rat
 (def bool-to-rat b = ((makeR2 (bool-to-int b)) one))
@@ -164,7 +164,7 @@
 (def convert-to-list OBJ = 
     (_let default-list = nil
     (_let value = (val OBJ)
-    (make-int (
+    ((pair _list) (
         _if (is-bool OBJ) ; bool?
         _then (bool-to-list value)
         _else (

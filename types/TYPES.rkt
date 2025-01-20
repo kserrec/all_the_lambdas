@@ -499,15 +499,15 @@
 (def read-nat N = (string-append "nat:" (n-read (val N))))
 (def read-int Z = (string-append "int:" (z-read (val Z))))
 
-; can't decide on how to read lists - going with second version for now
+; can't decide on how to read lists 
 ; (def read-list L = (transform-string (string-append "list" ((l-read (val L)) read-any))))
-(def read-list L = 
-    (let ([result ((l-read (val L)) read-any)])
-        (if (string-contains? result "err")
-            ; (substring result 1 (- (string-length result) 1))
-            (string-append "list" result)
-            (transform-string (string-append "list" result)))))
-; (def read-list L = (string-append "list" ((l-read (val L)) read-any)))
+; (def read-list L = 
+;     (let ([result ((l-read (val L)) read-any)])
+;         (if (string-contains? result "err")
+;             ; (substring result 1 (- (string-length result) 1))
+;             (string-append "list" result)
+;             (transform-string (string-append "list" result)))))
+(def read-list L = (string-append "list" ((l-read (val L)) read-any)))
 
 (def read-rat R = (string-append "rat:" (r-read (val R))))
 
