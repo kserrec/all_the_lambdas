@@ -9,24 +9,6 @@
          "TYPES.rkt"
          "../TYPES.rkt")
 
-; (def TRUE = (make-bool true))
-; (def FALSE = (make-bool false))
-
-; (def NOT B = ((((COERCE-1 _not) convert-to-bool) B) bool))
-
-; (def AND B1 B2 = (((((COERCE-2 _and) convert-to-bool) B1) B2) bool))
-
-; (def OR B1 B2 = (((((COERCE-2 _or) convert-to-bool) B1) B2) bool))
-
-; (def XOR B1 B2 = (((((COERCE-2 xor) convert-to-bool) B1) B2) bool))
-
-; (def NOR B1 B2 = (((((COERCE-2 nor) convert-to-bool) B1) B2) bool))
-
-; (def NAND B1 B2 = (((((COERCE-2 nand) convert-to-bool) B1) B2) bool))
-
-
-
-
 ; TYPED NILs
 
 (def NIL-list = ((pair _list) nil))
@@ -45,4 +27,17 @@
 
 (def FILTER G L = ((((((COERCE-2-diff _filter) _identity) (func G)) convert-to-list) L) _list))
 
-; (def FOLD G )
+(def FOLD G X L = (val (COERCE-3-diff _fold _identity (func G) _identity X convert-to-list L bool)))
+
+(def TAKE N L = ((((((COERCE-2-diff _take) convert-to-nat) N) convert-to-list) L) _list))
+
+(def TAKE-TAIL N L = ((((((COERCE-2-diff takeTail) convert-to-nat) N) convert-to-list) L) _list))
+
+(def DROP N L = ((((((COERCE-2-diff _drop) convert-to-nat) N) convert-to-list) L) _list))
+
+(def REMOVE L I = ((((((COERCE-2-diff _remove) convert-to-list) L) convert-to-nat) I) _list))
+
+(def INSERT X L I = ((((((((COERCE-3-diff insert) _identity) X) convert-to-list) L) convert-to-nat) I) _list))
+
+(def REPLACE X L I = ((((((((COERCE-3-diff replace) _identity) X) convert-to-list) L) convert-to-nat) I) _list))
+

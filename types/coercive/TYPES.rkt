@@ -225,10 +225,19 @@
     (_let res = ((func (val coerced-OBJ1)) (val coerced-OBJ2))
     ((pair out-type) res)))))
 
+; function of three arguments of same type
 (def COERCE-3 func convert-func OBJ1 OBJ2 OBJ3 out-type =
     (_let coerced-OBJ1 = (convert-func OBJ1)
     (_let coerced-OBJ2 = (convert-func OBJ2)
     (_let coerced-OBJ3 = (convert-func OBJ3)
+    (_let res = (((func (val coerced-OBJ1)) (val coerced-OBJ2)) (val coerced-OBJ3))
+    ((pair out-type) res))))))
+
+; function of three arguments of different type
+(def COERCE-3-diff func convert-func1 OBJ1 convert-func2 OBJ2 convert-func3 OBJ3 out-type =
+    (_let coerced-OBJ1 = (convert-func1 OBJ1)
+    (_let coerced-OBJ2 = (convert-func2 OBJ2)
+    (_let coerced-OBJ3 = (convert-func3 OBJ3)
     (_let res = (((func (val coerced-OBJ1)) (val coerced-OBJ2)) (val coerced-OBJ3))
     ((pair out-type) res))))))
 
