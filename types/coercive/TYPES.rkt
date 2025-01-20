@@ -91,6 +91,8 @@
 (def list-to-rat lst = (((makeR true) (len lst)) one))
 (def rat-to-rat r = r)
 
+; this gives an already typed function a generic type value so it can then be stripped off for use in coersion functions below - "fake" typing for convenience
+(def func F = ((pair false) F))
 
 #|
     TYPED OBJECT CONVERSION FUNCTIONS

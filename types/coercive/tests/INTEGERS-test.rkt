@@ -115,3 +115,111 @@
 
 ; ====================================================================
 
+(define IS_EVENz-tests (list
+    (test-list-element "IS_EVENz(posZERO)" (read-any (IS_EVENz posZERO)) "bool:TRUE")
+    (test-list-element "IS_EVENz(posFIVE)" (read-any (IS_EVENz posFIVE)) "bool:FALSE")
+    (test-list-element "IS_EVENz(posONE)" (read-any (IS_EVENz posONE)) "bool:FALSE")
+    (test-list-element "IS_EVENz(posTHREE)" (read-any (IS_EVENz posTHREE)) "bool:FALSE")
+    (test-list-element "IS_EVENz(posFOUR)" (read-any (IS_EVENz posFOUR)) "bool:TRUE")
+    ; coercing
+    (test-list-element "IS_EVENz(TRUE)" (read-any (IS_EVENz TRUE)) "bool:FALSE")
+    (test-list-element "IS_EVENz(TWO)" (read-any (IS_EVENz TWO)) "bool:TRUE")
+))
+
+(show-results "IS_EVENz" IS_EVENz-tests)
+
+; ====================================================================
+
+(define IS_ODDz-tests (list
+    (test-list-element "IS_ODDz(posZERO)" (read-any (IS_ODDz posZERO)) "bool:FALSE")
+    (test-list-element "IS_ODDz(posFIVE)" (read-any (IS_ODDz posFIVE)) "bool:TRUE")
+    (test-list-element "IS_ODDz(posONE)" (read-any (IS_ODDz posONE)) "bool:TRUE")
+    (test-list-element "IS_ODDz(posTHREE)" (read-any (IS_ODDz posTHREE)) "bool:TRUE")
+    (test-list-element "IS_ODDz(posFOUR)" (read-any (IS_ODDz posFOUR)) "bool:FALSE")
+    (test-list-element "IS_ODDz(SUCC(posFIVE))" (read-any (IS_ODDz (SUCC posFIVE))) "bool:FALSE")
+    ; coercing
+    (test-list-element "IS_ODDz(TRUE)" (read-any (IS_ODDz TRUE)) "bool:TRUE")
+    (test-list-element "IS_ODDz(TWO)" (read-any (IS_ODDz TWO)) "bool:FALSE")
+))
+
+(show-results "IS_ODDz" IS_ODDz-tests)
+
+; ====================================================================
+
+(define GTEz-tests (list
+    (test-list-element "GTEz(posZERO)(posZERO)" (read-any ((GTEz posZERO) posZERO)) "bool:TRUE")
+    (test-list-element "GTEz(posONE)(posZERO)" (read-any ((GTEz posONE) posZERO)) "bool:TRUE")
+    (test-list-element "GTEz(posZERO)(posONE)" (read-any ((GTEz posZERO) posONE)) "bool:FALSE")
+    (test-list-element "GTEz(posFIVE)(posTWO)" (read-any ((GTEz posFIVE) posTWO)) "bool:TRUE")
+    (test-list-element "GTEz(posTHREE)(posFOUR)" (read-any ((GTEz posTHREE) posFOUR)) "bool:FALSE")
+    (test-list-element "GTEz(posFOUR)(posFOUR)" (read-any ((GTEz posFOUR) posFOUR)) "bool:TRUE")
+    ; coercing
+    (test-list-element "GTEz(TRUE)(FIVE)" (read-any ((GTEz TRUE) FIVE)) "bool:FALSE")
+    (test-list-element "GTEz(FIVE)(FALSE)" (read-any ((GTEz FIVE) FALSE)) "bool:TRUE")
+))
+
+(show-results "GTEz" GTEz-tests)
+
+; ====================================================================
+
+(define LTEz-tests (list
+    (test-list-element "LTEz(posZERO)(posZERO)" (read-any ((LTEz posZERO) posZERO)) "bool:TRUE")
+    (test-list-element "LTEz(posONE)(posZERO)" (read-any ((LTEz posONE) posZERO)) "bool:FALSE")
+    (test-list-element "LTEz(posZERO)(posONE)" (read-any ((LTEz posZERO) posONE)) "bool:TRUE")
+    (test-list-element "LTEz(posTWO)(posFIVE)" (read-any ((LTEz posTWO) posFIVE)) "bool:TRUE")
+    (test-list-element "LTEz(posFOUR)(posTHREE)" (read-any ((LTEz posFOUR) posTHREE)) "bool:FALSE")
+    (test-list-element "LTEz(posTHREE)(posTHREE)" (read-any ((LTEz posTHREE) posTHREE)) "bool:TRUE")
+    ; coercing
+    (test-list-element "LTEz(TRUE)(FIVE)" (read-any ((LTEz TRUE) FIVE)) "bool:TRUE")
+    (test-list-element "LTEz(FIVE)(FALSE)" (read-any ((LTEz FIVE) FALSE)) "bool:FALSE")
+))
+
+(show-results "LTEz" LTEz-tests)
+
+; ====================================================================
+
+(define EQz-tests (list
+    (test-list-element "EQz(posZERO)(posZERO)" (read-any ((EQz posZERO) posZERO)) "bool:TRUE")
+    (test-list-element "EQz(posONE)(posZERO)" (read-any ((EQz posONE) posZERO)) "bool:FALSE")
+    (test-list-element "EQz(posZERO)(posONE)" (read-any ((EQz posZERO) posONE)) "bool:FALSE")
+    (test-list-element "EQz(posFIVE)(posFIVE)" (read-any ((EQz posFIVE) posFIVE)) "bool:TRUE")
+    (test-list-element "EQz(posTHREE)(posFOUR)" (read-any ((EQz posTHREE) posFOUR)) "bool:FALSE")
+    ; coercing
+    (test-list-element "EQz(TRUE)(ONE)" (read-any ((EQz TRUE) ONE)) "bool:TRUE")
+    (test-list-element "EQz(TRUE)(FIVE)" (read-any ((EQz TRUE) FIVE)) "bool:FALSE")
+    (test-list-element "EQz(FIVE)(FALSE)" (read-any ((EQz FIVE) FALSE)) "bool:FALSE")
+))
+
+(show-results "EQz" EQz-tests)
+
+; ====================================================================
+
+(define GTz-tests (list
+    (test-list-element "GTz(posZERO)(posZERO)" (read-any ((GTz posZERO) posZERO)) "bool:FALSE")
+    (test-list-element "GTz(posONE)(posZERO)" (read-any ((GTz posONE) posZERO)) "bool:TRUE")
+    (test-list-element "GTz(posZERO)(posONE)" (read-any ((GTz posZERO) posONE)) "bool:FALSE")
+    (test-list-element "GTz(posFIVE)(posTWO)" (read-any ((GTz posFIVE) posTWO)) "bool:TRUE")
+    (test-list-element "GTz(posTHREE)(posFOUR)" (read-any ((GTz posTHREE) posFOUR)) "bool:FALSE")
+    (test-list-element "GTz(posFOUR)(posFOUR)" (read-any ((GTz posFOUR) posFOUR)) "bool:FALSE")
+    ; coercing
+    (test-list-element "GTz(TRUE)(FIVE)" (read-any ((GTz TRUE) FIVE)) "bool:FALSE")
+    (test-list-element "GTz(FIVE)(FALSE)" (read-any ((GTz FIVE) FALSE)) "bool:TRUE")
+))
+
+(show-results "GTz" GTz-tests)
+
+; ====================================================================
+
+(define LTz-tests (list
+    (test-list-element "LTz(posZERO)(posZERO)" (read-any ((LTz posZERO) posZERO)) "bool:FALSE")
+    (test-list-element "LTz(posONE)(posZERO)" (read-any ((LTz posONE) posZERO)) "bool:FALSE")
+    (test-list-element "LTz(posZERO)(posONE)" (read-any ((LTz posZERO) posONE)) "bool:TRUE")
+    (test-list-element "LTz(posTWO)(posFIVE)" (read-any ((LTz posTWO) posFIVE)) "bool:TRUE")
+    (test-list-element "LTz(posFOUR)(posTHREE)" (read-any ((LTz posFOUR) posTHREE)) "bool:FALSE")
+    (test-list-element "LTz(posTHREE)(posTHREE)" (read-any ((LTz posTHREE) posTHREE)) "bool:FALSE")
+    ; coercing
+    (test-list-element "LTz(TRUE)(FIVE)" (read-any ((LTz TRUE) FIVE)) "bool:TRUE")
+    (test-list-element "LTz(FIVE)(FALSE)" (read-any ((LTz FIVE) FALSE)) "bool:FALSE")
+))
+
+(show-results "LTz" LTz-tests)
