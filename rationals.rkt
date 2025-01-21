@@ -85,6 +85,7 @@
 (def r-neg1-2 = ((makeR2 negOne) two))
 (def r-neg1 = ((makeR2 negOne) one))
 (def r-neg0-1 = ((makeR2 negZero) one))
+(def r-0 = ((makeR2 posZero) one))
 (def r-pos1 = ((makeR2 posOne) one))
 (def r-pos1-2 = ((makeR2 posOne) two))
 (def r-pos1-3 = ((makeR2 posOne) three))
@@ -242,6 +243,23 @@
 |#
 (def divR r1 r2 = 
     ((multR r1) (reciprocal r2)))
+
+; this should work right now when r2 is a whole number
+; needs checking for r1 == 1 for early escape
+(def expR r1 r2 = 
+        (_if ((eqR r2) r-0)
+            _then r-1
+            _else 
+                (_let base = (_if ((gtR r2) r-0)
+                    _then r1
+                    _else (reciprocal r1))
+                (_let new-s-numer = ((expZ (s-numer base)) (s-numer r2)) 
+                (_let new-denom = ((expZ (denom base)) (s-numer r2))
+                ((makeR2 ((expZ new-s-numer) new-denom)))
+                )))
+        )
+    )
+
 
 ;===================================================
 

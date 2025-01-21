@@ -55,7 +55,3 @@
 (def GTz Z1 Z2 = (((((COERCE-2 gtZ) convert-to-int) Z1) Z2) bool))
 
 (def LTz Z1 Z2 = (((((COERCE-2 ltZ) convert-to-int) Z1) Z2) bool))
-
-
-(displayln (n-read (head posONE)))
-(displayln (z-read (tail posONE)))
