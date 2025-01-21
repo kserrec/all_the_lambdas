@@ -92,6 +92,29 @@
 
 ; ====================================================================
 
+(define EXP-tests (list
+    (test-list-element "EXP(ZERO)(ZERO)" (read-any ((EXP ZERO) ZERO)) "nat:1")
+    (test-list-element "EXP(ONE)(ZERO)" (read-any ((EXP ONE) ZERO)) "nat:1")
+    (test-list-element "EXP(ZERO)(ONE)" (read-any ((EXP THREE) ONE)) "nat:3")
+    (test-list-element "EXP(FIVE)(ONE)" (read-any ((EXP FIVE) ONE)) "nat:5")
+    (test-list-element "EXP(ONE)(TWO)" (read-any ((EXP ONE) TWO)) "nat:1")
+    (test-list-element "EXP(THREE)(FOUR)" (read-any ((EXP THREE) FOUR)) "nat:81")
+    (test-list-element "EXP(FOUR)(THREE)" (read-any ((EXP FOUR) THREE)) "nat:64")
+    (test-list-element "EXP(TWO)(TWO)" (read-any ((EXP TWO) TWO)) "nat:4")
+    (test-list-element "EXP(FIVE)(FIVE)" (read-any ((EXP FIVE) TWO)) "nat:25")
+    ; coercing
+    (test-list-element "EXP(TRUE)(FIVE)" (read-any ((EXP TRUE) FIVE)) "nat:1")
+    (test-list-element "EXP(negTWO)(FIVE)" (read-any ((EXP negTWO) FIVE)) "nat:32")
+    (test-list-element "EXP(FIVE)(FALSE)" (read-any ((EXP FIVE) FALSE)) "nat:1")
+    (test-list-element "EXP(FOUR)(ERROR)" (read-any ((EXP FIVE) ERROR)) "nat:1")
+    (test-list-element "EXP(THREE)(posONE)" (read-any ((EXP THREE) posONE)) "nat:3")
+    (test-list-element "EXP(THREE)(posTWO)" (read-any ((EXP THREE) posTWO)) "nat:9")
+))
+
+(show-results "EXP" EXP-tests)
+
+; ====================================================================
+
 (define DIV-tests (list
     (test-list-element "DIV(ZERO)(ONE)" (read-any ((DIV ZERO) ONE)) "nat:0")
     (test-list-element "DIV(ZERO)(FOUR)" (read-any ((DIV ZERO) ONE)) "nat:0")

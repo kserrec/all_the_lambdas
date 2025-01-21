@@ -526,7 +526,12 @@
                 _else (
                     _if (is-rat OBJ)
                     _then (read-rat OBJ)
-                    _else (read-error OBJ)))))))
+                    _else (
+                        _if (is-error OBJ)
+                        _then (read-error OBJ)
+                        _else (string OBJ))
+                    )
+                )))))
 
 
 ;===================================================

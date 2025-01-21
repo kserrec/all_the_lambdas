@@ -29,13 +29,13 @@
 (define read-any-LISTS-tests (list 
     ; normal cases
     (test-list-element "read-any(NIL-list)" (read-any NIL-list) "list[]")
-    (test-list-element "read-any(LIST-T)" (read-any LIST-T) "list:bool[TRUE]")
-    (test-list-element "read-any(LIST-F)" (read-any LIST-F) "list:bool[FALSE]")
-    (test-list-element "read-any(LIST-0)" (read-any LIST-0) "list:nat[0]")
-    (test-list-element "read-any(LIST-4)" (read-any LIST-4) "list:nat[4]")
-    (test-list-element "read-any(LIST-0-1)" (read-any LIST-0-1) "list:nat[0,1]")
-    (test-list-element "read-any(LIST-p2-n3-p0-p4)" (read-any LIST-p2-n3-p0-p4) "list:int[2,-3,0,4]")
-    (test-list-element "read-any(LIST-n2-p1-p2-n4-n5)" (read-any LIST-n2-p1-p2-n4-n5) "list:int[-2,1,2,-4,-5]")
+    (test-list-element "read-any(LIST-T)" (read-any LIST-T) "list[bool:TRUE]")
+    (test-list-element "read-any(LIST-F)" (read-any LIST-F) "list[bool:FALSE]")
+    (test-list-element "read-any(LIST-0)" (read-any LIST-0) "list[nat:0]")
+    (test-list-element "read-any(LIST-4)" (read-any LIST-4) "list[nat:4]")
+    (test-list-element "read-any(LIST-0-1)" (read-any LIST-0-1) "list[nat:0,nat:1]")
+    (test-list-element "read-any(LIST-p2-n3-p0-p4)" (read-any LIST-p2-n3-p0-p4) "list[int:2,int:-3,int:0,int:4]")
+    (test-list-element "read-any(LIST-n2-p1-p2-n4-n5)" (read-any LIST-n2-p1-p2-n4-n5) "list[int:-2,int:1,int:2,int:-4,int:-5]")
 ))
 
 (show-results "read-any-LISTS-tests" read-any-LISTS-tests)
@@ -92,18 +92,18 @@
 (define APP-tests (list
     ; normal cases
     (test-list-element "APP(NIL-list)(NIL-list)" (read-any ((APP NIL-list) NIL-list)) "list[]")
-    (test-list-element "APP(LIST-T)(NIL-list)" (read-any ((APP LIST-T) NIL-list)) "list:bool[TRUE]")
-    (test-list-element "APP(NIL-list)(LIST-F)" (read-any ((APP NIL-list) LIST-F)) "list:bool[FALSE]")
-    (test-list-element "APP(LIST-T)(LIST-T)" (read-any ((APP LIST-T) LIST-T)) "list:bool[TRUE,TRUE]")
-    (test-list-element "APP(LIST-F)(LIST-T)" (read-any ((APP LIST-F) LIST-T)) "list:bool[FALSE,TRUE]")
-    (test-list-element "APP(LIST-n2-p1-p2-n4-n5)(NIL-list)" (read-any ((APP LIST-n2-p1-p2-n4-n5) NIL-list)) "list:int[-2,1,2,-4,-5]")
-    (test-list-element "APP(LIST-n2-p1-p2-n4-n5)(LIST-n2-p1-p2-n4-n5)" (read-any ((APP LIST-n2-p1-p2-n4-n5) LIST-n2-p1-p2-n4-n5)) "list:int[-2,1,2,-4,-5,-2,1,2,-4,-5]")
-    (test-list-element "APP(LIST-n2-p1-p2-n4-n5)(LIST-p2-n3-p0-p4)" (read-any ((APP LIST-n2-p1-p2-n4-n5) LIST-p2-n3-p0-p4)) "list:int[-2,1,2,-4,-5,2,-3,0,4]")
-    (test-list-element "APP(LIST-0-1)(LIST-4)" (read-any ((APP LIST-0-1) LIST-4)) "list:nat[0,1,4]")
-    (test-list-element "APP(LIST-0)(LIST-1-0)" (read-any ((APP LIST-0) LIST-1-0)) "list:nat[0,1,0]")
+    (test-list-element "APP(LIST-T)(NIL-list)" (read-any ((APP LIST-T) NIL-list)) "list[bool:TRUE]")
+    (test-list-element "APP(NIL-list)(LIST-F)" (read-any ((APP NIL-list) LIST-F)) "list[bool:FALSE]")
+    (test-list-element "APP(LIST-T)(LIST-T)" (read-any ((APP LIST-T) LIST-T)) "list[bool:TRUE,bool:TRUE]")
+    (test-list-element "APP(LIST-F)(LIST-T)" (read-any ((APP LIST-F) LIST-T)) "list[bool:FALSE,bool:TRUE]")
+    (test-list-element "APP(LIST-n2-p1-p2-n4-n5)(NIL-list)" (read-any ((APP LIST-n2-p1-p2-n4-n5) NIL-list)) "list[int:-2,int:1,int:2,int:-4,int:-5]")
+    (test-list-element "APP(LIST-n2-p1-p2-n4-n5)(LIST-n2-p1-p2-n4-n5)" (read-any ((APP LIST-n2-p1-p2-n4-n5) LIST-n2-p1-p2-n4-n5)) "list[int:-2,int:1,int:2,int:-4,int:-5,int:-2,int:1,int:2,int:-4,int:-5]")
+    (test-list-element "APP(LIST-n2-p1-p2-n4-n5)(LIST-p2-n3-p0-p4)" (read-any ((APP LIST-n2-p1-p2-n4-n5) LIST-p2-n3-p0-p4)) "list[int:-2,int:1,int:2,int:-4,int:-5,int:2,int:-3,int:0,int:4]")
+    (test-list-element "APP(LIST-0-1)(LIST-4)" (read-any ((APP LIST-0-1) LIST-4)) "list[nat:0,nat:1,nat:4]")
+    (test-list-element "APP(LIST-0)(LIST-1-0)" (read-any ((APP LIST-0) LIST-1-0)) "list[nat:0,nat:1,nat:0]")
     ; error cases
     (test-list-element "APP(TRUE)(LIST-1-0)" (read-any ((APP TRUE) LIST-1-0)) "APP(arg1(err:list))")
-    (test-list-element "APP(LIST-T)(LIST-1-0)" (read-any ((APP LIST-T) LIST-1-0)) "list:bool[TRUE,nat:1,nat:0]")
+    (test-list-element "APP(LIST-T)(LIST-1-0)" (read-any ((APP LIST-T) LIST-1-0)) "list[bool:TRUE,nat:1,nat:0]")
 ))
 
 (show-results "APP" APP-tests)
@@ -115,14 +115,14 @@
 (define REV-tests (list
     ; normal cases
     (test-list-element "REV(NIL-list)" (read-any (REV NIL-list)) "list[]")
-    (test-list-element "REV(LIST-F)" (read-any (REV LIST-F)) "list:bool[FALSE]")
-    (test-list-element "REV(LIST-T)" (read-any (REV LIST-T)) "list:bool[TRUE]")
-    (test-list-element "REV(LIST-F)" (read-any (REV LIST-F)) "list:bool[FALSE]")
-    (test-list-element "REV(LIST-1-0)" (read-any (REV LIST-1-0)) "list:nat[0,1]")
-    (test-list-element "REV(LIST-0)" (read-any (REV LIST-0)) "list:nat[0]")
-    (test-list-element "REV(LIST-n2-p1-p2-n4-n5)" (read-any (REV LIST-n2-p1-p2-n4-n5)) "list:int[-5,-4,2,1,-2]")
-    (test-list-element "REV(LIST-1-3-4-2)" (read-any (REV LIST-1-3-4-2)) "list:nat[2,4,3,1]")
-    (test-list-element "REV(LIST-T-F-F-T)" (read-any (REV LIST-T-F-F-T)) "list:bool[TRUE,FALSE,FALSE,TRUE]")
+    (test-list-element "REV(LIST-F)" (read-any (REV LIST-F)) "list[bool:FALSE]")
+    (test-list-element "REV(LIST-T)" (read-any (REV LIST-T)) "list[bool:TRUE]")
+    (test-list-element "REV(LIST-F)" (read-any (REV LIST-F)) "list[bool:FALSE]")
+    (test-list-element "REV(LIST-1-0)" (read-any (REV LIST-1-0)) "list[nat:0,nat:1]")
+    (test-list-element "REV(LIST-0)" (read-any (REV LIST-0)) "list[nat:0]")
+    (test-list-element "REV(LIST-n2-p1-p2-n4-n5)" (read-any (REV LIST-n2-p1-p2-n4-n5)) "list[int:-5,int:-4,int:2,int:1,int:-2]")
+    (test-list-element "REV(LIST-1-3-4-2)" (read-any (REV LIST-1-3-4-2)) "list[nat:2,nat:4,nat:3,nat:1]")
+    (test-list-element "REV(LIST-T-F-F-T)" (read-any (REV LIST-T-F-F-T)) "list[bool:TRUE,bool:FALSE,bool:FALSE,bool:TRUE]")
     ; error cases
     (test-list-element "REV(TRUE)" (read-any (REV TRUE)) "REV(err:list)")
 ))
@@ -138,14 +138,14 @@
 (define MAP-tests (list
     ; normal cases
     (test-list-element "MAP(AND-T)(NIL-list)" (read-any ((MAP AND-T) NIL-list)) "list[]")
-    (test-list-element "MAP(AND-T)(LIST-F)" (read-any ((MAP AND-T) LIST-F)) "list:bool[FALSE]")
-    (test-list-element "MAP(AND-T)(LIST-T)" (read-any ((MAP AND-T) LIST-T)) "list:bool[TRUE]")
-    (test-list-element "MAP(NOT)(LIST-F)" (read-any ((MAP NOT) LIST-F)) "list:bool[TRUE]")
-    (test-list-element "MAP(NOT)(LIST-T-F-F-T)" (read-any ((MAP NOT) LIST-T-F-F-T)) "list:bool[FALSE,TRUE,TRUE,FALSE]")
-    (test-list-element "MAP(ADD-2)(LIST-0)" (read-any ((MAP ADD-2) LIST-0)) "list:nat[2]")
-    (test-list-element "MAP(ADD-2)(LIST-1-3-4-2)" (read-any ((MAP ADD-2) LIST-1-3-4-2)) "list:nat[3,5,6,4]")
-    (test-list-element "MAP(SQ-Z)(LIST-n2-p1-p2-n4-n5)" (read-any ((MAP SQ-Z) LIST-n2-p1-p2-n4-n5)) "list:int[4,1,4,16,25]")
-    (test-list-element "MAP(lambda (x) ((EXPz x) posTHREE))(LIST-n2-p1-p2-n4-n5)" (read-any ((MAP (lambda (x) ((EXPz x) posTHREE))) LIST-n2-p1-p2-n4-n5)) "list:int[-8,1,8,-64,-125]")
+    (test-list-element "MAP(AND-T)(LIST-F)" (read-any ((MAP AND-T) LIST-F)) "list[bool:FALSE]")
+    (test-list-element "MAP(AND-T)(LIST-T)" (read-any ((MAP AND-T) LIST-T)) "list[bool:TRUE]")
+    (test-list-element "MAP(NOT)(LIST-F)" (read-any ((MAP NOT) LIST-F)) "list[bool:TRUE]")
+    (test-list-element "MAP(NOT)(LIST-T-F-F-T)" (read-any ((MAP NOT) LIST-T-F-F-T)) "list[bool:FALSE,bool:TRUE,bool:TRUE,bool:FALSE]")
+    (test-list-element "MAP(ADD-2)(LIST-0)" (read-any ((MAP ADD-2) LIST-0)) "list[nat:2]")
+    (test-list-element "MAP(ADD-2)(LIST-1-3-4-2)" (read-any ((MAP ADD-2) LIST-1-3-4-2)) "list[nat:3,nat:5,nat:6,nat:4]")
+    (test-list-element "MAP(SQ-Z)(LIST-n2-p1-p2-n4-n5)" (read-any ((MAP SQ-Z) LIST-n2-p1-p2-n4-n5)) "list[int:4,int:1,int:4,int:16,int:25]")
+    (test-list-element "MAP(lambda (x) ((EXPz x) posTHREE))(LIST-n2-p1-p2-n4-n5)" (read-any ((MAP (lambda (x) ((EXPz x) posTHREE))) LIST-n2-p1-p2-n4-n5)) "list[int:-8,int:1,int:8,int:-64,int:-125]")
     ; error cases
     (test-list-element "MAP(AND-T)(LIST-0)" (read-any ((MAP AND-T) LIST-0)) "list[AND(arg1(err:bool))]")
     (test-list-element "MAP(AND-T)(LIST-0-1)" (read-any ((MAP AND-T) LIST-0-1)) "list[AND(arg1(err:bool)),AND(arg1(err:bool))]")
@@ -158,10 +158,10 @@
 
 (define FILTER-tests (list
     ; normal cases
-    (test-list-element "FILTER(AND-T)(LIST-T-F-F-T)" (read-any ((FILTER AND-T) LIST-T-F-F-T)) "list:bool[TRUE,TRUE]")
-    (test-list-element "FILTER(IS_EVEN)(LIST-1-3-4-2)" (read-any ((FILTER IS_EVEN) LIST-1-3-4-2)) "list:nat[4,2]")
-    (test-list-element "FILTER(IS_ODD)(LIST-1-3-4-2)" (read-any ((FILTER IS_ODD) LIST-1-3-4-2)) "list:nat[1,3]")
-    (test-list-element "FILTER(LIST-n2-p1-p2-n4-n5)" (read-any ((FILTER (lambda (x) ((EQz x) posTWO))) LIST-n2-p1-p2-n4-n5)) "list:int[2]")
+    (test-list-element "FILTER(AND-T)(LIST-T-F-F-T)" (read-any ((FILTER AND-T) LIST-T-F-F-T)) "list[bool:TRUE,bool:TRUE]")
+    (test-list-element "FILTER(IS_EVEN)(LIST-1-3-4-2)" (read-any ((FILTER IS_EVEN) LIST-1-3-4-2)) "list[nat:4,nat:2]")
+    (test-list-element "FILTER(IS_ODD)(LIST-1-3-4-2)" (read-any ((FILTER IS_ODD) LIST-1-3-4-2)) "list[nat:1,nat:3]")
+    (test-list-element "FILTER(LIST-n2-p1-p2-n4-n5)" (read-any ((FILTER (lambda (x) ((EQz x) posTWO))) LIST-n2-p1-p2-n4-n5)) "list[int:2]")
     ; error cases
     (test-list-element "FILTER(IS_ODD)(LIST-T-F-F-T)" (read-any ((FILTER IS_ODD) LIST-T-F-F-T)) "list[IS_ODD(err:nat),IS_ODD(err:nat),IS_ODD(err:nat),IS_ODD(err:nat)]")
     (test-list-element "FILTER(IS_ODD)(FALSE)" (read-any ((FILTER IS_ODD) FALSE)) "FILTER(arg2(err:list))")
@@ -190,11 +190,11 @@
 (define TAKE-tests (list
     ; normal cases
     (test-list-element "TAKE(FOUR)(NIL-list)" (read-any ((TAKE FOUR) NIL-list)) "list[]")
-    (test-list-element "TAKE(FOUR)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE FOUR) LIST-n2-p1-p2-n4-n5)) "list:int[-2,1,2,-4]")
-    (test-list-element "TAKE(FIVE)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE (SUCC FOUR)) LIST-n2-p1-p2-n4-n5)) "list:int[-2,1,2,-4,-5]")
+    (test-list-element "TAKE(FOUR)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE FOUR) LIST-n2-p1-p2-n4-n5)) "list[int:-2,int:1,int:2,int:-4]")
+    (test-list-element "TAKE(FIVE)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE (SUCC FOUR)) LIST-n2-p1-p2-n4-n5)) "list[int:-2,int:1,int:2,int:-4,int:-5]")
     (test-list-element "TAKE(ZERO)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE ZERO) LIST-n2-p1-p2-n4-n5)) "list[]")
-    (test-list-element "TAKE(TWO)(LIST-1-3-4-2)" (read-any ((TAKE TWO) LIST-1-3-4-2)) "list:nat[1,3]")
-    (test-list-element "TAKE(THREE)(LIST-T-F-F-T)" (read-any ((TAKE THREE) LIST-T-F-F-T)) "list:bool[TRUE,FALSE,FALSE]")
+    (test-list-element "TAKE(TWO)(LIST-1-3-4-2)" (read-any ((TAKE TWO) LIST-1-3-4-2)) "list[nat:1,nat:3]")
+    (test-list-element "TAKE(THREE)(LIST-T-F-F-T)" (read-any ((TAKE THREE) LIST-T-F-F-T)) "list[bool:TRUE,bool:FALSE,bool:FALSE]")
     ; error cases
     (test-list-element "TAKE(posTHREE)(LIST-T-F-F-T)" (read-any ((TAKE posTHREE) LIST-T-F-F-T)) "TAKE(arg1(err:nat))")
     (test-list-element "TAKE(THREE)(FALSE)" (read-any ((TAKE THREE) FALSE)) "TAKE(arg2(err:list))")
@@ -206,11 +206,11 @@
 
 (define TAKE-TAIL-tests (list
     ; normal cases
-    (test-list-element "TAKE(FOUR)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE-TAIL FOUR) LIST-n2-p1-p2-n4-n5)) "list:int[1,2,-4,-5]")
-    (test-list-element "TAKE(FIVE)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE-TAIL (SUCC FOUR)) LIST-n2-p1-p2-n4-n5)) "list:int[-2,1,2,-4,-5]")
+    (test-list-element "TAKE(FOUR)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE-TAIL FOUR) LIST-n2-p1-p2-n4-n5)) "list[int:1,int:2,int:-4,int:-5]")
+    (test-list-element "TAKE(FIVE)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE-TAIL (SUCC FOUR)) LIST-n2-p1-p2-n4-n5)) "list[int:-2,int:1,int:2,int:-4,int:-5]")
     (test-list-element "TAKE(ZERO)(LIST-n2-p1-p2-n4-n5)" (read-any ((TAKE-TAIL ZERO) LIST-n2-p1-p2-n4-n5)) "list[]")
-    (test-list-element "TAKE(TWO)(LIST-1-3-4-2)" (read-any ((TAKE-TAIL TWO) LIST-1-3-4-2)) "list:nat[4,2]")
-    (test-list-element "TAKE(THREE)(LIST-T-F-F-T)" (read-any ((TAKE-TAIL THREE) LIST-T-F-F-T)) "list:bool[FALSE,FALSE,TRUE]")
+    (test-list-element "TAKE(TWO)(LIST-1-3-4-2)" (read-any ((TAKE-TAIL TWO) LIST-1-3-4-2)) "list[nat:4,nat:2]")
+    (test-list-element "TAKE(THREE)(LIST-T-F-F-T)" (read-any ((TAKE-TAIL THREE) LIST-T-F-F-T)) "list[bool:FALSE,bool:FALSE,bool:TRUE]")
     ; error cases
     (test-list-element "TAKE-TAIL(posTHREE)(LIST-T-F-F-T)" (read-any ((TAKE-TAIL posTHREE) LIST-T-F-F-T)) "TAKE-TAIL(arg1(err:nat))")
     (test-list-element "TAKE-TAIL(THREE)(FALSE)" (read-any ((TAKE-TAIL THREE) FALSE)) "TAKE-TAIL(arg2(err:list))")
@@ -222,11 +222,11 @@
 
 (define INSERT-tests (list
     ; normal cases
-    (test-list-element "INSERT(posFOUR)(LIST-n2-p1-p2-n4-n5)(ZERO)" (read-any (((INSERT posFOUR) LIST-n2-p1-p2-n4-n5) ZERO)) "list:int[4,-2,1,2,-4,-5]")
-    (test-list-element "INSERT(negTHREE)(LIST-n2-p1-p2-n4-n5)(TWO)" (read-any (((INSERT negTHREE) LIST-n2-p1-p2-n4-n5) TWO)) "list:int[-2,1,-3,2,-4,-5]")
-    (test-list-element "INSERT(FIVE)(LIST-1-3-4-2)(ONE)" (read-any (((INSERT FIVE) LIST-1-3-4-2) ONE)) "list:nat[1,5,3,4,2]")
-    (test-list-element "INSERT(MULT(5)(2))(LIST-1-3-4-2)(FOUR)" (read-any (((INSERT ((MULT FIVE) TWO)) LIST-1-3-4-2) FOUR)) "list:nat[1,3,4,2,10]")
-    (test-list-element "INSERT(TRUE)(LIST-T-F-F-T)(TWO)" (read-any (((INSERT TRUE) LIST-T-F-F-T) TWO)) "list:bool[TRUE,FALSE,TRUE,FALSE,TRUE]")
+    (test-list-element "INSERT(posFOUR)(LIST-n2-p1-p2-n4-n5)(ZERO)" (read-any (((INSERT posFOUR) LIST-n2-p1-p2-n4-n5) ZERO)) "list[int:4,int:-2,int:1,int:2,int:-4,int:-5]")
+    (test-list-element "INSERT(negTHREE)(LIST-n2-p1-p2-n4-n5)(TWO)" (read-any (((INSERT negTHREE) LIST-n2-p1-p2-n4-n5) TWO)) "list[int:-2,int:1,int:-3,int:2,int:-4,int:-5]")
+    (test-list-element "INSERT(FIVE)(LIST-1-3-4-2)(ONE)" (read-any (((INSERT FIVE) LIST-1-3-4-2) ONE)) "list[nat:1,nat:5,nat:3,nat:4,nat:2]")
+    (test-list-element "INSERT(MULT(5)(2))(LIST-1-3-4-2)(FOUR)" (read-any (((INSERT ((MULT FIVE) TWO)) LIST-1-3-4-2) FOUR)) "list[nat:1,nat:3,nat:4,nat:2,nat:10]")
+    (test-list-element "INSERT(TRUE)(LIST-T-F-F-T)(TWO)" (read-any (((INSERT TRUE) LIST-T-F-F-T) TWO)) "list[bool:TRUE,bool:FALSE,bool:TRUE,bool:FALSE,bool:TRUE]")
     ; error cases
     (test-list-element "INSERT(TRUE)(TRUE)(TWO)" (read-any (((INSERT TRUE) TRUE) TWO)) "INSERT(arg2(err:list))")
     (test-list-element "INSERT(TRUE)(LIST-T-F-F-T)(posTWO)" (read-any (((INSERT TRUE) LIST-T-F-F-T) posTWO)) "INSERT(arg3(err:nat))")
@@ -238,11 +238,10 @@
 
 (define REPLACE-tests (list
     ; normal cases
-    (test-list-element "REPLACE(posFOUR)(LIST-n2-p1-p2-n4-n5)(ZERO)" (read-any (((REPLACE posFOUR) LIST-n2-p1-p2-n4-n5) ZERO)) "list:int[4,1,2,-4,-5]")
-    (test-list-element "REPLACE(negTHREE)(LIST-n2-p1-p2-n4-n5)(TWO)" (read-any (((REPLACE negTHREE) LIST-n2-p1-p2-n4-n5) TWO)) "list:int[-2,1,-3,-4,-5]")
-    (test-list-element "REPLACE(FIVE)(LIST-1-3-4-2)(ONE)" (read-any (((REPLACE FIVE) LIST-1-3-4-2) ONE)) "list:nat[1,5,4,2]")
-    (test-list-element "REPLACE(MULT(5)(2))(LIST-1-3-4-2)(FOUR)" (read-any (((REPLACE ((MULT FIVE) TWO)) LIST-1-3-4-2) FOUR)) "list:nat[1,3,4,2,10]")
-    (test-list-element "REPLACE(TRUE)(LIST-T-F-F-T)(TWO)" (read-any (((REPLACE TRUE) LIST-T-F-F-T) TWO)) "list:bool[TRUE,FALSE,TRUE,TRUE]")
+    (test-list-element "REPLACE(posFOUR)(LIST-n2-p1-p2-n4-n5)(ZERO)" (read-any (((REPLACE posFOUR) LIST-n2-p1-p2-n4-n5) ZERO)) "list[int:4,int:1,int:2,int:-4,int:-5]")
+    (test-list-element "REPLACE(negTHREE)(LIST-n2-p1-p2-n4-n5)(TWO)" (read-any (((REPLACE negTHREE) LIST-n2-p1-p2-n4-n5) TWO)) "list[int:-2,int:1,int:-3,int:-4,int:-5]")
+    (test-list-element "REPLACE(MULT(5)(2))(LIST-1-3-4-2)(FOUR)" (read-any (((REPLACE ((MULT FIVE) TWO)) LIST-1-3-4-2) FOUR)) "list[nat:1,nat:3,nat:4,nat:2,nat:10]")
+    (test-list-element "REPLACE(TRUE)(LIST-T-F-F-T)(TWO)" (read-any (((REPLACE TRUE) LIST-T-F-F-T) TWO)) "list[bool:TRUE,bool:FALSE,bool:TRUE,bool:TRUE]")
     ; error cases
     (test-list-element "REPLACE(TRUE)(FALSE)(TWO)" (read-any (((REPLACE TRUE) FALSE) TWO)) "REPLACE(arg2(err:list))")
     (test-list-element "REPLACE(TRUE)(LIST-T-F-F-T)(posTWO)" (read-any (((REPLACE TRUE) LIST-T-F-F-T) posTWO)) "REPLACE(arg3(err:nat))")
@@ -254,10 +253,10 @@
 
 (define DROP-tests (list
     ; normal cases
-    (test-list-element "DROP(ZERO)(LIST-T-F-F-T)" (read-any ((DROP ZERO) LIST-T-F-F-T)) "list:bool[TRUE,FALSE,FALSE,TRUE]")
-    (test-list-element "DROP(TWO)(LIST-1-3-4-2)" (read-any ((DROP TWO) LIST-1-3-4-2)) "list:nat[4,2]")
+    (test-list-element "DROP(ZERO)(LIST-T-F-F-T)" (read-any ((DROP ZERO) LIST-T-F-F-T)) "list[bool:TRUE,bool:FALSE,bool:FALSE,bool:TRUE]")
+    (test-list-element "DROP(TWO)(LIST-1-3-4-2)" (read-any ((DROP TWO) LIST-1-3-4-2)) "list[nat:4,nat:2]")
     (test-list-element "DROP(FIVE)(LIST-n2-p1-p2-n4-n5)" (read-any ((DROP FIVE) LIST-n2-p1-p2-n4-n5)) "list[]")
-    (test-list-element "DROP(THREE)(LIST-n2-p1-p2-n4-n5)" (read-any ((DROP THREE) LIST-n2-p1-p2-n4-n5)) "list:int[-4,-5]")
+    (test-list-element "DROP(THREE)(LIST-n2-p1-p2-n4-n5)" (read-any ((DROP THREE) LIST-n2-p1-p2-n4-n5)) "list[int:-4,int:-5]")
     ; error cases
     (test-list-element "DROP(posTHREE)(LIST-n2-p1-p2-n4-n5)" (read-any ((DROP posTHREE) LIST-n2-p1-p2-n4-n5)) "DROP(arg1(err:nat))")
     (test-list-element "DROP(THREE)(FOUR)" (read-any ((DROP THREE) FOUR)) "DROP(arg2(err:list))")

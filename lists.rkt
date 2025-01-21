@@ -101,10 +101,10 @@
                 finally returning n as the length of the list
                 i.e. the total number of heads it counted through.
 |#
-(def len _list = (((Y len-helper) _list) nil))
+(def len lst = (((Y len-helper) lst) nil))
 
-(def len-helper f _list n =
-    ((_list (lambda (x)
+(def len-helper f lst n =
+    ((lst (lambda (x)
                 (lambda (y)
                     (lambda (z)
                         ((f y) (succ n))
@@ -117,7 +117,7 @@
     - Contract: list => bool
     - Logic: If length of list is zero, it is nil
 |#
-(def isNil _list = ((eq (len _list)) zero))
+(def isNil lst = ((eq (len lst)) zero))
 
 #|
     ~ INDEX ~
@@ -125,7 +125,7 @@
     - Idea: Return value of list at index i
     - Logic: Take head at ith tail of list
 |#
-(def ind _list i = (head ((i tail) _list)))
+(def ind lst i = (head ((i tail) lst)))
 
 ;===================================================
 
@@ -154,7 +154,7 @@
     - Logic: Builds new list up from nil,
                 from head of old list on up recursively
 |#
-(def rev _list = (((Y rev-helper) _list) nil))
+(def rev lst = (((Y rev-helper) lst) nil))
 
 (def rev-helper f oldList newList = 
     (((isNil oldList)
@@ -169,10 +169,10 @@
     - Idea: Applies function g to each element of list and returns new list with results
     - Logic: Rebuilds list from bottom up applying g to each head x as it goes.
 |#
-(def _map g _list = ((((Y map-helper) g) _list) nil))
+(def _map g lst = ((((Y map-helper) g) lst) nil))
 
-(def map-helper f g _list n = 
-    ((_list (lambda (x)
+(def map-helper f g lst n = 
+    ((lst (lambda (x)
                 (lambda (y)
                     (lambda (z)
                         ((pair (g x)) (((f g) y) n))
@@ -187,10 +187,10 @@
     - Logic: Rebuilds list from bottom up with each element, 
                 but only if they return true when g is applied to them
 |#
-(def _filter g _list = ((((Y filter-helper) g) _list) nil))
+(def _filter g lst = ((((Y filter-helper) g) lst) nil))
 
-(def filter-helper f g _list n = 
-    ((_list (lambda (x)
+(def filter-helper f g lst n = 
+    ((lst (lambda (x)
                 (lambda (y)
                     (lambda (z)
                         (_if (g x)
@@ -234,12 +234,12 @@
 |#
 (define _take (Y take-helper))
 
-(def take-helper f n _list =
-    ((((_or (isZero n)) (isNil _list))
+(def take-helper f n lst =
+    ((((_or (isZero n)) (isNil lst))
             nil)
             ((pair 
-                (head _list)) 
-                ((f (pred n)) (tail _list)))))
+                (head lst)) 
+                ((f (pred n)) (tail lst)))))
 
 #|
     ~ TAKE TAIL ~
@@ -248,7 +248,7 @@
     - Idea: Makes new list out of the last n values of the list
     - Logic: Reverses the take of n elements of the reverse of the list
 |#
-(def takeTail n _list = (rev ((_take  n) (rev _list))))
+(def takeTail n lst = (rev ((_take  n) (rev lst))))
 
 #|
     ~ INSERT ~
@@ -258,10 +258,10 @@
                 insert value at index i,
                 then add tail behind it
 |#
-(def insert val _list i = 
+(def insert val lst i = 
     ((app
-        ((_take i) _list))
-        ((pair val) ((takeTail ((sub (len _list)) i)) _list))))
+        ((_take i) lst))
+        ((pair val) ((takeTail ((sub (len lst)) i)) lst))))
 
 #|
     ~ REPLACE ~
@@ -271,10 +271,10 @@
                 insert value at index i,
                 then add one less than tail behind it
 |#
-(def replace val _list i =
+(def replace val lst i =
     ((app
-        ((_take i) _list))
-        ((pair val) ((takeTail (pred ((sub (len _list)) i))) _list))))
+        ((_take i) lst))
+        ((pair val) ((takeTail (pred ((sub (len lst)) i))) lst))))
 
 #|
     ~ DROP ~
@@ -282,10 +282,10 @@
     - Idea: Remove first n elements from list
     - Logic: Just like takeTail but amount to take is length of list minus n
 |#
-(def _drop n _list = 
+(def _drop n lst = 
     (rev ((_take 
-            ((sub (len _list)) n))
-            (rev _list))))
+            ((sub (len lst)) n))
+            (rev lst))))
 
 #|
     ~ REMOVE ~

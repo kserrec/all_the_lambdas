@@ -60,3 +60,4 @@
 (def GT N1 N2 = (((((COERCE-2 gt) convert-to-nat) N1) N2) bool))
 
 (def LT N1 N2 = (((((COERCE-2 lt) convert-to-nat) N1) N2) bool))
+
