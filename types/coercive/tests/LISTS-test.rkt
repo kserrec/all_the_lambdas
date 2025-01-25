@@ -162,7 +162,7 @@
     (test-list-element "FOLD(ADD)(TWO)(LIST-2-3-2)" (read-any (((FOLD ADD) TWO) ((pair _list) (_cons TWO THREE TWO)))) "nat:9")
     (test-list-element "FOLD(ADD)(posTHREE)(LIST-2-3-2)" (read-any (((FOLD ADD) posTHREE) ((pair _list) (_cons TWO THREE TWO)))) "nat:10")
     (test-list-element "FOLD(EXP)(ONE)(LIST-p2-p3)" (read-any (((FOLD EXP) ONE) ((pair _list) (_cons posTWO posTHREE)))) "nat:1")
-    (test-list-element "FOLD(EXP)(posTWO)(LIST-3-2)" (read-any (((FOLD EXP) posTWO) ((pair _list) (_cons THREE TWO)))) "nat:64")
+    (test-list-element "FOLD(EXP)(posTHREE)(LIST-3-2)" (read-any (((FOLD EXP) posTHREE) ((pair _list) (_cons THREE TWO)))) "nat:729")
     (test-list-element "FOLD(EXPz)(TRUE)(LIST-3-2)" (read-any (((FOLD EXPz) TRUE) ((pair _list) (_cons LIST-1-3-4-2 FIVE)))) "int:1")
 ))
 

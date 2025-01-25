@@ -62,6 +62,10 @@
 
 ;===================================================
 
+(def RIGHT-FOLD G X L = (val ((((((((COERCE-3-diff right-fold) _identity) (fake G)) _identity) (fake X)) convert-to-list) L) zero)))
+
+;===================================================
+
 (def TAKE N L = ((((((COERCE-2-diff _take) convert-to-nat) N) convert-to-list) L) _list))
 
 ;===================================================
