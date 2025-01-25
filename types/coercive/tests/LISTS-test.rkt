@@ -155,15 +155,15 @@
     ; normal cases
     (test-list-element "FOLD(ADDz)(0)(LIST-n2-p1-p2-n4-n5)" (read-any (((FOLD ADDz) posZERO) LIST-n2-p1-p2-n4-n5)) "int:-8")
     (test-list-element "FOLD(MULT)(1)(LIST-1-3-4-2)" (read-any (((FOLD MULT) ONE) LIST-1-3-4-2)) "nat:24")
-    (test-list-element "FOLD(EXP)(1)(LIST-2-3)" (read-any (((FOLD EXP) ONE) ((pair _list) (_cons TWO THREE)))) "nat:8")
-    (test-list-element "FOLD(EXP)(1)(LIST-2-3)" (read-any (((FOLD EXP) ONE) ((pair _list) (_cons TWO THREE TWO)))) "nat:512")
-    (test-list-element "FOLD(APP)(nil)(LIST-OF-LISTS)" (read-any (((FOLD APP) NIL-list) LIST-OF-LISTS-test)) "list[int:-2,int:1,int:2,int:-4,int:-5,nat:1,nat:3,nat:4,nat:2,nat:0,nat:1,bool:TRUE,bool:FALSE,bool:FALSE,bool:TRUE]")
+    (test-list-element "FOLD(EXP)(1)(LIST-2-3)" (read-any (((FOLD EXP) ONE) ((pair _list) (_cons TWO THREE)))) "nat:1")
+    (test-list-element "FOLD(EXP)(2)(LIST-1-3-2)" (read-any (((FOLD EXP) TWO) ((pair _list) (_cons ONE THREE TWO)))) "nat:64")
+    (test-list-element "FOLD(APP)(nil)(LIST-OF-LISTS)" (read-any (((FOLD APP) NIL-list) LIST-OF-LISTS-test)) "list[bool:TRUE,bool:FALSE,bool:FALSE,bool:TRUE,nat:0,nat:1,nat:1,nat:3,nat:4,nat:2,int:-2,int:1,int:2,int:-4,int:-5]")
     ; coercing
     (test-list-element "FOLD(ADD)(TWO)(LIST-2-3-2)" (read-any (((FOLD ADD) TWO) ((pair _list) (_cons TWO THREE TWO)))) "nat:9")
     (test-list-element "FOLD(ADD)(posTHREE)(LIST-2-3-2)" (read-any (((FOLD ADD) posTHREE) ((pair _list) (_cons TWO THREE TWO)))) "nat:10")
-    (test-list-element "FOLD(EXP)(ONE)(LIST-p2-p3)" (read-any (((FOLD EXP) ONE) ((pair _list) (_cons posTWO posTHREE)))) "nat:8")
-    (test-list-element "FOLD(EXP)(posTWO)(LIST-3-2)" (read-any (((FOLD EXP) posTWO) ((pair _list) (_cons THREE TWO)))) "nat:81")
-    (test-list-element "FOLD(EXPz)(posTWO)(LIST-3-2)" (read-any (((FOLD EXPz) TRUE) ((pair _list) (_cons LIST-1-3-4-2 FIVE)))) "int:1024")
+    (test-list-element "FOLD(EXP)(ONE)(LIST-p2-p3)" (read-any (((FOLD EXP) ONE) ((pair _list) (_cons posTWO posTHREE)))) "nat:1")
+    (test-list-element "FOLD(EXP)(posTWO)(LIST-3-2)" (read-any (((FOLD EXP) posTWO) ((pair _list) (_cons THREE TWO)))) "nat:64")
+    (test-list-element "FOLD(EXPz)(TRUE)(LIST-3-2)" (read-any (((FOLD EXPz) TRUE) ((pair _list) (_cons LIST-1-3-4-2 FIVE)))) "int:1")
 ))
 
 (show-results "FOLD" FOLD-tests)

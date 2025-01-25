@@ -136,7 +136,7 @@
     - Logic: Builds a new list from bottom up from list2 and when done, 
                 successively adds each element from bottom up of list1.
 |#
-(define app (Y app-helper))
+(def app = (Y app-helper))
 
 (def app-helper f l1 l2 = 
     ((l1 (lambda (h)
@@ -210,9 +210,22 @@
                 starting with the initial value to return a final single value
     - Logic: Applies g to both head x and the value return from recursive call until it hits base
 |#
-(define _fold (Y fold-helper))
+
+(def _fold = (Y fold-helper))
 
 (def fold-helper f g i lst = 
+    ((lst (lambda (x)
+                (lambda (y)
+                    (lambda (z)
+                        ((g (((f g) i) y)) x)
+                    )
+                )
+            ))  i))
+
+
+(def right-fold = (Y right-fold-helper))
+
+(def right-fold-helper f g i lst = 
     ((lst (lambda (x)
                 (lambda (y)
                     (lambda (z)
@@ -220,6 +233,8 @@
                     )
                 )
             ))  i))
+
+
 
 ;===================================================
 
@@ -232,7 +247,7 @@
                 else build list with head and count down n recursively, 
                 building new list until n runs out and n elements have been "taken"
 |#
-(define _take (Y take-helper))
+(def _take = (Y take-helper))
 
 (def take-helper f n lst =
     ((((_or (isZero n)) (isNil lst))

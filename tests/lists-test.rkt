@@ -153,10 +153,20 @@
 (define _fold-tests (list
     (test-list-element "_fold(add)(0)(l-5-4-2-0-4-2)" (n-read (((_fold add) zero) l-5-4-2-0-4-2)) "17")
     (test-list-element "_fold(mult)(1)(l-5-4-2)" (n-read (((_fold mult) one) l-5-4-2)) "40")
-    (test-list-element "_fold(mult)(2)(l-4-2)" (n-read (((_fold _exp) two) l-4-2)) "256")
+    (test-list-element "_fold(mult)(2)(l-4-2)" (n-read (((_fold _exp) three) l-4-2)) "6561")
 ))
 
 (show-results "_fold" _fold-tests)
+
+; ====================================================================
+
+(define right-fold-tests (list
+    (test-list-element "right-fold(add)(0)(l-5-4-2-0-4-2)" (n-read (((right-fold add) zero) l-5-4-2-0-4-2)) "17")
+    (test-list-element "right-fold(mult)(1)(l-5-4-2)" (n-read (((right-fold mult) one) l-5-4-2)) "40")
+    (test-list-element "right-fold(mult)(2)(l-4-2)" (n-read (((right-fold _exp) three) l-4-2)) "65536")
+))
+
+(show-results "right-fold" right-fold-tests)
 
 ; ====================================================================
 

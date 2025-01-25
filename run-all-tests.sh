@@ -6,8 +6,8 @@ GREEN='\033[32m'
 BLUE='\033[94m'
 RESET='\033[0m'
 
-# Find all 'tests' directories and store them in an array
-test_dirs=($(find "$(dirname "$0")/.." -type d -name "tests"))
+# Find all 'tests' directories within the 'all_the_lambdas' directory and store them in an array
+test_dirs=($(find "$(dirname "$0")" -type d -name "tests"))
 
 # Iterate over each tests directory
 for dir in "${test_dirs[@]}"; do
