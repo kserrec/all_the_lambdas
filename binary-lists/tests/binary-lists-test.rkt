@@ -1,10 +1,10 @@
-#lang s-exp "../macros/lazy-with-macros.rkt"
-(require "../macros/macros.rkt")
+#lang s-exp "../../macros/lazy-with-macros.rkt"
+(require "../../macros/macros.rkt")
 (require "../binary-lists.rkt"
-         "../core.rkt"
-         "../logic.rkt"
-         "../church.rkt"
-         "helpers/test-helpers.rkt")
+         "../../core.rkt"
+         "../../logic.rkt"
+         "../../church.rkt"
+         "../../tests/helpers/test-helpers.rkt")
 
 ; ====================================================================
 ; ~ BINARY LISTS TESTS ~

@@ -1,11 +1,11 @@
-#lang s-exp "macros/lazy-with-macros.rkt"
-(require "macros/macros.rkt")
+#lang s-exp "../macros/lazy-with-macros.rkt"
+(require "../macros/macros.rkt")
 (provide (all-defined-out))
-(require "church.rkt"
-         "core.rkt"
-         "lists.rkt"
-         "logic.rkt"
-         "recursion.rkt")
+(require "../church.rkt"
+         "../core.rkt"
+         "../lists.rkt"
+         "../logic.rkt"
+         "../recursion.rkt")
 
 ;===================================================
 ; BINARY LISTS - a new numerical encoding
@@ -217,6 +217,8 @@
 |#
 (def bin-add l1 l2 = (rem-head-zeroes (rev ((((Y bin-add-helper) (rev l1)) (rev l2)) zero))))
 
+(def bin-succ bin-num = ((bin-add bin-num) bin-one))
+
 ;===================================================
 
 #|
@@ -309,7 +311,31 @@
             _then ((f (tail l1)) (tail l2))
             _else (isZero (head l2)))))
 
+
+(def bin-lte l1 l2 = 
+    (_let l1-cut = (rem-head-zeroes l1)
+    (_let l2-cut = (rem-head-zeroes l2)
+    (_let l1-len = (len l1-cut)
+    (_let l2-len = (len l2-cut)
+    (_if ((gt l1-len) l2-len)
+        _then false
+        _else (
+            _if ((lt l1-len) l2-len)
+                _then true
+                _else (((Y bin-lte-helper) l1-cut) l2-cut))))))))
+
+; assume l1, l2 same length
+(def bin-lte-helper f l1 l2 = 
+    (_if ((_and (isNil l1)) (isNil l2))
+        _then true
+        _else (_if ((eq (head l1)) (head l2))
+            _then ((f (tail l1)) (tail l2))
+            _else (isZero (head l1)))))
+
+
 (def bin-lt l1 l2 = (_not ((bin-gte l1) l2)))
+
+(def bin-gt l1 l2 = (_not ((bin-lte l1) l2)))
 
 #|
     The function get-new-borrow, 
@@ -386,6 +412,7 @@
         _then bin-zero
         _else (rem-head-zeroes (rev ((((Y bin-sub-helper) (rev l1)) (rev l2)) zero)))))
 
+(def bin-pred bin-num = ((bin-sub bin-num) bin-one))
 
 ;===================================================
 
@@ -425,3 +452,21 @@
             (_if (isNil tail-dividend)
                 _then new-running-q
                 _else ((((f dividend) divisor) (succ take-n)) new-running-q))))))))
+
+
+;===================================================   
+
+(bin-is-even bin-num = 
+    (_let final-digit = ((takeTail one) bin-num)
+    (isZero final-digit)))
+
+(bin-is-odd bin-num = ((_not bin-is-even) bin-num))
+
+; need to test: 
+; - bin-is-even
+; - bin-is-odd
+; - bin-lte
+; - bin-gt
+
+; and need to write:
+    ; - bin-exp
