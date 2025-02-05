@@ -11,7 +11,7 @@
 ; ====================================================================
 
 (define bin-read-tests (list 
-    (test-list-element "bin-read(bin-zero)" (bin-read bin-zero) "0")
+    (test-list-element "bin-read(bn.0)" (bin-read bn.0) "0")
     (test-list-element "bin-read(bin-one)" (bin-read bin-one) "1")
     (test-list-element "bin-read(bin-two)" (bin-read bin-two) "2")
     (test-list-element "bin-read(bin-three)" (bin-read bin-three) "3")
@@ -39,12 +39,12 @@
 
 (define bin-add-tests (list 
     ; trivial cases
-    (test-list-element "bin-add(bin-zero)(bin-zero)"
-        (bin-read ((bin-add bin-zero) bin-zero)) "0")
-    (test-list-element "bin-add(bin-one)(bin-zero)"
-        (bin-read ((bin-add bin-one) bin-zero)) "1")
-    (test-list-element "bin-add(bin-zero)(bin-one)"
-        (bin-read ((bin-add bin-one) bin-zero)) "1")
+    (test-list-element "bin-add(bn.0)(bn.0)"
+        (bin-read ((bin-add bn.0) bn.0)) "0")
+    (test-list-element "bin-add(bin-one)(bn.0)"
+        (bin-read ((bin-add bin-one) bn.0)) "1")
+    (test-list-element "bin-add(bn.0)(bin-one)"
+        (bin-read ((bin-add bin-one) bn.0)) "1")
     (test-list-element "bin-add(bin-one)(bin-one)"
         (bin-read ((bin-add bin-one) bin-one)) "2")
 
@@ -97,12 +97,12 @@
 
 (define bin-mult-tests (list 
     ; trivial cases
-    (test-list-element "bin-mult(bin-zero)(bin-zero)" 
-        (bin-read ((bin-mult bin-zero) bin-zero)) "0")
-    (test-list-element "bin-mult(bin-one)(bin-zero)" 
-        (bin-read ((bin-mult bin-one) bin-zero)) "0")
-    (test-list-element "bin-mult(bin-zero)(bin-one)" 
-        (bin-read ((bin-mult bin-zero) bin-one)) "0")
+    (test-list-element "bin-mult(bn.0)(bn.0)" 
+        (bin-read ((bin-mult bn.0) bn.0)) "0")
+    (test-list-element "bin-mult(bin-one)(bn.0)" 
+        (bin-read ((bin-mult bin-one) bn.0)) "0")
+    (test-list-element "bin-mult(bn.0)(bin-one)" 
+        (bin-read ((bin-mult bn.0) bin-one)) "0")
     (test-list-element "bin-mult(bin-one)(bin-one)" 
         (bin-read ((bin-mult bin-one) bin-one)) "1")
 
@@ -165,12 +165,12 @@
 
 (define bin-sub-tests (list
   ;; trivial cases
-  (test-list-element "bin-sub(bin-zero)(bin-zero)"
-    (bin-read ((bin-sub bin-zero) bin-zero)) "0")
-  (test-list-element "bin-sub(bin-one)(bin-zero)"
-    (bin-read ((bin-sub bin-one) bin-zero)) "1")
-  (test-list-element "bin-sub(bin-two)(bin-zero)"
-    (bin-read ((bin-sub bin-two) bin-zero)) "2")
+  (test-list-element "bin-sub(bn.0)(bn.0)"
+    (bin-read ((bin-sub bn.0) bn.0)) "0")
+  (test-list-element "bin-sub(bin-one)(bn.0)"
+    (bin-read ((bin-sub bin-one) bn.0)) "1")
+  (test-list-element "bin-sub(bin-two)(bn.0)"
+    (bin-read ((bin-sub bin-two) bn.0)) "2")
   (test-list-element "bin-sub(bin-two)(bin-one)"
     (bin-read ((bin-sub bin-two) bin-one)) "1")
 
@@ -225,14 +225,14 @@
 
 (define bin-gte-tests (list
     ;; trivial
-    (test-list-element "bin-gte(bin-zero)(bin-zero)"
-        (b-read ((bin-gte bin-zero) bin-zero))
+    (test-list-element "bin-gte(bn.0)(bn.0)"
+        (b-read ((bin-gte bn.0) bn.0))
         "true")
-    (test-list-element "bin-gte(bin-zero)(bin-one)"
-        (b-read ((bin-gte bin-zero) bin-one))
+    (test-list-element "bin-gte(bn.0)(bin-one)"
+        (b-read ((bin-gte bn.0) bin-one))
         "false")
-    (test-list-element "bin-gte(bin-one)(bin-zero)"
-        (b-read ((bin-gte bin-one) bin-zero))
+    (test-list-element "bin-gte(bin-one)(bn.0)"
+        (b-read ((bin-gte bin-one) bn.0))
         "true")
 
     ;; small
@@ -293,12 +293,12 @@
 
 (define bin-div-tests (list
     ; trivial zero cases
-    (test-list-element "bin-div(bin-zero)(bin-one)"
-        (bin-read ((bin-div bin-zero) bin-one)) "0")
-    (test-list-element "bin-div(bin-one)(bin-zero)"
-        (bin-read ((bin-div bin-one) bin-zero)) "0")
-    (test-list-element "bin-div(bin-zero)(bin-zero)"
-        (bin-read ((bin-div bin-zero) bin-zero)) "0")
+    (test-list-element "bin-div(bn.0)(bin-one)"
+        (bin-read ((bin-div bn.0) bin-one)) "0")
+    (test-list-element "bin-div(bin-one)(bn.0)"
+        (bin-read ((bin-div bin-one) bn.0)) "0")
+    (test-list-element "bin-div(bn.0)(bn.0)"
+        (bin-read ((bin-div bn.0) bn.0)) "0")
     (test-list-element "bin-div(bin-one)(bin-two)"
         (bin-read ((bin-div bin-one) bin-two)) "0")
     (test-list-element "bin-div(bin-two)(bin-three)"

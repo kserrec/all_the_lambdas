@@ -33,7 +33,7 @@
 #|
     ~ A FEW NUMBERS ~
 |#
-(def bin-zero = (_cons zero))
+(def bn.0 = (_cons zero))
 (def bin-one = (_cons one))
 (def bin-two = (_cons one zero))
 (def bin-three = (_cons one one))
@@ -225,7 +225,7 @@
     ~ BINARY DIGIT LIST MULTIPLICATION BY 2 ~
     Easy as can be - just append a zero
 |#
-(def bin-mult-2 bin-num = ((app bin-num) bin-zero))
+(def bin-mult-2 bin-num = ((app bin-num) bn.0))
 
 ; Repeat multiplication by 2 for this - also easy as can be
 (def bin-mult-pow-2 bin-num n = ((n bin-mult-2) bin-num))
@@ -261,8 +261,8 @@
 |#
 (def bin-mult l1 l2 = 
     (rem-head-zeroes (_if ((gte (len l1)) (len l2))
-        _then ((((((Y bin-mult-helper) (rev l1)) (rev l2)) (len l1)) zero) bin-zero)
-        _else ((((((Y bin-mult-helper) (rev l2)) (rev l1)) (len l2)) zero) bin-zero))))
+        _then ((((((Y bin-mult-helper) (rev l1)) (rev l2)) (len l1)) zero) bn.0)
+        _else ((((((Y bin-mult-helper) (rev l2)) (rev l1)) (len l2)) zero) bn.0))))
 
 
 ;===================================================
@@ -409,7 +409,7 @@
 |#
 (def bin-sub l1 l2 =
     (_if (_not ((bin-gte l1) l2))
-        _then bin-zero
+        _then bn.0
         _else (rem-head-zeroes (rev ((((Y bin-sub-helper) (rev l1)) (rev l2)) zero)))))
 
 (def bin-pred bin-num = ((bin-sub bin-num) bin-one))
@@ -430,7 +430,7 @@
 (def bin-div l1 l2 = 
     (_let both-zero = ((_or (bin-is-zero l1)) (bin-is-zero l2))
     (_if ((_or both-zero) ((bin-lt l1) l2))
-        _then bin-zero
+        _then bn.0
         _else (((((Y bin-div-helper) l1) l2) one) nil))))
 
 (def bin-div-helper f dividend divisor take-n running-q = 
@@ -448,7 +448,7 @@
                     (_let new-take-n = (succ (len diff))
                     ((((f new-dividend) divisor) new-take-n) new-running-q))))))
         _else
-            (_let new-running-q = ((app running-q) bin-zero)
+            (_let new-running-q = ((app running-q) bn.0)
             (_if (isNil tail-dividend)
                 _then new-running-q
                 _else ((((f dividend) divisor) (succ take-n)) new-running-q))))))))

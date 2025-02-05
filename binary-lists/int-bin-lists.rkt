@@ -30,11 +30,11 @@
 
 #|
     ~ INT ZERO ~
-    - Structure: {bool, bin-zero}
+    - Structure: {bool, bn.0}
     - Logic: n part same as false
     - Note: bool true or false, thus -0 == +0
 |#
-(def bz.0 = ((makeZ-bin true) bin-zero))
+(def bz.0 = ((makeZ-bin true) bn.0))
 
 #|
     ~ INT SUCCESSOR ~
@@ -84,7 +84,7 @@
 (def bz.-3 = ((makeZ-bin false) bin-three))
 (def bz.-2 = ((makeZ-bin false) bin-two))
 (def bz.-1 = ((makeZ-bin false) bin-one))
-(def bz.-0 = ((makeZ-bin false) bin-zero))
+(def bz.-0 = ((makeZ-bin false) bn.0))
 (def bz.1 = ((makeZ-bin true) bin-one))
 (def bz.2 = ((makeZ-bin true) bin-two))
 (def bz.3 = ((makeZ-bin true) bin-three))
@@ -206,9 +206,9 @@
         ; then default to zero
         _else (_if z1Sign
         ; else if z1 positive
-                _then ((makeZ-bin true) ((_exp z1Val) z2Val))
+                _then ((makeZ-bin true) ((bin-exp z1Val) z2Val))
                 ; then make positive and do regular exponent
-                _else ((makeZ-bin (isEven z2Val)) ((_exp z1Val) z2Val)))))))))
+                _else ((makeZ-bin (bin-is-even z2Val)) ((bin-exp z1Val) z2Val)))))))))
                 ; else flip sign based on even or odd power
             
 ;===================================================
