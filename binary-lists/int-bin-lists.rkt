@@ -34,7 +34,7 @@
     - Logic: n part same as false
     - Note: bool true or false, thus -0 == +0
 |#
-(def bin_+0 = ((makeZ-bin true) bin-zero))
+(def bz.0 = ((makeZ-bin true) bin-zero))
 
 #|
     ~ INT SUCCESSOR ~
@@ -78,17 +78,18 @@
     - Logic: As created by makeZ-bin
 |#
 
-(def bin_-5 = ((makeZ-bin false) bin-five))
-(def bin_-4 = ((makeZ-bin false) bin-four))
-(def bin_-3 = ((makeZ-bin false) bin-three))
-(def bin_-2 = ((makeZ-bin false) bin-two))
-(def bin_-1 = ((makeZ-bin false) bin-one))
-(def bin_+0 = ((makeZ-bin false) bin-zero))
-(def bin_+1 = ((makeZ-bin true) bin-one))
-(def bin_+2 = ((makeZ-bin true) bin-two))
-(def bin_+3 = ((makeZ-bin true) bin-three))
-(def bin_+4 = ((makeZ-bin true) bin-four))
-(def bin_+5 = ((makeZ-bin true) bin-five))
+
+(def bz.-5 = ((makeZ-bin false) bin-five))
+(def bz.-4 = ((makeZ-bin false) bin-four))
+(def bz.-3 = ((makeZ-bin false) bin-three))
+(def bz.-2 = ((makeZ-bin false) bin-two))
+(def bz.-1 = ((makeZ-bin false) bin-one))
+(def bz.-0 = ((makeZ-bin false) bin-zero))
+(def bz.1 = ((makeZ-bin true) bin-one))
+(def bz.2 = ((makeZ-bin true) bin-two))
+(def bz.3 = ((makeZ-bin true) bin-three))
+(def bz.4 = ((makeZ-bin true) bin-four))
+(def bz.5 = ((makeZ-bin true) bin-five))
 
 ;===================================================
 
@@ -148,7 +149,7 @@
     - Idea: z1 => z1-1
     - Logic: Use subZ (really, this is unnecessary since subtraction is more general)
 |#
-(def predZ-bin z-bin = ((subZ-bin z-bin) bin_+1))
+(def predZ-bin z-bin = ((subZ-bin z-bin) bz.1))
 
 #|
     ~ MULTIPLICATION ~
@@ -157,7 +158,7 @@
     - Logic: Negate logical xor (if both same sign, true, else false) for sign 
                 and do regular multiplication for number
 |#
-(def multZ z1-bin z2-bin = 
+(def multZ-bin z1-bin z2-bin = 
     ; let vars
     (_let z1Sign = (head z1-bin)
     (_let z1Val = (tail z1-bin)
@@ -192,22 +193,22 @@
     - Idea: z1,z2 => z1^z2
     - Logic: Do regular exponent except when z2 < 0, then result is 0
 |#
-; (def expZ-bin z1-bin z2-bin = 
-;     ; let vars
-;     (_let z1Sign = (head z1-bin)
-;     (_let z1Val = (tail z1-bin)
-;     (_let z2Sign = (head z2-bin)
-;     (_let z2Val = (tail z2-bin)
-;     ; core logic
-;     (_if (_not z2Sign)
-;     ; if raised to negative power
-;         _then bin_+0
-;         ; then default to zero
-;         _else (_if z1Sign
-;         ; else if z1 positive
-;                 _then ((makeZ-bin true) ((_exp z1Val) z2Val))
-;                 ; then make positive and do regular exponent
-;                 _else ((makeZ-bin (isEven z2Val)) ((_exp z1Val) z2Val)))))))))
+(def expZ-bin z1-bin z2-bin = 
+    ; let vars
+    (_let z1Sign = (head z1-bin)
+    (_let z1Val = (tail z1-bin)
+    (_let z2Sign = (head z2-bin)
+    (_let z2Val = (tail z2-bin)
+    ; core logic
+    (_if (_not z2Sign)
+    ; if raised to negative power
+        _then bz.0
+        ; then default to zero
+        _else (_if z1Sign
+        ; else if z1 positive
+                _then ((makeZ-bin true) ((_exp z1Val) z2Val))
+                ; then make positive and do regular exponent
+                _else ((makeZ-bin (isEven z2Val)) ((_exp z1Val) z2Val)))))))))
                 ; else flip sign based on even or odd power
             
 ;===================================================
@@ -326,14 +327,14 @@
     - Contract: int => bool
     - Idea: check if nat part is odd
 |#
-(def isOddZ-bin z-bin = (bin-is-odd (tail z)))
+(def isOddZ-bin z-bin = (bin-is-odd (tail z-bin)))
 
 #|
     ~ IS EVEN z ~
     - Contract: int => bool
     - Idea: check if nat part is even
 |#
-(def isEvenZ-bin z-bin = (bin-is-even (tail z)))
+(def isEvenZ-bin z-bin = (bin-is-even (tail z-bin)))
 
 
 

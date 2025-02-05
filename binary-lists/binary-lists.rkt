@@ -456,11 +456,11 @@
 
 ;===================================================   
 
-(bin-is-even bin-num = 
+(def bin-is-even bin-num = 
     (_let final-digit = ((takeTail one) bin-num)
     (isZero final-digit)))
 
-(bin-is-odd bin-num = ((_not bin-is-even) bin-num))
+(def bin-is-odd bin-num = ((_not bin-is-even) bin-num))
 
 ; need to test: 
 ; - bin-is-even
@@ -470,3 +470,27 @@
 
 ; and need to write:
     ; - bin-exp
+
+
+;===================================================  
+
+#|
+    ~ BINARY DIGIT LIST EXPONENTIATION ~
+    Contract: (bin-list, bin-list) => bin-list
+    Idea: Repeated multiplication
+    Logic:
+        - Count down (pred) the exponent one recursive step at a time until it is zero
+        - Collect result (new-val) along the way of multiplying l1 by itself for each step
+        - Return new-val when l2 is zero
+|#
+
+(def bin-exp l1 l2 = ((((Y bin-exp-helper) l1) l2) bin-one))
+
+(def bin-exp-helper f l1 l2 new-val = 
+    (_if (bin-is-zero l2)
+        _then new-val
+        _else 
+          (_let _new-val = ((bin-mult l1) new-val)
+          (((f l1) (bin-pred l2)) _new-val))))
+
+

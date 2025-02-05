@@ -72,6 +72,7 @@
     (test-list-element "divZ(negZero)(posOne)" (z-read ((divZ negZero) posOne)) "0")
     (test-list-element "divZ(posFour)(posTwo)" (z-read ((divZ posFour) posTwo)) "2")
     (test-list-element "divZ(negTwo)(posFive)" (z-read ((divZ negTwo) posFive)) "0")
+    (test-list-element "divZ(posThree)(negTwo)" (z-read ((divZ posThree) negTwo)) "-1")
 ))
 
 (show-results "divZ" divZ-tests)
