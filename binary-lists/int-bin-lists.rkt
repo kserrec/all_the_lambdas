@@ -79,17 +79,17 @@
 |#
 
 
-(def bz.-5 = ((makeZ-bin false) bin-five))
-(def bz.-4 = ((makeZ-bin false) bin-four))
-(def bz.-3 = ((makeZ-bin false) bin-three))
-(def bz.-2 = ((makeZ-bin false) bin-two))
-(def bz.-1 = ((makeZ-bin false) bin-one))
+(def bz.-5 = ((makeZ-bin false) bn.5))
+(def bz.-4 = ((makeZ-bin false) bn.4))
+(def bz.-3 = ((makeZ-bin false) bn.3))
+(def bz.-2 = ((makeZ-bin false) bn.2))
+(def bz.-1 = ((makeZ-bin false) bn.1))
 (def bz.-0 = ((makeZ-bin false) bn.0))
-(def bz.1 = ((makeZ-bin true) bin-one))
-(def bz.2 = ((makeZ-bin true) bin-two))
-(def bz.3 = ((makeZ-bin true) bin-three))
-(def bz.4 = ((makeZ-bin true) bin-four))
-(def bz.5 = ((makeZ-bin true) bin-five))
+(def bz.1 = ((makeZ-bin true) bn.1))
+(def bz.2 = ((makeZ-bin true) bn.2))
+(def bz.3 = ((makeZ-bin true) bn.3))
+(def bz.4 = ((makeZ-bin true) bn.4))
+(def bz.5 = ((makeZ-bin true) bn.5))
 
 ;===================================================
 

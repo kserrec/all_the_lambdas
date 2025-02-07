@@ -12,25 +12,25 @@
 
 (define bin-read-tests (list 
     (test-list-element "bin-read(bn.0)" (bin-read bn.0) "0")
-    (test-list-element "bin-read(bin-one)" (bin-read bin-one) "1")
-    (test-list-element "bin-read(bin-two)" (bin-read bin-two) "2")
-    (test-list-element "bin-read(bin-three)" (bin-read bin-three) "3")
-    (test-list-element "bin-read(bin-four)" (bin-read bin-four) "4")
-    (test-list-element "bin-read(bin-five)" (bin-read bin-five) "5")
-    (test-list-element "bin-read(bin-ten)" (bin-read bin-ten) "10")
-    (test-list-element "bin-read(bin-twenty)" (bin-read bin-twenty) "20")
-    (test-list-element "bin-read(bin-twenty-four)" 
-        (bin-read bin-twenty-four) "24")
-    (test-list-element "bin-read(bin-one-billion)" 
-        (bin-read bin-one-billion) "1000000000")
-    (test-list-element "bin-read(bin-one-trillion)" 
-        (bin-read bin-one-trillion) "1000000000000")
-    (test-list-element "bin-read(bin-one-quadrillion)" 
-        (bin-read bin-one-quadrillion) "1000000000000000")
-    (test-list-element "bin-read(bin-one-quintillion)" 
-        (bin-read bin-one-quintillion) "1000000000000000000")
-    (test-list-element "bin-read(bin-one-sextillion)" 
-        (bin-read bin-one-sextillion) "1000000000000000000000")
+    (test-list-element "bin-read(bn.1)" (bin-read bn.1) "1")
+    (test-list-element "bin-read(bn.2)" (bin-read bn.2) "2")
+    (test-list-element "bin-read(bn.3)" (bin-read bn.3) "3")
+    (test-list-element "bin-read(bn.4)" (bin-read bn.4) "4")
+    (test-list-element "bin-read(bn.5)" (bin-read bn.5) "5")
+    (test-list-element "bin-read(bn.10)" (bin-read bn.10) "10")
+    (test-list-element "bin-read(bn.20)" (bin-read bn.20) "20")
+    (test-list-element "bin-read(bn.20-four)" 
+        (bin-read bn.20-four) "24")
+    (test-list-element "bin-read(bn.1_000_000_000)" 
+        (bin-read bn.1_000_000_000) "1000000000")
+    (test-list-element "bin-read(bn.1_000_000_000_000)" 
+        (bin-read bn.1_000_000_000_000) "1000000000000")
+    (test-list-element "bin-read(bn.1_000_000_000_000_000)" 
+        (bin-read bn.1_000_000_000_000_000) "1000000000000000")
+    (test-list-element "bin-read(bn.1_000_000_000_000_000_000)" 
+        (bin-read bn.1_000_000_000_000_000_000) "1000000000000000000")
+    (test-list-element "bin-read(bn.1_000_000_000_000_000_000_000)" 
+        (bin-read bn.1_000_000_000_000_000_000_000) "1000000000000000000000")
 ))
 
 (show-results "bin-read" bin-read-tests)
@@ -41,54 +41,54 @@
     ; trivial cases
     (test-list-element "bin-add(bn.0)(bn.0)"
         (bin-read ((bin-add bn.0) bn.0)) "0")
-    (test-list-element "bin-add(bin-one)(bn.0)"
-        (bin-read ((bin-add bin-one) bn.0)) "1")
-    (test-list-element "bin-add(bn.0)(bin-one)"
-        (bin-read ((bin-add bin-one) bn.0)) "1")
-    (test-list-element "bin-add(bin-one)(bin-one)"
-        (bin-read ((bin-add bin-one) bin-one)) "2")
+    (test-list-element "bin-add(bn.1)(bn.0)"
+        (bin-read ((bin-add bn.1) bn.0)) "1")
+    (test-list-element "bin-add(bn.0)(bn.1)"
+        (bin-read ((bin-add bn.1) bn.0)) "1")
+    (test-list-element "bin-add(bn.1)(bn.1)"
+        (bin-read ((bin-add bn.1) bn.1)) "2")
 
     ; small numbers
-    (test-list-element "bin-add(bin-two)(bin-three)"
-        (bin-read ((bin-add bin-two) bin-three)) "5")
-    (test-list-element "bin-add(bin-four)(bin-one)"
-        (bin-read ((bin-add bin-four) bin-one)) "5")
-    (test-list-element "bin-add(bin-six)(bin-two)"
-        (bin-read ((bin-add bin-six) bin-two)) "8")
-    (test-list-element "bin-add(bin-seven)(bin-five)"
-        (bin-read ((bin-add bin-seven) bin-five)) "12")
+    (test-list-element "bin-add(bn.2)(bn.3)"
+        (bin-read ((bin-add bn.2) bn.3)) "5")
+    (test-list-element "bin-add(bn.4)(bn.1)"
+        (bin-read ((bin-add bn.4) bn.1)) "5")
+    (test-list-element "bin-add(bn.6)(bn.2)"
+        (bin-read ((bin-add bn.6) bn.2)) "8")
+    (test-list-element "bin-add(bn.7)(bn.5)"
+        (bin-read ((bin-add bn.7) bn.5)) "12")
 
     ; large numbers
-    (test-list-element "bin-add(bin-fifteen)(bin-one)"
-        (bin-read ((bin-add bin-fifteen) bin-one)) "16")
-    (test-list-element "bin-add(bin-thirty-one)(bin-thirty-two)"
-        (bin-read ((bin-add bin-thirty-one) bin-thirty-two)) "63")
-    (test-list-element "bin-add(bin-five-hundred-twelve)(bin-five-hundred-twelve)"
-        (bin-read ((bin-add bin-five-hundred-twelve) bin-five-hundred-twelve)) "1024")
+    (test-list-element "bin-add(bn.15)(bn.1)"
+        (bin-read ((bin-add bn.15) bn.1)) "16")
+    (test-list-element "bin-add(bn.31)(bn.32)"
+        (bin-read ((bin-add bn.31) bn.32)) "63")
+    (test-list-element "bin-add(bn.512)(bn.512)"
+        (bin-read ((bin-add bn.512) bn.512)) "1024")
 
     ; uneven list lengths
-    (test-list-element "bin-add(bin-eight)(bin-one)"
-        (bin-read ((bin-add bin-eight) bin-one)) "9")
-    (test-list-element "bin-add(bin-sixty-four)(bin-fifteen)" 
-        (bin-read ((bin-add bin-sixty-four) bin-fifteen)) "79")
-    (test-list-element "bin-add(bin-one-hundred-twenty-eight)(bin-seven)"
-        (bin-read ((bin-add bin-one-hundred-twenty-eight) bin-seven)) "135")
+    (test-list-element "bin-add(bn.8)(bn.1)"
+        (bin-read ((bin-add bn.8) bn.1)) "9")
+    (test-list-element "bin-add(bn.64)(bn.15)" 
+        (bin-read ((bin-add bn.64) bn.15)) "79")
+    (test-list-element "bin-add(bn.128)(bn.7)"
+        (bin-read ((bin-add bn.128) bn.7)) "135")
 
     ; carry propagation
-    (test-list-element "bin-add(bin-three)(bin-one)"
-        (bin-read ((bin-add bin-three) bin-one)) "4")
-    (test-list-element "bin-add(bin-seven)(bin-one)" 
-        (bin-read ((bin-add bin-seven) bin-one)) "8")
-    (test-list-element "bin-add(bin-fifteen)(bin-one)"
-        (bin-read ((bin-add bin-fifteen) bin-one)) "16")
-    (test-list-element "bin-add(bin-one-hundred-twenty-seven)(bin-one)"
-        (bin-read ((bin-add bin-one-hundred-twenty-seven) bin-one)) "128")
+    (test-list-element "bin-add(bn.3)(bn.1)"
+        (bin-read ((bin-add bn.3) bn.1)) "4")
+    (test-list-element "bin-add(bn.7)(bn.1)" 
+        (bin-read ((bin-add bn.7) bn.1)) "8")
+    (test-list-element "bin-add(bn.15)(bn.1)"
+        (bin-read ((bin-add bn.15) bn.1)) "16")
+    (test-list-element "bin-add(bn.127)(bn.1)"
+        (bin-read ((bin-add bn.127) bn.1)) "128")
 
     ; scalability
-    (test-list-element "bin-add(bin-one-billion)(bin-one-billion)"
-        (bin-read ((bin-add bin-one-billion) bin-one-billion)) "2000000000")
-    (test-list-element "bin-add(bin-one-sextillion)(bin-one-quadrillion)" 
-        (bin-read ((bin-add bin-one-sextillion) bin-one-quadrillion)) "1000001000000000000000")
+    (test-list-element "bin-add(bn.1_000_000_000)(bn.1_000_000_000)"
+        (bin-read ((bin-add bn.1_000_000_000) bn.1_000_000_000)) "2000000000")
+    (test-list-element "bin-add(bn.1_000_000_000_000_000_000_000)(bn.1_000_000_000_000_000)" 
+        (bin-read ((bin-add bn.1_000_000_000_000_000_000_000) bn.1_000_000_000_000_000)) "1000001000000000000000")
 ))
 
 (show-results "bin-add" bin-add-tests)
@@ -99,64 +99,64 @@
     ; trivial cases
     (test-list-element "bin-mult(bn.0)(bn.0)" 
         (bin-read ((bin-mult bn.0) bn.0)) "0")
-    (test-list-element "bin-mult(bin-one)(bn.0)" 
-        (bin-read ((bin-mult bin-one) bn.0)) "0")
-    (test-list-element "bin-mult(bn.0)(bin-one)" 
-        (bin-read ((bin-mult bn.0) bin-one)) "0")
-    (test-list-element "bin-mult(bin-one)(bin-one)" 
-        (bin-read ((bin-mult bin-one) bin-one)) "1")
+    (test-list-element "bin-mult(bn.1)(bn.0)" 
+        (bin-read ((bin-mult bn.1) bn.0)) "0")
+    (test-list-element "bin-mult(bn.0)(bn.1)" 
+        (bin-read ((bin-mult bn.0) bn.1)) "0")
+    (test-list-element "bin-mult(bn.1)(bn.1)" 
+        (bin-read ((bin-mult bn.1) bn.1)) "1")
 
     ; small numbers
-    (test-list-element "bin-mult(bin-two)(bin-one)" 
-        (bin-read ((bin-mult bin-two) bin-one)) "2")
-    (test-list-element "bin-mult(bin-three)(bin-two)" 
-        (bin-read ((bin-mult bin-three) bin-two)) "6")
-    (test-list-element "bin-mult(bin-four)(bin-three)" 
-        (bin-read ((bin-mult bin-four) bin-three)) "12")
-    (test-list-element "bin-mult(bin-five)(bin-two)" 
-        (bin-read ((bin-mult bin-five) bin-two)) "10")
-    (test-list-element "bin-mult(bin-five)(bin-three)" 
-        (bin-read ((bin-mult bin-five) bin-three)) "15")
+    (test-list-element "bin-mult(bn.2)(bn.1)" 
+        (bin-read ((bin-mult bn.2) bn.1)) "2")
+    (test-list-element "bin-mult(bn.3)(bn.2)" 
+        (bin-read ((bin-mult bn.3) bn.2)) "6")
+    (test-list-element "bin-mult(bn.4)(bn.3)" 
+        (bin-read ((bin-mult bn.4) bn.3)) "12")
+    (test-list-element "bin-mult(bn.5)(bn.2)" 
+        (bin-read ((bin-mult bn.5) bn.2)) "10")
+    (test-list-element "bin-mult(bn.5)(bn.3)" 
+        (bin-read ((bin-mult bn.5) bn.3)) "15")
 
     ; large numbers
-    (test-list-element "bin-mult(bin-seven)(bin-five)" 
-        (bin-read ((bin-mult bin-seven) bin-five)) "35")
-    (test-list-element "bin-mult(bin-fifteen)(bin-fifteen)" 
-        (bin-read ((bin-mult bin-fifteen) bin-fifteen)) "225")
-    (test-list-element "bin-mult(bin-four)(bin-three)" 
-        (bin-read ((bin-mult bin-four) bin-three)) "12")
-    (test-list-element "bin-mult(bin-thirty-one)(bin-sixteen)" 
-        (bin-read ((bin-mult bin-thirty-one) bin-sixteen)) "496")
+    (test-list-element "bin-mult(bn.7)(bn.5)" 
+        (bin-read ((bin-mult bn.7) bn.5)) "35")
+    (test-list-element "bin-mult(bn.15)(bn.15)" 
+        (bin-read ((bin-mult bn.15) bn.15)) "225")
+    (test-list-element "bin-mult(bn.4)(bn.3)" 
+        (bin-read ((bin-mult bn.4) bn.3)) "12")
+    (test-list-element "bin-mult(bn.31)(bn.16)" 
+        (bin-read ((bin-mult bn.31) bn.16)) "496")
 
     ; uneven list lengths
-    (test-list-element "bin-mult(bin-eight)(bin-three)" 
-        (bin-read ((bin-mult bin-eight) bin-three)) "24")
-    (test-list-element "bin-mult(bin-five)(bin-twelve)" 
-        (bin-read ((bin-mult bin-five) bin-twelve)) "60")
-    (test-list-element "bin-mult(bin-twenty)(bin-seven)" 
-        (bin-read ((bin-mult bin-twenty) bin-seven)) "140")
+    (test-list-element "bin-mult(bn.8)(bn.3)" 
+        (bin-read ((bin-mult bn.8) bn.3)) "24")
+    (test-list-element "bin-mult(bn.5)(bn.12)" 
+        (bin-read ((bin-mult bn.5) bn.12)) "60")
+    (test-list-element "bin-mult(bn.20)(bn.7)" 
+        (bin-read ((bin-mult bn.20) bn.7)) "140")
 
     ; by powers of two
-    (test-list-element "bin-mult(bin-two)(bin-two)" 
-        (bin-read ((bin-mult bin-two) bin-two)) "4")
-    (test-list-element "bin-mult(bin-four)(bin-four)" 
-        (bin-read ((bin-mult bin-four) bin-four)) "16")
-    (test-list-element "bin-mult(bin-eight)(bin-eight)" 
-        (bin-read ((bin-mult bin-eight) bin-eight)) "64")
-    (test-list-element "bin-mult(bin-thirty-two)(bin-four)" 
-        (bin-read ((bin-mult bin-thirty-two) bin-four)) "128")
+    (test-list-element "bin-mult(bn.2)(bn.2)" 
+        (bin-read ((bin-mult bn.2) bn.2)) "4")
+    (test-list-element "bin-mult(bn.4)(bn.4)" 
+        (bin-read ((bin-mult bn.4) bn.4)) "16")
+    (test-list-element "bin-mult(bn.8)(bn.8)" 
+        (bin-read ((bin-mult bn.8) bn.8)) "64")
+    (test-list-element "bin-mult(bn.32)(bn.4)" 
+        (bin-read ((bin-mult bn.32) bn.4)) "128")
 
     ; even larger numbers
-    (test-list-element "bin-mult(bin-one-k-twenty-three)(bin-one-k-twenty-three)" 
-        (bin-read ((bin-mult bin-one-k-twenty-three) bin-one-k-twenty-three)) "1046529")
-    (test-list-element "bin-mult(bin-two-k-forty-eight)(bin-five-hundred-twelve)" 
-        (bin-read ((bin-mult bin-two-k-forty-eight) bin-five-hundred-twelve)) "1048576")
-    (test-list-element "bin-mult(bin-one-hundred-thirty-one-k-seventy-two)(bin-sixty-five-k-five-hundred-thirty-six)" 
-        (bin-read ((bin-mult bin-one-hundred-thirty-one-k-seventy-two) bin-sixty-five-k-five-hundred-thirty-six)) "8589934592")
+    (test-list-element "bin-mult(bn.1023)(bn.1023)" 
+        (bin-read ((bin-mult bn.1023) bn.1023)) "1046529")
+    (test-list-element "bin-mult(bn.1048)(bn.512)" 
+        (bin-read ((bin-mult bn.1048) bn.512)) "1048576")
+    (test-list-element "bin-mult(bn.131_072)(bn.65_536)" 
+        (bin-read ((bin-mult bn.131_072) bn.65_536)) "8589934592")
 
     ; scalability
-    (test-list-element "bin-mult(bin-one-sextillion)(bin-one-sextillion)" 
-        (bin-read ((bin-mult bin-one-sextillion) bin-one-sextillion)) "1000000000000000000000000000000000000000000")
+    (test-list-element "bin-mult(bn.1_000_000_000_000_000_000_000)(bn.1_000_000_000_000_000_000_000)" 
+        (bin-read ((bin-mult bn.1_000_000_000_000_000_000_000) bn.1_000_000_000_000_000_000_000)) "1000000000000000000000000000000000000000000")
 ))
 
 (show-results "bin-mult" bin-mult-tests)
@@ -167,56 +167,56 @@
   ;; trivial cases
   (test-list-element "bin-sub(bn.0)(bn.0)"
     (bin-read ((bin-sub bn.0) bn.0)) "0")
-  (test-list-element "bin-sub(bin-one)(bn.0)"
-    (bin-read ((bin-sub bin-one) bn.0)) "1")
-  (test-list-element "bin-sub(bin-two)(bn.0)"
-    (bin-read ((bin-sub bin-two) bn.0)) "2")
-  (test-list-element "bin-sub(bin-two)(bin-one)"
-    (bin-read ((bin-sub bin-two) bin-one)) "1")
+  (test-list-element "bin-sub(bn.1)(bn.0)"
+    (bin-read ((bin-sub bn.1) bn.0)) "1")
+  (test-list-element "bin-sub(bn.2)(bn.0)"
+    (bin-read ((bin-sub bn.2) bn.0)) "2")
+  (test-list-element "bin-sub(bn.2)(bn.1)"
+    (bin-read ((bin-sub bn.2) bn.1)) "1")
 
   ;; small numbers
-  (test-list-element "bin-sub(bin-three)(bin-two)"
-    (bin-read ((bin-sub bin-three) bin-two)) "1")
-  (test-list-element "bin-sub(bin-four)(bin-one)"
-    (bin-read ((bin-sub bin-four) bin-one)) "3")
-  (test-list-element "bin-sub(bin-seven)(bin-five)"
-    (bin-read ((bin-sub bin-seven) bin-five)) "2")
-  (test-list-element "bin-sub(bin-six)(bin-three)"
-    (bin-read ((bin-sub bin-six) bin-three)) "3")
+  (test-list-element "bin-sub(bn.3)(bn.2)"
+    (bin-read ((bin-sub bn.3) bn.2)) "1")
+  (test-list-element "bin-sub(bn.4)(bn.1)"
+    (bin-read ((bin-sub bn.4) bn.1)) "3")
+  (test-list-element "bin-sub(bn.7)(bn.5)"
+    (bin-read ((bin-sub bn.7) bn.5)) "2")
+  (test-list-element "bin-sub(bn.6)(bn.3)"
+    (bin-read ((bin-sub bn.6) bn.3)) "3")
 
   ;; large numbers
-  (test-list-element "bin-sub(bin-thirty-two)(bin-one)"
-    (bin-read ((bin-sub bin-thirty-two) bin-one)) "31")
-  (test-list-element "bin-sub(bin-thirty-one)(bin-fifteen)"
-    (bin-read ((bin-sub bin-thirty-one) bin-fifteen)) "16")
-  (test-list-element "bin-sub(bin-five-hundred-twelve)(bin-five-hundred-twelve)"
-    (bin-read ((bin-sub bin-five-hundred-twelve) bin-five-hundred-twelve)) "0")
-  (test-list-element "bin-sub(bin-five-hundred-twelve)(bin-two-hundred-fifty-six)"
-    (bin-read ((bin-sub bin-five-hundred-twelve) bin-two-hundred-fifty-six)) "256")
+  (test-list-element "bin-sub(bn.32)(bn.1)"
+    (bin-read ((bin-sub bn.32) bn.1)) "31")
+  (test-list-element "bin-sub(bn.31)(bn.15)"
+    (bin-read ((bin-sub bn.31) bn.15)) "16")
+  (test-list-element "bin-sub(bn.512)(bn.512)"
+    (bin-read ((bin-sub bn.512) bn.512)) "0")
+  (test-list-element "bin-sub(bn.512)(bn.256)"
+    (bin-read ((bin-sub bn.512) bn.256)) "256")
 
   ;; uneven list lengths
-  (test-list-element "bin-sub(bin-nine)(bin-one)"
-    (bin-read ((bin-sub bin-nine) bin-one)) "8")
-  (test-list-element "bin-sub(bin-sixty-four)(bin-fifteen)"
-    (bin-read ((bin-sub bin-sixty-four) bin-fifteen)) "49")
-  (test-list-element "bin-sub(bin-one-hundred-twenty-eight)(bin-seven)"
-    (bin-read ((bin-sub bin-one-hundred-twenty-eight) bin-seven)) "121")
+  (test-list-element "bin-sub(bn.9)(bn.1)"
+    (bin-read ((bin-sub bn.9) bn.1)) "8")
+  (test-list-element "bin-sub(bn.64)(bn.15)"
+    (bin-read ((bin-sub bn.64) bn.15)) "49")
+  (test-list-element "bin-sub(bn.128)(bn.7)"
+    (bin-read ((bin-sub bn.128) bn.7)) "121")
 
   ;; borrow propagation
-  (test-list-element "bin-sub(bin-five)(bin-one)"
-    (bin-read ((bin-sub bin-five) bin-one)) "4")
-  (test-list-element "bin-sub(bin-eight)(bin-one)"
-    (bin-read ((bin-sub bin-eight) bin-one)) "7")
-  (test-list-element "bin-sub(bin-fifteen)(bin-one)"
-    (bin-read ((bin-sub bin-fifteen) bin-one)) "14")
-  (test-list-element "bin-sub(bin-sixteen)(bin-one)"
-    (bin-read ((bin-sub bin-sixteen) bin-one)) "15")
+  (test-list-element "bin-sub(bn.5)(bn.1)"
+    (bin-read ((bin-sub bn.5) bn.1)) "4")
+  (test-list-element "bin-sub(bn.8)(bn.1)"
+    (bin-read ((bin-sub bn.8) bn.1)) "7")
+  (test-list-element "bin-sub(bn.15)(bn.1)"
+    (bin-read ((bin-sub bn.15) bn.1)) "14")
+  (test-list-element "bin-sub(bn.16)(bn.1)"
+    (bin-read ((bin-sub bn.16) bn.1)) "15")
 
   ;; scalability
-  (test-list-element "bin-sub(bin-two-billion)(bin-one-billion)"
-    (bin-read ((bin-sub bin-two-billion) bin-one-billion)) "1000000000")
-  (test-list-element "bin-sub(bin-one-sextillion-and-three)(bin-one-sextillion)"
-    (bin-read ((bin-sub bin-one-sextillion-and-three) bin-one-sextillion)) "3")
+  (test-list-element "bin-sub(bn.2_000_000_000)(bn.1_000_000_000)"
+    (bin-read ((bin-sub bn.2_000_000_000) bn.1_000_000_000)) "1000000000")
+  (test-list-element "bin-sub(bn.1_000_000_000_000_000_000_003)(bn.1_000_000_000_000_000_000_000)"
+    (bin-read ((bin-sub bn.1_000_000_000_000_000_000_003) bn.1_000_000_000_000_000_000_000)) "3")
 ))
 
 (show-results "bin-sub" bin-sub-tests)
@@ -228,61 +228,61 @@
     (test-list-element "bin-gte(bn.0)(bn.0)"
         (b-read ((bin-gte bn.0) bn.0))
         "true")
-    (test-list-element "bin-gte(bn.0)(bin-one)"
-        (b-read ((bin-gte bn.0) bin-one))
+    (test-list-element "bin-gte(bn.0)(bn.1)"
+        (b-read ((bin-gte bn.0) bn.1))
         "false")
-    (test-list-element "bin-gte(bin-one)(bn.0)"
-        (b-read ((bin-gte bin-one) bn.0))
+    (test-list-element "bin-gte(bn.1)(bn.0)"
+        (b-read ((bin-gte bn.1) bn.0))
         "true")
 
     ;; small
-    (test-list-element "bin-gte(bin-two)(bin-three)"
-        (b-read ((bin-gte bin-two) bin-three))
+    (test-list-element "bin-gte(bn.2)(bn.3)"
+        (b-read ((bin-gte bn.2) bn.3))
         "false")
-    (test-list-element "bin-gte(bin-four)(bin-two)"
-        (b-read ((bin-gte bin-four) bin-two))
+    (test-list-element "bin-gte(bn.4)(bn.2)"
+        (b-read ((bin-gte bn.4) bn.2))
         "true")
-    (test-list-element "bin-gte(bin-four)(bin-seven)"
-        (b-read ((bin-gte bin-four) bin-seven))
+    (test-list-element "bin-gte(bn.4)(bn.7)"
+        (b-read ((bin-gte bn.4) bn.7))
         "false")
-    (test-list-element "bin-gte(bin-nine)(bin-seven)"
-        (b-read ((bin-gte bin-nine) bin-seven))
+    (test-list-element "bin-gte(bn.9)(bn.7)"
+        (b-read ((bin-gte bn.9) bn.7))
         "true")
-    (test-list-element "bin-gte(bin-ten)(bin-twelve)"
-        (b-read ((bin-gte bin-ten) bin-twelve))
+    (test-list-element "bin-gte(bn.10)(bn.12)"
+        (b-read ((bin-gte bn.10) bn.12))
         "false")
 
     ;; large
-    (test-list-element "bin-gte(bin-thirty-two)(bin-sixteen)"
-        (b-read ((bin-gte bin-thirty-two) bin-sixteen))
+    (test-list-element "bin-gte(bn.32)(bn.16)"
+        (b-read ((bin-gte bn.32) bn.16))
         "true")
-    (test-list-element "bin-gte(bin-thirty-two)(bin-sixty-four)"
-        (b-read ((bin-gte bin-thirty-two) bin-sixty-four))
+    (test-list-element "bin-gte(bn.32)(bn.64)"
+        (b-read ((bin-gte bn.32) bn.64))
         "false")
-    (test-list-element "bin-gte(bin-five-hundred-twelve)(bin-four)"
-        (b-read ((bin-gte bin-five-hundred-twelve) bin-four))
+    (test-list-element "bin-gte(bn.512)(bn.4)"
+        (b-read ((bin-gte bn.512) bn.4))
         "true")
 
     ;; uneven
-    (test-list-element "bin-gte(bin-twelve)(bin-nine)"
-        (b-read ((bin-gte bin-twelve) bin-nine))
+    (test-list-element "bin-gte(bn.12)(bn.9)"
+        (b-read ((bin-gte bn.12) bn.9))
         "true")
-    (test-list-element "bin-gte(bin-seven)(bin-nine)"
-        (b-read ((bin-gte bin-seven) bin-nine))
+    (test-list-element "bin-gte(bn.7)(bn.9)"
+        (b-read ((bin-gte bn.7) bn.9))
         "false")
 
     ;; scalability
-    (test-list-element "bin-gte(bin-one-billion)(bin-two)"
-        (b-read ((bin-gte bin-one-billion) bin-two))
+    (test-list-element "bin-gte(bn.1_000_000_000)(bn.2)"
+        (b-read ((bin-gte bn.1_000_000_000) bn.2))
         "true")
-    (test-list-element "bin-gte(bin-one-billion)(bin-one-hundred-thousand)"
-        (b-read ((bin-gte bin-one-billion) bin-one-hundred-thousand))
+    (test-list-element "bin-gte(bn.1_000_000_000)(bn.100_000)"
+        (b-read ((bin-gte bn.1_000_000_000) bn.100_000))
         "true")
-    (test-list-element "bin-gte(bin-one-sextillion)(bin-one-trillion)"
-        (b-read ((bin-gte bin-one-sextillion) bin-one-trillion))
+    (test-list-element "bin-gte(bn.1_000_000_000_000_000_000_000)(bn.1_000_000_000_000)"
+        (b-read ((bin-gte bn.1_000_000_000_000_000_000_000) bn.1_000_000_000_000))
         "true")
-    (test-list-element "bin-gte(bin-one-billion)(bin-one-sextillion)"
-        (b-read ((bin-gte bin-one-billion) bin-one-sextillion))
+    (test-list-element "bin-gte(bn.1_000_000_000)(bn.1_000_000_000_000_000_000_000)"
+        (b-read ((bin-gte bn.1_000_000_000) bn.1_000_000_000_000_000_000_000))
         "false")
 ))
 
@@ -293,71 +293,71 @@
 
 (define bin-div-tests (list
     ; trivial zero cases
-    (test-list-element "bin-div(bn.0)(bin-one)"
-        (bin-read ((bin-div bn.0) bin-one)) "0")
-    (test-list-element "bin-div(bin-one)(bn.0)"
-        (bin-read ((bin-div bin-one) bn.0)) "0")
+    (test-list-element "bin-div(bn.0)(bn.1)"
+        (bin-read ((bin-div bn.0) bn.1)) "0")
+    (test-list-element "bin-div(bn.1)(bn.0)"
+        (bin-read ((bin-div bn.1) bn.0)) "0")
     (test-list-element "bin-div(bn.0)(bn.0)"
         (bin-read ((bin-div bn.0) bn.0)) "0")
-    (test-list-element "bin-div(bin-one)(bin-two)"
-        (bin-read ((bin-div bin-one) bin-two)) "0")
-    (test-list-element "bin-div(bin-two)(bin-three)"
-        (bin-read ((bin-div bin-two) bin-three)) "0")
+    (test-list-element "bin-div(bn.1)(bn.2)"
+        (bin-read ((bin-div bn.1) bn.2)) "0")
+    (test-list-element "bin-div(bn.2)(bn.3)"
+        (bin-read ((bin-div bn.2) bn.3)) "0")
 
     ; trivial cases
-    (test-list-element "bin-div(bin-one)(bin-one)"
-        (bin-read ((bin-div bin-one) bin-one)) "1")
-    (test-list-element "bin-div(bin-two)(bin-one)"
-        (bin-read ((bin-div bin-two) bin-one)) "2")
+    (test-list-element "bin-div(bn.1)(bn.1)"
+        (bin-read ((bin-div bn.1) bn.1)) "1")
+    (test-list-element "bin-div(bn.2)(bn.1)"
+        (bin-read ((bin-div bn.2) bn.1)) "2")
 
     ; small numbers
-    (test-list-element "bin-div(bin-three)(bin-two)"
-        (bin-read ((bin-div bin-three) bin-two)) "1")
-    (test-list-element "bin-div(bin-four)(bin-two)"
-        (bin-read ((bin-div bin-four) bin-two)) "2")
-    (test-list-element "bin-div(bin-seven)(bin-three)"
-        (bin-read ((bin-div bin-seven) bin-three)) "2")
-    (test-list-element "bin-div(bin-nine)(bin-three)"
-        (bin-read ((bin-div bin-nine) bin-three)) "3")
+    (test-list-element "bin-div(bn.3)(bn.2)"
+        (bin-read ((bin-div bn.3) bn.2)) "1")
+    (test-list-element "bin-div(bn.4)(bn.2)"
+        (bin-read ((bin-div bn.4) bn.2)) "2")
+    (test-list-element "bin-div(bn.7)(bn.3)"
+        (bin-read ((bin-div bn.7) bn.3)) "2")
+    (test-list-element "bin-div(bn.9)(bn.3)"
+        (bin-read ((bin-div bn.9) bn.3)) "3")
 
     ; large numbers
-    (test-list-element "bin-div(bin-thirty-two)(bin-four)"
-        (bin-read ((bin-div bin-thirty-two) bin-four)) "8")
-    (test-list-element "bin-div(bin-thirty-two)(bin-eight)"
-        (bin-read ((bin-div bin-thirty-two) bin-eight)) "4")
-    (test-list-element "bin-div(bin-sixty-four)(bin-four)"
-        (bin-read ((bin-div bin-sixty-four) bin-four)) "16")
-    (test-list-element "bin-div(bin-five-hundred-twelve)(bin-four)"
-        (bin-read ((bin-div bin-five-hundred-twelve) bin-four)) "128")
+    (test-list-element "bin-div(bn.32)(bn.4)"
+        (bin-read ((bin-div bn.32) bn.4)) "8")
+    (test-list-element "bin-div(bn.32)(bn.8)"
+        (bin-read ((bin-div bn.32) bn.8)) "4")
+    (test-list-element "bin-div(bn.64)(bn.4)"
+        (bin-read ((bin-div bn.64) bn.4)) "16")
+    (test-list-element "bin-div(bn.512)(bn.4)"
+        (bin-read ((bin-div bn.512) bn.4)) "128")
 
     ;; uneven list lengths
-    (test-list-element "bin-div(bin-ten)(bin-two)"
-        (bin-read ((bin-div bin-ten) bin-two)) "5")
-    (test-list-element "bin-div(bin-twelve)(bin-three)"
-        (bin-read ((bin-div bin-twelve) bin-three)) "4")
-    (test-list-element "bin-div(bin-sixteen)(bin-two)"
-        (bin-read ((bin-div bin-sixteen) bin-two)) "8")
+    (test-list-element "bin-div(bn.10)(bn.2)"
+        (bin-read ((bin-div bn.10) bn.2)) "5")
+    (test-list-element "bin-div(bn.12)(bn.3)"
+        (bin-read ((bin-div bn.12) bn.3)) "4")
+    (test-list-element "bin-div(bn.16)(bn.2)"
+        (bin-read ((bin-div bn.16) bn.2)) "8")
 
     ; scalability
-    (test-list-element "bin-div(bin-one-billion)(bin-one-hundred-thousand)"
-        (bin-read ((bin-div bin-one-billion) bin-one-hundred-thousand)) "10000")
-    (test-list-element "bin-div(bin-one-sextillion)(bin-one-trillion)"
-        (bin-read ((bin-div bin-one-sextillion) bin-one-trillion)) "1000000000")
-    (test-list-element "bin-div(bin-one-thousand)(bin-one-two)"
-        (bin-read ((bin-div bin-one-thousand) bin-two)) "500")
-    (test-list-element "bin-div(bin-two-k-forty-eight)(bin-one-two)"
-        (bin-read ((bin-div bin-two-k-forty-eight) bin-two)) "1024")
-    (test-list-element "bin-div(bin-two-k-forty-eight)(bin-one-three)"
-        (bin-read ((bin-div bin-two-k-forty-eight) bin-three)) "682")
+    (test-list-element "bin-div(bn.1_000_000_000)(bn.100_000)"
+        (bin-read ((bin-div bn.1_000_000_000) bn.100_000)) "10000")
+    (test-list-element "bin-div(bn.1_000_000_000_000_000_000_000)(bn.1_000_000_000_000)"
+        (bin-read ((bin-div bn.1_000_000_000_000_000_000_000) bn.1_000_000_000_000)) "1000000000")
+    (test-list-element "bin-div(bn.1000)(bn.1-two)"
+        (bin-read ((bin-div bn.1000) bn.2)) "500")
+    (test-list-element "bin-div(bn.1048)(bn.1-two)"
+        (bin-read ((bin-div bn.1048) bn.2)) "1024")
+    (test-list-element "bin-div(bn.1048)(bn.1-three)"
+        (bin-read ((bin-div bn.1048) bn.3)) "682")
 
-    (test-list-element "bin-div(bin-ten-thousand)(bin-one-two)"
-        (bin-read ((bin-div bin-ten-thousand) bin-two)) "5000")
-    (test-list-element "bin-div(bin-one-hundred-thousand)(bin-one-two)"
-        (bin-read ((bin-div bin-one-hundred-thousand) bin-two)) "50000")
-    (test-list-element "bin-div(bin-one-trillion)(bin-one-two)"
-        (bin-read ((bin-div bin-one-trillion) bin-two)) "500000000000")
-    (test-list-element "bin-div(bin-one-sextillion)(bin-one-two)"
-        (bin-read ((bin-div bin-one-sextillion) bin-two)) "500000000000000000000")
+    (test-list-element "bin-div(bn.10_000)(bn.1-two)"
+        (bin-read ((bin-div bn.10_000) bn.2)) "5000")
+    (test-list-element "bin-div(bn.100_000)(bn.1-two)"
+        (bin-read ((bin-div bn.100_000) bn.2)) "50000")
+    (test-list-element "bin-div(bn.1_000_000_000_000)(bn.1-two)"
+        (bin-read ((bin-div bn.1_000_000_000_000) bn.2)) "500000000000")
+    (test-list-element "bin-div(bn.1_000_000_000_000_000_000_000)(bn.1-two)"
+        (bin-read ((bin-div bn.1_000_000_000_000_000_000_000) bn.2)) "500000000000000000000")
 ))
 
 (show-results "bin-div" bin-div-tests)

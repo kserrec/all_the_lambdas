@@ -34,61 +34,61 @@
     ~ A FEW NUMBERS ~
 |#
 (def bn.0 = (_cons zero))
-(def bin-one = (_cons one))
-(def bin-two = (_cons one zero))
-(def bin-three = (_cons one one))
-(def bin-four = (_cons one zero zero))
-(def bin-five = (_cons one zero one))
-(def bin-six = (_cons one one zero))
-(def bin-seven = (_cons one one one))
-(def bin-eight = (_cons one zero zero zero))
-(def bin-nine = (_cons one zero zero one))
-(def bin-ten = (_cons one zero one zero))
-(def bin-twelve = (_cons one one zero zero))
-(def bin-fifteen = (_cons one one one one))
-(def bin-sixteen = (_cons one zero zero zero zero))
-(def bin-twenty = (_cons one zero one zero zero))
-(def bin-twenty-four = (_cons one one zero zero zero))
-(def bin-thirty-one = (_cons one one one one one))
-(def bin-thirty-two = (_cons one zero zero zero zero zero))
-(def bin-sixty-four = (_cons one zero zero zero zero zero zero))
-(def bin-one-hundred-twenty-seven = (_cons one one one one one one one))
-(def bin-one-hundred-twenty-eight = (_cons one zero zero zero zero zero zero zero))
-(def bin-two-hundred-fifty-five = (_cons one one one one one one one one))
-(def bin-two-hundred-fifty-six = (_cons one zero zero zero zero zero zero zero zero))
-(def bin-five-hundred-twelve = (_cons one zero zero zero zero zero zero zero zero zero))
-(def bin-one-thousand = (_cons one one one one one zero one zero zero zero))
-(def bin-one-k-twenty-three = (_cons one one one one one one one one one one))
-(def bin-two-k-forty-eight = (_cons one zero zero zero zero zero zero zero zero zero zero zero))
-(def bin-ten-thousand = (_cons one zero zero one one one zero zero zero one zero zero zero zero))
-(def bin-sixty-five-k-five-hundred-thirty-six = (_cons one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero))
-(def bin-one-hundred-thousand = (_cons one one zero zero zero zero one one zero one zero one zero zero zero zero zero))
-(def bin-one-hundred-thirty-one-k-seventy-two = (_cons one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero))
-(def bin-one-billion =
+(def bn.1 = (_cons one))
+(def bn.2 = (_cons one zero))
+(def bn.3 = (_cons one one))
+(def bn.4 = (_cons one zero zero))
+(def bn.5 = (_cons one zero one))
+(def bn.6 = (_cons one one zero))
+(def bn.7 = (_cons one one one))
+(def bn.8 = (_cons one zero zero zero))
+(def bn.9 = (_cons one zero zero one))
+(def bn.10 = (_cons one zero one zero))
+(def bn.12 = (_cons one one zero zero))
+(def bn.15 = (_cons one one one one))
+(def bn.16 = (_cons one zero zero zero zero))
+(def bn.20 = (_cons one zero one zero zero))
+(def bn.20-four = (_cons one one zero zero zero))
+(def bn.31 = (_cons one one one one one))
+(def bn.32 = (_cons one zero zero zero zero zero))
+(def bn.64 = (_cons one zero zero zero zero zero zero))
+(def bn.127 = (_cons one one one one one one one))
+(def bn.128 = (_cons one zero zero zero zero zero zero zero))
+(def bn.255 = (_cons one one one one one one one one))
+(def bn.256 = (_cons one zero zero zero zero zero zero zero zero))
+(def bn.512 = (_cons one zero zero zero zero zero zero zero zero zero))
+(def bn.1000 = (_cons one one one one one zero one zero zero zero))
+(def bn.1023 = (_cons one one one one one one one one one one))
+(def bn.1048 = (_cons one zero zero zero zero zero zero zero zero zero zero zero))
+(def bn.10_000 = (_cons one zero zero one one one zero zero zero one zero zero zero zero))
+(def bn.65_536 = (_cons one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero))
+(def bn.100_000 = (_cons one one zero zero zero zero one one zero one zero one zero zero zero zero zero))
+(def bn.131_072 = (_cons one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero))
+(def bn.1_000_000_000 =
   (_cons one one one zero one one one zero 
          zero one one zero one zero one one 
          zero zero one zero one zero zero zero 
          zero zero zero zero zero zero)
 )
-(def bin-two-billion =
+(def bn.2_000_000_000 =
   (_cons one one one zero one one one zero 
          zero one one zero one zero one one 
          zero zero one zero one zero zero zero 
          zero zero zero zero zero zero zero)
 )
-(def bin-one-trillion = 
+(def bn.1_000_000_000_000 = 
     (_cons one one one zero one zero zero zero one one zero one zero one zero zero one zero one zero zero one zero one zero zero zero one zero zero zero zero zero zero zero zero zero zero zero zero)
 )
-(def bin-one-quadrillion = 
+(def bn.1_000_000_000_000_000 = 
     (_cons one one one zero zero zero one one zero one zero one one one one one one zero one zero one zero zero one zero zero one one zero zero zero one one zero one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero)
 )
-(def bin-one-quintillion = 
+(def bn.1_000_000_000_000_000_000 = 
     (_cons one one zero one one one one zero zero zero zero zero one zero one one zero one one zero one zero one one zero zero one one one zero one zero zero one one one zero one one zero zero one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero)
 )
-(def bin-one-sextillion = 
+(def bn.1_000_000_000_000_000_000_000 = 
     (_cons one one zero one one zero zero zero one one zero one zero one one one zero zero one zero zero one one zero one zero one one zero one one one zero zero zero one zero one one one zero one one one one zero one zero one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero)
 )
-(def bin-one-sextillion-and-three = 
+(def bn.1_000_000_000_000_000_000_003 = 
     (_cons one one zero one one zero zero zero one one zero one zero one one one zero zero one zero zero one one zero one zero one one zero one one one zero zero zero one zero one one one zero one one one one zero one zero one zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero zero one one)
 )
 
@@ -217,7 +217,7 @@
 |#
 (def bin-add l1 l2 = (rem-head-zeroes (rev ((((Y bin-add-helper) (rev l1)) (rev l2)) zero))))
 
-(def bin-succ bin-num = ((bin-add bin-num) bin-one))
+(def bin-succ bin-num = ((bin-add bin-num) bn.1))
 
 ;===================================================
 
@@ -412,7 +412,7 @@
         _then bn.0
         _else (rem-head-zeroes (rev ((((Y bin-sub-helper) (rev l1)) (rev l2)) zero)))))
 
-(def bin-pred bin-num = ((bin-sub bin-num) bin-one))
+(def bin-pred bin-num = ((bin-sub bin-num) bn.1))
 
 ;===================================================
 
@@ -439,7 +439,7 @@
     (_let tail-dividend = ((takeTail ((sub len-dividend) take-n)) dividend)
     (_if ((bin-gte sub-dividend) divisor)
         _then 
-            (_let new-running-q = ((app running-q) bin-one)
+            (_let new-running-q = ((app running-q) bn.1)
             (_if (isNil tail-dividend)
                 _then new-running-q
                 _else 
@@ -484,7 +484,7 @@
         - Return new-val when l2 is zero
 |#
 
-(def bin-exp l1 l2 = ((((Y bin-exp-helper) l1) l2) bin-one))
+(def bin-exp l1 l2 = ((((Y bin-exp-helper) l1) l2) bn.1))
 
 (def bin-exp-helper f l1 l2 new-val = 
     (_if (bin-is-zero l2)
