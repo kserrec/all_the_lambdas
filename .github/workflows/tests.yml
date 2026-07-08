@@ -17,8 +17,8 @@ jobs:
           version: stable
           variant: CS
 
-      - name: Install lazy package
-        run: raco pkg install --auto --skip-installed lazy
+      - name: Install lazy package (if not bundled)
+        run: racket -e '(require lazy)' 2>/dev/null || raco pkg install --auto lazy
 
       - name: Run test suite
         run: ./run-all-tests.sh
