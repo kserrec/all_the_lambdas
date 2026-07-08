@@ -28,7 +28,7 @@ is valued there too, so explicit beats clever.
 - [x] **3. Continuous integration**
   - GitHub Actions workflow (`.github/workflows/tests.yml`): installs Racket +
     `lazy`, runs `./run-all-tests.sh` on every push and pull request
-  - Not yet observed passing on GitHub — verify on first push
+  - Verified passing on GitHub (first green run 2026-07-08, 1405/1405 tests)
 
 - [x] **4. Small cleanups**
   - README: added a repository map table and single-file test instructions
