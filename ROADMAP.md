@@ -6,6 +6,22 @@ The sugar layer (macros) and tooling (test runner, CI) are ordinary
 Racket/bash and may be improved freely — but readability-as-teaching-material
 is valued there too, so explicit beats clever.
 
+## Session status (as of 2026-07-08)
+
+Phase 2 is essentially complete. Everything numbered below is done except:
+- **8c** — the reals arc (dyadics → intervals → computable reals). Deliberately
+  **set aside** by the user for now; do not start it without asking.
+- The **item-7 follow-on** slices (option-returning search, `HEAD-OPT`,
+  Result-returning safe division) remain open but optional.
+
+**Phase 3 is not yet defined** — the direction is a pending user decision.
+Candidate tracks discussed (reals excluded): (a) strings → parser combinators
+[reuses `Result`; recommended], (b) deepen the strict type layer [richer errors,
+precondition checks, typed-list element discipline, function signatures — the
+item-8 road not taken], (c) data structures [trees → BST → sets → maps → graphs],
+(d) lambda terms as data [Var/Abs/App, substitution, beta reduction, De Bruijn,
+SKI]. See `~/all-the-lambdas-notes.md` for the full menu.
+
 ## Phase 2 — continuing the build (from ~/all-the-lambdas-notes.md priorities)
 
 - [x] **1. README framing** — "what happens after the tutorial ends" opening,
