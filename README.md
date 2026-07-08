@@ -70,6 +70,7 @@ Note: this is a work in progress and I don't know when it will be complete if ev
 - **Rationals** and basic operators for them
 - **Binary Digit List Encodings of Natural Numbers** — see [Binary Digit Lists](#binary-digit-lists) below
 - **Signed Binary Integers** — integers as {sign, binary digit list} pairs with arithmetic, comparisons, absolute value, and parity (`int-binary-lists.rkt`)
+- **Option and Result** — typed containers in the strict type layer for computations that may not return a value: `option = some(value) | none` and `result = ok(value) | err(error)`, so expected absence and failure become values you handle instead of raw error objects (`types/TYPES.rkt`)
 - **Data Structures as Closures** using closures to represent key/value pairs in a few ways (translating Greg Michaelson's code into pure lambda calculus)
 
 #### Typed Untyped Lambda Calculus

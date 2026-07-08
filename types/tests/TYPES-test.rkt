@@ -74,3 +74,85 @@
 ))
 
 (show-results "type-check3" type-check3-tests)
+
+; ====================================================================
+
+(define option-tests (list
+    ; rendering
+    (test-list-element "read-any(some(THREE))"
+        (read-any (make-some THREE)) "option:some(nat:3)")
+    (test-list-element "read-any(NONE)"
+        (read-any NONE) "option:none")
+    (test-list-element "read-option(some(posONE))"
+        (read-option (make-some posONE)) "option:some(int:1)")
+    ; case predicates
+    (test-list-element "is-some(some(THREE))"
+        (b-read (is-some (make-some THREE))) "true")
+    (test-list-element "is-some(NONE)"
+        (b-read (is-some NONE)) "false")
+    (test-list-element "is-none(NONE)"
+        (b-read (is-none NONE)) "true")
+    (test-list-element "is-none(some(THREE))"
+        (b-read (is-none (make-some THREE))) "false")
+    ; type predicate keeps option distinct from other types
+    (test-list-element "is-option(some(THREE))"
+        (b-read (is-option (make-some THREE))) "true")
+    (test-list-element "is-option(THREE)"
+        (b-read (is-option THREE)) "false")
+    (test-list-element "is-option(ok(THREE))"
+        (b-read (is-option (make-ok THREE))) "false")
+    ; selection and safe elimination
+    (test-list-element "unwrap-some(some(THREE))"
+        (read-any (unwrap-some (make-some THREE))) "nat:3")
+    (test-list-element "option-or-else(some(THREE), ONE)"
+        (read-any ((option-or-else (make-some THREE)) ONE)) "nat:3")
+    (test-list-element "option-or-else(NONE, ONE)"
+        (read-any ((option-or-else NONE) ONE)) "nat:1")
+    ; nesting: the payload is itself a typed object, read recursively
+    (test-list-element "read-any(some(some(THREE)))"
+        (read-any (make-some (make-some THREE))) "option:some(option:some(nat:3))")
+))
+
+(show-results "option" option-tests)
+
+; ====================================================================
+
+(define result-tests (list
+    ; rendering
+    (test-list-element "read-any(ok(THREE))"
+        (read-any (make-ok THREE)) "result:ok(nat:3)")
+    (test-list-element "read-any(err(NAT-ERROR))"
+        (read-any (make-err-result NAT-ERROR)) "result:err(err:nat)")
+    (test-list-element "read-result(ok(THREE))"
+        (read-result (make-ok THREE)) "result:ok(nat:3)")
+    ; case predicates
+    (test-list-element "is-ok(ok(THREE))"
+        (b-read (is-ok (make-ok THREE))) "true")
+    (test-list-element "is-err(err(NAT-ERROR))"
+        (b-read (is-err (make-err-result NAT-ERROR))) "true")
+    (test-list-element "is-ok(err(NAT-ERROR))"
+        (b-read (is-ok (make-err-result NAT-ERROR))) "false")
+    (test-list-element "is-err(ok(THREE))"
+        (b-read (is-err (make-ok THREE))) "false")
+    ; type predicate keeps result distinct from other types
+    (test-list-element "is-result(ok(THREE))"
+        (b-read (is-result (make-ok THREE))) "true")
+    (test-list-element "is-result(THREE)"
+        (b-read (is-result THREE)) "false")
+    (test-list-element "is-result(some(THREE))"
+        (b-read (is-result (make-some THREE))) "false")
+    ; selection and safe elimination
+    (test-list-element "unwrap-ok(ok(THREE))"
+        (read-any (unwrap-ok (make-ok THREE))) "nat:3")
+    (test-list-element "unwrap-err(err(NAT-ERROR))"
+        (read-any (unwrap-err (make-err-result NAT-ERROR))) "err:nat")
+    (test-list-element "result-or-else(ok(THREE), ONE)"
+        (read-any ((result-or-else (make-ok THREE)) ONE)) "nat:3")
+    (test-list-element "result-or-else(err(NAT-ERROR), ONE)"
+        (read-any ((result-or-else (make-err-result NAT-ERROR)) ONE)) "nat:1")
+    ; nesting: ok wrapping an option renders recursively
+    (test-list-element "read-any(ok(some(THREE)))"
+        (read-any (make-ok (make-some THREE))) "result:ok(option:some(nat:3))")
+))
+
+(show-results "result" result-tests)

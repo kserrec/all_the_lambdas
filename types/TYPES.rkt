@@ -153,10 +153,14 @@
 (def nat = two)
 ;   INT NUMBER
 (def int = three)
-;   LIST 
+;   LIST
 (def _list = four)
-;   RAT 
+;   RAT
 (def rat = five)
+;   OPTION - some(value) | none
+(def option = (succ five))
+;   RESULT - ok(value) | err(error)
+(def result = (succ (succ five)))
 
 ;===================================================
 
@@ -321,6 +325,55 @@
     - Structure: obj => list
 |#
 (def is-rat obj = ((is-type rat) obj))
+;===================================================
+
+#|
+    ~ OPTION AND RESULT ~
+    - Idea: two typed containers for computations that may not produce a value.
+        - option = some(value) | none    (for expected absence, e.g. a search
+                                           that finds nothing, an out-of-range index)
+        - result = ok(value) | err(error) (an explicit success/error channel, so
+                                           callers handle errors as data instead
+                                           of fishing raw error objects out of returns)
+    - Structure: both reuse the {type, value} shape. The value is itself a pair
+        whose head is an untyped bool discriminating the two cases - exactly the
+        {sign, magnitude} trick integers use - and whose tail is the payload:
+            some(v) = {option, {true,  v}}      none    = {option, {false, nil}}
+            ok(v)   = {result, {true,  v}}       err(e)  = {result, {false, e}}
+        The payload v is itself a typed object; err's payload e is an error object.
+|#
+
+;   CONSTRUCTORS
+(def make-some v = ((make-obj option) ((pair true) v)))
+(def NONE = ((make-obj option) ((pair false) nil)))
+(def make-ok v = ((make-obj result) ((pair true) v)))
+(def make-err-result e = ((make-obj result) ((pair false) e)))
+
+;   TYPE PREDICATES - is this object an option / a result at all?
+(def is-option obj = ((is-type option) obj))
+(def is-result obj = ((is-type result) obj))
+
+;   CASE PREDICATES - read the discriminating bool in the value pair.
+;       (assume a well-formed option/result, like is-nat assumes a typed object)
+(def is-some opt = (head (val opt)))
+(def is-none opt = (_not (head (val opt))))
+(def is-ok res = (head (val res)))
+(def is-err res = (_not (head (val res))))
+
+;   SELECTORS - pull the payload out of a some / ok / err.
+;       unwrap-some on a NONE (or unwrap-ok on an err) is caller error, like
+;       taking the head of an empty list - guard with the predicates first.
+(def unwrap-some opt = (tail (val opt)))
+(def unwrap-ok res = (tail (val res)))
+(def unwrap-err res = (tail (val res)))
+
+;   SAFE ELIMINATORS - collapse the container to a value, supplying a fallback
+;       for the empty/error case so the caller never has to branch by hand.
+(def option-or-else opt default =
+    (_if (is-some opt) _then (unwrap-some opt) _else default))
+(def result-or-else res default =
+    (_if (is-ok res) _then (unwrap-ok res) _else default))
+
 ;===================================================
 
 #|
@@ -529,7 +582,19 @@
 
 (def read-rat R = (string-append "rat:" (r-read (val R))))
 
-(def read-any OBJ = 
+; some(<inner>) / none, ok(<inner>) / err(<inner>); the payload is read with
+; read-any so any typed value (or the error inside an err) renders naturally
+(def read-option OPT =
+    (_if (is-some OPT)
+        _then (string-append "option:some(" (string-append (read-any (unwrap-some OPT)) ")"))
+        _else "option:none"))
+
+(def read-result RES =
+    (_if (is-ok RES)
+        _then (string-append "result:ok(" (string-append (read-any (unwrap-ok RES)) ")"))
+        _else (string-append "result:err(" (string-append (read-any (unwrap-err RES)) ")"))))
+
+(def read-any OBJ =
     (_if (is-bool OBJ)
      _then (read-bool OBJ)
     _else (
@@ -545,9 +610,17 @@
                     _if (is-rat OBJ)
                     _then (read-rat OBJ)
                     _else (
-                        _if (is-error OBJ)
-                        _then (read-error OBJ)
-                        _else (string OBJ))
+                        _if (is-option OBJ)
+                        _then (read-option OBJ)
+                        _else (
+                            _if (is-result OBJ)
+                            _then (read-result OBJ)
+                            _else (
+                                _if (is-error OBJ)
+                                _then (read-error OBJ)
+                                _else (string OBJ))
+                            )
+                        )
                     )
                 )))))
 

@@ -46,7 +46,16 @@ is valued there too, so explicit beats clever.
   labeled?" question is answered by which branch we are in, never by inspecting
   the message. Dropped the now-unused `racket/string` require from
   `types/LISTS.rkt`. Object language re-verified fully pure (2026-07-08)
-- [ ] **7. Add `Option`/`Result` to the strict typing branch**
+- [x] **7. Add `Option`/`Result` to the strict typing branch** — two new typed
+  containers in `types/TYPES.rkt`: `option = some(value) | none` (type tag 6)
+  and `result = ok(value) | err(error)` (type tag 7). Both reuse the
+  `{type, {discriminating-bool, payload}}` shape (the same trick integers use).
+  Constructors `make-some`/`NONE`/`make-ok`/`make-err-result`, predicates
+  `is-option`/`is-result`/`is-some`/`is-none`/`is-ok`/`is-err`, selectors
+  `unwrap-*`, safe eliminators `option-or-else`/`result-or-else`, and reader
+  integration (`read-option`/`read-result`, wired into `read-any`). 29 tests
+  (2026-07-08). Follow-on (not done): wire these into functions where failure
+  is expected — `IND` (out-of-range), search, `HEAD` of empty, division by zero
 - [ ] **8. Decide the next major tentacle** — binary rationals vs typed-list /
   function signatures (user decision)
 
