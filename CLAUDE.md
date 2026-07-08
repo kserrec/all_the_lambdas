@@ -81,11 +81,15 @@ them through readers.
   first, normalized (no leading zeros) via `rem-head-zeroes`; every public
   function returns normalized output
 - Signed binary integer (`int-binary-lists.rkt`): `{sign, binary nat}`
+- Binary rational (`binary-rationals.rkt`): `{signed binary integer, binary nat}`
+  — the same shape as the Church rational, mirrored onto the `-bin` operators
 - Typed object (`types/`): `{church-numeral type tag, value}`; error object:
   `{_error, {expected-type tag, message string}}`. The `type-check`/
   `type-check2`/`type-check3` wrappers check tags, run the wrapped untyped
   function, and chain error objects through failures so errors propagate as
   values; `fully-type*` additionally rewraps the return value with its tag.
+  Option/Result are two more typed containers layered on this (tags 6/7):
+  `{option, {is-some, payload}}` and `{result, {is-ok, payload}}`.
 
 **Tests** compare reader output strings:
 `(test-list-element "label" (bin-read expr) "42")`, grouped into a list and

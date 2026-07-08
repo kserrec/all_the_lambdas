@@ -547,6 +547,29 @@
 
 ; ====================================================================
 
+(define bin-eq-tests (list
+    (test-list-element "bin-eq(bin-zero)(bin-zero)"
+        (b-read ((bin-eq bin-zero) bin-zero)) "true")
+    (test-list-element "bin-eq(bin-five)(bin-five)"
+        (b-read ((bin-eq bin-five) bin-five)) "true")
+    (test-list-element "bin-eq(bin-five)(bin-four)"
+        (b-read ((bin-eq bin-five) bin-four)) "false")
+    (test-list-element "bin-eq(bin-four)(bin-five)"
+        (b-read ((bin-eq bin-four) bin-five)) "false")
+    ; unnormalized vs normalized still compare equal (bin-gte/lte normalize)
+    (test-list-element "bin-eq(bin-one)(bin-one)"
+        (b-read ((bin-eq bin-one) bin-one)) "true")
+    ; scalability
+    (test-list-element "bin-eq(bin-one-billion)(bin-one-billion)"
+        (b-read ((bin-eq bin-one-billion) bin-one-billion)) "true")
+    (test-list-element "bin-eq(bin-one-sextillion)(bin-one-sextillion-and-three)"
+        (b-read ((bin-eq bin-one-sextillion) bin-one-sextillion-and-three)) "false")
+))
+
+(show-results "bin-eq" bin-eq-tests)
+
+; ====================================================================
+
 (define bin-parity-tests (list
     (test-list-element "bin-is-even(bin-zero)"
         (b-read (bin-is-even bin-zero)) "true")

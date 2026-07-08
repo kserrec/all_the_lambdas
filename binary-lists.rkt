@@ -349,6 +349,13 @@
 (def bin-gt l1 l2 = (_not ((bin-lte l1) l2)))
 
 #|
+    ~ BINARY DIGIT LIST EQUALITY ~
+    Contract: (bin-list, bin-list) => bool
+    Logic: two numbers are equal exactly when each is >= the other
+|#
+(def bin-eq l1 l2 = ((_and ((bin-gte l1) l2)) ((bin-lte l1) l2)))
+
+#|
     The function get-new-borrow,
     is based entirely off this truth table:
     (zeroes are turned to false, ones to true)

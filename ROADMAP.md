@@ -62,8 +62,21 @@ is valued there too, so explicit beats clever.
     `some(index)`/`none` would retire those in-band sentinels
   - [ ] `HEAD-OPT` (no typed `HEAD` exists yet) and a Result-returning safe
     division (`err` on divide-by-zero)
-- [ ] **8. Decide the next major tentacle** — binary rationals vs typed-list /
-  function signatures (user decision)
+- [~] **8. Next major tentacle: binary rationals** (chosen 2026-07-08 over
+  typed-list/function-signatures). The scalable counterpart to `rationals.rkt`.
+  - [x] 8a. `binary-rationals.rkt` — `binR = {binZ numerator, binNat denominator}`,
+    mirroring `rationals.rkt` onto the `-bin` operators (uses the `bin-gcd`/
+    `bin-lcm` from item 6 directly instead of re-deriving Euclid). Reader,
+    constants, `reduce-bin`, `reciprocal-bin`, `invert-sign-R-bin`,
+    `convert-s-numer-bin`, `isZeroR-bin`, arithmetic (`addR-bin`/`subR-bin`/
+    `multR-bin`/`divR-bin`), and comparisons (`eqR-bin`/`gteR-bin`/`gtR-bin`/
+    `ltR-bin`/`lteR-bin`). Also filled a gap in `binary-lists.rkt`: `bin-eq`
+    (had gte/gt/lt/lte but no equality). 44 + 7 tests (2026-07-08)
+  - [ ] 8b. `floorR-bin` and `expR-bin` — the coupled, subtle pair (exponentiation
+    floors its exponent; watch the negative-value/remainder edge that bit the
+    Church `floorR`). Mirror rationals.rkt's `floorR`/`expR`
+  - [ ] 8c. (stretch) the numeric-tower next steps from the notes: dyadic
+    rationals, then intervals, then computable reals as approximation functions
 
 ## Phase 1 — quality improvements (complete)
 
