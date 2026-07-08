@@ -18,7 +18,7 @@ jobs:
           variant: CS
 
       - name: Install lazy package
-        run: raco pkg install --auto lazy
+        run: raco pkg install --auto --skip-installed lazy
 
       - name: Run test suite
         run: ./run-all-tests.sh
