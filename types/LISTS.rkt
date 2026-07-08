@@ -32,6 +32,19 @@
 ; have to use untype-elements because fully-type-f adds types to elements so sub elements cannot go in already typed
 (def IND L I = (((((((fully-type2 ind) "IND") _list) (untype-elements L)) nat) I) (type (head (val L)))))
 
+; ~ SAFE INDEX ~
+;   - Contract: (list, nat) => option
+;   - Idea: like IND, but a bad index is an expected outcome rather than
+;       garbage: in range => some(value there), out of range => none. This is
+;       what Option is for - the caller pattern-matches instead of guarding.
+;   - Logic: the valid indices are 0 .. len-1, so guard on (index < length)
+;       before delegating to IND. A type error in L or I is IND's concern,
+;       not this range guard's, so well-typed inputs are assumed here.
+(def IND-OPT L I =
+    (_if ((lt (val I)) (len (val L)))
+        _then (make-some ((IND L) I))
+        _else NONE))
+
 ;===================================================
 
 (def APP L1 L2 = (((((((fully-type2 app) "APP") _list) L1) _list) L2) _list))

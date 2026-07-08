@@ -54,8 +54,14 @@ is valued there too, so explicit beats clever.
   `is-option`/`is-result`/`is-some`/`is-none`/`is-ok`/`is-err`, selectors
   `unwrap-*`, safe eliminators `option-or-else`/`result-or-else`, and reader
   integration (`read-option`/`read-result`, wired into `read-any`). 29 tests
-  (2026-07-08). Follow-on (not done): wire these into functions where failure
-  is expected — `IND` (out-of-range), search, `HEAD` of empty, division by zero
+  (2026-07-08). Follow-on — wire these into functions where failure is expected:
+  - [x] `IND-OPT` in `types/LISTS.rkt` — safe indexing: in range => `some(value)`,
+    out of range => `none` (rather than IND's garbage). 10 tests (2026-07-08)
+  - [ ] Option-returning search — the untyped `binarySearch` signals "not found"
+    with a church `true`, `binarySearchZ` with `negOne`; a typed search returning
+    `some(index)`/`none` would retire those in-band sentinels
+  - [ ] `HEAD-OPT` (no typed `HEAD` exists yet) and a Result-returning safe
+    division (`err` on divide-by-zero)
 - [ ] **8. Decide the next major tentacle** — binary rationals vs typed-list /
   function signatures (user decision)
 

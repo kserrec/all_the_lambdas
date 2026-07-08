@@ -89,6 +89,29 @@
 
 ; ====================================================================
 
+(define IND-OPT-tests (list
+    ; in range => some(value there)
+    (test-list-element "IND-OPT(LIST-1-0)(0)" (read-any ((IND-OPT LIST-1-0) ZERO)) "option:some(nat:1)")
+    (test-list-element "IND-OPT(LIST-1-0)(1)" (read-any ((IND-OPT LIST-1-0) ONE)) "option:some(nat:0)")
+    (test-list-element "IND-OPT(LIST-1-3-4-2)(2)" (read-any ((IND-OPT LIST-1-3-4-2) TWO)) "option:some(nat:4)")
+    (test-list-element "IND-OPT(LIST-1-3-4-2)(3)" (read-any ((IND-OPT LIST-1-3-4-2) THREE)) "option:some(nat:2)")
+    ; out of range => none (valid indices are 0 .. len-1)
+    (test-list-element "IND-OPT(LIST-1-0)(2)" (read-any ((IND-OPT LIST-1-0) TWO)) "option:none")
+    (test-list-element "IND-OPT(LIST-1-3-4-2)(4)" (read-any ((IND-OPT LIST-1-3-4-2) FOUR)) "option:none")
+    ; case predicates
+    (test-list-element "is-some(IND-OPT in range)" (b-read (is-some ((IND-OPT LIST-1-0) ZERO))) "true")
+    (test-list-element "is-none(IND-OPT out of range)" (b-read (is-none ((IND-OPT LIST-1-3-4-2) FOUR))) "true")
+    ; and it composes with the safe eliminator: default used only when none
+    (test-list-element "option-or-else(IND-OPT out of range, ZERO)"
+        (read-any ((option-or-else ((IND-OPT LIST-1-3-4-2) FOUR)) ZERO)) "nat:0")
+    (test-list-element "option-or-else(IND-OPT in range, ZERO)"
+        (read-any ((option-or-else ((IND-OPT LIST-1-3-4-2) TWO)) ZERO)) "nat:4")
+))
+
+(show-results "IND-OPT" IND-OPT-tests)
+
+; ====================================================================
+
 (define APP-tests (list
     ; normal cases
     (test-list-element "APP(NIL-list)(NIL-list)" (read-any ((APP NIL-list) NIL-list)) "list[]")
