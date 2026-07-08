@@ -1,4 +1,4 @@
-# Roadmap — quality improvements (no new features)
+# Roadmap
 
 Guiding principle: the *object language* (the lambda calculus terms themselves)
 stays pure untyped lambda calculus, written the way a textbook would write it.
@@ -6,7 +6,37 @@ The sugar layer (macros) and tooling (test runner, CI) are ordinary
 Racket/bash and may be improved freely — but readability-as-teaching-material
 is valued there too, so explicit beats clever.
 
-## Items
+## Phase 2 — continuing the build (from ~/all-the-lambdas-notes.md priorities)
+
+- [x] **1. README framing** — "what happens after the tutorial ends" opening,
+  Lazy Racket rationale, softened uniqueness claim (2026-07-08)
+- [x] **2. "Typed Untyped Lambda Calculus" explanation** — README section plus
+  matching doc headers in `types/TYPES.rkt` (strict) and
+  `types/coercive/TYPES.rkt` (strict-vs-coercive contrast) (2026-07-08)
+- [x] **3. Binary-list explanation** — README section and `binary-lists.rkt`
+  motivation reframed as the project's first representation upgrade (2026-07-08)
+- [x] **3.5. Fix `type-check3` arg3 bug** — errors for a wrong-typed third
+  argument were tagged with `param-type2`; fixed with regression tests
+  (2026-07-08)
+- [ ] **4. Restore historical binary integer work** (from the old
+  `binary-lists/` folder, commits `664ced3`..`705a26b`)
+  - [x] 4a. Nat-level operators restored into `binary-lists.rkt` with tests:
+    `bin-succ`, `bin-pred`, `bin-lte`, `bin-gt`, `bin-is-even`, `bin-is-odd`,
+    `bin-exp`. Note: historical `bin-is-even`/`bin-is-odd` were untested and
+    buggy (`isZero` applied to a one-element list instead of its digit; `_not`
+    applied to the function instead of the result) — fixed in restoration
+    (2026-07-08)
+  - [ ] 4b. Signed binary integers: restore `int-bin-lists.rkt` (makeZ-bin,
+    succZ-bin, addZ-bin, subZ-bin, multZ-bin, divZ-bin, expZ-bin, comparisons,
+    absValZ-bin, parity) adapted to current naming, plus its historical tests
+- [ ] **5. Add `bin-div-n-mod` and `bin-mod`** — quotient+remainder pair, then
+  remainder alone
+- [ ] **6. Add `bin-gcd`** (Euclid via `bin-mod`; `bin-lcm` optional)
+- [ ] **7. Add `Option`/`Result` to the strict typing branch**
+- [ ] **8. Decide the next major tentacle** — binary rationals vs typed-list /
+  function signatures (user decision)
+
+## Phase 1 — quality improvements (complete)
 
 - [x] **1. Test runner overhaul** (`run-all-tests.sh`)
   - Run each test file **once**, not twice (currently the whole suite runs a

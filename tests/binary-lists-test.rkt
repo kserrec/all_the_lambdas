@@ -361,3 +361,146 @@
 ))
 
 (show-results "bin-div" bin-div-tests)
+
+; ====================================================================
+
+(define bin-succ-tests (list
+    (test-list-element "bin-succ(bin-zero)"
+        (bin-read (bin-succ bin-zero)) "1")
+    (test-list-element "bin-succ(bin-one)"
+        (bin-read (bin-succ bin-one)) "2")
+    ; carry propagation
+    (test-list-element "bin-succ(bin-three)"
+        (bin-read (bin-succ bin-three)) "4")
+    (test-list-element "bin-succ(bin-one-hundred-twenty-seven)"
+        (bin-read (bin-succ bin-one-hundred-twenty-seven)) "128")
+    ; scalability
+    (test-list-element "bin-succ(bin-one-billion)"
+        (bin-read (bin-succ bin-one-billion)) "1000000001")
+))
+
+(show-results "bin-succ" bin-succ-tests)
+
+; ====================================================================
+
+(define bin-pred-tests (list
+    (test-list-element "bin-pred(bin-one)"
+        (bin-read (bin-pred bin-one)) "0")
+    ; naturals floor at zero
+    (test-list-element "bin-pred(bin-zero)"
+        (bin-read (bin-pred bin-zero)) "0")
+    ; borrow propagation
+    (test-list-element "bin-pred(bin-four)"
+        (bin-read (bin-pred bin-four)) "3")
+    (test-list-element "bin-pred(bin-one-hundred-twenty-eight)"
+        (bin-read (bin-pred bin-one-hundred-twenty-eight)) "127")
+    ; scalability
+    (test-list-element "bin-pred(bin-one-billion)"
+        (bin-read (bin-pred bin-one-billion)) "999999999")
+))
+
+(show-results "bin-pred" bin-pred-tests)
+
+; ====================================================================
+
+(define bin-lte-tests (list
+    (test-list-element "bin-lte(bin-zero)(bin-zero)"
+        (b-read ((bin-lte bin-zero) bin-zero)) "true")
+    (test-list-element "bin-lte(bin-zero)(bin-one)"
+        (b-read ((bin-lte bin-zero) bin-one)) "true")
+    (test-list-element "bin-lte(bin-one)(bin-zero)"
+        (b-read ((bin-lte bin-one) bin-zero)) "false")
+    (test-list-element "bin-lte(bin-two)(bin-three)"
+        (b-read ((bin-lte bin-two) bin-three)) "true")
+    (test-list-element "bin-lte(bin-nine)(bin-seven)"
+        (b-read ((bin-lte bin-nine) bin-seven)) "false")
+    (test-list-element "bin-lte(bin-twelve)(bin-twelve)"
+        (b-read ((bin-lte bin-twelve) bin-twelve)) "true")
+    ; scalability
+    (test-list-element "bin-lte(bin-one-trillion)(bin-one-sextillion)"
+        (b-read ((bin-lte bin-one-trillion) bin-one-sextillion)) "true")
+    (test-list-element "bin-lte(bin-one-sextillion)(bin-one-trillion)"
+        (b-read ((bin-lte bin-one-sextillion) bin-one-trillion)) "false")
+))
+
+(show-results "bin-lte" bin-lte-tests)
+
+; ====================================================================
+
+(define bin-gt-tests (list
+    (test-list-element "bin-gt(bin-zero)(bin-zero)"
+        (b-read ((bin-gt bin-zero) bin-zero)) "false")
+    (test-list-element "bin-gt(bin-one)(bin-zero)"
+        (b-read ((bin-gt bin-one) bin-zero)) "true")
+    (test-list-element "bin-gt(bin-two)(bin-three)"
+        (b-read ((bin-gt bin-two) bin-three)) "false")
+    (test-list-element "bin-gt(bin-nine)(bin-seven)"
+        (b-read ((bin-gt bin-nine) bin-seven)) "true")
+    (test-list-element "bin-gt(bin-twelve)(bin-twelve)"
+        (b-read ((bin-gt bin-twelve) bin-twelve)) "false")
+    ; scalability
+    (test-list-element "bin-gt(bin-one-sextillion)(bin-one-trillion)"
+        (b-read ((bin-gt bin-one-sextillion) bin-one-trillion)) "true")
+))
+
+(show-results "bin-gt" bin-gt-tests)
+
+; ====================================================================
+
+(define bin-parity-tests (list
+    (test-list-element "bin-is-even(bin-zero)"
+        (b-read (bin-is-even bin-zero)) "true")
+    (test-list-element "bin-is-even(bin-one)"
+        (b-read (bin-is-even bin-one)) "false")
+    (test-list-element "bin-is-even(bin-two)"
+        (b-read (bin-is-even bin-two)) "true")
+    (test-list-element "bin-is-even(bin-ten)"
+        (b-read (bin-is-even bin-ten)) "true")
+    (test-list-element "bin-is-even(bin-thirty-one)"
+        (b-read (bin-is-even bin-thirty-one)) "false")
+    (test-list-element "bin-is-even(bin-one-billion)"
+        (b-read (bin-is-even bin-one-billion)) "true")
+
+    (test-list-element "bin-is-odd(bin-zero)"
+        (b-read (bin-is-odd bin-zero)) "false")
+    (test-list-element "bin-is-odd(bin-one)"
+        (b-read (bin-is-odd bin-one)) "true")
+    (test-list-element "bin-is-odd(bin-three)"
+        (b-read (bin-is-odd bin-three)) "true")
+    (test-list-element "bin-is-odd(bin-sixteen)"
+        (b-read (bin-is-odd bin-sixteen)) "false")
+    (test-list-element "bin-is-odd(bin-one-sextillion-and-three)"
+        (b-read (bin-is-odd bin-one-sextillion-and-three)) "true")
+))
+
+(show-results "bin-is-even/bin-is-odd" bin-parity-tests)
+
+; ====================================================================
+
+(define bin-exp-tests (list
+    ; trivial cases
+    (test-list-element "bin-exp(bin-two)(bin-zero)"
+        (bin-read ((bin-exp bin-two) bin-zero)) "1")
+    (test-list-element "bin-exp(bin-zero)(bin-two)"
+        (bin-read ((bin-exp bin-zero) bin-two)) "0")
+    (test-list-element "bin-exp(bin-one)(bin-five)"
+        (bin-read ((bin-exp bin-one) bin-five)) "1")
+    (test-list-element "bin-exp(bin-two)(bin-one)"
+        (bin-read ((bin-exp bin-two) bin-one)) "2")
+
+    ; small numbers
+    (test-list-element "bin-exp(bin-two)(bin-three)"
+        (bin-read ((bin-exp bin-two) bin-three)) "8")
+    (test-list-element "bin-exp(bin-three)(bin-four)"
+        (bin-read ((bin-exp bin-three) bin-four)) "81")
+    (test-list-element "bin-exp(bin-five)(bin-three)"
+        (bin-read ((bin-exp bin-five) bin-three)) "125")
+
+    ; larger numbers
+    (test-list-element "bin-exp(bin-ten)(bin-three)"
+        (bin-read ((bin-exp bin-ten) bin-three)) "1000")
+    (test-list-element "bin-exp(bin-two)(bin-ten)"
+        (bin-read ((bin-exp bin-two) bin-ten)) "1024")
+))
+
+(show-results "bin-exp" bin-exp-tests)
