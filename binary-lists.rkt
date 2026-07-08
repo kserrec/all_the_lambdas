@@ -12,9 +12,17 @@
 ;===================================================
 
 #|
-    MOTIVATION: Using Church Numerals defined in Racket has serious limits.
-    Representing numbers beyond the tens of millions is not possible on my machine with this encoding.
-    The goal here is to support greater values, hopefully far greater, by encoding numbers as lists of binary digits.
+    MOTIVATION: Church Numerals are beautiful, but they are unary - a number is a
+    function applied n times, so the cost of representing a number grows with its VALUE.
+    In practice that means numbers beyond the tens of millions are not representable
+    on my machine with that encoding.
+
+    This module is the project's first major representation upgrade. A number becomes
+    a lambda-encoded list of binary digits, so the cost grows with the number of BITS
+    instead of the value. Arithmetic then becomes the same carry, borrow, shift, and
+    long-division algorithms we learn by hand - which is the real point: once enough
+    structure exists, ordinary algorithm design reappears inside the lambda universe.
+    (The tests exercise these operators through sextillion-scale values.)
 
     NATURAL NUMBERS as BINARY DIGIT LISTS
 

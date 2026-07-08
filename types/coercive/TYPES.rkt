@@ -19,10 +19,16 @@
 #|
 
     This is a different approach to typing in the untyped lambda calculus than seen in the main TYPES.rkt file.
-    Instead of being strict, functions will coerce values to be the type required for sensible operation on them.
+    Where the strict layer draws hard boundaries - "this operation expects a nat; pass anything
+    else and you get an error value" - the coercive layer asks what happens if typed
+    lambda-encoded values are converted instead of rejected: "this operation needs a
+    nat-shaped value; here is how a bool, int, list, or rat collapses into one."
     This feels more natural in the lambda calculus and still permits most everything while nevertheless providing some guardrails (like no division by zero).
-    
-    Note: The basic structure of each typed object will remain the same and be inherited from the main TYPES file. 
+
+    Together the two layers are two different answers to the same question: how much
+    type-like behavior can be built from inside untyped lambda calculus?
+
+    Note: The basic structure of each typed object will remain the same and be inherited from the main TYPES file.
 
     Approach to converting to...
         bool: truthy/false: if value is zero or nil => false, else true

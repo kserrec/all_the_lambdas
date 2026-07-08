@@ -3,9 +3,25 @@
 
 **Welcome!**
 
-The idea here is to do just about everything in *Pure Untyped Lambda Calculus*.  
-*(Exceptions will be things of necessity like printing out results or syntactic sugar. 
-Even if types are added, they will be made out of untyped lambdas.)*
+## What Happens After the Lambda Calculus Tutorial Ends?
+
+Most lambda calculus introductions build booleans, Church numerals, a little
+arithmetic, recursion, and maybe lists. Then they stop.
+
+This project keeps going.
+
+The goal is to build as much as possible inside *pure untyped lambda calculus*:
+numbers, integers, rationals, lists, algorithms, binary numeric encodings,
+runtime typing disciplines, and data structures. Racket is the host language,
+Lazy Racket supplies the evaluation strategy, but the object language — the
+thing actually being programmed in — remains lambda-calculus encodings.
+*(Exceptions are things of necessity, like printing out results or syntactic
+sugar. Even the types are made out of untyped lambdas.)*
+
+None of the individual ingredients are new — Church encodings, runtime tags,
+binary arithmetic, and contract-style checking are all known ideas. The
+distinctive part is the continuity: the same lambda-built world keeps getting
+extended, piece by piece, into a substantial executable, tested library.
 
 [Here](https://personal.utdallas.edu/~gupta/courses/apl/lambda.pdf) is a link to a short introduction to the Lambda Calculus.
 Ideas have also been taken from this book, [Functional Programming Through Lambda Calculus](https://www.macs.hw.ac.uk/~greg/books/gjm.lambook88.pdf), and elsewhere. Other resources can easily be found online.
@@ -14,9 +30,29 @@ Ideas have also been taken from this book, [Functional Programming Through Lambd
 
 **Lambda Calculus is the simplest programming language in the world.**
 
+To be able to build complex structures that work reliably out of a language with just a couple syntax and substitution rules is a fascination and joy.
 
-To be able to build complex structures that work reliably out of a language with just a couple syntax and substitution rules is a fascination and joy.  
-I chose to use **Racket** because it was the first language I could find that seemed to give me the tools I needed for doing this as simply as possible.
+#### Why Racket (and specifically Lazy Racket)?
+
+Racket is used as a host language, not as the object language. The requirement
+was never just "has lambdas" — most languages do. The requirement was: can I
+write lambda-calculus-shaped programs directly, use self-application and
+Y-combinator-style recursion, avoid premature evaluation, and still have enough
+real tooling (modules, tests, macros) to build an actual repository?
+
+Lazy Racket fits that unusually well:
+
+- first-class functions and closures
+- Lisp syntax that maps almost one-to-one onto lambda application
+- macros for readable sugar that expands back to pure nested lambdas
+- `#lang lazy`, whose evaluation order lets direct Y-combinator-style recursion
+  work without first building a custom interpreter
+- normal project tooling: modules, tests, scripts, CI
+
+Eager hosts like Python or JavaScript can express the functions, but direct
+self-application quickly drowns in manual thunking or interpreter machinery.
+Lazy Racket is the execution substrate that makes the project survivable
+without turning it into an interpreter project.
 
 Note: this is a work in progress and I don't know when it will be complete if ever.
 
@@ -29,11 +65,58 @@ Note: this is a work in progress and I don't know when it will be complete if ev
 - **Pairs** and **Lists** with operators for them
 - **Algorithms** binary Search for church numerals and integers and a few sorting algorithms
 - **Added Syntactic Sugar** to make things look good. Specifically, added def, let, and conditional sugar
-- **Added Embedded Types and Type Checking** defined types out of untyped lambda calculus. This is an informal type system, a type-like system, probably best called an embedded type system. Most everything built so far now has embedded typed versions! Have strict typing system, but also defining coercive alternate (wip)
+- **Added Embedded Types and Type Checking** — see [Typed Untyped Lambda Calculus](#typed-untyped-lambda-calculus) below
 - **Integers** and basic operators for them
 - **Rationals** and basic operators for them
-- **Binary Digit List Encodings of Natural Numbers** and add and multiplication operators for them - these are hundreds of orders of magnitude more capable at representing numbers than Church Numerals in terms of size
+- **Binary Digit List Encodings of Natural Numbers** — see [Binary Digit Lists](#binary-digit-lists) below
 - **Data Structures as Closures** using closures to represent key/value pairs in a few ways (translating Greg Michaelson's code into pure lambda calculus)
+
+#### Typed Untyped Lambda Calculus
+
+This is not typed lambda calculus in the formal static sense — no simply typed
+lambda calculus, no System F, no type checker that rejects terms before they
+run. The underlying object language stays pure untyped lambda calculus.
+
+The goal is more mischievous: build something that *behaves* like strict typing
+from inside the untyped world itself. Types are Church-numeral tags. Typed
+objects are lambda-encoded pairs whose first element is a lambda-encoded type
+tag. Typed functions check those tags, unwrap valid inputs, rewrap outputs, and
+propagate lambda-encoded error values when checks fail.
+
+The error values are the most interesting part. They are not host-language
+exceptions — they are lambda-encoded values like everything else. That means a
+type failure doesn't halt anything: it can be returned, nested inside lists,
+passed through higher-order functions like `MAP` and `FOLD`, chained into a
+readable trace, and rendered later. In spirit this is closer to a
+lambda-encoded dynamic contract layer (with blame-like error bubbling) than to
+a formal static type system.
+
+There are two takes on this, and having both is the point:
+
+- **Strict** (`types/`) draws hard boundaries: this operation expects a nat;
+  pass anything else and you get an error value.
+- **Coercive** (`types/coercive/`, wip) asks what happens if values are
+  converted instead of rejected: this operation needs a nat-shaped value, and
+  here is how a bool, int, list, or rat collapses into one.
+
+Two different answers to the same question: how much type-like behavior can be
+built from inside untyped lambda calculus?
+
+#### Binary Digit Lists
+
+Church numerals are beautiful, but they are unary — a number is a function
+applied n times, so the representation grows with the *value* of the number.
+Beyond the tens of millions they stop being practical.
+
+Binary digit lists are the project's first major representation upgrade. A
+number becomes a lambda-encoded list of zero/one digits, so the cost grows
+with the number of *bits* instead of the value. Arithmetic becomes the same
+carry, borrow, shift, and long-division algorithms we learn by hand — and the
+tests run through sextillion-scale values.
+
+The point is not just that lambda calculus *can* encode arithmetic (that's the
+tutorial part). It's that once enough structure exists, ordinary algorithm
+design reappears inside the lambda universe.
 
 #### Repository Map:
 | Where | What | Flavor |
