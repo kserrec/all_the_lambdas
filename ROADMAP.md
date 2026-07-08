@@ -37,6 +37,14 @@ is valued there too, so explicit beats clever.
   `bin-div` untouched (2026-07-08)
 - [x] **6. Add `bin-gcd` and `bin-lcm`** — Euclid via `bin-mod`;
   lcm = product / gcd (2026-07-08)
+- [ ] **6.5. Purify `wrap-FOLD-only-once`** (`types/LISTS.rkt`) — the only spot
+  where object-level control flow branches on host data: a Racket `if` +
+  `string-contains?` checks whether an error message already says "FOLD" to
+  avoid double-wrapping the trace. Replace the string sniffing with pure
+  structure (e.g. a church-bool "already-labeled" flag carried in the error
+  object). Found during the 2026-07-08 purity audit; everything else in the
+  object language verified pure (no host branching, no host data, all
+  recursion via Y)
 - [ ] **7. Add `Option`/`Result` to the strict typing branch**
 - [ ] **8. Decide the next major tentacle** — binary rationals vs typed-list /
   function signatures (user decision)
