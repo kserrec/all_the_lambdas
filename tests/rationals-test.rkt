@@ -254,3 +254,39 @@
 ))
 
 (show-results "ltR" ltR-tests)
+
+; ====================================================================
+
+(define floorR-tests (list
+    (test-list-element "floorR(r-pos1-2)" (r-read (floorR r-pos1-2)) "0")
+    (test-list-element "floorR(r-neg1-2)" (r-read (floorR r-neg1-2)) "-1")
+    (test-list-element "floorR(3/2)" (r-read (floorR ((makeR2 posThree) two))) "1")
+    (test-list-element "floorR(-3/2)" (r-read (floorR ((makeR2 negThree) two))) "-2")
+    (test-list-element "floorR(r-pos2-1)" (r-read (floorR r-pos2-1)) "2")
+    (test-list-element "floorR(r-neg1)" (r-read (floorR r-neg1)) "-1")
+    (test-list-element "floorR(r-neg0-1)" (r-read (floorR r-neg0-1)) "0")
+    (test-list-element "floorR(-4/2)" (r-read (floorR ((makeR2 ((multZ negTwo) posTwo)) two))) "-2")
+))
+
+(show-results "floorR" floorR-tests)
+
+; ====================================================================
+
+(define expR-tests (list
+    (test-list-element "expR(r-pos1-2)(r-pos2-1)" (r-read ((expR r-pos1-2) r-pos2-1)) "1/4")
+    (test-list-element "expR(r-neg1-2)(r-pos2-1)" (r-read ((expR r-neg1-2) r-pos2-1)) "1/4")
+    (test-list-element "expR(r-neg1-2)(3/1)" (r-read ((expR r-neg1-2) ((makeR2 posThree) one))) "-1/8")
+    (test-list-element "expR(r-pos2-3)(r-pos2-1)" (r-read ((expR r-pos2-3) r-pos2-1)) "4/9")
+    (test-list-element "expR(r-pos1-2)(r-neg1)" (r-read ((expR r-pos1-2) r-neg1)) "2")
+    (test-list-element "expR(r-neg1-2)(r-neg1)" (r-read ((expR r-neg1-2) r-neg1)) "-2")
+    (test-list-element "expR(r-pos2-3)(-2/1)" (r-read ((expR r-pos2-3) ((makeR2 negTwo) one))) "9/4")
+    (test-list-element "expR(r-pos8)(r-0)" (r-read ((expR r-pos8) r-0)) "1")
+    (test-list-element "expR(r-0)(r-0)" (r-read ((expR r-0) r-0)) "1")
+    (test-list-element "expR(r-0)(r-pos2-1)" (r-read ((expR r-0) r-pos2-1)) "0")
+    (test-list-element "expR(r-pos1-2)(r-pos1-2)" (r-read ((expR r-pos1-2) r-pos1-2)) "1")
+    (test-list-element "expR(r-pos2-1)(3/2)" (r-read ((expR r-pos2-1) ((makeR2 posThree) two))) "2")
+    (test-list-element "expR(r-pos2-3)(-3/2)" (r-read ((expR r-pos2-3) ((makeR2 negThree) two))) "9/4")
+    (test-list-element "expR(r-neg2-4)(r-pos2-1)" (r-read ((expR r-neg2-4) r-pos2-1)) "1/4")
+))
+
+(show-results "expR" expR-tests)

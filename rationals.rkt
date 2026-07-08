@@ -244,21 +244,37 @@
 (def divR r1 r2 = 
     ((multR r1) (reciprocal r2)))
 
-; this should work right now when r2 is a whole number
-; needs checking for r1 == 1 for early escape
-; (def expR r1 r2 = 
-;         (_if ((eqR r2) r-0)
-;             _then r-1
-;             _else 
-;                 (_let base = (_if ((gtR r2) r-0)
-;                     _then r1
-;                     _else (reciprocal r1))
-;                 (_let new-s-numer = ((expZ (s-numer base)) (s-numer r2)) 
-;                 (_let new-denom = ((expZ (denom base)) (s-numer r2))
-;                 ((makeR2 ((expZ new-s-numer) new-denom)))
-;                 )))
-;         )
-;     )
+#|
+    ~ EXPONENTIATION ~
+    - Contract: (rat, rat) => rat
+    - Idea: r1,r2 => r1^floor(r2)
+    - Logic: Floor the exponent to a whole number z, so rationals
+        stay closed under this operation (a true rational power
+        like (1/2)^(1/2) is irrational). Zero exponent gives one,
+        with 0^0 = 1 by convention. Negative z flips the base to
+        its reciprocal and uses |z|. The base is reduced first:
+        lowest terms in means lowest terms out, so no reduce is
+        needed afterward. The signed numerator is raised with expZ
+        (which handles the sign by parity) and the denominator
+        with plain nat _exp
+    - Note: the first zero check must come before floorR, since
+        flooring a denominator-zero "zero" would divide by zero
+|#
+(def expR r1 r2 =
+    (_if (isZeroR r2)
+        _then r-pos1
+        _else
+        (_let z = (s-numer (floorR r2))
+        (_if (isZeroZ z)
+            _then r-pos1
+            _else
+            (_let base = (reduce (_if (head z)
+                            _then r1
+                            _else (reciprocal r1)))
+            (_let n = (tail z)
+            (_let new-s-numer = ((expZ (s-numer base)) ((makeZ true) n))
+            (_let new-denom = ((_exp (denom base)) n)
+            ((makeR2 new-s-numer) new-denom)))))))))
 
 
 ;===================================================
@@ -339,12 +355,22 @@
 
 ;===================================================
 
-(def floorR r = 
-    (_let reduced-r = (reduce r)
+#|
+    ~ FLOOR ~
+    - Contract: rat => rat
+    - Idea: a/b => greatest whole number n with n <= a/b
+    - Logic: Divide the magnitudes (natural division truncates).
+        For non-negative values that is the floor already.
+        Negative values must go one further down, but only when
+        the division left a remainder — a negative whole number
+        is already its own floor
+|#
+(def floorR r =
     (_let sign-of-r = (r-sign r)
     (_let divided = ((div (numer r)) (denom r))
-    (_let new-numer = 
-        (_if (sign-of-r)
+    (_let remainder = ((mod (numer r)) (denom r))
+    (_let new-numer =
+        (_if ((_or sign-of-r) (isZero remainder))
             _then divided
             _else (succ divided))
     (((makeR sign-of-r) new-numer) one))))))

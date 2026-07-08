@@ -40,7 +40,10 @@ is valued there too, so explicit beats clever.
 
 ## Out of scope (features — not this effort)
 
-- Finishing rational exponentiation (`rationals.rkt`, was in progress)
+- ~~Finishing rational exponentiation~~ — **done 2026-07-07**: `expR` in
+  `rationals.rkt` floors the exponent first (rationals stay closed under
+  exponentiation), and a `floorR` bug (negative whole values floored one
+  too far down, e.g. floor(−4/2) gave −3) was fixed along the way
 - Finishing the coercive type system's remaining pieces
 
 ## Decisions
