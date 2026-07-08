@@ -35,9 +35,25 @@ Note: this is a work in progress and I don't know when it will be complete if ev
 - **Binary Digit List Encodings of Natural Numbers** and add and multiplication operators for them - these are hundreds of orders of magnitude more capable at representing numbers than Church Numerals in terms of size
 - **Data Structures as Closures** using closures to represent key/value pairs in a few ways (translating Greg Michaelson's code into pure lambda calculus)
 
+#### Repository Map:
+| Where | What | Flavor |
+|---|---|---|
+| `bitter/` | Logic, numerals, recursion, lists, algorithms | Purest: raw nested lambdas, zero sugar |
+| root `*.rkt` | The same material, plus integers, rationals, binary lists | Sugared: `def`, `_if`, `_let`, `_cons` |
+| `types/` | Strict embedded type system and typed versions of everything | Sugared + typed |
+| `types/coercive/` | Alternate type system that coerces instead of rejecting (wip) | Sugared + typed |
+| `macros/` | The sugar itself — Racket macros that expand to pure nested lambdas | Not lambda calculus; the translator |
+| `data-structures-as-closures/` | Key/value structures as closures (after Michaelson) | Sugared |
+| `tests/`, `types/tests/`, `types/coercive/tests/` | Test suites (shared helpers in `tests/helpers/`) | — |
+
+The three flavors are deliberate: same ideas, increasing comfort. Purity lives in what the code expands to, and everything expands to pure untyped lambda calculus.
+
 #### How to Run Tests:
-1. Download [Racket](https://racket-lang.org/) and the *lazy* package
+1. Download [Racket](https://racket-lang.org/) and the *lazy* package (`raco pkg install --auto lazy`)
 2. From root, run `./run-all-tests.sh`
+3. Or run one file or folder: `./run-all-tests.sh tests/logic-test.rkt`, `./run-all-tests.sh types`
+
+Tests also run automatically on every push via GitHub Actions (`.github/workflows/tests.yml`).
 
 
 #### How to Dissect:
