@@ -2,6 +2,7 @@
 (require "../macros/macros.rkt")
 (require "../binary-lists.rkt"
          "../core.rkt"
+         "../lists.rkt"
          "../logic.rkt"
          "../church.rkt"
          "helpers/test-helpers.rkt")
@@ -361,6 +362,105 @@
 ))
 
 (show-results "bin-div" bin-div-tests)
+
+; ====================================================================
+
+(define bin-div-n-mod-tests (list
+    ; quotient and remainder together
+    (test-list-element "bin-div-n-mod(bin-seven)(bin-two) quotient"
+        (bin-read (head ((bin-div-n-mod bin-seven) bin-two))) "3")
+    (test-list-element "bin-div-n-mod(bin-seven)(bin-two) remainder"
+        (bin-read (tail ((bin-div-n-mod bin-seven) bin-two))) "1")
+    (test-list-element "bin-div-n-mod(bin-ten)(bin-three) quotient"
+        (bin-read (head ((bin-div-n-mod bin-ten) bin-three))) "3")
+    (test-list-element "bin-div-n-mod(bin-ten)(bin-three) remainder"
+        (bin-read (tail ((bin-div-n-mod bin-ten) bin-three))) "1")
+    ; divides evenly
+    (test-list-element "bin-div-n-mod(bin-twelve)(bin-four) quotient"
+        (bin-read (head ((bin-div-n-mod bin-twelve) bin-four))) "3")
+    (test-list-element "bin-div-n-mod(bin-twelve)(bin-four) remainder"
+        (bin-read (tail ((bin-div-n-mod bin-twelve) bin-four))) "0")
+    ; dividend smaller than divisor
+    (test-list-element "bin-div-n-mod(bin-five)(bin-seven) quotient"
+        (bin-read (head ((bin-div-n-mod bin-five) bin-seven))) "0")
+    (test-list-element "bin-div-n-mod(bin-five)(bin-seven) remainder"
+        (bin-read (tail ((bin-div-n-mod bin-five) bin-seven))) "5")
+    ; zero dividend
+    (test-list-element "bin-div-n-mod(bin-zero)(bin-five) quotient"
+        (bin-read (head ((bin-div-n-mod bin-zero) bin-five))) "0")
+    (test-list-element "bin-div-n-mod(bin-zero)(bin-five) remainder"
+        (bin-read (tail ((bin-div-n-mod bin-zero) bin-five))) "0")
+))
+
+(show-results "bin-div-n-mod" bin-div-n-mod-tests)
+
+; ====================================================================
+
+(define bin-mod-tests (list
+    (test-list-element "bin-mod(bin-seven)(bin-two)"
+        (bin-read ((bin-mod bin-seven) bin-two)) "1")
+    (test-list-element "bin-mod(bin-ten)(bin-five)"
+        (bin-read ((bin-mod bin-ten) bin-five)) "0")
+    (test-list-element "bin-mod(bin-nine)(bin-four)"
+        (bin-read ((bin-mod bin-nine) bin-four)) "1")
+    (test-list-element "bin-mod(bin-three)(bin-seven)"
+        (bin-read ((bin-mod bin-three) bin-seven)) "3")
+    ; scalability
+    (test-list-element "bin-mod(bin-one-billion)(bin-two)"
+        (bin-read ((bin-mod bin-one-billion) bin-two)) "0")
+    (test-list-element "bin-mod(bin-ten-thousand)(bin-three)"
+        (bin-read ((bin-mod bin-ten-thousand) bin-three)) "1")
+    (test-list-element "bin-mod(bin-one-sextillion-and-three)(bin-two)"
+        (bin-read ((bin-mod bin-one-sextillion-and-three) bin-two)) "1")
+))
+
+(show-results "bin-mod" bin-mod-tests)
+
+; ====================================================================
+
+(define bin-gcd-tests (list
+    (test-list-element "bin-gcd(bin-twelve)(bin-eight)"
+        (bin-read ((bin-gcd bin-twelve) bin-eight)) "4")
+    ; order does not matter
+    (test-list-element "bin-gcd(bin-eight)(bin-twelve)"
+        (bin-read ((bin-gcd bin-eight) bin-twelve)) "4")
+    ; coprime
+    (test-list-element "bin-gcd(bin-seven)(bin-five)"
+        (bin-read ((bin-gcd bin-seven) bin-five)) "1")
+    ; one divides the other
+    (test-list-element "bin-gcd(bin-ten)(bin-five)"
+        (bin-read ((bin-gcd bin-ten) bin-five)) "5")
+    ; zero cases: gcd(a,0) = a
+    (test-list-element "bin-gcd(bin-five)(bin-zero)"
+        (bin-read ((bin-gcd bin-five) bin-zero)) "5")
+    (test-list-element "bin-gcd(bin-zero)(bin-five)"
+        (bin-read ((bin-gcd bin-zero) bin-five)) "5")
+    ; larger numbers
+    (test-list-element "bin-gcd(bin-one-thousand)(bin-two-hundred-fifty-six)"
+        (bin-read ((bin-gcd bin-one-thousand) bin-two-hundred-fifty-six)) "8")
+))
+
+(show-results "bin-gcd" bin-gcd-tests)
+
+; ====================================================================
+
+(define bin-lcm-tests (list
+    (test-list-element "bin-lcm(bin-four)(bin-six)"
+        (bin-read ((bin-lcm bin-four) bin-six)) "12")
+    ; coprime: lcm is the product
+    (test-list-element "bin-lcm(bin-three)(bin-five)"
+        (bin-read ((bin-lcm bin-three) bin-five)) "15")
+    (test-list-element "bin-lcm(bin-ten)(bin-four)"
+        (bin-read ((bin-lcm bin-ten) bin-four)) "20")
+    ; equal values
+    (test-list-element "bin-lcm(bin-five)(bin-five)"
+        (bin-read ((bin-lcm bin-five) bin-five)) "5")
+    ; zero case
+    (test-list-element "bin-lcm(bin-zero)(bin-five)"
+        (bin-read ((bin-lcm bin-zero) bin-five)) "0")
+))
+
+(show-results "bin-lcm" bin-lcm-tests)
 
 ; ====================================================================
 

@@ -475,6 +475,59 @@
 ;===================================================
 
 #|
+    ~ BINARY DIGIT LIST DIVISION WITH REMAINDER ~
+    Contract: (bin-list, bin-list) => {bin-list quotient, bin-list remainder}
+    Idea: The same identity we use to check long division by hand:
+            dividend = quotient * divisor + remainder
+          so remainder = dividend - quotient * divisor
+    Logic:
+        - Get the quotient from bin-div
+        - Multiply it back by the divisor and subtract from the dividend
+        - Return both as a pair
+    Note: division by zero keeps bin-div's convention (quotient zero),
+          which makes the remainder the whole dividend
+|#
+(def bin-div-n-mod l1 l2 =
+    (_let q = ((bin-div l1) l2)
+    (_let r = ((bin-sub l1) ((bin-mult q) l2))
+    ((pair q) r))))
+
+#|
+    ~ BINARY DIGIT LIST MODULO ~
+    Contract: (bin-list, bin-list) => bin-list
+    Logic: just the remainder part of bin-div-n-mod
+|#
+(def bin-mod l1 l2 = (tail ((bin-div-n-mod l1) l2)))
+
+
+;===================================================
+
+#|
+    ~ BINARY DIGIT LIST GREATEST COMMON DIVISOR ~
+    Contract: (bin-list, bin-list) => bin-list
+    Idea: Euclid's algorithm
+    Logic:
+        gcd(a, 0) = a
+        gcd(a, b) = gcd(b, a mod b)
+|#
+(def bin-gcd l1 l2 = (((Y bin-gcd-helper) l1) l2))
+
+(def bin-gcd-helper f l1 l2 =
+    (_if (bin-is-zero l2)
+        _then (rem-head-zeroes l1)
+        _else ((f l2) ((bin-mod l1) l2))))
+
+#|
+    ~ BINARY DIGIT LIST LEAST COMMON MULTIPLE ~
+    Contract: (bin-list, bin-list) => bin-list
+    Logic: lcm(a,b) = (a * b) / gcd(a,b)
+|#
+(def bin-lcm l1 l2 = ((bin-div ((bin-mult l1) l2)) ((bin-gcd l1) l2)))
+
+
+;===================================================
+
+#|
     ~ BINARY DIGIT LIST PARITY ~
     - Contract: bin-list => bool
     - Logic: a binary number is even exactly when its last digit is zero

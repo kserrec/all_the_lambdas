@@ -32,9 +32,11 @@ is valued there too, so explicit beats clever.
     renamed bz.N -> bin-posN/bin-negN to match integers.rkt style. Historical
     tests restored and extended to the operators that never had any (succ,
     pred, invert, exp, comparisons, absVal, parity) — 121 tests (2026-07-08)
-- [ ] **5. Add `bin-div-n-mod` and `bin-mod`** — quotient+remainder pair, then
-  remainder alone
-- [ ] **6. Add `bin-gcd`** (Euclid via `bin-mod`; `bin-lcm` optional)
+- [x] **5. Add `bin-div-n-mod` and `bin-mod`** — remainder via the long-division
+  identity (remainder = dividend − quotient·divisor), leaving the tested
+  `bin-div` untouched (2026-07-08)
+- [x] **6. Add `bin-gcd` and `bin-lcm`** — Euclid via `bin-mod`;
+  lcm = product / gcd (2026-07-08)
 - [ ] **7. Add `Option`/`Result` to the strict typing branch**
 - [ ] **8. Decide the next major tentacle** — binary rationals vs typed-list /
   function signatures (user decision)
