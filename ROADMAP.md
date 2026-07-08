@@ -26,9 +26,12 @@ is valued there too, so explicit beats clever.
     buggy (`isZero` applied to a one-element list instead of its digit; `_not`
     applied to the function instead of the result) — fixed in restoration
     (2026-07-08)
-  - [ ] 4b. Signed binary integers: restore `int-bin-lists.rkt` (makeZ-bin,
-    succZ-bin, addZ-bin, subZ-bin, multZ-bin, divZ-bin, expZ-bin, comparisons,
-    absValZ-bin, parity) adapted to current naming, plus its historical tests
+  - [x] 4b. Signed binary integers restored as root `int-binary-lists.rkt`
+    (makeZ-bin, succZ-bin, predZ-bin, invertZ-bin, addZ-bin, subZ-bin,
+    multZ-bin, divZ-bin, expZ-bin, comparisons, absValZ-bin, parity), constants
+    renamed bz.N -> bin-posN/bin-negN to match integers.rkt style. Historical
+    tests restored and extended to the operators that never had any (succ,
+    pred, invert, exp, comparisons, absVal, parity) — 121 tests (2026-07-08)
 - [ ] **5. Add `bin-div-n-mod` and `bin-mod`** — quotient+remainder pair, then
   remainder alone
 - [ ] **6. Add `bin-gcd`** (Euclid via `bin-mod`; `bin-lcm` optional)

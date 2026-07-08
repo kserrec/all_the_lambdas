@@ -69,6 +69,7 @@ Note: this is a work in progress and I don't know when it will be complete if ev
 - **Integers** and basic operators for them
 - **Rationals** and basic operators for them
 - **Binary Digit List Encodings of Natural Numbers** — see [Binary Digit Lists](#binary-digit-lists) below
+- **Signed Binary Integers** — integers as {sign, binary digit list} pairs with arithmetic, comparisons, absolute value, and parity (`int-binary-lists.rkt`)
 - **Data Structures as Closures** using closures to represent key/value pairs in a few ways (translating Greg Michaelson's code into pure lambda calculus)
 
 #### Typed Untyped Lambda Calculus
@@ -122,7 +123,7 @@ design reappears inside the lambda universe.
 | Where | What | Flavor |
 |---|---|---|
 | `bitter/` | Logic, numerals, recursion, lists, algorithms | Purest: raw nested lambdas, zero sugar |
-| root `*.rkt` | The same material, plus integers, rationals, binary lists | Sugared: `def`, `_if`, `_let`, `_cons` |
+| root `*.rkt` | The same material, plus integers, rationals, binary lists (natural and signed) | Sugared: `def`, `_if`, `_let`, `_cons` |
 | `types/` | Strict embedded type system and typed versions of everything | Sugared + typed |
 | `types/coercive/` | Alternate type system that coerces instead of rejecting (wip) | Sugared + typed |
 | `macros/` | The sugar itself — Racket macros that expand to pure nested lambdas | Not lambda calculus; the translator |
