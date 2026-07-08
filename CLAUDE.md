@@ -40,9 +40,10 @@ Permitted host-language zones, and nothing else:
    host string carried as an opaque token and concatenated (`wrap`,
    `string-append`) for diagnostics. The boundary: object-level control flow
    must branch only on church-encoded structure (`is-type`, `is-error`), never
-   on string contents. One historical exception exists (`wrap-FOLD-only-once`
-   in `types/LISTS.rkt` inspects a message with `string-contains?`); it is
-   tracked on the roadmap for purification. Do not add more.
+   on string contents. As of 2026-07-08 no code violates this (the one former
+   exception, `wrap-FOLD-only-once`, was purified — `FOLD` now tells its two
+   error origins apart by control-flow branch, not by sniffing the message).
+   Keep it that way.
 
 ## Commands
 

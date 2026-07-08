@@ -1,6 +1,5 @@
 #lang lazy
 (provide (all-defined-out))
-(require racket/string)
 (require "../macros/macros.rkt")
 (require "helpers/custom-type-funcs.rkt")
 (require "../church.rkt"
@@ -49,22 +48,18 @@
 
 (def FILTER G L = (((((((fully-type2 custom-filter-typed) "FILTER") bool) ((make-obj bool) G)) _list) L) _list))
 
-(def FOLD-HELPER G X L = (((((((((keep-typed3 _fold) "FOLD") bool) ((make-obj bool) G)) (type X)) ((make-obj (type X)) X)) _list) L) (type X)))
+; Runs the underlying fold and labels an error that arises from *inside* it
+; (e.g. applying G to a bad list element) with "FOLD" exactly once. Errors from
+; the outer argument-type checks never reach here - keep-typed3/type-check3
+; produce and label those itself - so the two error origins are told apart by
+; which control-flow branch we are in, never by inspecting message text.
+(def FOLD-inner G X L =
+    (_let r = (((_fold G) X) L)
+        (_if (is-error r)
+            _then ((make-error (head (val r))) (wrap "FOLD" (err-read r)))
+            _else r)))
 
-(def wrap-FOLD-only-once res = 
-    ((lambda (msg)
-        ((lambda (x) (if x msg (wrap "FOLD" msg)))
-         (string-contains? msg "FOLD")))
-     (err-read res)))
-
-(def FOLD G X L = 
-    (_let result = (((FOLD-HELPER G) X) L)
-        (_if (is-error result)
-            _then ((make-error (head (val result))) (wrap-FOLD-only-once result))
-            _else result
-        )
-    )
-)
+(def FOLD G X L = (((((((((keep-typed3 FOLD-inner) "FOLD") bool) ((make-obj bool) G)) (type X)) ((make-obj (type X)) X)) _list) L) (type X)))
 ;===================================================
 
 (def TAKE N L = (((((((fully-type2 _take) "TAKE") nat) N) _list) L) _list))
