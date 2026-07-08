@@ -63,7 +63,8 @@ is valued there too, so explicit beats clever.
   - [ ] `HEAD-OPT` (no typed `HEAD` exists yet) and a Result-returning safe
     division (`err` on divide-by-zero)
 - [~] **8. Next major tentacle: binary rationals** (chosen 2026-07-08 over
-  typed-list/function-signatures). The scalable counterpart to `rationals.rkt`.
+  typed-list/function-signatures). The scalable counterpart to `rationals.rkt`,
+  now at full parity with it.
   - [x] 8a. `binary-rationals.rkt` — `binR = {binZ numerator, binNat denominator}`,
     mirroring `rationals.rkt` onto the `-bin` operators (uses the `bin-gcd`/
     `bin-lcm` from item 6 directly instead of re-deriving Euclid). Reader,
@@ -72,9 +73,12 @@ is valued there too, so explicit beats clever.
     `multR-bin`/`divR-bin`), and comparisons (`eqR-bin`/`gteR-bin`/`gtR-bin`/
     `ltR-bin`/`lteR-bin`). Also filled a gap in `binary-lists.rkt`: `bin-eq`
     (had gte/gt/lt/lte but no equality). 44 + 7 tests (2026-07-08)
-  - [ ] 8b. `floorR-bin` and `expR-bin` — the coupled, subtle pair (exponentiation
-    floors its exponent; watch the negative-value/remainder edge that bit the
-    Church `floorR`). Mirror rationals.rkt's `floorR`/`expR`
+  - [x] 8b. `floorR-bin` and `expR-bin` — the coupled, subtle pair. Translated
+    the *fixed* Church `floorR` (non-negative truncates; negative goes one down
+    only on a nonzero remainder, so negative wholes are their own floor — the
+    `-4/2 => -2` edge is tested). `expR-bin` floors its exponent, so rationals
+    stay closed; 0^0 = 1, negative exponent flips to the reciprocal, negative
+    base's sign follows exponent parity. 16 tests (2026-07-08)
   - [ ] 8c. (stretch) the numeric-tower next steps from the notes: dyadic
     rationals, then intervals, then computable reals as approximation functions
 

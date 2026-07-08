@@ -122,3 +122,44 @@
 ))
 
 (show-results "ordering-bin" ordering-bin-tests)
+
+; ====================================================================
+
+(define floorR-bin-tests (list
+    ; non-negative fractions truncate toward zero
+    (test-list-element "floorR-bin(1/2) => 0" (r-read-bin (floorR-bin binR-pos1-2)) "0")
+    (test-list-element "floorR-bin(2/3) => 0" (r-read-bin (floorR-bin binR-pos2-3)) "0")
+    (test-list-element "floorR-bin(4/2) => 2" (r-read-bin (floorR-bin binR-pos4-2)) "2")
+    ; negative fractions go one further down
+    (test-list-element "floorR-bin(-1/2) => -1" (r-read-bin (floorR-bin binR-neg1-2)) "-1")
+    (test-list-element "floorR-bin(-3/4) => -1" (r-read-bin (floorR-bin binR-neg3-4)) "-1")
+    (test-list-element "floorR-bin(-2/4) => -1" (r-read-bin (floorR-bin binR-neg2-4)) "-1")
+    ; negative WHOLE numbers are their own floor (the -4/2 => -2, not -3, edge)
+    (test-list-element "floorR-bin(-4/2) => -2"
+        (r-read-bin (floorR-bin ((makeR2-bin bin-negFour) bin-two))) "-2")
+    (test-list-element "floorR-bin(0) => 0" (r-read-bin (floorR-bin binR-0)) "0")
+))
+
+(show-results "floorR-bin" floorR-bin-tests)
+
+; ====================================================================
+
+(define expR-bin-tests (list
+    ; zero exponent => 1 (including 0^0 by convention)
+    (test-list-element "expR-bin(2/3)^0 => 1" (r-read-bin ((expR-bin binR-pos2-3) binR-0)) "1")
+    (test-list-element "expR-bin(0)^0 => 1" (r-read-bin ((expR-bin binR-0) binR-0)) "1")
+    ; a fractional exponent floors to 0 => 1
+    (test-list-element "expR-bin(2/3)^(1/2) => 1" (r-read-bin ((expR-bin binR-pos2-3) binR-pos1-2)) "1")
+    ; whole positive exponents
+    (test-list-element "expR-bin(2)^2 => 4" (r-read-bin ((expR-bin binR-pos2-1) binR-pos2-1)) "4")
+    (test-list-element "expR-bin(1/2)^2 => 1/4" (r-read-bin ((expR-bin binR-pos1-2) binR-pos2-1)) "1/4")
+    ; negative base: even power positive, odd power negative
+    (test-list-element "expR-bin(-1/2)^2 => 1/4" (r-read-bin ((expR-bin binR-neg1-2) binR-pos2-1)) "1/4")
+    (test-list-element "expR-bin(-1/2)^3 => -1/8"
+        (r-read-bin ((expR-bin binR-neg1-2) ((makeR2-bin bin-posThree) bin-one))) "-1/8")
+    ; negative exponent flips the base to its reciprocal
+    (test-list-element "expR-bin(1/2)^(-2) => 4"
+        (r-read-bin ((expR-bin binR-pos1-2) ((makeR2-bin bin-negTwo) bin-one))) "4")
+))
+
+(show-results "expR-bin" expR-bin-tests)

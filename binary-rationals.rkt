@@ -24,10 +24,6 @@
 
     Reusing the binary integer functions for the numerator gives the sign
     handling for free, exactly as rationals.rkt leans on the Church integers.
-
-    Not yet implemented (see ROADMAP): floorR-bin and expR-bin, which are
-    coupled (exponentiation floors its exponent) and carry the subtle
-    sign/remainder edge cases worth their own slice.
 |#
 
 ;===================================================
@@ -256,3 +252,55 @@
     - Logic: not gt
 |#
 (def lteR-bin r1 r2 = (_not ((gtR-bin r1) r2)))
+
+;===================================================
+
+#|
+    ~ FLOOR ~
+    - Contract: binR => binR
+    - Idea: a/b => greatest whole number n with n <= a/b
+    - Logic: divide the magnitudes (binary nat division truncates). For a
+        non-negative value that truncation is already the floor. A negative
+        value must go one further down, but ONLY when the division left a
+        remainder - a negative whole number is already its own floor. (This is
+        the exact edge that once made the Church floorR send e.g. -4/2 to -3.)
+|#
+(def floorR-bin r =
+    (_let sign-of-r = (r-sign-bin r)
+    (_let divided = ((bin-div (numer-bin r)) (denom-bin r))
+    (_let remainder = ((bin-mod (numer-bin r)) (denom-bin r))
+    (_let new-numer =
+        (_if ((_or sign-of-r) (bin-is-zero remainder))
+            _then divided
+            _else (bin-succ divided))
+    (((makeR-bin sign-of-r) new-numer) bin-one))))))
+
+#|
+    ~ EXPONENTIATION ~
+    - Contract: (binR, binR) => binR
+    - Idea: r1,r2 => r1^floor(r2)
+    - Logic: floor the exponent to a whole integer z so the rationals stay
+        closed under this operation (a genuine rational power like (1/2)^(1/2)
+        is irrational). A zero exponent gives one, with 0^0 = 1 by convention.
+        A negative z flips the base to its reciprocal and uses |z|. The base is
+        reduced first, so lowest terms in means lowest terms out - no reduce
+        afterward. The signed numerator is raised with expZ-bin (which sets the
+        sign by parity) and the denominator with the plain nat bin-exp.
+    - Note: the zero check must come before floorR-bin, since flooring a
+        denominator-zero "zero" would divide by zero.
+|#
+(def expR-bin r1 r2 =
+    (_if (isZeroR-bin r2)
+        _then binR-pos1
+        _else
+        (_let z = (s-numer-bin (floorR-bin r2))
+        (_if (isZeroZ-bin z)
+            _then binR-pos1
+            _else
+            (_let base = (reduce-bin (_if (head z)
+                            _then r1
+                            _else (reciprocal-bin r1)))
+            (_let n = (tail z)
+            (_let new-s-numer = ((expZ-bin (s-numer-bin base)) ((makeZ-bin true) n))
+            (_let new-denom = ((bin-exp (denom-bin base)) n)
+            ((makeR2-bin new-s-numer) new-denom)))))))))
