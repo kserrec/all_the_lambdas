@@ -57,3 +57,20 @@
 ))
 
 (show-results "is-type" is-type-tests)
+
+; ====================================================================
+
+; a dummy curried 3-arg function for exercising type-check3 directly
+(define dummy3 (lambda (a) (lambda (b) (lambda (c) a))))
+
+(define type-check3-tests (list
+    (test-list-element "type-check3 valid args runs func"
+        (read-any ((((((((type-check3 dummy3) "dummy") bool) nat) int) TRUE) ONE) posONE)) "bool:TRUE")
+    (test-list-element "type-check3 arg3 wrong type names arg3"
+        (read-any ((((((((type-check3 dummy3) "dummy") bool) nat) int) TRUE) ONE) TRUE)) "dummy(arg3(err:int))")
+    ; regression: the error object must carry arg3's expected type (int), not arg2's (nat)
+    (test-list-element "type-check3 arg3 error carries param-type3"
+        (b-read ((eq int) (type (val ((((((((type-check3 dummy3) "dummy") bool) nat) int) TRUE) ONE) TRUE))))) "true")
+))
+
+(show-results "type-check3" type-check3-tests)

@@ -54,7 +54,25 @@
 ; TYPES - strict
 ;===================================================
 
-#|  
+#|
+    ~ WHAT THIS IS ~
+    An embedded runtime typing discipline built entirely from untyped
+    lambda-calculus values. This is not static typing: nothing is rejected
+    before evaluation, and the object language underneath stays pure untyped
+    lambda calculus. Instead, types are Church-numeral tags, typed objects are
+    lambda-encoded pairs carrying their tag, and typed functions check tags,
+    unwrap valid inputs, rewrap outputs, and produce error values when a check
+    fails.
+
+    Crucially, the errors are not host-language exceptions - they are
+    lambda-encoded values like everything else. A type failure can be returned,
+    stored in a list, passed through higher-order functions, chained into a
+    trace (see wrap and the type-check family below), and rendered later.
+    In spirit this is closer to a lambda-encoded dynamic contract layer, with
+    blame-like error bubbling, than to a formal static type system.
+|#
+
+#|
     Note: pairs will be written here in braces, {a,b}
     For typed objects, a pair of this format is used: typed_obj = {type, value}
 
@@ -387,7 +405,7 @@
     (_let chain-errs2 = ((make-error param-type2) (string-append (err-read param2) "->" err-msg2))
     ; make/chain errors for param 3 if needed
     (_let err-msg3 = (wrap func-name (wrap "arg3" (err-read (param-err-type param-type3))))
-    (_let err3 = ((make-error param-type2) err-msg3)
+    (_let err3 = ((make-error param-type3) err-msg3)
     (_let chain-errs3 = ((make-error param-type3) (string-append (err-read param3) "->" err-msg3))
         ; check types
         (_if ((is-type param-type1) param1)
