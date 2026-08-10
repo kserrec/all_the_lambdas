@@ -490,7 +490,9 @@
                         _then INT-ERROR
                         _else (_if ((eq _list) param-type)
                                 _then LIST-ERROR
-                                _else ERROR)))))
+                                _else (_if ((eq rat) param-type)
+                                        _then RAT-ERROR
+                                        _else ERROR))))))
 
 #|
     ~ MAKE F TYPED ~

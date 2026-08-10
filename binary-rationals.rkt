@@ -22,6 +22,11 @@
 
         binR = (binZ, binNat) = {{sign, binNat}, binNat}
 
+    This representation deliberately treats any zero numerator or zero
+    denominator as rational zero. As a consequence, reciprocal and division by
+    rational zero return rational zero rather than diverging or returning an
+    error. The runtime-tagged layers may put a different guard around division.
+
     Reusing the binary integer functions for the numerator gives the sign
     handling for free, exactly as rationals.rkt leans on the Church integers.
 |#
@@ -52,7 +57,7 @@
     ~ IS-ZERO ~
     - Contract: binR => bool
     - Logic: zero when the numerator is zero, or the denominator is zero
-        (a zero denominator is treated as a zero value, as in rationals.rkt)
+        (a zero denominator is deliberately treated as rational zero)
 |#
 (def isZeroR-bin r =
     ((_or (isZeroZ-bin (s-numer-bin r))) (bin-is-zero (denom-bin r))))
@@ -107,6 +112,8 @@
     ~ RECIPROCAL ~
     - Contract: binR => binR
     - Logic: sign unchanged, swap numerator and denominator
+    - Totalization: Reciprocating rational zero creates a zero denominator,
+        which this representation deliberately reads as rational zero.
 |#
 (def reciprocal-bin r =
     (((makeR-bin (r-sign-bin r)) (denom-bin r)) (numer-bin r)))
@@ -187,6 +194,9 @@
     ~ DIVISION ~
     - Contract: (binR, binR) => binR
     - Logic: multiply by the reciprocal of the second argument
+    - Totalization: A zero divisor reciprocates to a denominator-zero rational,
+        which this representation treats as rational zero. Therefore divR-bin
+        returns rational zero for division by rational zero.
 |#
 (def divR-bin r1 r2 = ((multR-bin r1) (reciprocal-bin r2)))
 

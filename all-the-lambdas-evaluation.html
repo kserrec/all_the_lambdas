@@ -1,0 +1,3073 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A full pedagogical and technical evaluation of All the Lambdas, with an extension atlas and recommended development sequence.">
+  <title>All the Lambdas — Project Evaluation &amp; Extension Atlas</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #081417;
+      --bg-elevated: #0d1d21;
+      --panel: #11262a;
+      --panel-soft: #0d2024;
+      --ink: #edf6ef;
+      --muted: #a9bbb6;
+      --faint: #718783;
+      --line: rgba(211, 233, 226, 0.14);
+      --line-strong: rgba(211, 233, 226, 0.28);
+      --mint: #70d6b2;
+      --mint-strong: #9be7ca;
+      --coral: #ff8c72;
+      --gold: #efc56a;
+      --blue: #7eb9f4;
+      --violet: #b9a1ff;
+      --danger: #ff8f8f;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+      --radius: 18px;
+      --radius-small: 11px;
+      --max: 1220px;
+    }
+
+    html[data-theme="light"] {
+      color-scheme: light;
+      --bg: #f4f1e9;
+      --bg-elevated: #fffdf7;
+      --panel: #ffffff;
+      --panel-soft: #f7f5ee;
+      --ink: #142422;
+      --muted: #536661;
+      --faint: #74847f;
+      --line: rgba(24, 57, 51, 0.14);
+      --line-strong: rgba(24, 57, 51, 0.25);
+      --mint: #087d60;
+      --mint-strong: #06674f;
+      --coral: #b5452f;
+      --gold: #91690a;
+      --blue: #266ca9;
+      --violet: #6b4ec1;
+      --danger: #b62d3d;
+      --shadow: 0 24px 70px rgba(37, 48, 43, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 88px;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 14% -10%, rgba(112, 214, 178, 0.13), transparent 34rem),
+        radial-gradient(circle at 96% 6%, rgba(255, 140, 114, 0.10), transparent 31rem),
+        var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      text-rendering: optimizeLegibility;
+    }
+
+    a {
+      color: var(--mint-strong);
+      text-decoration-color: color-mix(in srgb, var(--mint) 45%, transparent);
+      text-underline-offset: 0.18em;
+    }
+
+    a:hover {
+      text-decoration-color: var(--mint);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    code,
+    .mono {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 0.91em;
+    }
+
+    code {
+      padding: 0.12rem 0.34rem;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: color-mix(in srgb, var(--panel-soft) 78%, transparent);
+      color: color-mix(in srgb, var(--ink) 92%, var(--mint));
+      overflow-wrap: anywhere;
+    }
+
+    pre {
+      margin: 1rem 0 0;
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-small);
+      background: #071114;
+      color: #dcece5;
+      overflow: auto;
+      line-height: 1.55;
+    }
+
+    html[data-theme="light"] pre {
+      background: #172320;
+      color: #f2faf6;
+    }
+
+    ::selection {
+      background: rgba(112, 214, 178, 0.28);
+    }
+
+    .skip-link {
+      position: fixed;
+      top: 0.75rem;
+      left: 0.75rem;
+      z-index: 1000;
+      padding: 0.65rem 0.9rem;
+      border-radius: 8px;
+      background: var(--ink);
+      color: var(--bg);
+      transform: translateY(-150%);
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .progress-track {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 999;
+      height: 4px;
+      background: transparent;
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--mint), var(--gold), var(--coral));
+      box-shadow: 0 0 16px rgba(112, 214, 178, 0.45);
+    }
+
+    .hero {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero::before {
+      content: "λ";
+      position: absolute;
+      top: -7rem;
+      right: max(2vw, calc((100vw - var(--max)) / 2));
+      z-index: -1;
+      color: rgba(112, 214, 178, 0.055);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(28rem, 55vw, 51rem);
+      font-weight: 700;
+      line-height: 1;
+      transform: rotate(5deg);
+      user-select: none;
+    }
+
+    .hero-inner {
+      width: min(var(--max), calc(100% - 2.5rem));
+      margin: 0 auto;
+      padding: clamp(4.5rem, 9vw, 8rem) 0 clamp(3.5rem, 7vw, 6rem);
+    }
+
+    .eyebrow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem;
+      margin: 0 0 1.2rem;
+      color: var(--mint);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 2.4rem;
+      height: 2px;
+      background: currentColor;
+      content: "";
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      margin-top: 0;
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 650;
+      line-height: 1.12;
+      text-wrap: balance;
+    }
+
+    h1 {
+      max-width: 950px;
+      margin-bottom: 1.25rem;
+      font-size: clamp(3rem, 8vw, 6.8rem);
+      letter-spacing: -0.055em;
+    }
+
+    h1 em {
+      color: var(--mint);
+      font-style: normal;
+    }
+
+    h2 {
+      margin-bottom: 1.1rem;
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      letter-spacing: -0.035em;
+    }
+
+    h3 {
+      margin-bottom: 0.7rem;
+      font-size: clamp(1.35rem, 2.3vw, 1.8rem);
+      letter-spacing: -0.018em;
+    }
+
+    h4 {
+      margin-bottom: 0.45rem;
+      font-size: 1.08rem;
+      font-family: inherit;
+      letter-spacing: -0.01em;
+    }
+
+    p {
+      margin: 0 0 1rem;
+    }
+
+    .hero-lede {
+      max-width: 850px;
+      margin-bottom: 2.2rem;
+      color: var(--muted);
+      font-size: clamp(1.15rem, 2.4vw, 1.48rem);
+      line-height: 1.55;
+    }
+
+    .verdict {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1rem 1.2rem;
+      max-width: 900px;
+      padding: 1.25rem 1.35rem;
+      border: 1px solid rgba(112, 214, 178, 0.32);
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(112, 214, 178, 0.11), rgba(112, 214, 178, 0.035));
+      box-shadow: var(--shadow);
+    }
+
+    .verdict-mark {
+      display: grid;
+      width: 2.4rem;
+      height: 2.4rem;
+      border-radius: 50%;
+      background: var(--mint);
+      color: #08221b;
+      font-weight: 900;
+      place-items: center;
+    }
+
+    .verdict strong {
+      display: block;
+      margin-bottom: 0.15rem;
+      font-size: 1.08rem;
+    }
+
+    .verdict p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 0.7rem;
+      margin-top: 2.4rem;
+    }
+
+    .metric {
+      min-height: 104px;
+      padding: 0.95rem;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: rgba(8, 20, 23, 0.48);
+      backdrop-filter: blur(8px);
+    }
+
+    html[data-theme="light"] .metric {
+      background: rgba(255, 255, 255, 0.65);
+    }
+
+    .metric strong {
+      display: block;
+      color: var(--mint-strong);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.8rem;
+      line-height: 1.1;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 0.35rem;
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+
+    .page-shell {
+      display: grid;
+      grid-template-columns: 248px minmax(0, 1fr);
+      gap: clamp(2rem, 5vw, 5rem);
+      width: min(var(--max), calc(100% - 2.5rem));
+      margin: 0 auto;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 1.8rem;
+      align-self: start;
+      max-height: calc(100vh - 3.6rem);
+      padding: 2.2rem 0;
+      overflow: auto;
+      scrollbar-width: thin;
+    }
+
+    .sidebar-title {
+      margin-bottom: 0.65rem;
+      color: var(--faint);
+      font-size: 0.69rem;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .toc {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .toc a {
+      display: block;
+      margin: 0.15rem 0;
+      padding: 0.43rem 0.7rem;
+      border-left: 2px solid transparent;
+      color: var(--muted);
+      font-size: 0.83rem;
+      line-height: 1.35;
+      text-decoration: none;
+      transition: 150ms ease;
+    }
+
+    .toc a:hover,
+    .toc a.active {
+      border-color: var(--mint);
+      color: var(--ink);
+      background: rgba(112, 214, 178, 0.055);
+    }
+
+    .sidebar-actions {
+      display: grid;
+      gap: 0.55rem;
+      margin-top: 1.3rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      min-height: 38px;
+      padding: 0.5rem 0.72rem;
+      border: 1px solid var(--line-strong);
+      border-radius: 9px;
+      background: var(--panel-soft);
+      color: var(--ink);
+      font-size: 0.78rem;
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    .button:hover {
+      border-color: var(--mint);
+      background: color-mix(in srgb, var(--panel-soft) 88%, var(--mint));
+    }
+
+    main {
+      min-width: 0;
+      padding: 4rem 0 7rem;
+    }
+
+    section {
+      margin-bottom: clamp(5rem, 10vw, 8rem);
+    }
+
+    section[id] {
+      scroll-margin-top: 70px;
+    }
+
+    .section-kicker {
+      margin-bottom: 0.65rem;
+      color: var(--coral);
+      font-size: 0.73rem;
+      font-weight: 850;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .section-intro {
+      max-width: 780px;
+      margin-bottom: 2rem;
+      color: var(--muted);
+      font-size: 1.08rem;
+    }
+
+    .callout {
+      margin: 1.6rem 0;
+      padding: 1.2rem 1.35rem;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--mint);
+      border-radius: 0 var(--radius-small) var(--radius-small) 0;
+      background: var(--panel-soft);
+    }
+
+    .callout.warning {
+      border-left-color: var(--gold);
+    }
+
+    .callout.danger {
+      border-left-color: var(--danger);
+    }
+
+    .callout.recommendation {
+      border-left-color: var(--coral);
+      background: linear-gradient(100deg, rgba(255, 140, 114, 0.10), var(--panel-soft) 55%);
+    }
+
+    .callout p:last-child {
+      margin-bottom: 0;
+    }
+
+    .grid-2,
+    .grid-3 {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .card {
+      padding: 1.25rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, var(--panel), var(--panel-soft));
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+    }
+
+    .card p:last-child,
+    .card ul:last-child {
+      margin-bottom: 0;
+    }
+
+    .card-icon {
+      display: inline-grid;
+      width: 2.4rem;
+      height: 2.4rem;
+      margin-bottom: 1rem;
+      border: 1px solid var(--line-strong);
+      border-radius: 10px;
+      color: var(--mint);
+      font-weight: 800;
+      place-items: center;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin: 1.5rem 0;
+    }
+
+    .badge,
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.38rem;
+      padding: 0.32rem 0.62rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--panel-soft);
+      color: var(--muted);
+      font-size: 0.71rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .badge.fact::before,
+    .badge.inference::before,
+    .badge.recommendation::before {
+      width: 0.48rem;
+      height: 0.48rem;
+      border-radius: 50%;
+      content: "";
+    }
+
+    .badge.fact::before {
+      background: var(--mint);
+    }
+
+    .badge.inference::before {
+      background: var(--blue);
+    }
+
+    .badge.recommendation::before {
+      background: var(--coral);
+    }
+
+    .table-wrap {
+      margin: 1.4rem 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--panel-soft);
+      font-size: 0.88rem;
+    }
+
+    th,
+    td {
+      padding: 0.82rem 0.9rem;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--ink);
+      background: color-mix(in srgb, var(--panel) 83%, var(--mint));
+      font-size: 0.71rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    td {
+      color: var(--muted);
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    td strong {
+      color: var(--ink);
+    }
+
+    ul,
+    ol {
+      margin: 0.7rem 0 1rem;
+      padding-left: 1.25rem;
+    }
+
+    li {
+      margin: 0.35rem 0;
+    }
+
+    li::marker {
+      color: var(--mint);
+    }
+
+    .clean-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .clean-list li {
+      position: relative;
+      margin: 0;
+      padding: 0.58rem 0 0.58rem 1.35rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .clean-list li:last-child {
+      border-bottom: 0;
+    }
+
+    .clean-list li::before {
+      position: absolute;
+      top: 0.72rem;
+      left: 0;
+      color: var(--mint);
+      content: "→";
+    }
+
+    .score-row {
+      display: grid;
+      grid-template-columns: minmax(170px, 0.7fr) minmax(130px, 0.42fr) 1.6fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 0.9rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .score-row:last-child {
+      border-bottom: 0;
+    }
+
+    .score-row > strong {
+      font-size: 0.92rem;
+    }
+
+    .rating {
+      display: inline-flex;
+      width: fit-content;
+      padding: 0.28rem 0.55rem;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 850;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .rating.exceptional,
+    .rating.strong {
+      background: rgba(112, 214, 178, 0.13);
+      color: var(--mint-strong);
+    }
+
+    .rating.mixed {
+      background: rgba(239, 197, 106, 0.14);
+      color: var(--gold);
+    }
+
+    .rating.weak {
+      background: rgba(255, 143, 143, 0.13);
+      color: var(--danger);
+    }
+
+    .score-row p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .architecture {
+      margin: 1.8rem 0;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel-soft);
+      overflow: auto;
+    }
+
+    .architecture svg {
+      display: block;
+      width: 100%;
+      min-width: 720px;
+      height: auto;
+    }
+
+    .architecture .node {
+      fill: var(--panel);
+      stroke: var(--line-strong);
+      stroke-width: 1.5;
+    }
+
+    .architecture .node-primary {
+      fill: color-mix(in srgb, var(--panel) 80%, var(--mint));
+      stroke: var(--mint);
+    }
+
+    .architecture .node-alert {
+      fill: color-mix(in srgb, var(--panel) 82%, var(--coral));
+      stroke: var(--coral);
+    }
+
+    .architecture .edge {
+      fill: none;
+      stroke: var(--faint);
+      stroke-width: 2;
+      marker-end: url("#arrow");
+    }
+
+    .architecture .edge-dashed {
+      stroke-dasharray: 7 6;
+    }
+
+    .architecture text {
+      fill: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    }
+
+    .architecture .svg-title {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .architecture .svg-sub {
+      fill: var(--muted);
+      font-size: 12px;
+    }
+
+    .figure-caption {
+      margin: 0.75rem 0 0.2rem;
+      color: var(--faint);
+      font-size: 0.78rem;
+    }
+
+    .finding-list,
+    .track-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .finding {
+      position: relative;
+      padding: 1.2rem 1.25rem 1.25rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel-soft);
+    }
+
+    .finding[data-severity="high"] {
+      border-left: 4px solid var(--danger);
+    }
+
+    .finding[data-severity="medium"] {
+      border-left: 4px solid var(--gold);
+    }
+
+    .finding[data-severity="precision"] {
+      border-left: 4px solid var(--blue);
+    }
+
+    .finding-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.55rem;
+    }
+
+    .finding-id {
+      color: var(--faint);
+      font-size: 0.72rem;
+      font-weight: 850;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .severity {
+      display: inline-flex;
+      padding: 0.28rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.67rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .severity.high {
+      background: rgba(255, 143, 143, 0.13);
+      color: var(--danger);
+    }
+
+    .severity.medium {
+      background: rgba(239, 197, 106, 0.14);
+      color: var(--gold);
+    }
+
+    .severity.precision {
+      background: rgba(126, 185, 244, 0.13);
+      color: var(--blue);
+    }
+
+    .finding h3 {
+      font-family: inherit;
+      font-size: 1.18rem;
+      letter-spacing: -0.015em;
+    }
+
+    .finding p {
+      color: var(--muted);
+      font-size: 0.91rem;
+    }
+
+    details {
+      margin-top: 0.9rem;
+      border-top: 1px solid var(--line);
+    }
+
+    summary {
+      padding: 0.8rem 0 0;
+      color: var(--mint-strong);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.025em;
+      list-style: none;
+      cursor: pointer;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::before {
+      display: inline-block;
+      width: 1.25rem;
+      color: var(--mint);
+      content: "+";
+      font-size: 1rem;
+    }
+
+    details[open] summary::before {
+      content: "−";
+    }
+
+    .detail-body {
+      padding: 0.7rem 0 0;
+    }
+
+    .detail-body p,
+    .detail-body li {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .filters {
+      display: grid;
+      gap: 0.8rem;
+      margin: 1.6rem 0 1.3rem;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel-soft);
+    }
+
+    .search {
+      width: 100%;
+      min-height: 44px;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid var(--line-strong);
+      border-radius: 10px;
+      outline: none;
+      background: var(--bg-elevated);
+      color: var(--ink);
+    }
+
+    .search:focus {
+      border-color: var(--mint);
+      box-shadow: 0 0 0 3px rgba(112, 214, 178, 0.12);
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .chip {
+      cursor: pointer;
+    }
+
+    .chip:hover,
+    .chip.active {
+      border-color: var(--mint);
+      background: rgba(112, 214, 178, 0.12);
+      color: var(--mint-strong);
+    }
+
+    .track-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .track {
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+      padding: 1.3rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(160deg, var(--panel), var(--panel-soft));
+      box-shadow: 0 13px 38px rgba(0, 0, 0, 0.08);
+    }
+
+    .track.hidden,
+    .finding.hidden {
+      display: none;
+    }
+
+    .track-topline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .track-number {
+      display: inline-grid;
+      width: 2rem;
+      height: 2rem;
+      margin-bottom: 0.75rem;
+      border-radius: 8px;
+      background: rgba(112, 214, 178, 0.13);
+      color: var(--mint-strong);
+      font-size: 0.78rem;
+      font-weight: 900;
+      place-items: center;
+    }
+
+    .track h3 {
+      margin-bottom: 0.5rem;
+      font-family: inherit;
+      font-size: 1.25rem;
+    }
+
+    .track > p {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .track dl {
+      display: grid;
+      grid-template-columns: 7.1rem 1fr;
+      gap: 0.45rem 0.7rem;
+      margin: 0.75rem 0 0;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--line);
+      font-size: 0.82rem;
+    }
+
+    .track dt {
+      color: var(--faint);
+      font-weight: 800;
+    }
+
+    .track dd {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .track details {
+      margin-top: auto;
+      padding-top: 0.2rem;
+    }
+
+    .empty-state {
+      display: none;
+      padding: 1.4rem;
+      border: 1px dashed var(--line-strong);
+      border-radius: var(--radius);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .roadmap {
+      position: relative;
+      display: grid;
+      gap: 0;
+      margin-top: 2rem;
+    }
+
+    .phase {
+      display: grid;
+      grid-template-columns: 95px minmax(0, 1fr);
+      gap: 1.2rem;
+      position: relative;
+      padding-bottom: 1.5rem;
+    }
+
+    .phase::before {
+      position: absolute;
+      top: 2.1rem;
+      bottom: -0.15rem;
+      left: 38px;
+      width: 1px;
+      background: var(--line-strong);
+      content: "";
+    }
+
+    .phase:last-child::before {
+      display: none;
+    }
+
+    .phase-label {
+      display: grid;
+      align-self: start;
+      width: 77px;
+      min-height: 42px;
+      border: 1px solid var(--line-strong);
+      border-radius: 9px;
+      background: var(--panel);
+      color: var(--mint-strong);
+      font-size: 0.7rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      place-items: center;
+      text-transform: uppercase;
+    }
+
+    .phase-body {
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-small);
+      background: var(--panel-soft);
+    }
+
+    .phase-body h3 {
+      margin-bottom: 0.35rem;
+      font-family: inherit;
+      font-size: 1.05rem;
+    }
+
+    .phase-body p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 0.55rem;
+      margin: 1.2rem 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .checklist li {
+      position: relative;
+      margin: 0;
+      padding: 0.75rem 0.85rem 0.75rem 2.6rem;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel-soft);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .checklist li::before {
+      position: absolute;
+      top: 0.73rem;
+      left: 0.85rem;
+      display: grid;
+      width: 1.15rem;
+      height: 1.15rem;
+      border: 1px solid var(--mint);
+      border-radius: 4px;
+      color: var(--mint);
+      content: "✓";
+      font-size: 0.72rem;
+      font-weight: 900;
+      place-items: center;
+    }
+
+    .reference-list {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .reference {
+      padding: 0.9rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel-soft);
+    }
+
+    .reference strong {
+      display: block;
+      margin-bottom: 0.15rem;
+    }
+
+    .reference p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .footer {
+      padding: 2rem 0 3.5rem;
+      border-top: 1px solid var(--line);
+      color: var(--faint);
+      text-align: center;
+      font-size: 0.78rem;
+    }
+
+    .back-top {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      z-index: 20;
+      display: grid;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line-strong);
+      border-radius: 50%;
+      background: var(--panel);
+      color: var(--ink);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: 160ms ease;
+      place-items: center;
+    }
+
+    .back-top.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    @media (max-width: 980px) {
+      .metrics {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .page-shell {
+        display: block;
+      }
+
+      .sidebar {
+        position: relative;
+        top: auto;
+        max-height: none;
+        padding: 1.2rem 0 0;
+      }
+
+      .toc,
+      .sidebar-title {
+        display: none;
+      }
+
+      .sidebar-actions {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0;
+        padding: 0;
+        border: 0;
+      }
+
+      main {
+        padding-top: 2.8rem;
+      }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        font-size: 15px;
+      }
+
+      .hero-inner,
+      .page-shell {
+        width: min(100% - 1.4rem, var(--max));
+      }
+
+      .hero-inner {
+        padding-top: 4rem;
+      }
+
+      .metrics,
+      .grid-2,
+      .grid-3,
+      .track-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .verdict {
+        grid-template-columns: 1fr;
+      }
+
+      .score-row {
+        grid-template-columns: 1fr;
+        gap: 0.35rem;
+      }
+
+      .track dl {
+        grid-template-columns: 1fr;
+        gap: 0.05rem;
+      }
+
+      .track dd {
+        margin-bottom: 0.45rem;
+      }
+
+      .phase {
+        grid-template-columns: 72px minmax(0, 1fr);
+        gap: 0.7rem;
+      }
+
+      .phase-label {
+        width: 63px;
+      }
+
+      .phase::before {
+        left: 31px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+    }
+
+    @media print {
+      :root,
+      html[data-theme="light"],
+      html[data-theme="dark"] {
+        color-scheme: light;
+        --bg: #fff;
+        --bg-elevated: #fff;
+        --panel: #fff;
+        --panel-soft: #fff;
+        --ink: #111;
+        --muted: #333;
+        --faint: #555;
+        --line: #ccc;
+        --line-strong: #aaa;
+        --mint: #075f48;
+        --mint-strong: #075f48;
+        --coral: #8f301f;
+        --gold: #765400;
+        --blue: #245f8e;
+        --danger: #962333;
+        --shadow: none;
+      }
+
+      body {
+        background: #fff;
+        font-size: 10pt;
+      }
+
+      .progress-track,
+      .skip-link,
+      .sidebar,
+      .back-top,
+      .filters,
+      .hero::before {
+        display: none !important;
+      }
+
+      .hero-inner,
+      .page-shell {
+        width: 100%;
+      }
+
+      .hero-inner {
+        padding: 1.5rem 0;
+      }
+
+      .page-shell {
+        display: block;
+      }
+
+      .track-grid {
+        display: block;
+      }
+
+      .track {
+        display: block;
+        margin-bottom: 1rem;
+      }
+
+      main {
+        padding: 1.5rem 0;
+      }
+
+      section {
+        margin-bottom: 2.5rem;
+      }
+
+      .card,
+      .finding,
+      .track,
+      .phase-body,
+      .architecture,
+      .table-wrap {
+        break-inside: avoid;
+        box-shadow: none;
+      }
+
+      details {
+        display: block;
+      }
+
+      details > * {
+        display: block;
+      }
+
+      summary {
+        display: none;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to report</a>
+  <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progress"></div></div>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Repository evaluation · 10 August 2026</p>
+      <h1>All the <em>Lambdas</em></h1>
+      <p class="hero-lede">
+        A pedagogical and technical evaluation of a project that takes untyped lambda calculus as a given,
+        then asks the much more interesting question: <strong>how far can one coherent lambda-built world keep going?</strong>
+      </p>
+      <div class="verdict" aria-label="Executive verdict">
+        <div class="verdict-mark">✓</div>
+        <div>
+          <strong>Keep the thesis. Stabilize the boundaries. Then build the language branch.</strong>
+          <p>
+            The project already succeeds as an unusually ambitious executable lambda-calculus laboratory.
+            It is not yet dependable as a fully traversable teaching path because its advertised raw on-ramp is broken
+            and several boundaries make contradictory, undocumented, or unverified claims. Repair those foundations first; the
+            strongest next major extension is strings → parser combinators → lambda terms as data.
+          </p>
+        </div>
+      </div>
+
+      <div class="metrics" aria-label="Audit metrics">
+        <div class="metric"><strong>70</strong><span>current project files</span></div>
+        <div class="metric"><strong>64</strong><span>Racket source and test files</span></div>
+        <div class="metric"><strong>12,227</strong><span>lines of Racket, Markdown, shell, and CI material</span></div>
+        <div class="metric"><strong>24</strong><span>test modules executed by the main runner</span></div>
+        <div class="metric"><strong>211</strong><span>named test groups</span></div>
+        <div class="metric"><strong>1,745 / 0</strong><span>passing / failing assertions in the green suite</span></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-shell">
+    <aside class="sidebar" aria-label="Report navigation">
+      <p class="sidebar-title">In this report</p>
+      <nav>
+        <ol class="toc">
+          <li><a href="#verdict">1. Executive verdict</a></li>
+          <li><a href="#identity">2. Project identity</a></li>
+          <li><a href="#architecture">3. Architecture</a></li>
+          <li><a href="#strengths">4. What works</a></li>
+          <li><a href="#method">5. Audit method</a></li>
+          <li><a href="#findings">6. Confirmed findings</a></li>
+          <li><a href="#pedagogy">7. Pedagogical evaluation</a></li>
+          <li><a href="#tests">8. Evidence &amp; tests</a></li>
+          <li><a href="#extensions">9. Extension atlas</a></li>
+          <li><a href="#dependencies">10. Branch map</a></li>
+          <li><a href="#sequence">11. Recommended sequence</a></li>
+          <li><a href="#done">12. Definition of done</a></li>
+          <li><a href="#appendix">13. Evidence appendix</a></li>
+        </ol>
+      </nav>
+      <div class="sidebar-actions">
+        <button class="button" id="themeToggle" type="button" aria-label="Switch color theme">◐ Theme</button>
+        <button class="button" id="expandAll" type="button">＋ Expand details</button>
+        <button class="button" id="printReport" type="button">↗ Print / PDF</button>
+      </div>
+    </aside>
+
+    <main id="main">
+      <section id="verdict">
+        <p class="section-kicker">01 · Executive verdict</p>
+        <h2>The project’s heart is real.</h2>
+        <p class="section-intro">
+          This is not a pile of disconnected Church encodings. It is a sustained attempt to make one computational
+          world out of functions alone, then pressure-test that world with arithmetic, lists, algorithms, runtime
+          contracts, coercions, binary representations, rational numbers, and closure-built data structures.
+        </p>
+
+        <div class="grid-3">
+          <article class="card">
+            <div class="card-icon">λ</div>
+            <h3>The premise succeeds</h3>
+            <p>
+              Using Lazy Racket as the reduction engine is the right choice for this project. It lets the material
+              begin after the introductory interpreter lesson and spend its attention on construction, representation,
+              invariants, recursion, and composition.
+            </p>
+          </article>
+          <article class="card">
+            <div class="card-icon">≠</div>
+            <h3>The boundaries are not honest yet</h3>
+            <p>
+              Division by zero, absent search results, negative integer exponents, and noncanonical binary values
+              are handled inconsistently. In several places the project returns a valid-looking answer where the
+              mathematics says the operation is undefined.
+            </p>
+          </article>
+          <article class="card">
+            <div class="card-icon">↗</div>
+            <h3>The extension surface is exceptional</h3>
+            <p>
+              The existing layers are not dead ends. They support several legitimate futures: languages, types,
+              coercion theory, persistent data structures, binary algorithms, lazy streams, exact computation,
+              and comparative encoding experiments.
+            </p>
+          </article>
+        </div>
+
+        <div class="callout recommendation">
+          <p>
+            <strong>Direct recommendation:</strong> do one foundation-integrity phase before opening another large
+            branch. Then choose <strong>strings and parser combinators</strong> as the next major content track,
+            leading to lambda terms represented as ordinary project data. That path exercises almost everything
+            already built without turning the whole repository into an interpreter project.
+          </p>
+        </div>
+
+        <div class="legend" aria-label="Evidence legend">
+          <span class="badge fact">Fact — observed in source or execution</span>
+          <span class="badge inference">Inference — pedagogical interpretation</span>
+          <span class="badge recommendation">Recommendation — proposed direction</span>
+        </div>
+
+        <div class="card" aria-label="Project scorecard">
+          <div class="score-row">
+            <strong>Identity and thesis</strong>
+            <span class="rating exceptional">Exceptional</span>
+            <p>Distinctive, coherent, and worth protecting. “Keep going” is visible in the implementation, not just the README.</p>
+          </div>
+          <div class="score-row">
+            <strong>Purity discipline</strong>
+            <span class="rating strong">Strong</span>
+            <p>Host-language features are concentrated at declared macro, reader, printer, error, and demonstration boundaries.</p>
+          </div>
+          <div class="score-row">
+            <strong>Correctness on valid inputs</strong>
+            <span class="rating strong">Strong</span>
+            <p>Logic, core Church arithmetic, recursion, lists, signed arithmetic, rational reduction, and binary value computations perform well on their documented valid domains.</p>
+          </div>
+          <div class="score-row">
+            <strong>Boundary semantics</strong>
+            <span class="rating weak">Needs repair</span>
+            <p>Undefined and absent cases are inconsistent, can diverge, or can masquerade as ordinary zero values.</p>
+          </div>
+          <div class="score-row">
+            <strong>Pedagogical sequencing</strong>
+            <span class="rating mixed">Promising, uneven</span>
+            <p>The conceptual progression is rich, but the advertised first route breaks and later modules read more like a library than a guided course.</p>
+          </div>
+          <div class="score-row">
+            <strong>Executable evidence</strong>
+            <span class="rating mixed">Broad, incomplete</span>
+            <p>1,745 passing assertions are meaningful, but entire branches and representation invariants sit outside that green signal.</p>
+          </div>
+          <div class="score-row">
+            <strong>Extensibility</strong>
+            <span class="rating exceptional">Exceptional</span>
+            <p>Every major existing subsystem can become either a deeper branch or a bridge to a new one.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="identity">
+        <p class="section-kicker">02 · Project identity</p>
+        <h2>Lambda is the material, not the prerequisite lesson.</h2>
+        <p class="section-intro">
+          The repository makes a valuable pedagogical bet: its learner already understands variables,
+          abstraction, application, and beta reduction. It therefore does not need to spend its energy
+          building another evaluator before it can discuss the structures that evaluators usually demonstrate.
+        </p>
+
+        <div class="grid-2">
+          <article class="card">
+            <h3>What the project is</h3>
+            <ul class="clean-list">
+              <li>An executable notebook for constructing computation from lambdas.</li>
+              <li>A comparative laboratory with raw, sugared, strict-contract, and coercive surfaces.</li>
+              <li>A representation study: unary Church naturals, signed pairs, rational pairs, and binary digit lists.</li>
+              <li>A place where higher-order functions are both subject matter and implementation mechanism.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>What it should not become</h3>
+            <ul class="clean-list">
+              <li>A beginner introduction that repeats what the intended learner already knows.</li>
+              <li>A general Racket utility library with lambda encodings hidden behind host conveniences.</li>
+              <li>A monolithic interpreter whose implementation replaces the project’s existing constructed world.</li>
+              <li>An abstraction catalog in which new names arrive faster than concrete examples and laws.</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Intended learner already has</th>
+                <th>What the project currently supplies</th>
+                <th>What the next teaching layer should supply</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Untyped lambda-calculus syntax and reduction</td>
+                <td>Real programs made of encodings, recursion, and eliminators</td>
+                <td>Representation invariants and worked traces through nontrivial programs</td>
+              </tr>
+              <tr>
+                <td>Church booleans and numerals, at least conceptually</td>
+                <td>Arithmetic, signed integers, rationals, lists, and algorithms</td>
+                <td>Explicit contrasts between alternative representations and their operational costs</td>
+              </tr>
+              <tr>
+                <td>Comfort with higher-order functions</td>
+                <td>Maps, folds, filters, fixed points, runtime wrappers, and closures</td>
+                <td>Prediction prompts, exercises, laws, and “why this representation” checkpoints</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout">
+          <p>
+            The right product description is <strong>an advanced executable lambda-calculus lab</strong>.
+            Calling it a course would currently overstate its sequencing and learner guidance; calling it a code
+            collection would understate its coherence and pedagogical potential.
+          </p>
+        </div>
+      </section>
+
+      <section id="architecture">
+        <p class="section-kicker">03 · Architecture</p>
+        <h2>One substrate, several lenses.</h2>
+        <p class="section-intro">
+          The repository is best understood as a shared lambda-built core viewed through several semantic and
+          representational lenses. The branches are related, but they are not simply versions on one linear ladder.
+        </p>
+
+        <figure class="architecture">
+          <svg viewBox="0 0 1040 510" role="img" aria-labelledby="archTitle archDesc">
+            <title id="archTitle">Current repository architecture</title>
+            <desc id="archDesc">Lazy Racket and macros support a central lambda-built core. Raw, strict, coercive, binary, rational, algorithm, and closure branches extend or reinterpret it.</desc>
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"></path>
+              </marker>
+            </defs>
+
+            <path class="edge" d="M174 102 C240 102 245 205 318 205"></path>
+            <path class="edge" d="M174 246 C235 246 250 220 318 220"></path>
+            <path class="edge" d="M512 190 C565 139 592 109 650 109"></path>
+            <path class="edge" d="M512 218 C570 218 590 229 650 229"></path>
+            <path class="edge" d="M512 246 C570 295 590 348 650 348"></path>
+            <path class="edge" d="M512 228 C650 228 730 421 840 421"></path>
+            <path class="edge edge-dashed" d="M174 388 C250 388 267 270 338 251"></path>
+            <path class="edge" d="M820 109 C862 109 875 160 900 193"></path>
+            <path class="edge" d="M820 229 C856 229 876 226 900 226"></path>
+            <path class="edge" d="M820 348 C856 348 876 286 900 256"></path>
+
+            <rect class="node node-alert" x="24" y="62" width="150" height="80" rx="14"></rect>
+            <text class="svg-title" x="99" y="91" text-anchor="middle">bitter/</text>
+            <text class="svg-sub" x="99" y="114" text-anchor="middle">raw nested lambdas</text>
+            <text class="svg-sub" x="99" y="131" text-anchor="middle">currently breaks at lists</text>
+
+            <rect class="node" x="24" y="206" width="150" height="80" rx="14"></rect>
+            <text class="svg-title" x="99" y="235" text-anchor="middle">Macros</text>
+            <text class="svg-sub" x="99" y="258" text-anchor="middle">def · _if · _let · _cons</text>
+            <text class="svg-sub" x="99" y="275" text-anchor="middle">legibility surface</text>
+
+            <rect class="node" x="24" y="348" width="150" height="80" rx="14"></rect>
+            <text class="svg-title" x="99" y="377" text-anchor="middle">Lazy Racket</text>
+            <text class="svg-sub" x="99" y="400" text-anchor="middle">call-by-need host</text>
+            <text class="svg-sub" x="99" y="417" text-anchor="middle">reader / printer boundary</text>
+
+            <rect class="node node-primary" x="318" y="165" width="194" height="105" rx="16"></rect>
+            <text class="svg-title" x="415" y="198" text-anchor="middle">Lambda-built core</text>
+            <text class="svg-sub" x="415" y="223" text-anchor="middle">logic · Church naturals · Y</text>
+            <text class="svg-sub" x="415" y="242" text-anchor="middle">pairs · lists · integers</text>
+            <text class="svg-sub" x="415" y="260" text-anchor="middle">rationals · algorithms</text>
+
+            <rect class="node" x="650" y="69" width="170" height="80" rx="14"></rect>
+            <text class="svg-title" x="735" y="98" text-anchor="middle">Strict contracts</text>
+            <text class="svg-sub" x="735" y="121" text-anchor="middle">runtime tags + errors</text>
+            <text class="svg-sub" x="735" y="138" text-anchor="middle">Option / Result seeds</text>
+
+            <rect class="node" x="650" y="189" width="170" height="80" rx="14"></rect>
+            <text class="svg-title" x="735" y="218" text-anchor="middle">Coercive contracts</text>
+            <text class="svg-sub" x="735" y="241" text-anchor="middle">cross-type conversion</text>
+            <text class="svg-sub" x="735" y="258" text-anchor="middle">lossy defaults</text>
+
+            <rect class="node" x="650" y="308" width="170" height="80" rx="14"></rect>
+            <text class="svg-title" x="735" y="337" text-anchor="middle">Binary values</text>
+            <text class="svg-sub" x="735" y="360" text-anchor="middle">digit lists + algorithms</text>
+            <text class="svg-sub" x="735" y="377" text-anchor="middle">integer / rational variants</text>
+
+            <rect class="node" x="840" y="381" width="170" height="80" rx="14"></rect>
+            <text class="svg-title" x="925" y="410" text-anchor="middle">Closure structures</text>
+            <text class="svg-sub" x="925" y="433" text-anchor="middle">objects · queues · trees</text>
+            <text class="svg-sub" x="925" y="450" text-anchor="middle">isolated demonstration</text>
+
+            <rect class="node" x="900" y="184" width="116" height="82" rx="14"></rect>
+            <text class="svg-title" x="958" y="214" text-anchor="middle">Readers</text>
+            <text class="svg-sub" x="958" y="237" text-anchor="middle">observable values</text>
+            <text class="svg-sub" x="958" y="254" text-anchor="middle">test boundary</text>
+          </svg>
+          <figcaption class="figure-caption">
+            Solid arrows show implementation or representation flow; the dashed edge marks the host evaluation
+            substrate. The raw branch is pedagogically upstream but currently not executable beyond recursion/division.
+          </figcaption>
+        </figure>
+
+        <div class="grid-2">
+          <article class="card">
+            <h3>Why Lazy Racket is appropriate</h3>
+            <p>
+              The project depends on non-strict behavior for Church booleans and recursive constructions.
+              Racket’s lazy language evaluates applications by need and forces promises when their values are required.
+              That gives the repository a trustworthy reduction substrate without inventing a second semantics in a
+              home-grown interpreter.
+            </p>
+          </article>
+          <article class="card">
+            <h3>What “pure” means here</h3>
+            <p>
+              The computational representations are built from lambdas, application, and pairs encoded as selectors.
+              Host strings, numbers, conditionals, and effects appear where the project explicitly crosses into
+              macro expansion, reading, printing, error display, tests, or demonstrations. That is a credible,
+              teachable boundary—not a claim that every byte in every module is literal lambda syntax.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="strengths">
+        <p class="section-kicker">04 · What works</p>
+        <h2>The repository has earned the right to keep going.</h2>
+        <p class="section-intro">
+          The audit found substantial working content, not merely promising scaffolding. These are the parts to preserve
+          while correcting the foundations.
+        </p>
+
+        <div class="grid-3">
+          <article class="card">
+            <h3>A coherent constructed world</h3>
+            <p>
+              Booleans select, pairs store, lists recurse, numerals iterate, signed numbers pair sign with magnitude,
+              rationals compose signed numerators with denominators, and algorithms consume those representations.
+              Later layers reuse earlier ideas rather than resetting the model.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Correct core behavior</h3>
+            <p>
+              On valid domains, logic, Church arithmetic, recursion, list transformations, signed arithmetic,
+              rational reduction and ordering, and the principal binary operations all survive direct execution
+              and a broad automated suite.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Binary values prove scale</h3>
+            <p>
+              The binary-list branch moves the project beyond “toy unary arithmetic.” It handles values through the
+              sextillion-scale fixtures and exposes genuine carry, borrow, comparison, multiplication, and long-division
+              questions.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Strict typing is described honestly</h3>
+            <p>
+              The strict branch is presented as runtime tagging and contract enforcement, not as static typing or
+              System F. That precision matters: the teaching value is in the wrappers, checks, error paths, and
+              observable boundaries.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Option and Result are good seeds</h3>
+            <p>
+              Their encodings, readers, and nested behavior are sound. They are exactly the vocabulary the rest of the
+              project needs for absence and partiality; the current issue is limited integration, not a bad foundation.
+            </p>
+          </article>
+          <article class="card">
+            <h3>The test runner is serious</h3>
+            <p>
+              One command discovers the main test modules, treats crashes as failures, preserves a nonzero exit status,
+              and runs in CI. The green total is useful evidence even though it is not yet evidence for every branch
+              or invariant.
+            </p>
+          </article>
+        </div>
+
+        <div class="callout">
+          <p>
+            The closure demonstration also runs as documented: object-style updates, FIFO and ordered queues,
+            and binary-tree traversal all produce the expected values. Its weakness is isolation, not failure.
+          </p>
+        </div>
+      </section>
+
+      <section id="method">
+        <p class="section-kicker">05 · Audit method</p>
+        <h2>The evaluation used the project as a learner would—and as a library would.</h2>
+        <p class="section-intro">
+          A green suite alone cannot answer whether examples teach the truth, whether advertised paths load, or whether
+          readers conceal malformed representations. The audit combined source review with direct execution at several
+          boundaries.
+        </p>
+
+        <div class="grid-2">
+          <article class="card">
+            <h3>Static review</h3>
+            <ul>
+              <li>Read the README, roadmap, repository guidance, macro layer, implementation modules, test helpers, CI, and test sources.</li>
+              <li>Checked mathematical definitions, comments, contracts, examples, representation claims, and branch-to-branch consistency.</li>
+              <li>Scanned non-test computational modules for host-language constructs outside declared boundaries.</li>
+              <li>Compared labels in tests with the expressions those tests actually execute.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Executable review</h3>
+            <ul>
+              <li>Ran the complete test runner after the rational-boundary work: 1,745 passes, zero reported failures.</li>
+              <li>Loaded every non-test Racket module independently to find branches outside test discovery.</li>
+              <li>Used isolated timeouts to distinguish nontermination from slow execution.</li>
+              <li>Probed internal binary digit shapes, typed readers, safe indexing, rational zero behavior, and closure-demo outputs.</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="callout warning">
+          <p>
+            Dotenv files were categorically excluded from discovery and inspection. They were not needed for this audit.
+            The audit baseline was <code>main</code> at commit <code>7098e7b</code>, before this report was added.
+            Counts describe that project content in scope, not Git internals or secret-bearing environment files.
+          </p>
+        </div>
+      </section>
+
+      <section id="findings">
+        <p class="section-kicker">06 · Confirmed findings</p>
+        <h2>The green suite hides a small number of foundational contradictions.</h2>
+        <p class="section-intro">
+          Findings are ranked by pedagogical and semantic impact, not by how many lines a repair would take. “High”
+          means a learner can be taught a false rule, hit a nonterminating advertised operation, or fail to enter an
+          advertised branch.
+        </p>
+
+        <div class="filters" aria-label="Finding search">
+          <label for="findingSearch"><strong>Search findings</strong></label>
+          <input class="search" id="findingSearch" type="search" placeholder="Try: division, bitter, binary, tests…" autocomplete="off">
+        </div>
+
+        <div class="finding-list" id="findingList">
+          <article class="finding filterable" data-severity="high">
+            <div class="finding-head">
+              <span class="finding-id">F-01 · Traversability</span>
+              <span class="severity high">High</span>
+            </div>
+            <h3>The recommended raw on-ramp is broken at <code>bitter/lists.rkt</code>.</h3>
+            <p>
+              The README recommends beginning in <code>bitter/</code>, but that branch comments out its local
+              <code>pair</code> and <code>nil</code> definitions and does not import replacements. Loading the module
+              stops at its first <code>pair</code> use with <code>pair: unbound identifier</code>. The integer and
+              algorithm modules that depend on it fail for the same reason.
+            </p>
+            <p>
+              <strong>Why it matters:</strong> the project’s pedagogically purest route is also the first route a learner
+              is explicitly told to take. Because no bitter module is under the main <code>tests/</code> tree, the complete
+              suite remains green.
+            </p>
+            <details>
+              <summary>Evidence and repair direction</summary>
+              <div class="detail-body">
+                <ul>
+                  <li><code>README.md:146</code> recommends starting with bitter logic.</li>
+                  <li><code>bitter/lists.rkt:38–53</code> comments out <code>pair</code> and <code>nil</code>; the first unresolved use is near line 84.</li>
+                  <li><code>bitter/test.rkt</code>, <code>bitter/integers.rkt</code>, and <code>bitter/algorithms.rkt</code> consequently do not load.</li>
+                  <li>Once loadability is restored, mixed-sign <code>addZ</code> also needs correction: its positive/negative case subtracts the magnitudes in reverse order, so the written definition would map +5 + −2 to 0 rather than 3.</li>
+                </ul>
+                <p>
+                  The repair target is not merely “make it compile.” Give bitter its own smoke tests and a small
+                  equivalence suite against the sugared root branch so the raw path cannot drift silently again.
+                </p>
+              </div>
+            </details>
+          </article>
+
+          <article class="finding filterable" data-severity="medium">
+            <div class="finding-head">
+              <span class="finding-id">F-02 · Mathematical semantics</span>
+              <span class="severity medium">Medium</span>
+            </div>
+            <h3>Division by zero follows four different, mostly undeclared policies.</h3>
+            <p>
+              Raw and strict runtime-tagged Church natural and integer division do not terminate. Coercive natural and
+              integer division returns an explicit error. Binary division returns quotient zero and the original
+              dividend as remainder. Raw Church-backed and binary-backed rationals deliberately treat a zero numerator
+              or denominator as rational zero; the strict and coercive runtime-tagged rational boundaries now return
+              explicit errors for a divisor that meets that raw zero definition.
+            </p>
+            <p>
+              <strong>Why it matters:</strong> each choice can be coherent within its layer. The integrity problem is
+              failing to tell a learner which domain uses which policy, especially when changing only a representation
+              or runtime wrapper changes whether an operation returns, errors, or does not terminate.
+            </p>
+            <details>
+              <summary>Observed behavior matrix</summary>
+              <div class="detail-body">
+                <div class="table-wrap">
+                  <table>
+                    <thead><tr><th>Surface</th><th>Observed zero-divisor behavior</th><th>Semantic problem</th></tr></thead>
+                    <tbody>
+                      <tr><td>Raw and strict Church naturals/integers</td><td>Demanding a zero-divisor result does not terminate.</td><td>A conventional partial operation; the remaining problem is that the boundary does not say so clearly.</td></tr>
+                      <tr><td>Coercive naturals/integers</td><td>Returns <code>err:div by 0</code> after coercing the divisor.</td><td>A coherent runtime-guard policy.</td></tr>
+                      <tr><td>Binary naturals/integers</td><td><code>bin-div x 0 = 0</code>; <code>bin-mod x 0 = x</code>; signed division inherits quotient zero.</td><td>A coherent totalization that preserves <code>x = q×d + r</code>.</td></tr>
+                      <tr><td>Raw Church/binary rationals</td><td><code>(1/2) / 0 = 0</code>; a zero numerator or denominator counts as rational zero.</td><td>A deliberate raw representation convention, now documented.</td></tr>
+                      <tr><td>Strict/coercive tagged rationals</td><td>Returns <code>result:err(err:div by 0)</code> or direct <code>err:div by 0</code>.</td><td>The runtime-tagged layers now provide explicit zero-divisor boundaries.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p>
+                  Preserve these domain decisions. Finish the integrity work by documenting each policy at its
+                  implementation and teaching boundary, and by testing deliberate nontermination with bounded probes.
+                </p>
+              </div>
+            </details>
+          </article>
+
+          <article class="finding filterable" data-severity="high">
+            <div class="finding-head">
+              <span class="finding-id">F-03 · Termination and absence</span>
+              <span class="severity high">High</span>
+            </div>
+            <h3>Binary search can repeat forever and its natural “not found” value is not a natural.</h3>
+            <p>
+              The natural-number search tracks both bounds as Church naturals. When the target is lower than the first
+              element and the midpoint is zero, <code>pred zero</code> is still zero, so the recursive state does not
+              change. When another absence path does terminate, the untyped function returns Church <code>true</code>
+              as a sentinel even though the typed wrapper labels the result as a natural.
+            </p>
+            <p>
+              <strong>Why it matters:</strong> the function’s two failure modes are respectively nontermination and a
+              malformed typed value. “Not found” is expected data and should be represented as <code>Option</code>.
+            </p>
+            <details>
+              <summary>Concrete failing scenarios</summary>
+              <div class="detail-body">
+                <ul>
+                  <li>Searching below the first element of a nonempty natural list exceeded a four-second isolated timeout.</li>
+                  <li>Typed search for 2 in the sorted natural list [1, 3] reached the reader as a procedure tagged <code>nat</code>, then failed with <code>number-&gt;string: expected number?</code>.</li>
+                  <li>The empty-list upper-bound initialization has the same natural-underflow problem.</li>
+                </ul>
+                <p>
+                  A safe redesign can use half-open bounds <code>[low, high)</code>, terminate when they meet,
+                  and return <code>some(index)</code> or <code>none</code>. That removes both the underflow and sentinel.
+                </p>
+              </div>
+            </details>
+          </article>
+
+          <article class="finding filterable" data-severity="high">
+            <div class="finding-head">
+              <span class="finding-id">F-04 · Representation invariant</span>
+              <span class="severity high">High</span>
+            </div>
+            <h3>Public binary functions do not always return the promised canonical representation.</h3>
+            <p>
+              Repository guidance says binary naturals have no leading zeroes and every public function returns
+              normalized output. Direct structure probes contradict that claim: <code>bin-div 4 3</code> produces
+              the little-endian digit list <code>[0,0,1]</code> rather than <code>[1]</code>, while
+              <code>bin-sub 4 4</code> produces the empty list rather than the declared zero representation <code>[0]</code>.
+            </p>
+            <p>
+              <strong>Why it matters:</strong> the public reader collapses both malformed forms to the right host number,
+              so value-only tests cannot see the invariant failure. Later algorithms can depend on shape, not merely value.
+            </p>
+            <details>
+              <summary>Repair direction</summary>
+              <div class="detail-body">
+                <p>
+                  Define one canonical constructor/normalizer, specify exactly whether zero is <code>[0]</code>, and
+                  make public operations cross that constructor boundary. Add representation readers or structural
+                  predicates to the tests; do not rely exclusively on <code>bin-read</code>.
+                </p>
+              </div>
+            </details>
+          </article>
+
+          <article class="finding filterable" data-severity="medium">
+            <div class="finding-head">
+              <span class="finding-id">F-05 · Domain precision</span>
+              <span class="severity medium">Medium</span>
+            </div>
+            <h3>Negative integer exponents return zero, which is a false answer rather than an integer result.</h3>
+            <p>
+              Both unary and binary signed-integer exponentiation choose zero whenever the exponent is negative.
+              Thus <code>2^-1</code> reads as 0. Negative powers generally leave the integers; the operation is partial
+              in this domain, not truncated in the way integer division is.
+            </p>
+            <details>
+              <summary>Better semantic choices</summary>
+              <div class="detail-body">
+                <p>
+                  The cleanest integer API returns a <code>Result</code> error for negative exponents. A second,
+                  explicitly lifted operation can return a rational. Either choice teaches the domain boundary;
+                  silently returning zero erases it.
+                </p>
+              </div>
+            </details>
+          </article>
+
+          <article class="finding filterable" data-severity="medium">
+            <div class="finding-head">
+              <span class="finding-id">F-06 · Contract integrity</span>
+              <span class="severity medium">Medium</span>
+            </div>
+            <h3>The strict layer has two holes in otherwise useful runtime contracts.</h3>
+            <p>
+              <code>IND-OPT</code> unwraps its arguments to check the range before confirming that they are a typed list
+              and typed natural. The probe <code>IND-OPT FALSE ZERO</code> returns <code>option:none</code> instead of a
+              type error. Separately, typed natural and integer readers emit the boolean error object when given the
+              wrong type; <code>nat-read TRUE</code> becomes <code>err:bool</code>.
+            </p>
+            <details>
+              <summary>Why this is pedagogically useful to fix</summary>
+              <div class="detail-body">
+                <p>
+                  These are small examples of a large systems lesson: a wrapper is only a boundary if every path goes
+                  through it. Repairing them can become a worked chapter on validation order, error provenance, and the
+                  difference between “invalid input” and “valid input with no answer.”
+                </p>
+              </div>
+            </details>
+          </article>
+
+          <article class="finding filterable" data-severity="medium">
+            <div class="finding-head">
+              <span class="finding-id">F-07 · Evidence quality</span>
+              <span class="severity medium">Medium</span>
+            </div>
+            <h3>Several test names do not describe the expressions they execute.</h3>
+            <p>
+              The problem is distributed: a strict test labeled <code>DIV ZERO FOUR</code> executes division by one;
+              multiplication and subtraction labels sometimes execute different operands; one binary “unnormalized
+              versus normalized” equality test compares <code>bin-one</code> with itself; list append and fold labels
+              similarly drift from their expressions.
+            </p>
+            <p>
+              <strong>Why it matters:</strong> every assertion can pass while the named teaching example was never run.
+              Test names are learner-facing claims in this repository, not incidental metadata.
+            </p>
+            <details>
+              <summary>Evidence policy to add</summary>
+              <div class="detail-body">
+                <ul>
+                  <li>Prefer table-driven fixtures where the label is derived from the same operands used by the expression.</li>
+                  <li>Add explicit structural and law-based suites rather than many hand-copied near-duplicates.</li>
+                  <li>Test documentation examples verbatim when possible.</li>
+                  <li>Keep the current assertion total, but stop treating it as complete branch coverage.</li>
+                </ul>
+              </div>
+            </details>
+          </article>
+
+          <article class="finding filterable" data-severity="precision">
+            <div class="finding-head">
+              <span class="finding-id">F-08 · Teaching precision</span>
+              <span class="severity precision">Precision</span>
+            </div>
+            <h3>A cluster of comments and examples teaches the wrong local fact.</h3>
+            <p>
+              Examples include a two-element list expansion that repeats <code>a</code> instead of using <code>b</code>,
+              a typed-boolean example that uses Church <code>one</code> as if it were Church <code>true</code>, a bare
+              empty list described as a fully typed list, predicate comments that name their input type as their return
+              type, and a NOR section labeled XOR.
+            </p>
+            <p>
+              None of these destroys the project’s main thesis. Together, though, they impose avoidable verification
+              work on exactly the learner who is trying to reason from representation details.
+            </p>
+            <details>
+              <summary>Related precision notes</summary>
+              <div class="detail-body">
+                <ul>
+                  <li>Rational exponentiation is explicitly defined as base raised to the floor of the rational exponent. The implementation and tests agree, but the public name can still invite a stronger mathematical reading. Consider naming the restriction at the API boundary.</li>
+                  <li>The strict list tag is shallow: lists can intentionally contain mixed typed elements. That is a legitimate experiment, but “strict” should not imply homogeneous element typing.</li>
+                  <li>The closure-data-structure file is an effective demo, but it is not a provided module, has no automated tests, and does not yet explain representation or persistence laws.</li>
+                </ul>
+              </div>
+            </details>
+          </article>
+        </div>
+        <p class="empty-state" id="findingEmpty">No findings match that search.</p>
+      </section>
+
+      <section id="pedagogy">
+        <p class="section-kicker">07 · Pedagogical evaluation</p>
+        <h2>Strong material; incomplete learning path.</h2>
+        <p class="section-intro">
+          The repository should not backfill an introduction to lambda calculus. Its missing pedagogy begins after that
+          point: how a learner chooses a route, sees an invariant, predicts a program, diagnoses a boundary, and compares
+          two encodings of the same idea.
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Pedagogical dimension</th><th>Current state</th><th>Evaluation</th><th>Highest-leverage improvement</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Conceptual ambition</strong></td>
+                <td>Logic through rationals, algorithms, binary values, runtime contracts, and closures</td>
+                <td>Excellent breadth with a genuine through-line</td>
+                <td>Keep the breadth; add explicit dependency paths rather than flattening it</td>
+              </tr>
+              <tr>
+                <td><strong>Entry path</strong></td>
+                <td>README points to raw bitter logic</td>
+                <td>Conceptually right, operationally broken at lists</td>
+                <td>Restore and continuously test the raw route</td>
+              </tr>
+              <tr>
+                <td><strong>Module orientation</strong></td>
+                <td>Rich comments and local contracts, few chapter-level goals</td>
+                <td>Good reference material, weak route guidance</td>
+                <td>Add “why now / prerequisites / invariant / next” headers</td>
+              </tr>
+              <tr>
+                <td><strong>Worked reasoning</strong></td>
+                <td>Definitions and output tests dominate</td>
+                <td>Learner sees answers more often than reductions</td>
+                <td>Trace one nontrivial value through each new representation</td>
+              </tr>
+              <tr>
+                <td><strong>Practice</strong></td>
+                <td>No systematic prediction prompts or exercises</td>
+                <td>Easy to read passively</td>
+                <td>Add small “predict, run, explain, extend” exercises with answers</td>
+              </tr>
+              <tr>
+                <td><strong>Comparison</strong></td>
+                <td>Raw, sugared, strict, coercive, unary, and binary branches coexist</td>
+                <td>Enormous latent teaching value, lightly harvested</td>
+                <td>Show the same operation side-by-side and compare failure modes and cost</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="grid-3">
+          <article class="card">
+            <h3>Journey A · Construction</h3>
+            <p>
+              Raw logic → Church naturals → fixed-point recursion → pairs and lists → signed values → rationals.
+              The question is: “How does one representation become enough substrate for the next?”
+            </p>
+          </article>
+          <article class="card">
+            <h3>Journey B · Semantics</h3>
+            <p>
+              The same operations through untyped, strict-contract, and coercive surfaces. The question is:
+              “Where does invalid input become an error, a conversion, a default, or divergence?”
+            </p>
+          </article>
+          <article class="card">
+            <h3>Journey C · Representation</h3>
+            <p>
+              Unary numerals → binary digit lists → signed binary values → binary rationals. The question is:
+              “What changes when data representation changes but the mathematical value does not?”
+            </p>
+          </article>
+        </div>
+
+        <div class="callout recommendation">
+          <p>
+            Add a pedagogical spine without turning modules into textbooks: a short goal, prerequisites, the
+            representation invariant, one worked trace, two prediction exercises, and a pointer to the next branch.
+            That small repeated structure would make the project navigable while preserving its exploratory character.
+          </p>
+        </div>
+      </section>
+
+      <section id="tests">
+        <p class="section-kicker">08 · Evidence and tests</p>
+        <h2>1,745 passes are real evidence—but only for what the runner can see.</h2>
+        <p class="section-intro">
+          The suite gives strong confidence in many ordinary value-level cases. It does not currently certify raw-branch
+          loadability, deliberate nontermination, representation invariants, or the accuracy of every test label.
+        </p>
+
+        <div class="grid-2">
+          <article class="card">
+            <h3>What the green run establishes</h3>
+            <ul>
+              <li>The discovered 24 test modules load and complete in one run.</li>
+              <li>All 211 named groups report zero failing assertions.</li>
+              <li>Core valid-domain examples have substantial breadth.</li>
+              <li>Crashing discovered test files would produce a failing process and CI signal.</li>
+              <li>Large binary value fixtures execute successfully.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>What it does not establish</h3>
+            <ul>
+              <li>Any <code>bitter/</code> module beyond the earlier raw core works.</li>
+              <li>The untested <code>bitter/</code> demonstration and modules load successfully.</li>
+              <li>Operations terminate for adversarial boundary inputs.</li>
+              <li>Binary values are canonical internally.</li>
+              <li>Handwritten labels match the expressions underneath them.</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>New evidence layer</th><th>What it catches</th><th>Example property</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Branch smoke tests</strong></td><td>Unimported names, drift, top-level crashes</td><td>Every advertised module loads independently</td></tr>
+              <tr><td><strong>Representation tests</strong></td><td>Readers masking malformed internal data</td><td>Every public binary result is canonical; zero has one shape</td></tr>
+              <tr><td><strong>Timeout tests</strong></td><td>Repeated recursive state and missing domain guards</td><td>Search and valid division complete within a bounded test harness</td></tr>
+              <tr><td><strong>Law/property tests</strong></td><td>Case gaps across broad input families</td><td><code>a = (a / b) × b + (a mod b)</code> for positive <code>b</code></td></tr>
+              <tr><td><strong>Differential tests</strong></td><td>Unary/binary or raw/sugared branch disagreement</td><td>Two representations read to the same value across a generated range</td></tr>
+              <tr><td><strong>Documentation tests</strong></td><td>Examples and labels drifting from actual programs</td><td>Every learner-facing example is executable and asserted</td></tr>
+              <tr><td><strong>Purity lint</strong></td><td>Accidental host shortcuts in computational modules</td><td>Host primitives appear only in an explicit allowlist of boundaries</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="extensions">
+        <p class="section-kicker">09 · Extension atlas</p>
+        <h2>There is no single “next.” There is a trunk and a set of real branches.</h2>
+        <p class="section-intro">
+          Each track below has a distinct teaching question, prerequisite shape, and failure mode. Search or filter the
+          atlas, then expand a card for a concrete sequence of milestones.
+        </p>
+
+        <div class="filters" aria-label="Extension filters">
+          <label for="trackSearch"><strong>Find an extension path</strong></label>
+          <input class="search" id="trackSearch" type="search" placeholder="Try: parser, types, data structures, streams…" autocomplete="off">
+          <div class="chip-row" role="group" aria-label="Filter extension category">
+            <button class="chip active" type="button" data-filter="all">All tracks</button>
+            <button class="chip" type="button" data-filter="foundation">Foundation</button>
+            <button class="chip" type="button" data-filter="language">Language</button>
+            <button class="chip" type="button" data-filter="systems">Systems</button>
+            <button class="chip" type="button" data-filter="data">Data</button>
+            <button class="chip" type="button" data-filter="numbers">Numbers</button>
+            <button class="chip" type="button" data-filter="lazy">Laziness</button>
+            <button class="chip" type="button" data-filter="comparative">Comparative</button>
+            <button class="chip" type="button" data-filter="pedagogy">Pedagogy</button>
+          </div>
+        </div>
+
+        <div class="track-grid" id="trackGrid">
+          <article class="track filterable" data-category="foundation">
+            <span class="track-number">00</span>
+            <div class="track-topline"><span class="badge recommendation">Do first</span><span class="badge">Foundation</span></div>
+            <h3>Foundation integrity and explicit partiality</h3>
+            <p>
+              Make the repository’s boundary behavior as principled as its valid-input core: one policy for absence,
+              undefined arithmetic, malformed construction, canonical representations, and termination-sensitive APIs.
+            </p>
+            <dl>
+              <dt>Depends on</dt><dd>Existing Option, Result, readers, and tests</dd>
+              <dt>First payoff</dt><dd>A learner can trust every advertised operation’s domain</dd>
+              <dt>Main risk</dt><dd>Changing many APIs without one shared semantic policy</dd>
+            </dl>
+            <details>
+              <summary>Milestones and completion test</summary>
+              <div class="detail-body">
+                <ol>
+                  <li>Restore bitter loadability and add raw/sugared equivalence smoke tests.</li>
+                  <li>Write a domain table for division, modulo, reciprocal, exponentiation, head/tail/index, and search.</li>
+                  <li>Return <code>Result</code> for invalid operations and <code>Option</code> for expected absence.</li>
+                  <li>Enforce rational denominator and binary canonical-form invariants at constructors.</li>
+                  <li>Add timeout, structure, property, and uncovered-branch tests.</li>
+                </ol>
+                <p><strong>Done means:</strong> no public operation invents a normal value for an undefined case, and every README route loads in CI.</p>
+              </div>
+            </details>
+          </article>
+
+          <article class="track filterable" data-category="pedagogy foundation">
+            <span class="track-number">01</span>
+            <div class="track-topline"><span class="badge recommendation">Run alongside</span><span class="badge">Pedagogy</span></div>
+            <h3>A navigable “beyond lambda” learning spine</h3>
+            <p>
+              Preserve the assumption that lambda calculus is known, then scaffold what comes after: representation
+              choices, invariants, operational cost, partiality, and cross-branch comparisons.
+            </p>
+            <dl>
+              <dt>Depends on</dt><dd>A stable recommended route</dd>
+              <dt>First payoff</dt><dd>Readers know why a module exists and where to go next</dd>
+              <dt>Main risk</dt><dd>Adding exposition that duplicates an introductory lambda course</dd>
+            </dl>
+            <details>
+              <summary>Milestones and completion test</summary>
+              <div class="detail-body">
+                <ol>
+                  <li>Create a dependency-based chapter index with three journeys: construction, semantics, representation.</li>
+                  <li>Give each chapter a goal, prerequisites, invariant, one trace, prediction prompts, and next links.</li>
+                  <li>Build side-by-side studies of raw/sugared and strict/coercive implementations.</li>
+                  <li>Turn every major boundary failure into an exercise about domains and representation.</li>
+                </ol>
+                <p><strong>Done means:</strong> a learner who already knows lambda calculus can complete a coherent route without guessing module order or trusting prose that is not executed.</p>
+              </div>
+            </details>
+          </article>
+
+          <article class="track filterable" data-category="language">
+            <span class="track-number">02</span>
+            <div class="track-topline"><span class="badge recommendation">Best next branch</span><span class="badge">Language</span></div>
+            <h3>Strings → parser combinators → small languages</h3>
+            <p>
+              Represent text as lambda-built lists, then make parsers ordinary higher-order values:
+              input → <code>Result</code> of a parsed value paired with the unconsumed input.
+            </p>
+            <dl>
+              <dt>Depends on</dt><dd>Lists, pairs, recursion, Option/Result, explicit partiality</dd>
+              <dt>First payoff</dt><dd>Parse signed integers and arithmetic expressions from project data</dd>
+              <dt>Main risk</dt><dd>Using host strings invisibly instead of declaring the read boundary</dd>
+            </dl>
+            <details>
+              <summary>Milestones and completion test</summary>
+              <div class="detail-body">
+                <ol>
+                  <li>Choose a character representation: a finite pedagogical alphabet first, binary code points later.</li>
+                  <li>Implement string equality, prefix, concatenation, splitting, and safe head/tail.</li>
+                  <li>Define parser primitives: satisfy, literal, choice, sequencing, mapping, repetition, whitespace.</li>
+                  <li>Parse naturals, signed integers, lists, and a precedence-aware arithmetic grammar.</li>
+                  <li>Expose structured error positions without converting them to host exceptions.</li>
+                </ol>
+                <p><strong>Done means:</strong> a nontrivial grammar parses entirely through lambda-built combinators, with success, remainder, and failure observable through project readers.</p>
+              </div>
+            </details>
+          </article>
+
+          <article class="track filterable" data-category="language comparative">
+            <span class="track-number">03</span>
+            <div class="track-topline"><span class="badge">Language</span><span class="badge">Metacircular</span></div>
+            <h3>Lambda terms as data</h3>
+            <p>
+              Encode variables, abstractions, and applications inside the same world; study binding and reduction as
+              data transformations. This is a branch off the project, not a replacement for Racket as its main evaluator.
+            </p>
+            <dl>
+              <dt>Depends on</dt><dd>Strings/symbols, Result, lists, persistent maps</dd>
+              <dt>First payoff</dt><dd>Free-variable analysis and alpha-equivalence</dd>
+              <dt>Main risk</dt><dd>Letting interpreter mechanics consume the project’s broader identity</dd>
+            </dl>
+            <details>
+              <summary>Milestones and completion test</summary>
+              <div class="detail-body">
+                <ol>
+                  <li>Choose and document a Var/Abs/App encoding with a single eliminator.</li>
+                  <li>Implement free variables, renaming, alpha-equivalence, and capture-avoiding substitution.</li>
+                  <li>Add one-step beta and eta reduction plus normal-order and applicative-order drivers.</li>
+                  <li>Compare named variables with de Bruijn indices.</li>
+                  <li>Translate lambda terms to SKI and connect the parser and pretty-printer.</li>
+                  <li>Later, compare ordinary encodings with Mogensen-style self-representation.</li>
+                </ol>
+                <p><strong>Done means:</strong> parsed terms round-trip, substitution avoids capture, strategies visibly differ on known examples, and the rest of the repository still uses Lazy Racket directly.</p>
+              </div>
+            </details>
+          </article>
+
+          <article class="track filterable" data-category="systems">
+            <span class="track-number">04</span>
+            <div class="track-topline"><span class="badge">Systems</span><span class="badge">Strict</span></div>
+            <h3>Runtime contracts as a real type-design laboratory</h3>
+            <p>
+              Deepen the strict branch without pretending it is static typing: function signatures, typed collections,
+              richer blame paths, domain checks, and reusable Option/Result combinators.
+            </p>
+            <dl>
+              <dt>Depends on</dt><dd>Foundation semantics and current type tags</dd>
+              <dt>First payoff</dt><dd>Safe indexing and division distinguish type error from domain failure</dd>
+              <dt>Main risk</dt><dd>Calling dynamic wrappers “types” without preserving the distinction</dd>
+            </dl>
+            <details>
+              <summary>Milestones and completion test</summary>
+              <div class="detail-body">
+                <ol>
+                  <li>Repair validation order and correct type-specific reader errors.</li>
+                  <li>Add function tags or explicit signature descriptors.</li>
+                  <li>Choose whether lists remain heterogeneous or gain an element-type descriptor; teach both models if both remain.</li>
+                  <li>Type rationals and binary representations with invariant-aware constructors.</li>
+                  <li>Add <code>map</code>, <code>bind</code>, <code>fold</code>, and traversal for Option and Result.</li>
+                </ol>
+                <p><strong>Done means:</strong> every public strict function has a tested contract, domain errors preserve their cause, and the documentation consistently says “runtime contracts.”</p>
+              </div>
+            </details>
+          </article>
+
+          <article class="track filterable" data-category="systems comparative">
+            <span class="track-number">05</span>
+            <div class="track-topline"><span class="badge">Systems</span><span class="badge">Experimental</span></div>
+            <h3>Coercion as a theory, not a convenience</h3>
+            <p>
+              Turn the coercive branch into a study of what conversions mean: which are lossless, which choose defaults,
+              whether paths are coherent, and whether errors retain provenance.
+            </p>
+            <dl>
+              <dt>Depends on</dt><dd>Stable strict semantics and explicit conversion table</dd>
+              <dt>First payoff</dt><dd>Every surprising conversion becomes explainable and testable</dd>
+              <dt>Main risk</dt><dd>Silent defaults erasing errors and making every operation appear total</dd>
+            </dl>
+            <details>
+              <summary>Milestones and completion test</summary>
+              <div class="detail-body">
+                <ol>
+                  <li>Publish a complete source-type × target-type conversion matrix.</li>
+                  <li>Label conversions lossless, lossy, partial, or forbidden.</li>
+                  <li>Test identity, idempotence, round-trip, and path-coherence laws.</li>
+                  <li>Preserve error/provenance information instead of converting every unknown value to zero, false, or nil.</li>
+                  <li>Run the same programs through strict and coercive surfaces and explain the semantic difference.</li>
+                </ol>
+                <p><strong>Done means:</strong> no conversion is accidental, every loss is named, and equivalent conversion paths either agree or deliberately return a conflict.</p>
+              </div>
+            </details>
+          </article>
+
+          <article class="track filterable" data-category="data">
+            <span class="track-number">06</span>
+            <div class="track-topline"><span class="badge">Data</span><span class="badge">Closures</span></div>
+            <h3>Persistent data structures and graph algorithms</h3>
+            <p>
+              Promote the working closure demonstration into tested modules, then use closures and encoded trees to
+              explore maps, sets, heaps, tries, graphs, and algorithms with persistent updates.
+            </p>
+            <dl>
+              <dt>Depends on</dt><dd>Option/Result, lists, binary trees, tested closure protocol</dd>
+              <dt>First payoff</dt><dd>A persistent association map with safe lookup and update</dd>
+              <dt>Main risk</dt><dd>Hiding representation and complexity behind object-like messages</dd>
+            </dl>
+            <details>
+              <summary>Milestones and completion test</summary>
+              <div class="detail-body">
+                <ol>
+                  <li>Extract objects, queues, ordered queues, and trees into provided modules with automated tests.</li>
+                  <li>State persistence laws: an update returns a new value and leaves the old value observable and unchanged.</li>
+                  <li>Add association maps, sets, balanced-search-tree experiments, heaps/priority queues, and tries.</li>
+                  <li>Represent graphs and implement breadth-first search, depth-first search, topological sorting, then Dijkstra with a heap.</li>
+                  <li>Compare closure/message-passing representations with pair/list algebraic encodings.</li>
+                </ol>
+                <p><strong>Done means:</strong> structures have documented protocols and invariants, safe lookup, persistence tests, and at least one algorithm whose behavior depends materially on the chosen representation.</p>
+              </div>
+            </details>
+          </article>
+
+          <article class="track filterable" data-category="numbers comparative">
+            <span class="track-number">07</span>
+            <div class="track-topline"><span class="badge recommendation">High leverage</span><span class="badge">Numbers</span></div>
+            <h3>Binary algorithms and observable complexity</h3>
+            <p>
+              Make the binary branch a deliberate algorithms course: enforce canonical form, measure steps, add faster
+              algorithms, and compare cost against unary Church arithmetic instead of only comparing final values.
+            </p>
+            <dl>
+              <dt>Depends on</dt><dd>Canonical binary invariants and differential tests</dd>
+              <dt>First payoff</dt><dd>Exponentiation by squaring exposes the value of binary representation</dd>
+              <dt>Main risk</dt><dd>Large outputs giving an illusion of efficient algorithms</dd>
+            </dl>
+            <details>
+              <summary>Milestones and completion test</summary>
+              <div class="detail-body">
+                <ol>
+                  <li>Add canonical constructors and Church↔binary conversion laws.</li>
+                  <li>Implement shifts and bitwise operations over digit lists.</li>
+                  <li>Replace repeated-decrement exponentiation with exponentiation by squaring.</li>
+                  <li>Compare grade-school, Karatsuba-style, and long-division variants if the representation supports a clear lesson.</li>
+                  <li>Instrument abstract operation counts rather than relying only on wall-clock timing.</li>
+                </ol>
+                <p><strong>Done means:</strong> each algorithm has an invariant, law tests, and a cost table that visibly explains when binary representation changes the computation.</p>
+              </div>
+            </details>
+          </article>
+
+          <article class="track filterable" data-category="lazy data">
+            <span class="track-number">08</span>
+            <div class="track-topline"><span class="badge">Laziness</span><span class="badge">Coinduction</span></div>
+            <h3>Infinite streams and productive programs</h3>
+            <p>
+              Use call-by-need intentionally rather than merely as support for booleans: infinite streams,
+              observations, productive recursion, and algorithms that compute only the demanded prefix.
+            </p>
+            <dl>
+              <dt>Depends on</dt><dd>Stable list vocabulary, explicit stream representation, safe observation</dd>
+              <dt>First payoff</dt><dd>Infinite naturals and Fibonacci streams consumed by <code>take</code></dd>
+              <dt>Main risk</dt><dd>Confusing a finite Church list with a coinductive stream</dd>
+            </dl>
+            <details>
+              <summary>Milestones and completion test</summary>
+              <div class="detail-body">
+                <ol>
+                  <li>Define a stream cell whose tail is delayed by construction and explain the distinction from lists.</li>
+                  <li>Add head, tail, take, map, filter, zip, iterate, and unfold.</li>
+                  <li>Build naturals, Fibonacci numbers, sieve-based prime exploration, and running approximations.</li>
+                  <li>Introduce guarded productivity and demonstrate a definition that looks recursive but cannot yield a head.</li>
+                  <li>Later add formal power-series examples as a bridge to exact computation.</li>
+                </ol>
+                <p><strong>Done means:</strong> finite observations terminate, unused tails are not evaluated, and the teaching material makes productivity—not “infinity as magic”—the central idea.</p>
+              </div>
+            </details>
+          </article>
+
+          <article class="track filterable" data-category="numbers lazy">
+            <span class="track-number">09</span>
+            <div class="track-topline"><span class="badge">Numbers</span><span class="badge">Later</span></div>
+            <h3>A number tower toward exact computation</h3>
+            <p>
+              Extend exact finite representations first—modular integers, polynomials, dyadics, intervals, continued
+              fractions—then approach computable reals through demanded precision rather than pretending a finite pair is a real.
+            </p>
+            <dl>
+              <dt>Depends on</dt><dd>Result semantics, binary arithmetic, streams for the real-number stage</dd>
+              <dt>First payoff</dt><dd>Modular arithmetic and polynomials reuse existing algebra safely</dd>
+              <dt>Main risk</dt><dd>Overpromising “real numbers” without convergence and error guarantees</dd>
+            </dl>
+            <details>
+              <summary>Milestones and completion test</summary>
+              <div class="detail-body">
+                <ol>
+                  <li>Add modular integers with a nonzero modulus invariant and law tests.</li>
+                  <li>Add polynomial coefficients over an explicit base domain, then evaluation and symbolic derivative.</li>
+                  <li>Explore continued fractions and dyadic rationals as exact infinite/finite bridges.</li>
+                  <li>Represent an exact real as a function from requested precision to a certified rational interval.</li>
+                  <li>Implement arithmetic with interval refinement and make convergence failures explicit.</li>
+                </ol>
+                <p><strong>Done means:</strong> every approximation carries a checkable error bound. Until that is designed, keep the existing roadmap’s real-number work parked.</p>
+              </div>
+            </details>
+          </article>
+
+          <article class="track filterable" data-category="comparative foundation">
+            <span class="track-number">10</span>
+            <div class="track-topline"><span class="badge">Comparative</span><span class="badge">Encodings</span></div>
+            <h3>Church versus Scott-style encoding laboratory</h3>
+            <p>
+              Implement the same booleans, naturals, lists, and trees with alternative eliminators, then compare which
+              observations are direct and which require reconstruction or traversal.
+            </p>
+            <dl>
+              <dt>Depends on</dt><dd>Stable common readers and an observational-equivalence harness</dd>
+              <dt>First payoff</dt><dd>Head, tail, predecessor, and case analysis expose representation tradeoffs</dd>
+              <dt>Main risk</dt><dd>Presenting encodings as notation variants instead of operational choices</dd>
+            </dl>
+            <details>
+              <summary>Milestones and completion test</summary>
+              <div class="detail-body">
+                <ol>
+                  <li>Give Church and Scott-style values a common behavioral interface at the reader boundary.</li>
+                  <li>Implement naturals and lists in both styles.</li>
+                  <li>Count eliminator applications for predecessor, fold, head, tail, and conversion.</li>
+                  <li>Add observational-equivalence properties over finite generated examples.</li>
+                  <li>Connect the term-data branch to Mogensen–Scott encodings when the learner has enough context.</li>
+                </ol>
+                <p><strong>Done means:</strong> a learner can predict which encoding favors iteration versus deconstruction and confirm the prediction with traces or counts.</p>
+              </div>
+            </details>
+          </article>
+
+          <article class="track filterable" data-category="comparative data systems">
+            <span class="track-number">11</span>
+            <div class="track-topline"><span class="badge">Abstraction</span><span class="badge">After examples</span></div>
+            <h3>Algebraic interfaces and reusable combinators</h3>
+            <p>
+              Extract repeated structures only after the repository has enough concrete instances: semigroups and
+              monoids, functor-like mapping, folds, traversals, and generic algorithms over explicit dictionaries.
+            </p>
+            <dl>
+              <dt>Depends on</dt><dd>Several mature concrete types and law-testing infrastructure</dd>
+              <dt>First payoff</dt><dd>One law-tested fold story across lists, Option, Result, and trees</dd>
+              <dt>Main risk</dt><dd>An abstraction pile that outruns the examples it is supposed to explain</dd>
+            </dl>
+            <details>
+              <summary>Milestones and completion test</summary>
+              <div class="detail-body">
+                <ol>
+                  <li>Start with named dictionaries of operations and laws, not hidden host-language protocols.</li>
+                  <li>Extract semigroup/monoid examples from addition, multiplication, append, and error accumulation.</li>
+                  <li>Unify map/fold vocabulary across Option, Result, lists, trees, and parser results.</li>
+                  <li>Use property tests to make laws executable.</li>
+                </ol>
+                <p><strong>Done means:</strong> every abstraction eliminates real duplication, has at least three concrete instances, and teaches a law that was already visible in earlier modules.</p>
+              </div>
+            </details>
+          </article>
+
+          <article class="track filterable" data-category="language data">
+            <span class="track-number">12</span>
+            <div class="track-topline"><span class="badge">Side branch</span><span class="badge">Symbolic</span></div>
+            <h3>Symbolic algebra, automata, and regular languages</h3>
+            <p>
+              Once symbols and strings exist, two smaller branches become cheap and illuminating: expression trees with
+              simplification/differentiation, and finite automata with regular-expression compilation.
+            </p>
+            <dl>
+              <dt>Depends on</dt><dd>Strings/symbols, term-like trees, sets/maps, Result</dd>
+              <dt>First payoff</dt><dd>A symbolic derivative or deterministic automaton over encoded strings</dd>
+              <dt>Main risk</dt><dd>Branching before the shared string and data foundations are stable</dd>
+            </dl>
+            <details>
+              <summary>Milestones and completion test</summary>
+              <div class="detail-body">
+                <p>
+                  For symbolic algebra: constants, variables, sum/product/power nodes, evaluation, simplification laws,
+                  and differentiation. For automata: alphabets, transition maps, deterministic execution, nondeterministic
+                  sets of states, subset construction, then a small regular-expression compiler.
+                </p>
+                <p><strong>Done means:</strong> each side branch reuses shared representations and includes law-level examples, rather than duplicating a private text or tree system.</p>
+              </div>
+            </details>
+          </article>
+        </div>
+        <p class="empty-state" id="trackEmpty">No extension paths match the current search and category.</p>
+      </section>
+
+      <section id="dependencies">
+        <p class="section-kicker">10 · Branch map</p>
+        <h2>A stable trunk should feed several independent limbs.</h2>
+        <p class="section-intro">
+          This dependency map explains why “strings and parsers next” is a direct recommendation without pretending
+          every other path must wait behind it.
+        </p>
+
+        <figure class="architecture">
+          <svg viewBox="0 0 1100 650" role="img" aria-labelledby="branchTitle branchDesc">
+            <title id="branchTitle">Recommended extension dependency map</title>
+            <desc id="branchDesc">Foundation integrity and a teaching spine form the trunk. Language, systems, data, numeric, lazy, and comparative branches grow from it and reconnect at later topics.</desc>
+            <defs>
+              <marker id="arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"></path>
+              </marker>
+            </defs>
+
+            <g style="marker-end:url(#arrow2)">
+              <path class="edge" d="M201 314 C253 314 273 209 326 209"></path>
+              <path class="edge" d="M201 336 C253 336 273 353 326 353"></path>
+              <path class="edge" d="M201 356 C253 356 273 499 326 499"></path>
+              <path class="edge" d="M201 291 C252 291 273 91 326 91"></path>
+              <path class="edge" d="M496 91 C545 91 561 91 610 91"></path>
+              <path class="edge" d="M780 91 C830 91 846 91 895 91"></path>
+              <path class="edge" d="M496 209 C545 209 561 209 610 209"></path>
+              <path class="edge" d="M496 353 C545 353 561 353 610 353"></path>
+              <path class="edge" d="M496 499 C545 499 561 499 610 499"></path>
+              <path class="edge" d="M780 499 C830 499 846 499 895 499"></path>
+              <path class="edge edge-dashed" d="M695 249 C695 292 695 310 695 324"></path>
+              <path class="edge edge-dashed" d="M695 459 C695 419 695 405 695 392"></path>
+              <path class="edge edge-dashed" d="M780 209 C866 209 849 469 895 488"></path>
+            </g>
+
+            <rect class="node node-primary" x="26" y="266" width="175" height="112" rx="16"></rect>
+            <text class="svg-title" x="113" y="299" text-anchor="middle">Stable trunk</text>
+            <text class="svg-sub" x="113" y="325" text-anchor="middle">explicit partiality</text>
+            <text class="svg-sub" x="113" y="344" text-anchor="middle">canonical invariants</text>
+            <text class="svg-sub" x="113" y="363" text-anchor="middle">teaching spine + tests</text>
+
+            <rect class="node node-primary" x="326" y="51" width="170" height="80" rx="14"></rect>
+            <text class="svg-title" x="411" y="80" text-anchor="middle">Strings &amp; symbols</text>
+            <text class="svg-sub" x="411" y="104" text-anchor="middle">language limb</text>
+
+            <rect class="node node-primary" x="610" y="51" width="170" height="80" rx="14"></rect>
+            <text class="svg-title" x="695" y="80" text-anchor="middle">Parser combinators</text>
+            <text class="svg-sub" x="695" y="104" text-anchor="middle">structured Result values</text>
+
+            <rect class="node node-primary" x="895" y="51" width="170" height="80" rx="14"></rect>
+            <text class="svg-title" x="980" y="80" text-anchor="middle">Lambda terms</text>
+            <text class="svg-sub" x="980" y="104" text-anchor="middle">binding · reduction · SKI</text>
+
+            <rect class="node" x="326" y="169" width="170" height="80" rx="14"></rect>
+            <text class="svg-title" x="411" y="198" text-anchor="middle">Strict contracts</text>
+            <text class="svg-sub" x="411" y="222" text-anchor="middle">systems limb</text>
+
+            <rect class="node" x="610" y="169" width="170" height="80" rx="14"></rect>
+            <text class="svg-title" x="695" y="198" text-anchor="middle">Coercion laws</text>
+            <text class="svg-sub" x="695" y="222" text-anchor="middle">loss + provenance</text>
+
+            <rect class="node" x="326" y="313" width="170" height="80" rx="14"></rect>
+            <text class="svg-title" x="411" y="342" text-anchor="middle">Closure structures</text>
+            <text class="svg-sub" x="411" y="366" text-anchor="middle">data limb</text>
+
+            <rect class="node" x="610" y="313" width="170" height="80" rx="14"></rect>
+            <text class="svg-title" x="695" y="342" text-anchor="middle">Maps · heaps · graphs</text>
+            <text class="svg-sub" x="695" y="366" text-anchor="middle">persistent algorithms</text>
+
+            <rect class="node" x="326" y="459" width="170" height="80" rx="14"></rect>
+            <text class="svg-title" x="411" y="488" text-anchor="middle">Binary algorithms</text>
+            <text class="svg-sub" x="411" y="512" text-anchor="middle">numeric limb</text>
+
+            <rect class="node" x="610" y="459" width="170" height="80" rx="14"></rect>
+            <text class="svg-title" x="695" y="488" text-anchor="middle">Lazy streams</text>
+            <text class="svg-sub" x="695" y="512" text-anchor="middle">coinductive limb</text>
+
+            <rect class="node" x="895" y="459" width="170" height="80" rx="14"></rect>
+            <text class="svg-title" x="980" y="488" text-anchor="middle">Exact computation</text>
+            <text class="svg-sub" x="980" y="512" text-anchor="middle">precision → interval</text>
+
+            <rect class="node" x="448" y="579" width="504" height="52" rx="14"></rect>
+            <text class="svg-title" x="700" y="602" text-anchor="middle">Comparative encodings + algebraic interfaces</text>
+            <text class="svg-sub" x="700" y="621" text-anchor="middle">draw examples from every mature limb; do not lead them</text>
+          </svg>
+          <figcaption class="figure-caption">
+            Solid arrows are hard prerequisites. Dashed arrows show strong cross-pollination. The systems, data,
+            numeric, and language limbs can progress independently after the trunk is stable.
+          </figcaption>
+        </figure>
+
+        <div class="callout">
+          <p>
+            <strong>Why the language limb wins the next-major-branch decision:</strong> it reuses the widest range of
+            existing ideas—lists, pairs, recursion, higher-order composition, Option/Result, errors, and eventually maps—
+            while producing a visible new capability. It also gives the project a natural way to study its own source
+            objects later without making an interpreter the price of entry.
+          </p>
+        </div>
+      </section>
+
+      <section id="sequence">
+        <p class="section-kicker">11 · Recommended sequence</p>
+        <h2>Repair trust first; then grow one flagship branch while the others remain available.</h2>
+        <p class="section-intro">
+          This is a dependency order, not a calendar estimate. Each phase should be split into the repository’s
+          normal single-pass executable chunks when it becomes implementation work.
+        </p>
+
+        <div class="roadmap">
+          <article class="phase">
+            <div class="phase-label">Phase 0</div>
+            <div class="phase-body">
+              <h3>Foundation integrity</h3>
+              <p>
+                Restore bitter, establish a single partiality policy, fix search termination, enforce binary and
+                rational invariants, repair strict validation holes, and extend CI to every advertised branch.
+              </p>
+            </div>
+          </article>
+          <article class="phase">
+            <div class="phase-label">Phase 1</div>
+            <div class="phase-body">
+              <h3>Pedagogical spine</h3>
+              <p>
+                Build the dependency index and repeatable chapter frame. This can proceed alongside foundation work,
+                but learner-facing examples should not be finalized until repaired semantics are stable.
+              </p>
+            </div>
+          </article>
+          <article class="phase">
+            <div class="phase-label">Phase 2</div>
+            <div class="phase-body">
+              <h3>Strings and parser combinators</h3>
+              <p>
+                Introduce encoded text, safe observations, parser primitives, structured failures, and an arithmetic
+                grammar. This becomes the flagship “new capability” branch.
+              </p>
+            </div>
+          </article>
+          <article class="phase">
+            <div class="phase-label">Parallel</div>
+            <div class="phase-body">
+              <h3>Binary algorithms and complexity</h3>
+              <p>
+                Once canonical forms are reliable, add law-based conversions, exponentiation by squaring, and operation
+                counts. This track is independent enough to run without waiting for the language branch.
+              </p>
+            </div>
+          </article>
+          <article class="phase">
+            <div class="phase-label">Phase 3</div>
+            <div class="phase-body">
+              <h3>Lambda terms as data</h3>
+              <p>
+                Add syntax values, binding operations, substitution, strategies, parsing, and printing. Keep it
+                explicitly scoped as one branch of the larger constructed world.
+              </p>
+            </div>
+          </article>
+          <article class="phase">
+            <div class="phase-label">Choose</div>
+            <div class="phase-body">
+              <h3>Deepen systems or data structures</h3>
+              <p>
+                Choose based on the teaching question that feels alive then: strict/coercive semantic boundaries, or
+                persistent structures and graph algorithms. Neither choice invalidates the other.
+              </p>
+            </div>
+          </article>
+          <article class="phase">
+            <div class="phase-label">Later</div>
+            <div class="phase-body">
+              <h3>Streams, exact computation, and abstractions</h3>
+              <p>
+                Streams should precede computable reals. Generic algebraic interfaces should follow multiple mature
+                examples. These become culminations, not foundations.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="done">
+        <p class="section-kicker">12 · Definition of done</p>
+        <h2>Every new branch should leave evidence, not just definitions.</h2>
+        <p class="section-intro">
+          The project’s next stage needs a shared completion standard so that breadth does not recreate the current
+          branch drift.
+        </p>
+
+        <ul class="checklist">
+          <li><strong>Domain:</strong> valid, invalid, absent, and divergent-looking cases are explicitly classified before implementation.</li>
+          <li><strong>Representation:</strong> constructors, invariants, canonical forms, and reader boundaries are stated in learner-facing prose.</li>
+          <li><strong>Purity:</strong> every host-language escape is confined to an identified reader, printer, macro, test, or demonstration boundary.</li>
+          <li><strong>Execution:</strong> every advertised module loads independently and is discovered by CI.</li>
+          <li><strong>Evidence:</strong> examples test structure and laws as well as rendered final values.</li>
+          <li><strong>Termination:</strong> recursive APIs have a stated decreasing measure or productivity argument and at least one boundary test.</li>
+          <li><strong>Pedagogy:</strong> the learner gets a goal, prerequisites, invariant, worked trace, prediction exercise, and next-route link.</li>
+          <li><strong>Comparison:</strong> when a parallel representation exists, at least one example explains the operational or semantic tradeoff.</li>
+          <li><strong>Scope:</strong> a branch earns its new abstractions and dependencies through real use sites; no convenience package or vocabulary arrives without a teaching payoff.</li>
+        </ul>
+
+        <div class="grid-2">
+          <article class="card">
+            <h3>Ship gate for the foundation phase</h3>
+            <p>
+              All README-recommended modules load; zero denominators cannot produce rationals; division-by-zero and
+              negative integer powers are explicit errors; search returns Option and terminates; every public binary
+              result is canonical; strict wrappers validate before unwrapping.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Ship gate for any new extension</h3>
+            <p>
+              The branch has a runnable learner journey, a stable observable boundary, ordinary examples, boundary
+              examples, law or differential tests, and a clear explanation of why its representation belongs in a
+              lambda-calculus project.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="appendix">
+        <p class="section-kicker">13 · Evidence appendix</p>
+        <h2>Reproducible observations and source trail.</h2>
+        <p class="section-intro">
+          These concise records separate what was directly observed from the recommendations built on top of it.
+        </p>
+
+        <h3>Selected direct probes</h3>
+        <pre aria-label="Selected audit probe outputs">Current full runner     1,745 pass · 0 fail
+
+Non-test module smoke    bitter/lists.rkt      pair: unbound identifier
+                         bitter/integers.rkt   same upstream failure
+                         bitter/algorithms.rkt same upstream failure
+
+Timeout probes           Church div(1, 0)      timed out after 4 seconds
+                         typed DIV(1, 0)       timed out after 4 seconds
+                         binary search below
+                         first element         timed out after 4 seconds
+
+Rational probes          raw Church (1/2)/0    0
+                         raw binary (1/2)/0    0
+                         strict tagged         result:err(err:div by 0)
+                         coercive tagged       err:div by 0
+
+Binary shape probes      div(4, 3) digits      [0,0,1]
+                         sub(4, 4) digits      []
+                         declared zero shape   [0]
+
+Contract probes          IND-OPT(FALSE, ZERO) option:none
+                         nat-read(TRUE)        err:bool
+
+Integer domain probe     expZ(2, -1)           0</pre>
+
+        <h3 style="margin-top:2rem">Local source anchors</h3>
+        <div class="reference-list">
+          <div class="reference">
+            <strong><a href="README.md">README.md</a> and <a href="ROADMAP.md">ROADMAP.md</a></strong>
+            <p>Project promise, recommended entry route, branch descriptions, completed work, and deferred real-number direction.</p>
+          </div>
+          <div class="reference">
+            <strong><a href="macros/macros.rkt">macros/macros.rkt</a> and <a href="macros/lazy-with-macros.rkt">macros/lazy-with-macros.rkt</a></strong>
+            <p>The legibility layer and lazy-language boundary supporting the computational modules.</p>
+          </div>
+          <div class="reference">
+            <strong><a href="bitter/lists.rkt">bitter/lists.rkt</a> and <a href="bitter/integers.rkt">bitter/integers.rkt</a></strong>
+            <p>Raw-branch load failure and the latent mixed-sign addition defect.</p>
+          </div>
+          <div class="reference">
+            <strong><a href="algorithms.rkt">algorithms.rkt</a> and <a href="types/ALGORITHMS.rkt">types/ALGORITHMS.rkt</a></strong>
+            <p>Natural/integer binary search, sentinel behavior, and strict result tagging.</p>
+          </div>
+          <div class="reference">
+            <strong><a href="binary-lists.rkt">binary-lists.rkt</a>, <a href="rationals.rkt">rationals.rkt</a>, and <a href="binary-rationals.rkt">binary-rationals.rkt</a></strong>
+            <p>Binary division conventions, canonical representation claims, rational construction, zero predicates, reciprocal, and division.</p>
+          </div>
+          <div class="reference">
+            <strong><a href="types/TYPES.rkt">types/TYPES.rkt</a>, <a href="types/LISTS.rkt">types/LISTS.rkt</a>, and <a href="types/coercive/TYPES.rkt">types/coercive/TYPES.rkt</a></strong>
+            <p>Runtime tags, Option/Result encodings, safe indexing, and stated coercion guardrails.</p>
+          </div>
+          <div class="reference">
+            <strong><a href="run-all-tests.sh">run-all-tests.sh</a>, <a href="tests">tests/</a>, and <a href="types/tests">types/tests/</a></strong>
+            <p>Test discovery, process-failure handling, value assertions, and current branch coverage.</p>
+          </div>
+          <div class="reference">
+            <strong><a href="data-structures-as-closures/update.rkt">data-structures-as-closures/update.rkt</a></strong>
+            <p>Working object update, queue, ordered queue, and binary-tree demonstration.</p>
+          </div>
+        </div>
+
+        <h3 style="margin-top:2rem">Primary references for future branches</h3>
+        <div class="reference-list">
+          <div class="reference">
+            <strong><a href="https://docs.racket-lang.org/lazy/">Racket Reference: Lazy Racket</a></strong>
+            <p>Official semantics for call-by-need application, promises, and forcing at the project’s host boundary.</p>
+          </div>
+          <div class="reference">
+            <strong><a href="https://people.cs.nott.ac.uk/pszgmh/monparsing.pdf">Graham Hutton and Erik Meijer: Monadic Parser Combinators</a></strong>
+            <p>A compact foundation for treating parsers as composable values; translate the ideas into this project’s Result/pair vocabulary rather than importing a parser package.</p>
+          </div>
+          <div class="reference">
+            <strong><a href="https://lawrencecpaulson.github.io/papers/deBruijn-nameless-dummies.pdf">N. G. de Bruijn: Lambda Calculus Notation with Nameless Dummies</a></strong>
+            <p>The classic source for a nameless representation after named substitution and alpha-equivalence are already understood.</p>
+          </div>
+          <div class="reference">
+            <strong><a href="https://www.cambridge.org/core/journals/journal-of-functional-programming/article/efficient-selfinterpretation-in-lambda-calculus/4727ED102FD8F5C5950EBBFE776E8C69">Torben Æ. Mogensen: Efficient Self-Interpretation in Lambda Calculus</a></strong>
+            <p>A natural advanced destination for the term-data and comparative-encoding branches, not the next prerequisite.</p>
+          </div>
+          <div class="reference">
+            <strong><a href="https://www.cs.ox.ac.uk/ralf.hinze/publications/ICFP08.pdf">Ralf Hinze: Functional Pearl—Streams and Unique Fixed Points</a></strong>
+            <p>A rigorous reference for the lazy-stream branch and the distinction between recursion and productive corecursion.</p>
+          </div>
+          <div class="reference">
+            <strong><a href="https://doi.org/10.1145/319838.319860">Hans-Juergen Boehm, Robert Cartwright, Mark Riggle, and Michael J. O'Donnell: Exact Real Arithmetic—A Case Study in Higher Order Programming</a></strong>
+            <p>A useful checkpoint for any eventual exact-real representation: approximation must come with precision and correctness guarantees.</p>
+          </div>
+          <div class="reference">
+            <strong><a href="https://www.macs.hw.ac.uk/~greg/books/gjm.lambook88.pdf">Greg Michaelson: An Introduction to Functional Programming Through Lambda Calculus</a></strong>
+            <p>The project’s existing linked book remains a broad contextual resource; this repository’s opportunity is to go beyond its introductory role.</p>
+          </div>
+        </div>
+
+        <div class="callout recommendation" style="margin-top:2rem">
+          <p>
+            <strong>Final judgment:</strong> do not redesign the project around its flaws. The flaws are local and
+            repairable; the identity is rare and valuable. Make failure and representation as carefully constructed as
+            success, add a navigable learning spine, and then let the world branch.
+          </p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <button class="back-top" id="backTop" type="button" aria-label="Back to top">↑</button>
+
+  <footer class="footer">
+    <p>All the Lambdas · pedagogical and technical evaluation · generated from repository source and direct execution · 10 August 2026</p>
+  </footer>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var root = document.documentElement;
+      var progress = document.getElementById("progress");
+      var backTop = document.getElementById("backTop");
+      var themeToggle = document.getElementById("themeToggle");
+      var expandAll = document.getElementById("expandAll");
+      var printReport = document.getElementById("printReport");
+      var tocLinks = Array.prototype.slice.call(document.querySelectorAll(".toc a"));
+      var sections = Array.prototype.slice.call(document.querySelectorAll("main section[id]"));
+
+      try {
+        var savedTheme = localStorage.getItem("all-lambdas-report-theme");
+        if (savedTheme === "light" || savedTheme === "dark") {
+          root.setAttribute("data-theme", savedTheme);
+        }
+      } catch (error) {
+        /* Local storage is optional for a file opened directly from disk. */
+      }
+
+      function updateScrollState() {
+        var scrollTop = window.scrollY || document.documentElement.scrollTop;
+        var scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+        var percent = scrollHeight > 0 ? Math.min(100, Math.max(0, scrollTop / scrollHeight * 100)) : 0;
+        progress.style.width = percent + "%";
+        backTop.classList.toggle("visible", scrollTop > 700);
+
+        var current = sections[0] ? sections[0].id : "";
+        sections.forEach(function (section) {
+          if (section.getBoundingClientRect().top <= 130) {
+            current = section.id;
+          }
+        });
+        tocLinks.forEach(function (link) {
+          var isActive = link.getAttribute("href") === "#" + current;
+          link.classList.toggle("active", isActive);
+          if (isActive) {
+            link.setAttribute("aria-current", "true");
+          } else {
+            link.removeAttribute("aria-current");
+          }
+        });
+      }
+
+      window.addEventListener("scroll", updateScrollState, { passive: true });
+      window.addEventListener("resize", updateScrollState);
+      updateScrollState();
+
+      themeToggle.addEventListener("click", function () {
+        var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        try {
+          localStorage.setItem("all-lambdas-report-theme", next);
+        } catch (error) {
+          /* Theme still changes even when storage is unavailable. */
+        }
+      });
+
+      var detailsOpen = false;
+      expandAll.addEventListener("click", function () {
+        detailsOpen = !detailsOpen;
+        document.querySelectorAll("details").forEach(function (detail) {
+          detail.open = detailsOpen;
+        });
+        expandAll.textContent = detailsOpen ? "− Collapse details" : "＋ Expand details";
+      });
+
+      printReport.addEventListener("click", function () {
+        window.print();
+      });
+
+      var prePrintDetails = [];
+      window.addEventListener("beforeprint", function () {
+        prePrintDetails = Array.prototype.slice.call(document.querySelectorAll("details")).map(function (detail) {
+          return detail.open;
+        });
+        document.querySelectorAll("details").forEach(function (detail) {
+          detail.open = true;
+        });
+      });
+
+      window.addEventListener("afterprint", function () {
+        document.querySelectorAll("details").forEach(function (detail, index) {
+          detail.open = Boolean(prePrintDetails[index]);
+        });
+      });
+
+      backTop.addEventListener("click", function () {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      function installFindingSearch() {
+        var input = document.getElementById("findingSearch");
+        var cards = Array.prototype.slice.call(document.querySelectorAll("#findingList .finding"));
+        var empty = document.getElementById("findingEmpty");
+
+        function apply() {
+          var query = input.value.trim().toLowerCase();
+          var visible = 0;
+          cards.forEach(function (card) {
+            var match = !query || card.textContent.toLowerCase().indexOf(query) !== -1;
+            card.classList.toggle("hidden", !match);
+            if (match) {
+              visible += 1;
+            }
+          });
+          empty.style.display = visible ? "none" : "block";
+        }
+
+        input.addEventListener("input", apply);
+      }
+
+      function installTrackFilters() {
+        var input = document.getElementById("trackSearch");
+        var chips = Array.prototype.slice.call(document.querySelectorAll("[data-filter]"));
+        var cards = Array.prototype.slice.call(document.querySelectorAll("#trackGrid .track"));
+        var empty = document.getElementById("trackEmpty");
+        var category = "all";
+
+        function apply() {
+          var query = input.value.trim().toLowerCase();
+          var visible = 0;
+          cards.forEach(function (card) {
+            var categories = (card.getAttribute("data-category") || "").split(" ");
+            var categoryMatch = category === "all" || categories.indexOf(category) !== -1;
+            var queryMatch = !query || card.textContent.toLowerCase().indexOf(query) !== -1;
+            var match = categoryMatch && queryMatch;
+            card.classList.toggle("hidden", !match);
+            if (match) {
+              visible += 1;
+            }
+          });
+          empty.style.display = visible ? "none" : "block";
+        }
+
+        chips.forEach(function (chip) {
+          chip.addEventListener("click", function () {
+            category = chip.getAttribute("data-filter");
+            chips.forEach(function (item) {
+              item.classList.toggle("active", item === chip);
+            });
+            apply();
+          });
+        });
+        input.addEventListener("input", apply);
+      }
+
+      installFindingSearch();
+      installTrackFilters();
+    }());
+  </script>
+</body>
+</html>

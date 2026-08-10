@@ -35,7 +35,17 @@
 
 (def MULTr R1 R2 = (((((COERCE-2 multR) convert-to-rat) R1) R2) rat))
 
-(def DIVr R1 R2 = (((((COERCE-2 divR) convert-to-rat) R1) R2) rat))
+#|
+    ~ COERCIVE RATIONAL DIVISION ~
+    - Contract: (OBJECT, OBJECT) => RAT/ERROR
+    - Logic: Coerce the divisor to a rational and reject it if the raw rational
+        policy calls it zero; otherwise run the unchanged raw divR through the
+        ordinary coercive function builder.
+|#
+(def DIVr R1 R2 =
+    (IF (IS_ZEROr R2)
+        THEN (make-rat-err "err:div by 0")
+        ELSE (((((COERCE-2 divR) convert-to-rat) R1) R2) rat)))
 
 (def EQr R1 R2 = (((((COERCE-2 eqR) convert-to-rat) R1) R2) bool))
 

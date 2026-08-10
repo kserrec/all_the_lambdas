@@ -6,7 +6,17 @@ The sugar layer (macros) and tooling (test runner, CI) are ordinary
 Racket/bash and may be improved freely — but readability-as-teaching-material
 is valued there too, so explicit beats clever.
 
-## Session status (as of 2026-07-08)
+## Session status (as of 2026-08-10)
+
+The current priority is the ordered **remaining integrity work** queue below.
+A new session invoked with `$next` must start with **Integrity Phase 1 — make
+green tests execute their claimed cases**, complete that one phase, update this
+roadmap, and stop. Each integrity phase is intentionally sized for one pass.
+
+The targeted rational-division phase is complete. Its raw implementations were
+preserved behaviorally, a strict runtime-tagged rational division module was
+created, and the existing coercive runtime-tagged division boundary now returns
+an explicit zero-divisor error.
 
 Phase 2 is essentially complete. Everything numbered below is done except:
 - **8c** — the reals arc (dyadics → intervals → computable reals). Deliberately
@@ -21,6 +31,144 @@ precondition checks, typed-list element discipline, function signatures — the
 item-8 road not taken], (c) data structures [trees → BST → sets → maps → graphs],
 (d) lambda terms as data [Var/Abs/App, substitution, beta reduction, De Bruijn,
 SKI]. See `~/all-the-lambdas-notes.md` for the full menu.
+
+## Targeted integrity phase — rational division semantics (2026-08-10)
+
+Decision: preserve the existing raw rational behavior exactly. The untyped
+Church-backed and untyped binary-backed representations both count a zero
+numerator or a zero denominator as rational zero, and raw division by rational
+zero returns rational zero. Only the runtime-tagged layers override that
+zero-divisor result: strict division returns a `Result` error, while coercive
+division returns a typed error after coercing the divisor.
+
+- [x] **Step 1. Preserve the raw rational behavior** — leave the constructors,
+  zero predicates, readers, reciprocal functions, and division functions
+  behaviorally unchanged in both raw representations, and document their
+  deliberate rational-zero totalization. Completed 2026-08-10: the original
+  171 Church-backed rational tests and 60 binary-backed rational tests pass,
+  and direct raw division-by-zero probes return `0`.
+- [x] **Step 2. Add runtime-tagged zero-divisor errors** — add strict rational
+  division using `Result`, and change coercive rational division to return its
+  typed division error after coercing and checking the divisor. Neither wrapper
+  changes the raw rational functions. Completed 2026-08-10.
+- [x] **Step 3. Evidence and documentation** — test successful division,
+  zero dividends, zero divisors, denominator-zero representations, strict type
+  failures, and coercion; then synchronize the README, implementation guide,
+  roadmap, and audit handoff with the verified behavior. Completed 2026-08-10:
+  all 1,745 repository tests pass with zero failures. Direct probes confirm that
+  both raw implementations return `0` for division by rational zero; strict
+  runtime-tagged division returns `result:err(err:div by 0)`, and coercive
+  runtime-tagged division returns `err:div by 0`.
+
+## Current `$next` queue — remaining integrity work
+
+This queue is ordered. One `$next` session completes exactly one integrity
+phase, including its steps, focused verification, roadmap update, and stopping
+point. Do not combine consecutive phases merely because time remains.
+
+### Integrity Phase 1 — make green tests execute their claimed cases
+
+- [ ] **Step 1. Repair the recorded strict test mismatches** — in
+  `types/tests/CHURCH-test.rkt`, reconcile each label, expression, and expected
+  value for `MULT(ZERO)(ONE)`, `MULT(FIVE)(FIVE)`, `DIV(ZERO)(FOUR)`, and
+  `MOD(FIVE)(FIVE)`. Determine the intended case from the surrounding test
+  sequence before editing; do not silently rename a label to preserve a copied
+  expression.
+- [ ] **Step 2. Repair the corresponding coercive mismatches** — perform the
+  same evidence-based corrections in `types/coercive/tests/CHURCH-test.rkt`,
+  preserving intentional coercion cases.
+- [ ] **Step 3. Make the binary normalization comparison real** — replace the
+  `tests/binary-lists-test.rkt` case labeled “unnormalized vs normalized” that
+  currently compares `bin-one` with itself with an actual leading-zero binary
+  representation compared against canonical `bin-one`.
+- [ ] **Step 4. Bound and verify the correction** — inspect the adjacent
+  `MULT`, `DIV`, `MOD`, and `bin-eq` groups for the same copy/paste failure;
+  run the three affected test files and then the full repository runner. Record
+  every corrected claim and the resulting counts here.
+
+### Integrity Phase 2 — restore and cover the `bitter/` teaching route
+
+- [ ] **Step 1. Restore loadability from the declared representation** —
+  reproduce the `pair: unbound identifier` failure in `bitter/lists.rkt`, then
+  restore the smallest source-correct raw `pair`/`nil` definitions needed by
+  the nested-lambda teaching branch. Do not import the sugared root
+  implementation into `bitter/`.
+- [ ] **Step 2. Expose and correct the masked signed-addition bug** — add direct
+  mixed-sign cases such as `+5 + (-2) = +3` and `-5 + (+2) = -3`, then correct
+  the reversed natural-subtraction operands in `bitter/integers.rkt` without
+  changing the signed-zero convention.
+- [ ] **Step 3. Put the branch under automated evidence** — retain
+  `bitter/test.rkt` as its human-readable demonstration and add a
+  harness-compatible test module under `bitter/tests/` so the existing runner
+  discovers it normally. Cover module loading plus the repaired list and
+  mixed-sign integer cases; do not special-case a no-results demo as passing.
+- [ ] **Step 4. Verify the restored route** — run the new bitter test module,
+  smoke-load every `bitter/` module it transitively covers, then run the full
+  repository runner and record the results.
+
+### Integrity Phase 3 — test deliberate nontermination safely
+
+- [ ] **Step 1. Add a bounded host-level probe mechanism** — run each expected
+  nonterminating expression in a fresh Racket subprocess, impose a short
+  explicit deadline, terminate the subprocess afterward, and distinguish an
+  expected timeout from a crash, early value, or harness failure. Keep this in
+  test/tooling code, outside the lambda-calculus object language.
+- [ ] **Step 2. Prove the probe itself** — include a terminating control that
+  must return the expected readable value before the deadline; a timeout-only
+  mechanism without a control is not evidence.
+- [ ] **Step 3. Cover every approved partial division boundary** — verify
+  nontermination for raw Church-natural `div`, raw Church-integer `divZ`,
+  strict runtime-tagged natural `DIV`, and strict runtime-tagged integer `DIVz`
+  with zero divisors. Do not encode the unrelated binary-search termination bug
+  as an expected behavior.
+- [ ] **Step 4. Integrate and verify** — make the bounded checks part of the
+  normal repository test signal without leaving child processes running; run
+  the focused probe test and the full runner and record timing and counts.
+
+### Integrity Phase 4 — enforce canonical binary structure
+
+- [ ] **Step 1. Add direct structural regressions** — demonstrate, without
+  passing through `bin-read`, that current `bin-div 4 3` produces leading
+  zeroes and current `bin-sub 4 4` produces an empty list instead of canonical
+  `bin-zero`.
+- [ ] **Step 2. Restore the invariant at its sources** — make
+  `rem-head-zeroes` return canonical `bin-zero` rather than an empty list and
+  normalize the quotient returned by `bin-div`. Preserve the existing numeric
+  results and the declared `x / 0 = 0`, `x mod 0 = x` policy.
+- [ ] **Step 3. Cover the public representation boundary** — add representative
+  direct-structure assertions for binary zero, one, and ordinary nonzero
+  outputs across subtraction, multiplication, division, remainder, successor,
+  predecessor, gcd/lcm, and exponentiation, plus representative signed-binary
+  integer and binary-rational consumers. Keep the existing reader-based tests.
+- [ ] **Step 4. Verify downstream compatibility** — run binary-natural,
+  signed-binary-integer, and binary-rational tests, then the full repository
+  runner and record the results.
+
+### Integrity Phase 5 — declare the accepted division policies
+
+- [ ] **Step 1. Document partial Church division** — state plainly in the raw
+  Church-natural and Church-integer implementations and their strict
+  runtime-tagged wrappers that demanding a zero-divisor result does not
+  terminate; do not describe this as an error return.
+- [ ] **Step 2. Document coercive errors** — state plainly that coercive
+  runtime-tagged natural and integer division checks the coerced divisor and
+  returns `err:div by 0`.
+- [ ] **Step 3. Document the binary totalization** — state plainly that binary
+  natural division chooses quotient zero and remainder equal to the dividend
+  at a zero divisor, and that signed binary integer division inherits the zero
+  quotient.
+- [ ] **Step 4. Synchronize the teaching documents** — make README,
+  `CLAUDE.md`, implementation comments, and the evaluation describe the same
+  domain-and-layer policy; run focused readable probes and the full repository
+  runner before marking the queue complete.
+
+### Later integrity findings — preserved, not authorized by this queue
+
+The audit handoff also records signed-zero exponentiation inconsistency,
+binary-search nontermination and false strict tagging, `IND-OPT` type/Option
+violations, reader diagnostic copy errors, and incorrect teaching equations.
+Do not start those repairs merely because the five phases above finish; discuss
+their behavioral decisions with Kyle first.
 
 ## Phase 2 — continuing the build (from ~/all-the-lambdas-notes.md priorities)
 
@@ -76,8 +224,10 @@ SKI]. See `~/all-the-lambdas-notes.md` for the full menu.
   - [ ] Option-returning search — the untyped `binarySearch` signals "not found"
     with a church `true`, `binarySearchZ` with `negOne`; a typed search returning
     `some(index)`/`none` would retire those in-band sentinels
-  - [ ] `HEAD-OPT` (no typed `HEAD` exists yet) and a Result-returning safe
-    division (`err` on divide-by-zero)
+  - [ ] `HEAD-OPT` (no typed `HEAD` exists yet)
+  - [~] Result-returning safe division — strict rational `DIVr` now returns
+    `result:ok(rat)` or `result:err(error)` (2026-08-10); strict natural and
+    integer division still inherit raw partiality, by the approved policy
 - [~] **8. Next major tentacle: binary rationals** (chosen 2026-07-08 over
   typed-list/function-signatures). The scalable counterpart to `rationals.rkt`,
   now at full parity with it.

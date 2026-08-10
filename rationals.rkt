@@ -19,6 +19,11 @@
     The head will be an integer z and the tail a nat n.
 
     r = (z, n) = {{sign, nat}, nat}
+
+    This representation deliberately treats any zero numerator or zero
+    denominator as rational zero. As a consequence, reciprocal and division by
+    rational zero return rational zero rather than diverging or returning an
+    error. The runtime-tagged layers may put a different guard around divR.
     
     This let's us leverage integer functions already made.
 |#
@@ -47,7 +52,7 @@
 #|
     ~ RAT ZERO ~
     - Structure: {{bool, zero}, nat}
-    - Logic: 0 int for numerator is a 0 rat
+    - Logic: A zero numerator or zero denominator is rational zero.
     - Note: bool true or false, thus -0 == +0
         also, the denominator can be ANY value and it is zero
         - Thus -0/0 == +0/0 == -0/1 == +0/1 == -0/2 == ...
@@ -148,6 +153,8 @@
     - Contract: rat => rat
     - Idea: a/b => b/a
     - Logic: Sign is unchanged, just swap numerator and denominator
+    - Totalization: Reciprocating rational zero creates a zero denominator,
+        which this rational representation deliberately reads as rational zero.
 |#
 (def reciprocal r = 
     (((makeR (r-sign r)) (denom r)) (numer r)))
@@ -240,6 +247,9 @@
     - Contract: (rat, rat) => rat
     - Idea: r1,r2 => r1/r2
     - Logic: Take reciprocal of second arg and multiply
+    - Totalization: A zero divisor reciprocates to a denominator-zero rational,
+        which this representation treats as rational zero. Therefore divR
+        returns rational zero for division by rational zero.
 |#
 (def divR r1 r2 = 
     ((multR r1) (reciprocal r2)))
@@ -284,8 +294,7 @@
 #|
     ~ IS-ZERO ~
     - Contract: rat => bool
-    - Logic: Check if (int part of r is zero)
-                true, else false
+    - Logic: A zero numerator OR zero denominator counts as rational zero.
 |#
 (def isZeroR r = ((_or (isZeroZ (head r))) (isZero (denom r))))
 

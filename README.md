@@ -67,11 +67,14 @@ Note: this is a work in progress and I don't know when it will be complete if ev
 - **Added Syntactic Sugar** to make things look good. Specifically, added def, let, and conditional sugar
 - **Added Embedded Types and Type Checking** — see [Typed Untyped Lambda Calculus](#typed-untyped-lambda-calculus) below
 - **Integers** and basic operators for them
-- **Rationals** and basic operators for them
+- **Rationals** and basic operators for them. In the raw Church-backed
+  representation, a zero numerator or a zero denominator counts as rational
+  zero. Raw reciprocal and division by rational zero therefore return rational
+  zero (`rationals.rkt`)
 - **Binary Digit List Encodings of Natural Numbers** — see [Binary Digit Lists](#binary-digit-lists) below
 - **Signed Binary Integers** — integers as {sign, binary digit list} pairs with arithmetic, comparisons, absolute value, and parity (`int-binary-lists.rkt`)
-- **Binary Rationals** — the scalable counterpart to the Church rationals: `{signed binary integer numerator, binary nat denominator}` with reduction, arithmetic, comparisons, floor, and exponentiation (`binary-rationals.rkt`)
-- **Option and Result** — typed containers in the strict type layer for computations that may not return a value: `option = some(value) | none` and `result = ok(value) | err(error)`, so expected absence and failure become values you handle instead of raw error objects (`types/TYPES.rkt`)
+- **Binary Rationals** — the scalable counterpart to the Church rationals: `{signed binary integer numerator, binary nat denominator}` with reduction, arithmetic, comparisons, floor, and exponentiation. It deliberately uses the same raw rational-zero rule: a zero numerator or denominator counts as rational zero, and division by rational zero returns rational zero (`binary-rationals.rkt`)
+- **Option and Result** — typed containers in the strict type layer for computations that may not return a value: `option = some(value) | none` and `result = ok(value) | err(error)`, so expected absence and failure become values you handle instead of raw error objects. Strict runtime-tagged rational division overrides the raw zero-divisor behavior by returning `result:err(err:div by 0)`; coercive runtime-tagged rational division returns `err:div by 0` after coercing the divisor (`types/TYPES.rkt`, `types/RATIONALS.rkt`, `types/coercive/RATIONALS.rkt`)
 - **Data Structures as Closures** using closures to represent key/value pairs in a few ways (translating Greg Michaelson's code into pure lambda calculus)
 
 #### Typed Untyped Lambda Calculus
@@ -126,8 +129,8 @@ design reappears inside the lambda universe.
 |---|---|---|
 | `bitter/` | Logic, numerals, recursion, lists, algorithms | Purest: raw nested lambdas, zero sugar |
 | root `*.rkt` | The same material, plus integers, rationals, binary lists (natural and signed) | Sugared: `def`, `_if`, `_let`, `_cons` |
-| `types/` | Strict embedded type system and typed versions of everything | Sugared + typed |
-| `types/coercive/` | Alternate type system that coerces instead of rejecting (wip) | Sugared + typed |
+| `types/` | Strict embedded type system, typed wrappers, and `Result`-returning safe rational division | Sugared + typed |
+| `types/coercive/` | Alternate type system that coerces instead of rejecting; rational division returns explicit errors after coercion (wip) | Sugared + typed |
 | `macros/` | The sugar itself — Racket macros that expand to pure nested lambdas | Not lambda calculus; the translator |
 | `data-structures-as-closures/` | Key/value structures as closures (after Michaelson) | Sugared |
 | `tests/`, `types/tests/`, `types/coercive/tests/` | Test suites (shared helpers in `tests/helpers/`) | — |
