@@ -197,7 +197,8 @@
     ~ EXPONENTIATION ~
     - Contract: (int,int) => int
     - Idea: z1,z2 => z1^z2
-    - Logic: Do regular exponent except when z2 < 0, then result is 0
+    - Logic: Any zero-magnitude exponent returns 1, regardless of its stored
+                sign. A negative exponent with nonzero magnitude returns 0
                 (negative powers leave the integers; zero is the convention here)
              If z1 is negative, the result's sign follows the parity of the
                 exponent: even power => positive, odd power => negative
@@ -209,16 +210,17 @@
     (_let z2Sign = (head z2-bin)
     (_let z2Val = (tail z2-bin)
     ; core logic
-    (_if (_not z2Sign)
-    ; if raised to negative power
-        _then bin-posZero
-        ; then default to zero
-        _else (_if z1Sign
-        ; else if z1 positive
-                _then ((makeZ-bin true) ((bin-exp z1Val) z2Val))
-                ; then make positive and do regular exponent
-                _else ((makeZ-bin (bin-is-even z2Val)) ((bin-exp z1Val) z2Val)))))))))
-                ; else flip sign based on even or odd power
+    (_if (bin-is-zero z2Val)
+        ; positive zero and negative zero are the same exponent
+        _then bin-posOne
+        _else (_if (_not z2Sign)
+            ; nonzero negative powers leave the integers
+            _then bin-posZero
+            _else (_if z1Sign
+                    ; positive base
+                    _then ((makeZ-bin true) ((bin-exp z1Val) z2Val))
+                    ; negative base: sign follows exponent parity
+                    _else ((makeZ-bin (bin-is-even z2Val)) ((bin-exp z1Val) z2Val))))))))))
 
 ;===================================================
 

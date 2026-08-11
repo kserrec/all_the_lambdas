@@ -20,7 +20,7 @@
     ; coercing
     (test-list-element "IS_ZERO(negTHREE)" (read-any (IS_ZERO negTHREE)) "bool:FALSE")
     (test-list-element "IS_ZERO(TRUE)" (read-any (IS_ZERO TRUE)) "bool:FALSE")
-    (test-list-element "IS_ZERO(TRUE)" (read-any (IS_ZERO FALSE)) "bool:TRUE")
+    (test-list-element "IS_ZERO(FALSE)" (read-any (IS_ZERO FALSE)) "bool:TRUE")
 ))
 
 (show-results "IS_ZERO" IS_ZERO-tests)
@@ -58,7 +58,7 @@
     (test-list-element "SUB(THREE)(FOUR)" (read-any ((SUB THREE) FOUR)) "nat:0")
     (test-list-element "SUB(FOUR)(THREE)" (read-any ((SUB FOUR) THREE)) "nat:1")
     (test-list-element "SUB(TWO)(TWO)" (read-any ((SUB TWO) TWO)) "nat:0")
-    (test-list-element "SUB(FIVE)(FIVE)" (read-any ((SUB FIVE) TWO)) "nat:3")
+    (test-list-element "SUB(FIVE)(FIVE)" (read-any ((SUB FIVE) FIVE)) "nat:0")
     ; coercing
     (test-list-element "SUB(TRUE)(FIVE)" (read-any ((SUB TRUE) FIVE)) "nat:0")
     (test-list-element "SUB(negTWO)(FIVE)" (read-any ((SUB negTWO) FIVE)) "nat:0")
@@ -95,18 +95,18 @@
 (define EXP-tests (list
     (test-list-element "EXP(ZERO)(ZERO)" (read-any ((EXP ZERO) ZERO)) "nat:1")
     (test-list-element "EXP(ONE)(ZERO)" (read-any ((EXP ONE) ZERO)) "nat:1")
-    (test-list-element "EXP(ZERO)(ONE)" (read-any ((EXP THREE) ONE)) "nat:3")
+    (test-list-element "EXP(ZERO)(ONE)" (read-any ((EXP ZERO) ONE)) "nat:0")
     (test-list-element "EXP(FIVE)(ONE)" (read-any ((EXP FIVE) ONE)) "nat:5")
     (test-list-element "EXP(ONE)(TWO)" (read-any ((EXP ONE) TWO)) "nat:1")
     (test-list-element "EXP(THREE)(FOUR)" (read-any ((EXP THREE) FOUR)) "nat:81")
     (test-list-element "EXP(FOUR)(THREE)" (read-any ((EXP FOUR) THREE)) "nat:64")
     (test-list-element "EXP(TWO)(TWO)" (read-any ((EXP TWO) TWO)) "nat:4")
-    (test-list-element "EXP(FIVE)(FIVE)" (read-any ((EXP FIVE) TWO)) "nat:25")
+    (test-list-element "EXP(FIVE)(FIVE)" (read-any ((EXP FIVE) FIVE)) "nat:3125")
     ; coercing
     (test-list-element "EXP(TRUE)(FIVE)" (read-any ((EXP TRUE) FIVE)) "nat:1")
     (test-list-element "EXP(negTWO)(FIVE)" (read-any ((EXP negTWO) FIVE)) "nat:32")
     (test-list-element "EXP(FIVE)(FALSE)" (read-any ((EXP FIVE) FALSE)) "nat:1")
-    (test-list-element "EXP(FOUR)(ERROR)" (read-any ((EXP FIVE) ERROR)) "nat:1")
+    (test-list-element "EXP(FOUR)(ERROR)" (read-any ((EXP FOUR) ERROR)) "nat:1")
     (test-list-element "EXP(THREE)(posONE)" (read-any ((EXP THREE) posONE)) "nat:3")
     (test-list-element "EXP(THREE)(posTWO)" (read-any ((EXP THREE) posTWO)) "nat:9")
 ))

@@ -25,7 +25,7 @@
 
     Note: The pair {a,b} is NOT the same as the pair, [a,b].
         In lambda, {a,b} is \f.f(a)(b).
-        In lambda, [a,b] is \f.f(a)(\f.f(a)(nil)) (which is {a,{b,[]}} in braces).
+        In lambda, [a,b] is \f.f(a)(\f.f(b)(nil)) (which is {a,{b,[]}} in braces).
 |#
 
 ;===================================================

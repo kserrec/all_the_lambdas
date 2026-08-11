@@ -22,7 +22,7 @@
 (def _Z-READ Z = 
     (_if (is-int Z)
         _then (string-append "int:" (z-read (val Z)))
-        _else (err-read BOOL-ERROR)))
+        _else (err-read INT-ERROR)))
 
 (def Z-READ Z = ((read-type _Z-READ) Z))
 

@@ -10,6 +10,18 @@
 ; ~ TYPED INTEGERS TESTS ~
 ; ====================================================================
 
+(define Z-READ-tests
+    (list
+        (test-list-element "Z-READ(posZERO)" (Z-READ posZERO) "int:0")
+        (test-list-element "Z-READ(negZERO)" (Z-READ negZERO) "int:0")
+        (test-list-element "Z-READ(negTWO)" (Z-READ negTWO) "int:-2")
+        (test-list-element "Z-READ(TRUE)" (Z-READ TRUE) "err:int")
+        (test-list-element "Z-READ(TWO)" (Z-READ TWO) "err:int")
+        (test-list-element "Z-READ(INT-ERROR)" (Z-READ INT-ERROR) "err:int")))
+(show-results "Z-READ" Z-READ-tests)
+
+; ====================================================================
+
 (define IS_ZEROz-tests
     (list
         (test-list-element "IS_ZEROz(posZERO)" (read-any (IS_ZEROz posZERO)) "bool:TRUE")
@@ -53,6 +65,24 @@
         ; type fails
         (test-list-element "MULTz(TRUE)(posONE)" (read-any ((MULTz TRUE) posONE)) "MULTz(arg1(err:int))")))
 (show-results "MULTz" MULTz-tests)
+
+; ====================================================================
+
+(define EXPz-tests
+    (list
+        ; both encodings of a zero exponent mean the same integer
+        (test-list-element "EXPz(posTWO)(posZERO)" (read-any ((EXPz posTWO) posZERO)) "int:1")
+        (test-list-element "EXPz(posTWO)(negZERO)" (read-any ((EXPz posTWO) negZERO)) "int:1")
+        (test-list-element "EXPz(negTWO)(negZERO)" (read-any ((EXPz negTWO) negZERO)) "int:1")
+        ; ordinary and nonzero-negative exponents
+        (test-list-element "EXPz(posTWO)(posTHREE)" (read-any ((EXPz posTWO) posTHREE)) "int:8")
+        (test-list-element "EXPz(posTWO)(negTWO)" (read-any ((EXPz posTWO) negTWO)) "int:0")
+        ; type failures identify the offending argument
+        (test-list-element "EXPz(TRUE)(posZERO)" (read-any ((EXPz TRUE) posZERO)) "EXPz(arg1(err:int))")
+        (test-list-element "EXPz(posTWO)(TRUE)" (read-any ((EXPz posTWO) TRUE)) "EXPz(arg2(err:int))")
+        ; incoming typed errors retain their trace
+        (test-list-element "EXPz(INT-ERROR)(posZERO)" (read-any ((EXPz INT-ERROR) posZERO)) "err:int->EXPz(arg1(err:int))")))
+(show-results "EXPz" EXPz-tests)
 
 ; ====================================================================
 

@@ -213,7 +213,8 @@
     ~ EXPONENTIATION ~
     - Contract: (int,int) => int
     - Idea: z1,z2 => z1^z2
-    - Logic: Do regular exponent except when z2 < 0, then result is 0
+    - Logic: Any zero-magnitude exponent returns 1, regardless of its stored
+             sign. A negative exponent with nonzero magnitude returns 0.
 |#
 (def expZ z1 z2 = 
     ; let vars
@@ -222,16 +223,17 @@
     (_let z2Sign = (head z2)
     (_let z2Val = (tail z2)
     ; core logic
-    (_if (_not z2Sign)
-    ; if raised to negative power
-        _then posZero
-        ; then default to zero
-        _else (_if z1Sign
-        ; else if z1 positive
-                _then ((makeZ true) ((_exp z1Val) z2Val))
-                ; then make positive and do regular exponent
-                _else ((makeZ (isEven z2Val)) ((_exp z1Val) z2Val)))))))))
-                ; else flip sign based on even or odd power
+    (_if (isZero z2Val)
+        ; positive zero and negative zero are the same exponent
+        _then posOne
+        _else (_if (_not z2Sign)
+            ; nonzero negative powers leave the integers
+            _then posZero
+            _else (_if z1Sign
+                    ; positive base
+                    _then ((makeZ true) ((_exp z1Val) z2Val))
+                    ; negative base: sign follows exponent parity
+                    _else ((makeZ (isEven z2Val)) ((_exp z1Val) z2Val))))))))))
             
 ;===================================================
 
@@ -357,7 +359,6 @@
     - Idea: check if nat part is even
 |#
 (def isEvenZ z = (isEven (tail z)))
-
 
 
 

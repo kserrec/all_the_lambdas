@@ -79,6 +79,10 @@
 ; ====================================================================
 
 (define expZ-tests (list
+    (test-list-element "expZ(posTwo)(posZero)" (z-read ((expZ posTwo) posZero)) "1")
+    (test-list-element "expZ(posTwo)(negZero)" (z-read ((expZ posTwo) negZero)) "1")
+    (test-list-element "expZ(negTwo)(posZero)" (z-read ((expZ negTwo) posZero)) "1")
+    (test-list-element "expZ(negTwo)(negZero)" (z-read ((expZ negTwo) negZero)) "1")
     (test-list-element "expZ(negThree)(negTwo)" (z-read ((expZ negThree) negTwo)) "0")
     (test-list-element "expZ(negThree)(posTwo)" (z-read ((expZ negThree) posTwo)) "9")
     (test-list-element "expZ(negZero)(posOne)" (z-read ((expZ negZero) posOne)) "0")

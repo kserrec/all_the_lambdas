@@ -8,13 +8,14 @@ is valued there too, so explicit beats clever.
 
 ## Session status (as of 2026-08-11)
 
-The ordered integrity-work queue and the subsequently authorized binary-search
-phase are complete. There is no pre-authorized implementation phase for a new
-`$next` invocation. The next action is a decision turn with Kyle: choose whether
-to address one of the remaining preserved integrity findings (signed-zero
-exponentiation, `IND-OPT`, remaining test-claim mismatches, reader diagnostics,
-or teaching equations) or begin a new Phase 3 product track. The deferred reals
-arc remains set aside and must not be selected without asking.
+The ordered integrity-work queue, the binary-search phase, and the five
+subsequently authorized preserved findings are complete. There is no
+pre-authorized implementation phase for a new `$next` invocation. The next
+action is discussion with Kyle about whether to take an optional item-7
+follow-on such as `HEAD-OPT`, define some other bounded work, or eventually
+choose a Phase 3 direction. Kyle has explicitly not authorized any larger
+Phase 3 track yet. The deferred reals arc remains set aside and must not be
+selected without asking.
 
 Integrity Phase 1 is complete. The bounded strict, coercive, and binary test
 claims named by that phase now execute the cases their labels describe; all
@@ -53,19 +54,64 @@ wrappers return `option:some(nat:index)` or `option:none` while preserving
 argument errors. The sugared and raw nested-lambda teaching routes agree, and
 all 1,856 repository tests pass.
 
+The targeted remaining-integrity phase is complete. Positive-zero and
+negative-zero integer exponents now agree; strict `IND-OPT` validates both
+arguments before unwrapping; the remaining known test claims execute their
+named operands; direct natural and integer readers report their own type; and
+the inaccurate teaching examples now match their encodings. The explicit
+26-file repository run passes 1,893/1,893 tests with zero failures.
+
 Phase 2 is essentially complete. Everything numbered below is done except:
 - **8c** — the reals arc (dyadics → intervals → computable reals). Deliberately
   **set aside** by the user for now; do not start it without asking.
 - The remaining **item-7 follow-on** slices (`HEAD-OPT` and the unfinished
   Result-returning safe-division families) remain open but optional.
 
-**Phase 3 is not yet defined** — the direction is a pending user decision.
+**Phase 3 is not yet defined or authorized** — the direction is a pending user
+decision.
 Candidate tracks discussed (reals excluded): (a) strings → parser combinators
 [reuses `Result`; recommended], (b) deepen the strict type layer [richer errors,
 precondition checks, typed-list element discipline, function signatures — the
 item-8 road not taken], (c) data structures [trees → BST → sets → maps → graphs],
 (d) lambda terms as data [Var/Abs/App, substitution, beta reduction, De Bruijn,
 SKI]. See `~/all-the-lambdas-notes.md` for the full menu.
+
+## Targeted integrity phase — remaining verified findings (complete 2026-08-11)
+
+- [x] **Step 1. Make signed-zero exponentiation consistent** — in both
+  `expZ` over Church-pair integers and `expZ-bin` over signed binary-list
+  integers, inspect the exponent magnitude before its stored sign. Completed
+  2026-08-11: positive zero and negative zero now both produce positive one;
+  nonzero negative exponents retain the project's existing zero convention.
+  Raw, strict runtime-tagged, and coercive runtime-tagged regressions cover the
+  shared behavior and preserve strict error propagation and coercion.
+- [x] **Step 2. Restore strict `IND-OPT` semantics** — check that the first
+  argument is a typed list and the second is a typed Church natural before
+  unwrapping either value. Completed 2026-08-11: valid in-range indexing
+  returns `option:some(element)`, valid out-of-range indexing returns
+  `option:none`, wrong types return argument-numbered typed errors, and incoming
+  errors retain their trace. The focused group passes 14/14 assertions.
+- [x] **Step 3. Make the remaining green tests execute their claims** — repair
+  strict `IS_ZERO(TRUE)` and `SUB(FIVE)(FIVE)`; coercive `IS_ZERO(FALSE)`,
+  `SUB(FIVE)(FIVE)`, `EXP(ZERO)(ONE)`, `EXP(FIVE)(FIVE)`, and
+  `EXP(FOUR)(ERROR)`; and binary `bin-add(bin-zero)(bin-one)`. Completed
+  2026-08-11: each label, expression, and expected value now names the same
+  case, including a real `5^5 = 3125` evaluation.
+- [x] **Step 4. Correct direct-reader diagnostics** — change only the rejection
+  branches of `nat-read` and `Z-READ` from the copied Boolean diagnostic to
+  their own runtime types. Completed 2026-08-11: rejected non-natural input
+  reads `err:nat`, rejected non-integer input reads `err:int`, and valid/error
+  inputs retain their established rendering.
+- [x] **Step 5. Correct the teaching equations** — make the lambda expansion of
+  `[a,b]` use `b` in its second cell, describe typed `TRUE` as `{one,true}`, and
+  describe the typed empty list as `{four,nil}`. Completed 2026-08-11; these are
+  comment-only corrections and add no host-language computation.
+
+Verification completed 2026-08-11: the eight directly affected suites pass
+1,025/1,025 assertions. The explicit dotenv-excluding 26-file repository run
+passes 1,893/1,893 with zero failures, `git diff --check` is clean, and the
+object-language changes use only the project's lambda-encoded data,
+predicates, branching, and existing runtime-tag machinery.
 
 ## Targeted integrity phase — terminating Option-returning binary search (complete 2026-08-11)
 
@@ -296,20 +342,15 @@ point. Do not combine consecutive phases merely because time remains.
   readable probes match the documentation, and the explicit 26-file repository
   run passes 1,807/1,807 with zero failures.
 
-### Later integrity findings — preserved, not authorized by this queue
+### Later integrity findings — completed 2026-08-11
 
-The audit handoff also records signed-zero exponentiation inconsistency,
-`IND-OPT` type/Option violations, reader diagnostic copy errors, and incorrect
-teaching equations. Its binary-search nontermination and false-tagging finding
-was resolved by the targeted phase above.
-Phase 1's context inspection also directly observed green claim mismatches
-outside its authorized `MULT`/`DIV`/`MOD`/`bin-eq` boundary: strict
-`IS_ZERO(TRUE)` and `SUB(FIVE)(FIVE)`; coercive `IS_ZERO(FALSE)`,
-`SUB(FIVE)(FIVE)`, `EXP(ZERO)(ONE)`, `EXP(FIVE)(FIVE)`, and
-`EXP(FOUR)(ERROR)`; and binary `bin-add(bin-zero)(bin-one)`. These were not
-changed in Phase 1 and have not received their own repair authorization.
-Do not start those repairs merely because the five phases above finish; discuss
-their scope, and any behavioral decisions they require, with Kyle first.
+The signed-zero exponentiation inconsistency, strict `IND-OPT` type/Option
+violations, remaining test-claim mismatches, direct-reader diagnostic copy
+errors, and incorrect teaching equations were explicitly authorized and
+completed in the targeted remaining-integrity phase above. Together with the
+earlier binary-search phase, every preserved finding formerly listed in this
+subsection is resolved. This does not authorize `HEAD-OPT`, unfinished safe
+division follow-ons, or any larger Phase 3 track.
 
 ## Phase 2 — continuing the build (from ~/all-the-lambdas-notes.md priorities)
 
@@ -361,7 +402,9 @@ their scope, and any behavioral decisions they require, with Kyle first.
   integration (`read-option`/`read-result`, wired into `read-any`). 29 tests
   (2026-07-08). Follow-on — wire these into functions where failure is expected:
   - [x] `IND-OPT` in `types/LISTS.rkt` — safe indexing: in range => `some(value)`,
-    out of range => `none` (rather than IND's garbage). 10 tests (2026-07-08)
+    out of range => `none` (rather than IND's garbage). Initially 10 tests
+    (2026-07-08); strict pre-unwrapping validation and error propagation bring
+    the focused group to 14 tests (2026-08-11)
   - [x] Option-returning search — both raw searches now return
     `{found Boolean, Church-natural index}` and terminate for gaps, boundary
     misses, and empty lists. Both strict wrappers return `some(nat:index)` or

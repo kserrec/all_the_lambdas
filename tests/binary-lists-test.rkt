@@ -132,7 +132,7 @@
     (test-list-element "bin-add(bin-one)(bin-zero)"
         (bin-read ((bin-add bin-one) bin-zero)) "1")
     (test-list-element "bin-add(bin-zero)(bin-one)"
-        (bin-read ((bin-add bin-one) bin-zero)) "1")
+        (bin-read ((bin-add bin-zero) bin-one)) "1")
     (test-list-element "bin-add(bin-one)(bin-one)"
         (bin-read ((bin-add bin-one) bin-one)) "2")
 

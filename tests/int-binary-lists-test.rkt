@@ -249,6 +249,10 @@
         (bin-z-read ((expZ-bin bin-posTwo) bin-posZero)) "1")
     (test-list-element "expZ-bin(bin-negTwo)(bin-posZero)"
         (bin-z-read ((expZ-bin bin-negTwo) bin-posZero)) "1")
+    (test-list-element "expZ-bin(bin-posTwo)(bin-negZero)"
+        (bin-z-read ((expZ-bin bin-posTwo) bin-negZero)) "1")
+    (test-list-element "expZ-bin(bin-negTwo)(bin-negZero)"
+        (bin-z-read ((expZ-bin bin-negTwo) bin-negZero)) "1")
     ; negative exponents default to zero
     (test-list-element "expZ-bin(bin-posTwo)(bin-negTwo)"
         (bin-z-read ((expZ-bin bin-posTwo) bin-negTwo)) "0")

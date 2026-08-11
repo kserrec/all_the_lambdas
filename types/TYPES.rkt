@@ -103,7 +103,7 @@
             - {zero, {one, "bool error!"}}  - BOOL ERROR
         - BOOL-OBJECTS (exhaustive list):
             - {one, zero}   - FALSE
-            - {one, one}    - TRUE
+            - {one, true}   - TRUE
         - NAT-OBJECTS:
             - {two, zero}   - TYPED 0
             - {two, one}    - TYPED 1
@@ -111,7 +111,7 @@
             - {three, {true, one}}   - TYPED +1
             - {three, {false, five}} - TYPED -5
         - LIST-OBJECTS:
-            - []   - TYPED nil list
+            - {four, nil}   - TYPED nil list
             - {four, [...]} - TYPED list
         - RAT-OBJECTS:
             - {five, {{true, one}, one}}   - TYPED +1

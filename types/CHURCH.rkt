@@ -38,7 +38,7 @@
     (_if (is-nat N)
         _then (string-append "nat:" (n-read (val N)))
         ; _then (n-read (val N))
-        _else (err-read BOOL-ERROR)))
+        _else (err-read NAT-ERROR)))
 
 (def nat-read N = ((read-type _nat-read) N))
 

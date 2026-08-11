@@ -9,10 +9,13 @@
 > binary-search phase completed on 2026-08-11, so no pre-authorized integrity
 > phase remains for `$next`. Both raw searches now terminate through half-open
 > bounds and return explicit found/index pairs; both strict wrappers return
-> typed `Option` values. All 1,856 tests pass. The next action is a decision with
-> Kyle: choose a remaining preserved finding or a new Phase 3 product track.
-> The findings below describe the pre-change state and preserve those later
-> issues that still require decisions.
+> typed `Option` values. The five later findings preserved by this audit were
+> also explicitly authorized and completed on 2026-08-11: signed-zero
+> exponentiation, strict `IND-OPT`, remaining test-claim mismatches, direct
+> reader diagnostics, and teaching equations. All 1,893 tests pass. The next
+> action is a decision with Kyle about optional follow-on work; no larger Phase
+> 3 product track has been authorized. The findings below preserve the
+> pre-change evidence, while resolved annotations state the current status.
 
 > Created 2026-08-10 for resuming this discussion in a new session.
 >
@@ -41,14 +44,14 @@
 
 ## Next step
 
-The five approved integrity phases and the targeted binary-search phase are complete. Before further implementation, Kyle must choose either one remaining preserved integrity finding or a new Phase 3 product track; the roadmap names both sets precisely. The reals arc remains explicitly deferred.
+The five approved integrity phases, the targeted binary-search phase, and the five subsequently authorized preserved findings are complete. Before further implementation, Kyle must choose whether to take an optional item-7 follow-on such as `HEAD-OPT`, define other bounded work, or eventually select a Phase 3 direction. No larger Phase 3 track is authorized, and the reals arc remains explicitly deferred.
 
 ## Watch-outs
 
 - Questions and critiques are not work orders. Answer them without changing files unless Kyle explicitly asks for a change.
 - Never inspect dotenv files or their contents.
 - Run these modules with the lazy Racket language when probing them, for example through `racket -I lazy`; strict top-level evaluation gives misleading promise-shaped results.
-- A green existing test suite does not settle the unresolved findings below because several test labels still execute different expressions and structural normalization is usually hidden by readers. Bounded subprocess tests cover the four approved partial division boundaries. The formerly unrelated binary-search termination defect is now resolved and directly covered in the sugared, strict, and `bitter/` suites. The human-readable `bitter/test.rkt` demo remains outside discovery by design, while `bitter/tests/bitter-test.rkt` covers that module route through the harness.
+- The evidence below is historical and must not be mistaken for current behavior. The previously mismatched test claims, hidden binary normalization failures, bounded partial operations, binary-search termination defect, strict `IND-OPT` violations, signed-zero exponentiation inconsistency, reader diagnostics, and teaching equations now have direct regression evidence. The human-readable `bitter/test.rkt` demo remains outside discovery by design, while `bitter/tests/bitter-test.rkt` covers that module route through the harness.
 - Distinguish three categories throughout the next discussion:
   1. an unconventional but coherent convention;
   2. an undeclared difference between domains, representations, or teaching layers;
@@ -129,6 +132,13 @@ There is one important exception involving signed zero.
 ## Actual semantic integrity failures
 
 ### 1. Equal integer zeros produce unequal exponentiation results
+
+**Resolved 2026-08-11:** both Church-pair `expZ` and signed-binary-list
+`expZ-bin` now inspect exponent magnitude before stored sign. Positive-zero and
+negative-zero exponents both return positive one, while nonzero negative
+exponents retain the established zero convention. Raw, strict, and coercive
+regressions cover the current behavior. The text below preserves the pre-repair
+evidence.
 
 The project explicitly declares positive zero and negative zero equal. Its tests confirm:
 
@@ -249,6 +259,14 @@ This matters because signed binary integers and binary rationals build on these 
 
 ### 4. `IND-OPT` violates both strict typing and Option meaning
 
+**Resolved 2026-08-11:** `IND-OPT` now validates its typed-list and typed-natural
+arguments through `type-check2` before unwrapping. Wrong types return
+argument-numbered typed errors, incoming errors retain their trace, and only a
+valid out-of-range index returns `option:none`. The direct readers were repaired
+in the same targeted phase: rejected non-natural input now reads `err:nat`, and
+rejected non-integer input reads `err:int`. The text below preserves the
+pre-repair evidence.
+
 The strict layer promises that passing the wrong type yields a typed error. But `IND-OPT` in `types/LISTS.rkt` unwraps its inputs before checking their tags.
 
 Confirmed examples:
@@ -308,6 +326,15 @@ would compute the magnitude as natural `2 - 5`, which saturates to zero, produci
 
 ### 6. Several green tests do not execute what their labels claim
 
+**Resolved across the authorized 2026-08-11 integrity work:** the originally
+approved test-claim phase corrected its bounded set, and the later targeted
+phase corrected strict `IS_ZERO(TRUE)` and `SUB(FIVE)(FIVE)`; coercive
+`IS_ZERO(FALSE)`, `SUB(FIVE)(FIVE)`, `EXP(ZERO)(ONE)`, `EXP(FIVE)(FIVE)`, and
+`EXP(FOUR)(ERROR)`; and binary `bin-add(bin-zero)(bin-one)`. The other missing
+coverage listed below was added by the corresponding bitter, bounded-partiality,
+binary-normalization, rational-division, binary-search, and signed-zero phases.
+The text below preserves the audit-time evidence.
+
 Examples from `types/tests/CHURCH-test.rkt`:
 
 ```text
@@ -339,6 +366,11 @@ That explains how the suite can be fully green while the claimed cases remain un
 - automated coverage of `bitter/test.rkt`.
 
 ### 7. Some teaching equations describe the wrong encoding
+
+**Resolved 2026-08-11:** `[a,b]` now expands with `b` in the second cell, typed
+`TRUE` is documented as `{one,true}`, and typed nil is documented as
+`{four,nil}`. These were comment-only corrections. The text below preserves the
+pre-repair evidence.
 
 The list explanation in `lists.rkt` expands `[a,b]` using `a` twice:
 

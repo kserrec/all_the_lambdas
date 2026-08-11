@@ -37,13 +37,17 @@
 ;   - Idea: like IND, but a bad index is an expected outcome rather than
 ;       garbage: in range => some(value there), out of range => none. This is
 ;       what Option is for - the caller pattern-matches instead of guarding.
-;   - Logic: the valid indices are 0 .. len-1, so guard on (index < length)
-;       before delegating to IND. A type error in L or I is IND's concern,
-;       not this range guard's, so well-typed inputs are assumed here.
+;   - Logic: validate both typed arguments before unwrapping either one. For
+;       valid inputs, the indices are 0 .. len-1, so guard on index < length
+;       before delegating to IND.
 (def IND-OPT L I =
-    (_if ((lt (val I)) (len (val L)))
-        _then (make-some ((IND L) I))
-        _else NONE))
+    ((((((type-check2
+        (lambda (checked-L)
+            (lambda (checked-I)
+                (_if ((lt (val checked-I)) (len (val checked-L)))
+                    _then (make-some ((IND checked-L) checked-I))
+                    _else NONE))))
+        "IND-OPT") _list) nat) L) I))
 
 ;===================================================
 
@@ -102,8 +106,6 @@
 (def DROP N L = (((((((fully-type2 _drop) "DROP") nat) N) _list) L) _list))
 
 ;===================================================
-
-
 
 
 

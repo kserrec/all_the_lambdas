@@ -93,6 +93,24 @@
 
 ; ====================================================================
 
+(define EXPz-tests (list
+    ; both encodings of a zero exponent mean the same integer
+    (test-list-element "EXPz(posTWO)(posZERO)" (read-any ((EXPz posTWO) posZERO)) "int:1")
+    (test-list-element "EXPz(posTWO)(negZERO)" (read-any ((EXPz posTWO) negZERO)) "int:1")
+    (test-list-element "EXPz(negTWO)(negZERO)" (read-any ((EXPz negTWO) negZERO)) "int:1")
+    ; ordinary and nonzero-negative exponents
+    (test-list-element "EXPz(posTWO)(posTHREE)" (read-any ((EXPz posTWO) posTHREE)) "int:8")
+    (test-list-element "EXPz(posTWO)(negTWO)" (read-any ((EXPz posTWO) negTWO)) "int:0")
+    ; coercing: booleans become one/zero and ERROR becomes zero
+    (test-list-element "EXPz(TRUE)(FALSE)" (read-any ((EXPz TRUE) FALSE)) "int:1")
+    (test-list-element "EXPz(TWO)(TRUE)" (read-any ((EXPz TWO) TRUE)) "int:2")
+    (test-list-element "EXPz(FOUR)(ERROR)" (read-any ((EXPz FOUR) ERROR)) "int:1")
+))
+
+(show-results "EXPz" EXPz-tests)
+
+; ====================================================================
+
 (define DIVz-tests (list
     ; normal
     (test-list-element "DIVz(posZERO)(posZERO)" (read-any ((DIVz posZERO) posZERO)) "err:div by 0") ; division by zero

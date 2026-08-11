@@ -10,6 +10,18 @@
 ; ~ TYPED CHURCH TESTS ~
 ; ====================================================================
 
+(define nat-read-tests (list
+    (test-list-element "nat-read(ZERO)" (nat-read ZERO) "nat:0")
+    (test-list-element "nat-read(FIVE)" (nat-read FIVE) "nat:5")
+    (test-list-element "nat-read(TRUE)" (nat-read TRUE) "err:nat")
+    (test-list-element "nat-read(posONE)" (nat-read posONE) "err:nat")
+    (test-list-element "nat-read(NAT-ERROR)" (nat-read NAT-ERROR) "err:nat")
+))
+
+(show-results "nat-read" nat-read-tests)
+
+; ====================================================================
+
 (define IS_ZERO-tests (list 
     ; normal
     (test-list-element "IS_ZERO(ZERO)" (read-any (IS_ZERO ZERO)) "bool:TRUE")
@@ -18,7 +30,7 @@
     (test-list-element "IS_ZERO(FIVE)" (read-any (IS_ZERO FIVE)) "bool:FALSE")
     ; type fails
     (test-list-element "IS_ZERO(negTHREE)" (read-any (IS_ZERO negTHREE)) "IS_ZERO(err:nat)")
-    (test-list-element "IS_ZERO(TRUE)" (read-any (IS_ZERO negTHREE)) "IS_ZERO(err:nat)")
+    (test-list-element "IS_ZERO(TRUE)" (read-any (IS_ZERO TRUE)) "IS_ZERO(err:nat)")
 ))
 
 (show-results "IS_ZERO" IS_ZERO-tests)
@@ -56,7 +68,7 @@
     (test-list-element "SUB(THREE)(FOUR)" (read-any ((SUB THREE) FOUR)) "nat:0")
     (test-list-element "SUB(FOUR)(THREE)" (read-any ((SUB FOUR) THREE)) "nat:1")
     (test-list-element "SUB(TWO)(TWO)" (read-any ((SUB TWO) TWO)) "nat:0")
-    (test-list-element "SUB(FIVE)(FIVE)" (read-any ((SUB FIVE) TWO)) "nat:3")
+    (test-list-element "SUB(FIVE)(FIVE)" (read-any ((SUB FIVE) FIVE)) "nat:0")
     ; ; type fails
     (test-list-element "SUB(TRUE)(FIVE)" (read-any ((SUB TRUE) FIVE)) "SUB(arg1(err:nat))")
     (test-list-element "SUB(negTWO)(FIVE)" (read-any ((SUB negTWO) FIVE)) "SUB(arg1(err:nat))")

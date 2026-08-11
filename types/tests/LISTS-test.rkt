@@ -106,6 +106,16 @@
         (read-any ((option-or-else ((IND-OPT LIST-1-3-4-2) FOUR)) ZERO)) "nat:0")
     (test-list-element "option-or-else(IND-OPT in range, ZERO)"
         (read-any ((option-or-else ((IND-OPT LIST-1-3-4-2) TWO)) ZERO)) "nat:4")
+    ; wrong types are errors, not expected absence
+    (test-list-element "IND-OPT(FALSE)(ZERO)"
+        (read-any ((IND-OPT FALSE) ZERO)) "IND-OPT(arg1(err:list))")
+    (test-list-element "IND-OPT(LIST-1-0)(FALSE)"
+        (read-any ((IND-OPT LIST-1-0) FALSE)) "IND-OPT(arg2(err:nat))")
+    ; incoming errors retain their trace
+    (test-list-element "IND-OPT(LIST-ERROR)(ZERO)"
+        (read-any ((IND-OPT LIST-ERROR) ZERO)) "err:list->IND-OPT(arg1(err:list))")
+    (test-list-element "IND-OPT(LIST-1-0)(NAT-ERROR)"
+        (read-any ((IND-OPT LIST-1-0) NAT-ERROR)) "err:nat->IND-OPT(arg2(err:nat))")
 ))
 
 (show-results "IND-OPT" IND-OPT-tests)
