@@ -3,6 +3,7 @@
 (require "../int-binary-lists.rkt"
          "../binary-lists.rkt"
          "../core.rkt"
+         "../lists.rkt"
          "../logic.rkt"
          "../church.rkt"
          "helpers/test-helpers.rkt")
@@ -25,6 +26,20 @@
 ))
 
 (show-results "bin-z-read" bin-z-read-tests)
+
+; ====================================================================
+
+(define z-bin-canonical-structure-tests (list
+    (test-list-element "structure: magnitude of subZ-bin(+4)(+4)"
+        ((l-read (tail ((subZ-bin bin-posFour) bin-posFour))) n-read) "[0]")
+    (test-list-element "structure: magnitude of divZ-bin(+2)(+3)"
+        ((l-read (tail ((divZ-bin bin-posTwo) bin-posThree))) n-read) "[0]")
+    (test-list-element "structure: magnitude of divZ-bin(+4)(+3)"
+        ((l-read (tail ((divZ-bin bin-posFour) bin-posThree))) n-read) "[1]")
+    (test-list-element "structure: magnitude of multZ-bin(+2)(+3)"
+        ((l-read (tail ((multZ-bin bin-posTwo) bin-posThree))) n-read) "[1,1,0]")))
+
+(show-results "signed binary canonical structure" z-bin-canonical-structure-tests)
 
 ; ====================================================================
 

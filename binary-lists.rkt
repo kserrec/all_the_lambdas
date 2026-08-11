@@ -281,11 +281,13 @@
 ;===================================================
 
 
-(def rem-head-zeroes bin-num = 
-    (_if (isZero (pred (len bin-num)))
-        _then bin-num
-        _else ((Y rem-head-zeroes-helper) bin-num))
-)
+#|
+    ~ BINARY DIGIT LIST NORMALIZATION ~
+    - Contract: bin-list => canonical bin-list
+    - Logic: Remove leading zeroes, but represent zero as bin-zero rather than
+             allowing an empty digit list to escape.
+|#
+(def rem-head-zeroes bin-num = ((Y rem-head-zeroes-helper) bin-num))
 
 
 ; pre-checks - do later
@@ -300,9 +302,11 @@
 
 
 (def rem-head-zeroes-helper f bin-num = 
-    (_if (isZero (head bin-num))
-        _then (f (tail bin-num))
-        _else bin-num))
+    (_if (isNil bin-num)
+        _then bin-zero
+        _else (_if (isZero (head bin-num))
+                _then (f (tail bin-num))
+                _else bin-num)))
 
 (def bin-gte l1 l2 = 
     (_let l1-cut = (rem-head-zeroes l1)
@@ -456,7 +460,7 @@
     (_let both-zero = ((_or (bin-is-zero l1)) (bin-is-zero l2))
     (_if ((_or both-zero) ((bin-lt l1) l2))
         _then bin-zero
-        _else (((((Y bin-div-helper) l1) l2) one) nil))))
+        _else (rem-head-zeroes (((((Y bin-div-helper) l1) l2) one) nil)))))
 
 (def bin-div-helper f dividend divisor take-n running-q = 
     (_let len-dividend = (len dividend)

@@ -5,11 +5,12 @@
 > by rational zero still returns rational zero. Strict and coercive
 > runtime-tagged rational division now return explicit errors for a
 > rational-zero divisor. The implementation and current evidence are tracked in
-> `ROADMAP.md`. Integrity Phases 1 through 3 completed on 2026-08-11; the two
-> remaining approved, single-pass integrity phases are ordered there, and a
-> future `$next` starts by enforcing canonical binary structure in Integrity
-> Phase 4. The findings below describe the pre-change state and preserve the
-> later issues that still require decisions.
+> `ROADMAP.md`. Integrity Phases 1 through 4 completed on 2026-08-11; the one
+> remaining approved, single-pass integrity phase is ordered there, and a
+> future `$next` starts by documenting the accepted division policies across
+> representations and layers in Integrity Phase 5. The findings below describe
+> the pre-change state and preserve the later issues that still require
+> decisions.
 
 > Created 2026-08-10 for resuming this discussion in a new session.
 >
@@ -203,6 +204,13 @@ given: a procedure
 The strict type tag therefore makes a false claim about its underlying value.
 
 ### 3. Binary arithmetic violates its canonical representation
+
+> **Resolved 2026-08-11 in Integrity Phase 4.** The evidence below records the
+> pre-fix state. `rem-head-zeroes` now returns canonical `[0]` when all digits
+> are removed, and `bin-div` normalizes its generated quotient. Direct
+> structure assertions now cover the binary-natural arithmetic boundary plus
+> signed-binary integer and binary-rational consumers; all 1,807 repository
+> tests pass.
 
 The project states that binary naturals are normalized lists with no leading zeroes and that every public operation returns normalized output.
 

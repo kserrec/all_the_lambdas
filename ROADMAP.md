@@ -9,9 +9,12 @@ is valued there too, so explicit beats clever.
 ## Session status (as of 2026-08-11)
 
 The current priority is the ordered **remaining integrity work** queue below.
-A new session invoked with `$next` must start with **Integrity Phase 4 — enforce
-canonical binary structure**, complete that one phase, update this
-roadmap, and stop. Each integrity phase is intentionally sized for one pass.
+A new session invoked with `$next` must start with **Integrity Phase 5 — declare
+the accepted division policies**: document the partial Church-natural and
+Church-integer boundaries, the coercive zero-divisor errors, and the binary
+quotient/remainder totalization consistently across implementation and teaching
+documents. Complete that one phase, update this roadmap, and stop. Each
+integrity phase is intentionally sized for one pass.
 
 Integrity Phase 1 is complete. The bounded strict, coercive, and binary test
 claims named by that phase now execute the cases their labels describe; all
@@ -25,6 +28,12 @@ Integrity Phase 3 is complete. A host-level subprocess test now proves the four
 approved partial division boundaries reach a 10-second deadline, while four
 terminating counterparts prove every module path can return normally. The full
 repository now passes 1,763 tests.
+
+Integrity Phase 4 is complete. Binary subtraction and division now return
+canonical digit lists directly rather than relying on readers to hide an empty
+zero or leading quotient zeroes. Direct structure tests cover the binary-natural
+arithmetic boundary and representative signed-integer and rational consumers;
+the full repository now passes 1,807 tests.
 
 The targeted rational-division phase is complete. Its raw implementations were
 preserved behaviorally, a strict runtime-tagged rational division module was
@@ -174,24 +183,40 @@ point. Do not combine consecutive phases merely because time remains.
   seconds inside the probes), a process-table check finds no surviving child,
   and the full 26-file repository run passes 1,763/1,763 with zero failures.
 
-### Integrity Phase 4 — enforce canonical binary structure
+### Integrity Phase 4 — enforce canonical binary structure (complete 2026-08-11)
 
-- [ ] **Step 1. Add direct structural regressions** — demonstrate, without
+- [x] **Step 1. Add direct structural regressions** — demonstrate, without
   passing through `bin-read`, that current `bin-div 4 3` produces leading
   zeroes and current `bin-sub 4 4` produces an empty list instead of canonical
-  `bin-zero`.
-- [ ] **Step 2. Restore the invariant at its sources** — make
+  `bin-zero`. Completed 2026-08-11: direct lazy-language probes observed
+  `[0,0,1]` versus numeric `1` and `[]` versus numeric `0`; the two focused
+  regressions failed exactly those cases while the existing 203 assertions
+  passed.
+- [x] **Step 2. Restore the invariant at its sources** — make
   `rem-head-zeroes` return canonical `bin-zero` rather than an empty list and
   normalize the quotient returned by `bin-div`. Preserve the existing numeric
-  results and the declared `x / 0 = 0`, `x mod 0 = x` policy.
-- [ ] **Step 3. Cover the public representation boundary** — add representative
+  results and the declared `x / 0 = 0`, `x mod 0 = x` policy. Completed
+  2026-08-11: normalization now maps an exhausted/all-zero list to `[0]`, and
+  `bin-div` normalizes the nontrivial quotient returned by its helper. The
+  original malformed results now read structurally as `[1]` and `[0]`; direct
+  zero-divisor probes still return quotient `[0]` and the dividend's canonical
+  digits as remainder.
+- [x] **Step 3. Cover the public representation boundary** — add representative
   direct-structure assertions for binary zero, one, and ordinary nonzero
   outputs across subtraction, multiplication, division, remainder, successor,
   predecessor, gcd/lcm, and exponentiation, plus representative signed-binary
   integer and binary-rational consumers. Keep the existing reader-based tests.
-- [ ] **Step 4. Verify downstream compatibility** — run binary-natural,
+  Completed 2026-08-11: 32 binary-natural structure assertions cover the
+  normalization helper, every named operation, combined quotient/remainder,
+  and both zero-divisor outputs; four signed-integer and eight binary-rational
+  assertions inspect their embedded digit lists directly. Existing
+  reader-based assertions remain in place.
+- [x] **Step 4. Verify downstream compatibility** — run binary-natural,
   signed-binary-integer, and binary-rational tests, then the full repository
-  runner and record the results.
+  runner and record the results. Completed 2026-08-11: the focused suites pass
+  428/428 tests (binary natural 235, signed binary integer 125, binary rational
+  68), and the explicit 26-file repository run passes 1,807/1,807 with zero
+  failures.
 
 ### Integrity Phase 5 — declare the accepted division policies
 

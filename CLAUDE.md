@@ -81,8 +81,8 @@ them through readers.
   zero. Raw reciprocal and division by rational zero return rational zero.
 - List: nested pairs ending in `nil`
 - Binary nat (`binary-lists.rkt`): list of zero/one digits, most significant
-  first, normalized (no leading zeros) via `rem-head-zeroes`; every public
-  function returns normalized output
+  first, with canonical zero `[0]` and no leading zeroes on nonzero values;
+  binary-natural arithmetic results are normalized via `rem-head-zeroes`
 - Signed binary integer (`int-binary-lists.rkt`): `{sign, binary nat}`
 - Binary rational (`binary-rationals.rkt`):
   `{signed binary integer, binary nat}` — the same raw rational-zero and

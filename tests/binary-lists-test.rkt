@@ -38,6 +38,93 @@
 
 ; ====================================================================
 
+(define bin-canonical-structure-tests (list
+    ; normalization itself
+    (test-list-element "structure: rem-head-zeroes(nil)"
+        ((l-read (rem-head-zeroes nil)) n-read) "[0]")
+    (test-list-element "structure: rem-head-zeroes([0,0,1])"
+        ((l-read (rem-head-zeroes (_cons zero zero one))) n-read) "[1]")
+
+    ; subtraction: zero, one, ordinary nonzero
+    (test-list-element "structure: bin-sub(bin-four)(bin-four)"
+        ((l-read ((bin-sub bin-four) bin-four)) n-read) "[0]")
+    (test-list-element "structure: bin-sub(bin-four)(bin-three)"
+        ((l-read ((bin-sub bin-four) bin-three)) n-read) "[1]")
+    (test-list-element "structure: bin-sub(bin-four)(bin-one)"
+        ((l-read ((bin-sub bin-four) bin-one)) n-read) "[1,1]")
+
+    ; multiplication: zero, one, ordinary nonzero
+    (test-list-element "structure: bin-mult(bin-zero)(bin-four)"
+        ((l-read ((bin-mult bin-zero) bin-four)) n-read) "[0]")
+    (test-list-element "structure: bin-mult(bin-one)(bin-one)"
+        ((l-read ((bin-mult bin-one) bin-one)) n-read) "[1]")
+    (test-list-element "structure: bin-mult(bin-two)(bin-three)"
+        ((l-read ((bin-mult bin-two) bin-three)) n-read) "[1,1,0]")
+
+    ; division: zero, one, ordinary nonzero, and the zero-divisor policy
+    (test-list-element "structure: bin-div(bin-one)(bin-two)"
+        ((l-read ((bin-div bin-one) bin-two)) n-read) "[0]")
+    (test-list-element "structure: bin-div(bin-four)(bin-three)"
+        ((l-read ((bin-div bin-four) bin-three)) n-read) "[1]")
+    (test-list-element "structure: bin-div(bin-six)(bin-two)"
+        ((l-read ((bin-div bin-six) bin-two)) n-read) "[1,1]")
+    (test-list-element "structure: bin-div(bin-five)(bin-zero)"
+        ((l-read ((bin-div bin-five) bin-zero)) n-read) "[0]")
+
+    ; remainder: zero, one, ordinary nonzero, and the zero-divisor policy
+    (test-list-element "structure: bin-mod(bin-four)(bin-two)"
+        ((l-read ((bin-mod bin-four) bin-two)) n-read) "[0]")
+    (test-list-element "structure: bin-mod(bin-four)(bin-three)"
+        ((l-read ((bin-mod bin-four) bin-three)) n-read) "[1]")
+    (test-list-element "structure: bin-mod(bin-five)(bin-three)"
+        ((l-read ((bin-mod bin-five) bin-three)) n-read) "[1,0]")
+    (test-list-element "structure: bin-mod(bin-five)(bin-zero)"
+        ((l-read ((bin-mod bin-five) bin-zero)) n-read) "[1,0,1]")
+
+    ; combined quotient/remainder result
+    (test-list-element "structure: quotient of bin-div-n-mod(bin-five)(bin-two)"
+        ((l-read (head ((bin-div-n-mod bin-five) bin-two))) n-read) "[1,0]")
+    (test-list-element "structure: remainder of bin-div-n-mod(bin-five)(bin-two)"
+        ((l-read (tail ((bin-div-n-mod bin-five) bin-two))) n-read) "[1]")
+
+    ; successor and predecessor
+    (test-list-element "structure: bin-succ(bin-zero)"
+        ((l-read (bin-succ bin-zero)) n-read) "[1]")
+    (test-list-element "structure: bin-succ(bin-one)"
+        ((l-read (bin-succ bin-one)) n-read) "[1,0]")
+    (test-list-element "structure: bin-pred(bin-one)"
+        ((l-read (bin-pred bin-one)) n-read) "[0]")
+    (test-list-element "structure: bin-pred(bin-two)"
+        ((l-read (bin-pred bin-two)) n-read) "[1]")
+    (test-list-element "structure: bin-pred(bin-four)"
+        ((l-read (bin-pred bin-four)) n-read) "[1,1]")
+
+    ; gcd and lcm: zero, one, ordinary nonzero
+    (test-list-element "structure: bin-gcd(bin-zero)(bin-zero)"
+        ((l-read ((bin-gcd bin-zero) bin-zero)) n-read) "[0]")
+    (test-list-element "structure: bin-gcd(bin-four)(bin-three)"
+        ((l-read ((bin-gcd bin-four) bin-three)) n-read) "[1]")
+    (test-list-element "structure: bin-gcd(bin-six)(bin-four)"
+        ((l-read ((bin-gcd bin-six) bin-four)) n-read) "[1,0]")
+    (test-list-element "structure: bin-lcm(bin-zero)(bin-three)"
+        ((l-read ((bin-lcm bin-zero) bin-three)) n-read) "[0]")
+    (test-list-element "structure: bin-lcm(bin-one)(bin-one)"
+        ((l-read ((bin-lcm bin-one) bin-one)) n-read) "[1]")
+    (test-list-element "structure: bin-lcm(bin-two)(bin-three)"
+        ((l-read ((bin-lcm bin-two) bin-three)) n-read) "[1,1,0]")
+
+    ; exponentiation: zero, one, ordinary nonzero
+    (test-list-element "structure: bin-exp(bin-zero)(bin-one)"
+        ((l-read ((bin-exp bin-zero) bin-one)) n-read) "[0]")
+    (test-list-element "structure: bin-exp(bin-two)(bin-zero)"
+        ((l-read ((bin-exp bin-two) bin-zero)) n-read) "[1]")
+    (test-list-element "structure: bin-exp(bin-two)(bin-three)"
+        ((l-read ((bin-exp bin-two) bin-three)) n-read) "[1,0,0,0]")))
+
+(show-results "binary canonical structure" bin-canonical-structure-tests)
+
+; ====================================================================
+
 (define bin-add-tests (list 
     ; trivial cases
     (test-list-element "bin-add(bin-zero)(bin-zero)"

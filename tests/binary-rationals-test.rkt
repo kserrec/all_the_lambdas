@@ -4,7 +4,9 @@
          "../binary-lists.rkt"
          "../int-binary-lists.rkt"
          "../core.rkt"
+         "../lists.rkt"
          "../logic.rkt"
+         "../church.rkt"
          "helpers/test-helpers.rkt")
 
 ; ====================================================================
@@ -24,6 +26,33 @@
 ))
 
 (show-results "r-read-bin" r-read-bin-tests)
+
+; ====================================================================
+
+(define reduced-structure-r (reduce-bin binR-pos4-2))
+(define canceled-structure-r ((subR-bin binR-pos1-2) binR-pos1-2))
+(define floored-structure-r (floorR-bin ((makeR2-bin bin-posFour) bin-three)))
+(define divided-structure-r ((divR-bin binR-pos1-2) binR-pos2-3))
+
+(define r-bin-canonical-structure-tests (list
+    (test-list-element "structure: numerator of reduce-bin(4/2)"
+        ((l-read (numer-bin reduced-structure-r)) n-read) "[1,0]")
+    (test-list-element "structure: denominator of reduce-bin(4/2)"
+        ((l-read (denom-bin reduced-structure-r)) n-read) "[1]")
+    (test-list-element "structure: numerator of subR-bin(1/2)(1/2)"
+        ((l-read (numer-bin canceled-structure-r)) n-read) "[0]")
+    (test-list-element "structure: denominator of subR-bin(1/2)(1/2)"
+        ((l-read (denom-bin canceled-structure-r)) n-read) "[1]")
+    (test-list-element "structure: numerator of floorR-bin(4/3)"
+        ((l-read (numer-bin floored-structure-r)) n-read) "[1]")
+    (test-list-element "structure: denominator of floorR-bin(4/3)"
+        ((l-read (denom-bin floored-structure-r)) n-read) "[1]")
+    (test-list-element "structure: numerator of divR-bin(1/2)(2/3)"
+        ((l-read (numer-bin divided-structure-r)) n-read) "[1,1]")
+    (test-list-element "structure: denominator of divR-bin(1/2)(2/3)"
+        ((l-read (denom-bin divided-structure-r)) n-read) "[1,0,0]")))
+
+(show-results "binary rational canonical structure" r-bin-canonical-structure-tests)
 
 ; ====================================================================
 
