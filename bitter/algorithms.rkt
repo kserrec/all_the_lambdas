@@ -13,23 +13,16 @@
 
 #|
     ~ BINARY SEARCH NATURALS ~
-    - Contract: (list,nat) => nat
+    - Contract: (list,nat) => {bool,nat}
         - note: list must be sorted
-    - Logic: def binarySearch list target low high = if (low <= high)
-                then (target == list[(s+b)/2])
-                    then (s+b)/2
-                    else if (target < list[s+b)/2])
-                        then binarySearch list low ((s+b)/2)-1)
-                        else binarySearch list ((s+b)/2)+1) high
-                else true (causes error)
+    - Logic: search the half-open natural-number range [low,high)
+        - found => {true,index}
+        - absent => {false,zero}; the index payload is ignored
 |#
 (define binarySearch
     (lambda (list)
         (lambda (target)
-            (((((Y binarySearch-helper) list) target) zero) (pred (len list)))
-        )
-    )
-)
+            (((((Y binarySearch-helper) list) target) zero) (len list)))))
 
 (define binarySearch-helper
     (lambda (f)
@@ -37,36 +30,29 @@
             (lambda (target)
                 (lambda (low)
                     (lambda (high)
-                        ((lambda (mid)
-                            ((((lte low) high)
+                        ((((lt low) high)
+                            ((lambda (mid)
                                 ((((eq target) ((ind list) mid))
-                                    mid)
+                                    ((pair true) mid))
                                     ((((lt target) ((ind list) mid))
-                                        ((((f list) target) low) (pred mid)))
-                                        ((((f list) target) (succ mid)) high)))) 
-                                true)
-                        ) ((div ((add low) high)) two))))))))
+                                        ((((f list) target) low) mid))
+                                        ((((f list) target) (succ mid)) high))))
+                             ((div ((add low) high)) two)))
+                            ((pair false) zero))))))))
 
 #|
     ~ BINARY SEARCH INTEGERS ~
-    - Contract: (list,int) => int
+    - Contract: (list,int) => {bool,nat}
         - note: list must be sorted
-    - Logic: rec binarySearch list target low high = if (low <= high)
-                then if (target == list[(s+b)/2])
-                    then (s+b)/2
-                    else if (target < list[s+b)/2])
-                        then binarySearch list low ((s+b)/2)-1)
-                        else binarySearch list ((s+b)/2)+1) high
-                else -1
+    - Logic: search the half-open natural-number range [low,high)
+        - found => {true,index}; the index is a natural
+        - absent => {false,zero}; the index payload is ignored
 |#
 
 (define binarySearchZ
     (lambda (list)
         (lambda (target)
-            (((((Y binarySearchZ-helper) list) target) zero) (pred (len list)))
-        )
-    )
-)
+            (((((Y binarySearchZ-helper) list) target) zero) (len list)))))
 
 (define binarySearchZ-helper
     (lambda (f)
@@ -74,21 +60,12 @@
             (lambda (target)
                 (lambda (low)
                     (lambda (high)
-                        ((lambda (mid)
-                            ((((lte low) high)
+                        ((((lt low) high)
+                            ((lambda (mid)
                                 ((((eqZ target) ((ind list) mid))
-                                    ((makeZ true) mid))
+                                    ((pair true) mid))
                                     ((((ltZ target) ((ind list) mid))
-                                        ((((f list) target) low) (pred mid)))
-                                        ((((f list) target) (succ mid)) high)
-                                    )
-                                )
-                            ) negOne
-                            )
-                        ) ((div ((add low) high)) two))
-                    )
-                )
-            )
-        )
-    )        
-)
+                                        ((((f list) target) low) mid))
+                                        ((((f list) target) (succ mid)) high))))
+                             ((div ((add low) high)) two)))
+                            ((pair false) zero))))))))

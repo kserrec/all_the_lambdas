@@ -8,11 +8,11 @@ is valued there too, so explicit beats clever.
 
 ## Session status (as of 2026-08-11)
 
-The ordered integrity-work queue is complete. There is no pre-authorized
-implementation phase for a new `$next` invocation. The next action is a
-decision turn with Kyle: choose whether to address one of the preserved later
-integrity findings (signed-zero exponentiation, binary-search termination and
-false tagging, `IND-OPT`, remaining test-claim mismatches, reader diagnostics,
+The ordered integrity-work queue and the subsequently authorized binary-search
+phase are complete. There is no pre-authorized implementation phase for a new
+`$next` invocation. The next action is a decision turn with Kyle: choose whether
+to address one of the remaining preserved integrity findings (signed-zero
+exponentiation, `IND-OPT`, remaining test-claim mismatches, reader diagnostics,
 or teaching equations) or begin a new Phase 3 product track. The deferred reals
 arc remains set aside and must not be selected without asking.
 
@@ -46,11 +46,18 @@ preserved behaviorally, a strict runtime-tagged rational division module was
 created, and the existing coercive runtime-tagged division boundary now returns
 an explicit zero-divisor error.
 
+The targeted binary-search phase is complete. Both raw search families now use
+terminating half-open natural-number bounds and return `{found Boolean,
+Church-natural index}` pairs; the strict natural-value and integer-value search
+wrappers return `option:some(nat:index)` or `option:none` while preserving
+argument errors. The sugared and raw nested-lambda teaching routes agree, and
+all 1,856 repository tests pass.
+
 Phase 2 is essentially complete. Everything numbered below is done except:
 - **8c** — the reals arc (dyadics → intervals → computable reals). Deliberately
   **set aside** by the user for now; do not start it without asking.
-- The **item-7 follow-on** slices (option-returning search, `HEAD-OPT`,
-  Result-returning safe division) remain open but optional.
+- The remaining **item-7 follow-on** slices (`HEAD-OPT` and the unfinished
+  Result-returning safe-division families) remain open but optional.
 
 **Phase 3 is not yet defined** — the direction is a pending user decision.
 Candidate tracks discussed (reals excluded): (a) strings → parser combinators
@@ -59,6 +66,37 @@ precondition checks, typed-list element discipline, function signatures — the
 item-8 road not taken], (c) data structures [trees → BST → sets → maps → graphs],
 (d) lambda terms as data [Var/Abs/App, substitution, beta reduction, De Bruijn,
 SKI]. See `~/all-the-lambdas-notes.md` for the full menu.
+
+## Targeted integrity phase — terminating Option-returning binary search (complete 2026-08-11)
+
+- [x] **Step 1. Restore a valid progress argument in both raw searches** —
+  change `binarySearch` over Church-natural values and `binarySearchZ` over
+  Church-integer values from closed saturating-natural bounds to half-open
+  `[low,high)` bounds. Completed 2026-08-11: the initial upper bound is the list
+  length, left recursion uses `high = mid`, right recursion uses
+  `low = succ(mid)`, and an empty range returns immediately. Found values return
+  the Church pair `{true,index}`; gaps, below-first targets, above-last targets,
+  and empty lists return `{false,zero}`. Indexes are Church naturals for both
+  searched value families.
+- [x] **Step 2. Make strict absence truthful and printable** — replace the
+  wrappers that blindly tagged raw returns as `nat` or `int` with checked
+  adapters that return the existing typed `Option`. Completed 2026-08-11:
+  success reads as `option:some(nat:index)`, expected absence reads as
+  `option:none`, and wrong types or incoming errors retain their existing
+  argument-numbered error propagation. `Option`, `read-any`, and every reader
+  dispatch branch remain executablely unchanged.
+- [x] **Step 3. Keep the unsugared teaching route equivalent** — mirror the
+  same bounds and result pair in `bitter/algorithms.rkt`, update the demonstration
+  to format the already-computed pair, and add harness coverage for natural and
+  integer found, gap, below-first, and empty cases. Completed 2026-08-11: the
+  bitter demonstration loads and prints the new result shape, and its full
+  automated module passes 26/26 assertions.
+- [x] **Step 4. Verify the approved boundary** — focused raw, strict, and bitter
+  suites pass 84/84 assertions (28, 30, and 26 respectively). The explicit
+  dotenv-excluding 26-file repository run passes 1,856/1,856 with zero failures;
+  the unchanged bounded-partiality group contributes 8/8. The object-language
+  implementation uses only lambda-encoded Booleans, naturals, integers, pairs,
+  lists, comparison, arithmetic, branching, and fixed-point recursion.
 
 ## Targeted integrity phase — rational division semantics (2026-08-10)
 
@@ -261,8 +299,9 @@ point. Do not combine consecutive phases merely because time remains.
 ### Later integrity findings — preserved, not authorized by this queue
 
 The audit handoff also records signed-zero exponentiation inconsistency,
-binary-search nontermination and false strict tagging, `IND-OPT` type/Option
-violations, reader diagnostic copy errors, and incorrect teaching equations.
+`IND-OPT` type/Option violations, reader diagnostic copy errors, and incorrect
+teaching equations. Its binary-search nontermination and false-tagging finding
+was resolved by the targeted phase above.
 Phase 1's context inspection also directly observed green claim mismatches
 outside its authorized `MULT`/`DIV`/`MOD`/`bin-eq` boundary: strict
 `IS_ZERO(TRUE)` and `SUB(FIVE)(FIVE)`; coercive `IS_ZERO(FALSE)`,
@@ -323,9 +362,11 @@ their scope, and any behavioral decisions they require, with Kyle first.
   (2026-07-08). Follow-on — wire these into functions where failure is expected:
   - [x] `IND-OPT` in `types/LISTS.rkt` — safe indexing: in range => `some(value)`,
     out of range => `none` (rather than IND's garbage). 10 tests (2026-07-08)
-  - [ ] Option-returning search — the untyped `binarySearch` signals "not found"
-    with a church `true`, `binarySearchZ` with `negOne`; a typed search returning
-    `some(index)`/`none` would retire those in-band sentinels
+  - [x] Option-returning search — both raw searches now return
+    `{found Boolean, Church-natural index}` and terminate for gaps, boundary
+    misses, and empty lists. Both strict wrappers return `some(nat:index)` or
+    `none`, while wrong input types remain propagated errors. The sugared and
+    `bitter/` routes agree; completed 2026-08-11 with all 1,856 tests passing.
   - [ ] `HEAD-OPT` (no typed `HEAD` exists yet)
   - [~] Result-returning safe division — strict rational `DIVr` now returns
     `result:ok(rat)` or `result:err(error)` (2026-08-10); strict natural and

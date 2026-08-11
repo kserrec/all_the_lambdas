@@ -17,55 +17,57 @@
     ~ BINARY SEARCH ~q
 
     -Algorithm:
-    ; binarySearch (lst) (target) (low) (high) = 
-    ;   let mid = ((low+high)/2)
-        ; if (low <= high)
-            ; then if (target == lst[mid])
-                    ; then mid
+    ; binarySearch (lst) (target) (low) (high-exclusive) =
+        ; if (low < high-exclusive)
+            ; then let mid = ((low+high-exclusive)/2)
+                ; if (target == lst[mid])
+                    ; then {true, mid}
                     ; else if (target < lst[mid])
-                        ; then binarySearch (lst) (target) (low) (mid-1)
-                        ; else binarySearch (lst) (target) (mid+1) (high)
-            ; else badVal
+                        ; then binarySearch (lst) (target) (low) (mid)
+                        ; else binarySearch (lst) (target) (mid+1) (high-exclusive)
+            ; else {false, zero}
 
    ===================
     ~ NATURALS ~
-    - Idea: returns index of target in list
-    - Contract: (list,nat) => nat
+    - Idea: returns whether the target was found and, when found, its index
+    - Contract: (list,nat) => {bool,nat}
         - note1: list must be sorted
-        - note2: returns true if element is not in list
+        - note2: {false,zero} means the target is absent; ignore that index
+        - note3: the half-open [low,high) bounds terminate without needing -1
 |#
 (def binarySearch lst target =
-    (((((Y binarySearch-helper) lst) target) zero) (pred (len lst))))
+    (((((Y binarySearch-helper) lst) target) zero) (len lst)))
 
-(def binarySearch-helper f lst target low high = 
-    (_let mid = ((div ((add low) high)) two)
-        (_if ((lte low) high)
-            _then (_if ((eq target) ((ind lst) mid))
-                    _then mid
+(def binarySearch-helper f lst target low high =
+    (_if ((lt low) high)
+        _then (_let mid = ((div ((add low) high)) two)
+            (_if ((eq target) ((ind lst) mid))
+                    _then ((pair true) mid)
                     _else (_if ((lt target) ((ind lst) mid))
-                            _then ((((f lst) target) low) (pred mid))
-                            _else ((((f lst) target) (succ mid)) high)))
-            _else true)))
+                            _then ((((f lst) target) low) mid)
+                            _else ((((f lst) target) (succ mid)) high))))
+        _else ((pair false) zero)))
 
 #|
     ~ BINARY SEARCH INTEGERS ~
-    - Contract: (list,int) => int
+    - Contract: (list,int) => {bool,nat}
         - note1: list must be sorted
-        - note2: returns -1 if element is not in list
+        - note2: indexes are naturals even though the searched values are ints
+        - note3: {false,zero} means the target is absent; ignore that index
 |#
 
 (def binarySearchZ lst target =
-    (((((Y binarySearchZ-helper) lst) target) zero) (pred (len lst))))
+    (((((Y binarySearchZ-helper) lst) target) zero) (len lst)))
 
 (def binarySearchZ-helper f lst target low high =
-    (_let mid = ((div ((add low) high)) two)
-        (_if ((lte low) high)
-            _then (_if ((eqZ target) ((ind lst) mid))
-                    _then ((makeZ true) mid)
+    (_if ((lt low) high)
+        _then (_let mid = ((div ((add low) high)) two)
+            (_if ((eqZ target) ((ind lst) mid))
+                    _then ((pair true) mid)
                     _else (_if ((ltZ target) ((ind lst) mid))
-                            _then ((((f lst) target) low) (pred mid))
-                            _else ((((f lst) target) (succ mid)) high)))   
-            _else negOne)))
+                            _then ((((f lst) target) low) mid)
+                            _else ((((f lst) target) (succ mid)) high))))
+        _else ((pair false) zero)))
 
 ;===================================================
 #|
@@ -177,4 +179,3 @@
 (def swap lst left i right j = 
     (_let new-lst = (((replace right) lst) i)
     (((replace left) new-lst) j)))
-

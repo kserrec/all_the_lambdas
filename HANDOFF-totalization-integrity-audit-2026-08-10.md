@@ -5,11 +5,14 @@
 > by rational zero still returns rational zero. Strict and coercive
 > runtime-tagged rational division now return explicit errors for a
 > rational-zero divisor. The implementation and current evidence are tracked in
-> `ROADMAP.md`. Integrity Phases 1 through 5 completed on 2026-08-11, so no
-> pre-authorized integrity phase remains for `$next`. The next action is a
-> decision with Kyle: choose a preserved later finding or a new Phase 3 product
-> track. The findings below describe the pre-change state and preserve those
-> later issues that still require decisions.
+> `ROADMAP.md`. Integrity Phases 1 through 5 and the subsequently authorized
+> binary-search phase completed on 2026-08-11, so no pre-authorized integrity
+> phase remains for `$next`. Both raw searches now terminate through half-open
+> bounds and return explicit found/index pairs; both strict wrappers return
+> typed `Option` values. All 1,856 tests pass. The next action is a decision with
+> Kyle: choose a remaining preserved finding or a new Phase 3 product track.
+> The findings below describe the pre-change state and preserve those later
+> issues that still require decisions.
 
 > Created 2026-08-10 for resuming this discussion in a new session.
 >
@@ -38,14 +41,14 @@
 
 ## Next step
 
-The five approved integrity phases are complete. Before further implementation, Kyle must choose either one preserved later integrity finding or a new Phase 3 product track; the roadmap names both sets precisely. The reals arc remains explicitly deferred.
+The five approved integrity phases and the targeted binary-search phase are complete. Before further implementation, Kyle must choose either one remaining preserved integrity finding or a new Phase 3 product track; the roadmap names both sets precisely. The reals arc remains explicitly deferred.
 
 ## Watch-outs
 
 - Questions and critiques are not work orders. Answer them without changing files unless Kyle explicitly asks for a change.
 - Never inspect dotenv files or their contents.
 - Run these modules with the lazy Racket language when probing them, for example through `racket -I lazy`; strict top-level evaluation gives misleading promise-shaped results.
-- A green existing test suite does not settle the unresolved findings below because several test labels still execute different expressions and structural normalization is usually hidden by readers. Bounded subprocess tests now cover the four approved partial division boundaries; the unrelated binary-search termination defect remains deliberately outside that policy. The human-readable `bitter/test.rkt` demo remains outside discovery by design, while `bitter/tests/bitter-test.rkt` now covers that module route through the harness.
+- A green existing test suite does not settle the unresolved findings below because several test labels still execute different expressions and structural normalization is usually hidden by readers. Bounded subprocess tests cover the four approved partial division boundaries. The formerly unrelated binary-search termination defect is now resolved and directly covered in the sugared, strict, and `bitter/` suites. The human-readable `bitter/test.rkt` demo remains outside discovery by design, while `bitter/tests/bitter-test.rkt` covers that module route through the harness.
 - Distinguish three categories throughout the next discussion:
   1. an unconventional but coherent convention;
   2. an undeclared difference between domains, representations, or teaching layers;
@@ -160,6 +163,17 @@ but
 Either the two zeros must remain observably distinct, or operations must treat them identically. The project currently claims the latter but implements the former here.
 
 ### 2. Binary search loses its termination argument at zero
+
+> **Resolved 2026-08-11 in the targeted binary-search phase.** Both natural-
+> value and integer-value searches now use the half-open Church-natural range
+> `[low,high)`, so the empty range ends immediately and every recursive call
+> shrinks it. Both return `{found Boolean, Church-natural index}`; absence is
+> `{false,zero}` rather than an in-band value of the advertised result type.
+> Their strict wrappers return `option:some(nat:index)` or `option:none` and
+> preserve wrong-type and incoming-error propagation. The `bitter/` mirror uses
+> the same pure nested-lambda computation. Focused suites pass 84/84 and the
+> full repository passes 1,856/1,856. The evidence below records the pre-fix
+> state.
 
 The natural binary search in `algorithms.rkt` uses natural numbers for `low`, `mid`, and `high`.
 
