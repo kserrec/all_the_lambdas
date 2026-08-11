@@ -364,7 +364,7 @@ division follow-ons, or any larger Phase 3 track.
 - [x] **3.5. Fix `type-check3` arg3 bug** — errors for a wrong-typed third
   argument were tagged with `param-type2`; fixed with regression tests
   (2026-07-08)
-- [ ] **4. Restore historical binary integer work** (from the old
+- [x] **4. Restore historical binary integer work** (from the old
   `binary-lists/` folder, commits `664ced3`..`705a26b`)
   - [x] 4a. Nat-level operators restored into `binary-lists.rkt` with tests:
     `bin-succ`, `bin-pred`, `bin-lte`, `bin-gt`, `bin-is-even`, `bin-is-odd`,
