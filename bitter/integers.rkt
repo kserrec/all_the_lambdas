@@ -121,25 +121,18 @@
     ~ ADDITION ~
     - Contract: (int,int) => int
     - Idea: z1,z2 => z1+z2
-    - Logic: If both positive
-                then make positive output and use regular add
-                else if both negative
-                    then make negative and use regular add
-                    else if z1 positive (assume z2 negative)
-                        then take difference and use gt to figure sign
-                        else take difference and use lt to figure sign
+    - Logic: If both have the same sign, keep it and add their magnitudes.
+                Otherwise, use the sign of the larger magnitude and subtract
+                the smaller magnitude from the larger one.
 |#
 (define addZ
     (lambda (z1)
         (lambda (z2)
-            ((((_and (head z1)) (head z2))
-                ((makeZ true) ((add (tail z1)) (tail z2))))
-                ((((_and (_not (head z1))) (_not (head z2)))
-                    ((makeZ false) ((add (tail z1)) (tail z2))))
-                    (((head z1)
-                        ((makeZ ((gt (tail z1)) (tail z2))) ((sub (tail z2)) (tail z1))))
-                        ((makeZ ((lt (tail z1)) (tail z2))) ((sub (tail z1)) (tail z2)))
-                    )
+            (((_not ((xor (head z1)) (head z2)))
+                ((makeZ (head z1)) ((add (tail z1)) (tail z2))))
+                ((((gt (tail z1)) (tail z2))
+                    ((makeZ (head z1)) ((sub (tail z1)) (tail z2))))
+                    ((makeZ (head z2)) ((sub (tail z2)) (tail z1)))
                 )
             )
         )
@@ -313,9 +306,6 @@
 )
 
 ;===================================================
-
-
-
 
 
 

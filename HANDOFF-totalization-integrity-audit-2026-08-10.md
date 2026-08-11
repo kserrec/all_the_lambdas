@@ -5,11 +5,11 @@
 > by rational zero still returns rational zero. Strict and coercive
 > runtime-tagged rational division now return explicit errors for a
 > rational-zero divisor. The implementation and current evidence are tracked in
-> `ROADMAP.md`. Integrity Phase 1's bounded test-claim corrections completed on
-> 2026-08-11; the four remaining approved, single-pass integrity phases are
-> ordered there, and a future `$next` starts with Integrity Phase 2's `bitter/`
-> restoration. The findings below describe the pre-change state and preserve
-> the later issues that still require decisions.
+> `ROADMAP.md`. Integrity Phases 1 and 2 completed on 2026-08-11; the three
+> remaining approved, single-pass integrity phases are ordered there, and a
+> future `$next` starts with Integrity Phase 3's bounded nontermination tests.
+> The findings below describe the pre-change state and preserve the later issues
+> that still require decisions.
 
 > Created 2026-08-10 for resuming this discussion in a new session.
 >
@@ -45,7 +45,7 @@ Read this handoff with Kyle and discuss which currently undeclared semantic diff
 - Questions and critiques are not work orders. Answer them without changing files unless Kyle explicitly asks for a change.
 - Never inspect dotenv files or their contents.
 - Run these modules with the lazy Racket language when probing them, for example through `racket -I lazy`; strict top-level evaluation gives misleading promise-shaped results.
-- A green existing test suite does not settle the findings below because several test labels execute different expressions, termination is not checked, structural normalization is usually hidden by readers, `bitter/test.rkt` is outside the runner's discovery pattern, and coercive rationals have no test file.
+- A green existing test suite does not settle the unresolved findings below because several test labels still execute different expressions, termination is not checked, and structural normalization is usually hidden by readers. The human-readable `bitter/test.rkt` demo remains outside discovery by design, while `bitter/tests/bitter-test.rkt` now covers that module route through the harness.
 - Distinguish three categories throughout the next discussion:
   1. an unconventional but coherent convention;
   2. an undeclared difference between domains, representations, or teaching layers;
@@ -259,6 +259,10 @@ Z-READ TRUE   => err:bool
 Both readers use `BOOL-ERROR` in their rejection branches rather than their own error types in `types/CHURCH.rkt` and `types/INTEGERS.rkt`.
 
 ### 5. The recommended `bitter/` teaching route cannot load
+
+**Resolved 2026-08-11:** the local raw `pair`/`nil` definitions were restored,
+mixed-sign addition was corrected, and a discoverable 10-test harness module
+now covers the route. The text below preserves the pre-repair evidence.
 
 The README recommends beginning with the raw `bitter/` branch.
 

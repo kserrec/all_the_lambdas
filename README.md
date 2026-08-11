@@ -133,7 +133,7 @@ design reappears inside the lambda universe.
 | `types/coercive/` | Alternate type system that coerces instead of rejecting; rational division returns explicit errors after coercion (wip) | Sugared + typed |
 | `macros/` | The sugar itself — Racket macros that expand to pure nested lambdas | Not lambda calculus; the translator |
 | `data-structures-as-closures/` | Key/value structures as closures (after Michaelson) | Sugared |
-| `tests/`, `types/tests/`, `types/coercive/tests/` | Test suites (shared helpers in `tests/helpers/`) | — |
+| `bitter/tests/`, `tests/`, `types/tests/`, `types/coercive/tests/` | Test suites (shared helpers in `tests/helpers/`) | — |
 
 The three flavors are deliberate: same ideas, increasing comfort. Purity lives in what the code expands to, and everything expands to pure untyped lambda calculus.
 

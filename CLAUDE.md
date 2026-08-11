@@ -34,7 +34,8 @@ Permitted host-language zones, and nothing else:
    `church-to-nat`, the `read-*` family in `types/`. Their comments mark them
    "not pure LC". Demo output (`displayln` in `data-structures-as-closures/`)
    is in the same category.
-3. **Tests and tooling** — `tests/` (all three suites), `run-all-tests.sh`, CI.
+3. **Tests and tooling** — the four suites under `bitter/tests/`, `tests/`,
+   `types/tests/`, and `types/coercive/tests/`; `run-all-tests.sh`; and CI.
 4. **Error-message payloads in `types/`** — error objects are lambda-encoded
    pairs whose *structure* (tags, nesting) is pure; the message inside is a
    host string carried as an opaque token and concatenated (`wrap`,

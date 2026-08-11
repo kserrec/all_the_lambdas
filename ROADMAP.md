@@ -9,13 +9,17 @@ is valued there too, so explicit beats clever.
 ## Session status (as of 2026-08-11)
 
 The current priority is the ordered **remaining integrity work** queue below.
-A new session invoked with `$next` must start with **Integrity Phase 2 — restore
-and cover the `bitter/` teaching route**, complete that one phase, update this
+A new session invoked with `$next` must start with **Integrity Phase 3 — test
+deliberate nontermination safely**, complete that one phase, update this
 roadmap, and stop. Each integrity phase is intentionally sized for one pass.
 
 Integrity Phase 1 is complete. The bounded strict, coercive, and binary test
 claims named by that phase now execute the cases their labels describe; all
 1,745 repository tests still pass.
+
+Integrity Phase 2 is complete. The raw nested-lambda `bitter/` route loads
+again, mixed-sign integer addition preserves the correct magnitude, and its new
+automated suite brings the repository total to 1,755 passing tests.
 
 The targeted rational-division phase is complete. Its raw implementations were
 preserved behaviorally, a strict runtime-tagged rational division module was
@@ -99,25 +103,39 @@ point. Do not combine consecutive phases merely because time remains.
   203), and the full 24-file repository run passes 1,745/1,745 with zero
   failures.
 
-### Integrity Phase 2 — restore and cover the `bitter/` teaching route
+### Integrity Phase 2 — restore and cover the `bitter/` teaching route (complete 2026-08-11)
 
-- [ ] **Step 1. Restore loadability from the declared representation** —
+- [x] **Step 1. Restore loadability from the declared representation** —
   reproduce the `pair: unbound identifier` failure in `bitter/lists.rkt`, then
   restore the smallest source-correct raw `pair`/`nil` definitions needed by
   the nested-lambda teaching branch. Do not import the sugared root
-  implementation into `bitter/`.
-- [ ] **Step 2. Expose and correct the masked signed-addition bug** — add direct
+  implementation into `bitter/`. Completed 2026-08-11: the unchanged module
+  failed at `bitter/lists.rkt:84:10`; restoring its existing raw nested-lambda
+  `pair` definition and `nil = zero` made the route load without cross-branch
+  imports.
+- [x] **Step 2. Expose and correct the masked signed-addition bug** — add direct
   mixed-sign cases such as `+5 + (-2) = +3` and `-5 + (+2) = -3`, then correct
   the reversed natural-subtraction operands in `bitter/integers.rkt` without
-  changing the signed-zero convention.
-- [ ] **Step 3. Put the branch under automated evidence** — retain
+  changing the signed-zero convention. Completed 2026-08-11: the pre-fix probe
+  returned `0, -3, -3, 0` for the four operand/magnitude orderings, and the new
+  regression failed exactly the two zero-collapsing cases. `addZ` now keeps the
+  shared sign when adding magnitudes and otherwise subtracts smaller from larger
+  under the larger operand's sign; all four cases return `3, -3, -3, 3`, while
+  `negZero` and `posZero` still compare equal.
+- [x] **Step 3. Put the branch under automated evidence** — retain
   `bitter/test.rkt` as its human-readable demonstration and add a
   harness-compatible test module under `bitter/tests/` so the existing runner
   discovers it normally. Cover module loading plus the repaired list and
   mixed-sign integer cases; do not special-case a no-results demo as passing.
-- [ ] **Step 4. Verify the restored route** — run the new bitter test module,
+  Completed 2026-08-11: `bitter/tests/bitter-test.rkt` adds five list/load tests
+  and five integer tests through the shared harness; `bitter/test.rkt` remains
+  behaviorally and textually unchanged as the demonstration.
+- [x] **Step 4. Verify the restored route** — run the new bitter test module,
   smoke-load every `bitter/` module it transitively covers, then run the full
-  repository runner and record the results.
+  repository runner and record the results. Completed 2026-08-11: the focused
+  module passes 10/10, all seven library modules plus `bitter/test.rkt`
+  smoke-load successfully, and the full 25-file repository run passes
+  1,755/1,755 with zero failures.
 
 ### Integrity Phase 3 — test deliberate nontermination safely
 
@@ -318,6 +336,6 @@ their scope, and any behavioral decisions they require, with Kyle first.
   compare unforced promises and fail even when the underlying values match.
   The custom harness forces values naturally inside the lazy world. Improve
   it in place (items 1–2) rather than replacing it.
-- **Test helpers are already shared** — all three suites (`tests/`,
-  `types/tests/`, `types/coercive/tests/`) require the single
+- **Test helpers are already shared** — all four suites (`bitter/tests/`,
+  `tests/`, `types/tests/`, `types/coercive/tests/`) require the single
   `tests/helpers/test-helpers.rkt`. No deduplication needed.
