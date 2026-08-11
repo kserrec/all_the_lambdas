@@ -9,8 +9,8 @@ is valued there too, so explicit beats clever.
 ## Session status (as of 2026-08-11)
 
 The current priority is the ordered **remaining integrity work** queue below.
-A new session invoked with `$next` must start with **Integrity Phase 3 — test
-deliberate nontermination safely**, complete that one phase, update this
+A new session invoked with `$next` must start with **Integrity Phase 4 — enforce
+canonical binary structure**, complete that one phase, update this
 roadmap, and stop. Each integrity phase is intentionally sized for one pass.
 
 Integrity Phase 1 is complete. The bounded strict, coercive, and binary test
@@ -20,6 +20,11 @@ claims named by that phase now execute the cases their labels describe; all
 Integrity Phase 2 is complete. The raw nested-lambda `bitter/` route loads
 again, mixed-sign integer addition preserves the correct magnitude, and its new
 automated suite brings the repository total to 1,755 passing tests.
+
+Integrity Phase 3 is complete. A host-level subprocess test now proves the four
+approved partial division boundaries reach a 10-second deadline, while four
+terminating counterparts prove every module path can return normally. The full
+repository now passes 1,763 tests.
 
 The targeted rational-division phase is complete. Its raw implementations were
 preserved behaviorally, a strict runtime-tagged rational division module was
@@ -137,24 +142,37 @@ point. Do not combine consecutive phases merely because time remains.
   smoke-load successfully, and the full 25-file repository run passes
   1,755/1,755 with zero failures.
 
-### Integrity Phase 3 — test deliberate nontermination safely
+### Integrity Phase 3 — test deliberate nontermination safely (complete 2026-08-11)
 
-- [ ] **Step 1. Add a bounded host-level probe mechanism** — run each expected
+- [x] **Step 1. Add a bounded host-level probe mechanism** — run each expected
   nonterminating expression in a fresh Racket subprocess, impose a short
   explicit deadline, terminate the subprocess afterward, and distinguish an
   expected timeout from a crash, early value, or harness failure. Keep this in
-  test/tooling code, outside the lambda-calculus object language.
-- [ ] **Step 2. Prove the probe itself** — include a terminating control that
+  test/tooling code, outside the lambda-calculus object language. Completed
+  2026-08-11: `tests/nontermination-test.rkt` starts a fresh Lazy Racket process
+  per probe, applies a 10-second deadline, forcibly terminates and reaps timed
+  out children, closes their ports, and reports timeout, crash, early return,
+  and harness failure as distinct outcomes.
+- [x] **Step 2. Prove the probe itself** — include a terminating control that
   must return the expected readable value before the deadline; a timeout-only
-  mechanism without a control is not evidence.
-- [ ] **Step 3. Cover every approved partial division boundary** — verify
+  mechanism without a control is not evidence. Completed 2026-08-11: four
+  controls—one for each module/import path—return `2`, `2`, `nat:2`, and
+  `int:2` inside the same deadline, so slow startup cannot masquerade as
+  nontermination.
+- [x] **Step 3. Cover every approved partial division boundary** — verify
   nontermination for raw Church-natural `div`, raw Church-integer `divZ`,
   strict runtime-tagged natural `DIV`, and strict runtime-tagged integer `DIVz`
   with zero divisors. Do not encode the unrelated binary-search termination bug
-  as an expected behavior.
-- [ ] **Step 4. Integrate and verify** — make the bounded checks part of the
+  as an expected behavior. Completed 2026-08-11: unchanged external probes for
+  all four reached the 10-second bound and exited only when terminated; all four
+  integrated cases likewise time out as expected. Binary search is not encoded
+  as approved nontermination.
+- [x] **Step 4. Integrate and verify** — make the bounded checks part of the
   normal repository test signal without leaving child processes running; run
   the focused probe test and the full runner and record timing and counts.
+  Completed 2026-08-11: the focused module passes 8/8 in 59.6 seconds (58.6
+  seconds inside the probes), a process-table check finds no surviving child,
+  and the full 26-file repository run passes 1,763/1,763 with zero failures.
 
 ### Integrity Phase 4 — enforce canonical binary structure
 

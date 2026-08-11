@@ -100,11 +100,15 @@ them through readers.
   division checks the divisor after coercion and returns a typed error directly.
   Both guards wrap the unchanged raw rational operation.
 
-**Tests** compare reader output strings:
+**Tests.** Most object-language tests compare reader output strings:
 `(test-list-element "label" (bin-read expr) "42")`, grouped into a list and
 reported with `(show-results "group" tests)`. Test files must explicitly
 require every module whose bindings they touch (e.g. `lists.rkt` for
 `head`/`tail`) — the sugar lang does not re-export them.
+`tests/nontermination-test.rkt` is the host-level exception: it runs each
+approved partial expression in a fresh Lazy Racket subprocess, kills and reaps
+the process after an explicit deadline, and emits the same summary format for
+the repository runner.
 
 **Style.** Definitions carry block comments in a Contract/Idea/Logic idiom;
 explicit beats clever everywhere — this is teaching material as much as code.

@@ -142,6 +142,13 @@ The three flavors are deliberate: same ideas, increasing comfort. Purity lives i
 2. From root, run `./run-all-tests.sh`
 3. Or run one file or folder: `./run-all-tests.sh tests/logic-test.rkt`, `./run-all-tests.sh types`
 
+The full suite deliberately spends 40 seconds checking partial division:
+`tests/nontermination-test.rkt` starts a fresh Lazy Racket process for each of
+four approved zero-divisor expressions and requires each one to remain active
+until a 10-second deadline. Matching terminating controls ensure the deadline
+is evidence of nontermination rather than slow module startup or a broken
+harness.
+
 Tests also run automatically on every push via GitHub Actions (`.github/workflows/tests.yml`).
 
 

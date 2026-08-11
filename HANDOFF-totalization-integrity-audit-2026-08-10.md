@@ -5,11 +5,11 @@
 > by rational zero still returns rational zero. Strict and coercive
 > runtime-tagged rational division now return explicit errors for a
 > rational-zero divisor. The implementation and current evidence are tracked in
-> `ROADMAP.md`. Integrity Phases 1 and 2 completed on 2026-08-11; the three
+> `ROADMAP.md`. Integrity Phases 1 through 3 completed on 2026-08-11; the two
 > remaining approved, single-pass integrity phases are ordered there, and a
-> future `$next` starts with Integrity Phase 3's bounded nontermination tests.
-> The findings below describe the pre-change state and preserve the later issues
-> that still require decisions.
+> future `$next` starts by enforcing canonical binary structure in Integrity
+> Phase 4. The findings below describe the pre-change state and preserve the
+> later issues that still require decisions.
 
 > Created 2026-08-10 for resuming this discussion in a new session.
 >
@@ -45,7 +45,7 @@ Read this handoff with Kyle and discuss which currently undeclared semantic diff
 - Questions and critiques are not work orders. Answer them without changing files unless Kyle explicitly asks for a change.
 - Never inspect dotenv files or their contents.
 - Run these modules with the lazy Racket language when probing them, for example through `racket -I lazy`; strict top-level evaluation gives misleading promise-shaped results.
-- A green existing test suite does not settle the unresolved findings below because several test labels still execute different expressions, termination is not checked, and structural normalization is usually hidden by readers. The human-readable `bitter/test.rkt` demo remains outside discovery by design, while `bitter/tests/bitter-test.rkt` now covers that module route through the harness.
+- A green existing test suite does not settle the unresolved findings below because several test labels still execute different expressions and structural normalization is usually hidden by readers. Bounded subprocess tests now cover the four approved partial division boundaries; the unrelated binary-search termination defect remains deliberately outside that policy. The human-readable `bitter/test.rkt` demo remains outside discovery by design, while `bitter/tests/bitter-test.rkt` now covers that module route through the harness.
 - Distinguish three categories throughout the next discussion:
   1. an unconventional but coherent convention;
   2. an undeclared difference between domains, representations, or teaching layers;
