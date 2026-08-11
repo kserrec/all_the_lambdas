@@ -15,13 +15,23 @@ numbers, integers, rationals, lists, algorithms, binary numeric encodings,
 runtime typing disciplines, and data structures. Racket is the host language,
 Lazy Racket supplies the evaluation strategy, but the object language — the
 thing actually being programmed in — remains lambda-calculus encodings.
-*(Exceptions are things of necessity, like printing out results or syntactic
-sugar. Even the types are made out of untyped lambdas.)*
+Racket's boundary roles are limited to hosting and evaluating the terms,
+mechanically expanding readable sugar, and observing completed encodings for
+human output and tests. Even the types are made out of untyped lambdas.
 
 None of the individual ingredients are new — Church encodings, runtime tags,
 binary arithmetic, and contract-style checking are all known ideas. The
 distinctive part is the continuity: the same lambda-built world keeps getting
 extended, piece by piece, into a substantial executable, tested library.
+
+If you want to learn from that progression rather than browse it at random,
+clone the repository and open the self-contained **[Interactive Learning
+Path](LEARNING_PATH.html)** in a browser. It gives the repository a
+dependency-aware spine from Boolean selection through Church numerals,
+recursion, lists, composed number systems, algorithms, binary representations,
+and lambda-encoded runtime typing. Each stop names the source definitions to
+study, the idea they contribute, the focused test coverage that exists, and a
+checkpoint for knowing when to move on.
 
 [Here](https://personal.utdallas.edu/~gupta/courses/apl/lambda.pdf) is a link to a short introduction to the Lambda Calculus.
 Ideas have also been taken from this book, [Functional Programming Through Lambda Calculus](https://www.macs.hw.ac.uk/~greg/books/gjm.lambook88.pdf), and elsewhere. Other resources can easily be found online.
@@ -141,20 +151,46 @@ does not produce either a value or an error; evaluation continues indefinitely.
 #### Repository Map:
 | Where | What | Flavor |
 |---|---|---|
-| `bitter/` | Logic, numerals, recursion, lists, algorithms | Purest: raw nested lambdas, zero sugar |
-| root `*.rkt` | The same material, plus integers, rationals, binary lists (natural and signed) | Sugared: `def`, `_if`, `_let`, `_cons` |
+| `bitter/` | A partial parallel route through logic, numerals, recursion, division, lists, integers, and binary search | Purest: raw nested lambdas, zero sugar |
+| root `*.rkt` | The continuous raw library: logic, numerals, recursion, collections, composed number families, algorithms, and binary-backed numbers | Sugared: `def`, `_if`, `_let`, `_cons` |
 | `types/` | Strict embedded type system, typed wrappers, and `Result`-returning safe rational division | Sugared + typed |
 | `types/coercive/` | Alternate type system that coerces instead of rejecting; rational division returns explicit errors after coercion (wip) | Sugared + typed |
 | `macros/` | The sugar itself — Racket macros that expand to pure nested lambdas | Not lambda calculus; the translator |
 | `data-structures-as-closures/` | Key/value structures as closures (after Michaelson) | Sugared |
 | `bitter/tests/`, `tests/`, `types/tests/`, `types/coercive/tests/` | Test suites (shared helpers in `tests/helpers/`) | — |
 
-The three flavors are deliberate: same ideas, increasing comfort. Purity lives in what the code expands to, and everything expands to pure untyped lambda calculus.
+The overlap is deliberate, but the branches do not all have identical
+coverage. Use the root modules as the main learning spine, `bitter/` as a
+microscope for selected unsugared definitions, `types/` for strict runtime
+boundaries, and `types/coercive/` for the alternate conversion experiment.
+Purity lives in the computational terms: every object-language operation is
+already, or mechanically expands to, pure untyped lambda calculus.
 
-#### How to Run Tests:
-1. Download [Racket](https://racket-lang.org/) and the *lazy* package (`raco pkg install --auto lazy`)
-2. From root, run `./run-all-tests.sh`
-3. Or run one file or folder: `./run-all-tests.sh tests/logic-test.rkt`, `./run-all-tests.sh types`
+For the maintainer-oriented module dependencies, execution boundary, and
+end-to-end implementation flows, read [ARCHITECTURE.md](ARCHITECTURE.md).
+
+#### Setup and tests
+
+This is a library and teaching repository, not an application with a server or
+single runtime entry point. After cloning it, install
+[Racket](https://racket-lang.org/) and the `lazy` package:
+
+```bash
+raco pkg install --auto lazy
+```
+
+From the repository root, run every test:
+
+```bash
+./run-all-tests.sh
+```
+
+Or shrink the loop to one file or one test directory:
+
+```bash
+./run-all-tests.sh tests/logic-test.rkt
+./run-all-tests.sh types
+```
 
 The full suite deliberately spends about one minute checking partial division:
 `tests/nontermination-test.rkt` starts a fresh Lazy Racket process for each of
@@ -166,11 +202,38 @@ harness.
 Tests also run automatically on every push via GitHub Actions (`.github/workflows/tests.yml`).
 
 
-#### How to Dissect:
-- I recommend starting in the bitter folder with logic.rkt. Logic is where it all begins. And bitter is most pure.
-- But if you want syntactic sugar, stay in the root and follow the same path I will outline here.
-- Or if you want types and sugar, go to the types folder, but still the steps are the same -  start with logic wherever you go. It's only logical.
-- Then go to church. Because after logic comes numbers. 
-- Then recursion.rkt. We need this. 
-- From there you can branch out to division or lists or integers.
-- Then algorithms, binary-lists, wherever
+#### How to Learn from the Repository
+
+Use the root modules as the main route because they carry the ideas all the way
+through the current library. At the beginning, compare a few definitions in
+`logic.rkt` with `bitter/logic.rkt` and inspect `macros/macros.rkt`; that proves
+the root notation mechanically expands to nested lambdas. Return to `bitter/`
+whenever you want the unsugared form, rather than maintaining two separate
+walkthroughs in your head.
+
+The full order is:
+
+1. logic and selection;
+2. Church numerals and iteration;
+3. fixed-point recursion;
+4. pairs, lists, and higher-order traversal;
+5. division, signed integers, and rationals;
+6. search and sorting;
+7. binary naturals, signed binary integers, and binary rationals;
+8. strict runtime tags, errors, `Option`, and `Result`; and
+9. the coercive runtime-tagged experiment.
+
+The self-contained **[Interactive Learning Path](LEARNING_PATH.html)** explains
+why this order matters, identifies the exact definitions and tests at every
+stop, and adds collapsible lessons, search, route filters, progress tracking,
+and copyable test commands. Open it locally after cloning the repository.
+
+#### Documentation map
+
+- [Interactive Learning Path](LEARNING_PATH.html) — the guided teaching route
+  through source, concepts, and focused evidence.
+- [Architecture](ARCHITECTURE.md) — module ownership, object/host boundaries,
+  end-to-end flows, and contribution mechanics.
+- [Roadmap](ROADMAP.md) — live decisions, deferred work, and possible future
+  directions. [Roadmap Archive](ROADMAP-ARCHIVE.md) holds the verbatim
+  completed implementation history.
