@@ -557,8 +557,8 @@
     (test-list-element "bin-eq(bin-four)(bin-five)"
         (b-read ((bin-eq bin-four) bin-five)) "false")
     ; unnormalized vs normalized still compare equal (bin-gte/lte normalize)
-    (test-list-element "bin-eq(bin-one)(bin-one)"
-        (b-read ((bin-eq bin-one) bin-one)) "true")
+    (test-list-element "bin-eq((_cons zero one))(bin-one)"
+        (b-read ((bin-eq (_cons zero one)) bin-one)) "true")
     ; scalability
     (test-list-element "bin-eq(bin-one-billion)(bin-one-billion)"
         (b-read ((bin-eq bin-one-billion) bin-one-billion)) "true")

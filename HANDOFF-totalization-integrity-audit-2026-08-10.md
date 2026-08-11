@@ -1,14 +1,15 @@
 # All the Lambdas — Integrity Audit Handoff
 
-> **Superseded later on 2026-08-10.** Kyle approved preserving the existing raw
+> **Superseded; status advanced 2026-08-11.** Kyle approved preserving the existing raw
 > rational behavior: untyped Church-backed and untyped binary-backed division
 > by rational zero still returns rational zero. Strict and coercive
 > runtime-tagged rational division now return explicit errors for a
 > rational-zero divisor. The implementation and current evidence are tracked in
-> `ROADMAP.md`. The next five approved, single-pass integrity phases are also
-> ordered there; a future `$next` starts with the test label/expression
-> corrections in Integrity Phase 1. The findings below describe the pre-change
-> state and preserve the later issues that still require decisions.
+> `ROADMAP.md`. Integrity Phase 1's bounded test-claim corrections completed on
+> 2026-08-11; the four remaining approved, single-pass integrity phases are
+> ordered there, and a future `$next` starts with Integrity Phase 2's `bitter/`
+> restoration. The findings below describe the pre-change state and preserve
+> the later issues that still require decisions.
 
 > Created 2026-08-10 for resuming this discussion in a new session.
 >

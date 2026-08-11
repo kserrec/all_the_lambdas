@@ -6,12 +6,16 @@ The sugar layer (macros) and tooling (test runner, CI) are ordinary
 Racket/bash and may be improved freely — but readability-as-teaching-material
 is valued there too, so explicit beats clever.
 
-## Session status (as of 2026-08-10)
+## Session status (as of 2026-08-11)
 
 The current priority is the ordered **remaining integrity work** queue below.
-A new session invoked with `$next` must start with **Integrity Phase 1 — make
-green tests execute their claimed cases**, complete that one phase, update this
+A new session invoked with `$next` must start with **Integrity Phase 2 — restore
+and cover the `bitter/` teaching route**, complete that one phase, update this
 roadmap, and stop. Each integrity phase is intentionally sized for one pass.
+
+Integrity Phase 1 is complete. The bounded strict, coercive, and binary test
+claims named by that phase now execute the cases their labels describe; all
+1,745 repository tests still pass.
 
 The targeted rational-division phase is complete. Its raw implementations were
 preserved behaviorally, a strict runtime-tagged rational division module was
@@ -66,25 +70,34 @@ This queue is ordered. One `$next` session completes exactly one integrity
 phase, including its steps, focused verification, roadmap update, and stopping
 point. Do not combine consecutive phases merely because time remains.
 
-### Integrity Phase 1 — make green tests execute their claimed cases
+### Integrity Phase 1 — make green tests execute their claimed cases (complete 2026-08-11)
 
-- [ ] **Step 1. Repair the recorded strict test mismatches** — in
+- [x] **Step 1. Repair the recorded strict test mismatches** — in
   `types/tests/CHURCH-test.rkt`, reconcile each label, expression, and expected
   value for `MULT(ZERO)(ONE)`, `MULT(FIVE)(FIVE)`, `DIV(ZERO)(FOUR)`, and
   `MOD(FIVE)(FIVE)`. Determine the intended case from the surrounding test
   sequence before editing; do not silently rename a label to preserve a copied
-  expression.
-- [ ] **Step 2. Repair the corresponding coercive mismatches** — perform the
+  expression. Completed 2026-08-11: those claims now assert results `nat:0`,
+  `nat:25`, `nat:0`, and `nat:0`, respectively; the bounded adjacent scan also
+  corrected `MOD(ZERO)(FOUR) => nat:0`.
+- [x] **Step 2. Repair the corresponding coercive mismatches** — perform the
   same evidence-based corrections in `types/coercive/tests/CHURCH-test.rkt`,
-  preserving intentional coercion cases.
-- [ ] **Step 3. Make the binary normalization comparison real** — replace the
+  preserving intentional coercion cases. Completed 2026-08-11: the same five
+  arithmetic claims now execute their labels, and the adjacent scan corrected
+  `MULT(FOUR)(ERROR) => nat:0` plus the intentional coercion case
+  `DIV(posFOUR)(negTWO) => nat:2`.
+- [x] **Step 3. Make the binary normalization comparison real** — replace the
   `tests/binary-lists-test.rkt` case labeled “unnormalized vs normalized” that
   currently compares `bin-one` with itself with an actual leading-zero binary
-  representation compared against canonical `bin-one`.
-- [ ] **Step 4. Bound and verify the correction** — inspect the adjacent
+  representation compared against canonical `bin-one`. Completed 2026-08-11:
+  `bin-eq((_cons zero one))(bin-one) => true` now compares `[0,1]` with `[1]`.
+- [x] **Step 4. Bound and verify the correction** — inspect the adjacent
   `MULT`, `DIV`, `MOD`, and `bin-eq` groups for the same copy/paste failure;
   run the three affected test files and then the full repository runner. Record
-  every corrected claim and the resulting counts here.
+  every corrected claim and the resulting counts here. Completed 2026-08-11:
+  the three affected files pass 478/478 tests (strict 127, coercive 148, binary
+  203), and the full 24-file repository run passes 1,745/1,745 with zero
+  failures.
 
 ### Integrity Phase 2 — restore and cover the `bitter/` teaching route
 
@@ -167,8 +180,14 @@ point. Do not combine consecutive phases merely because time remains.
 The audit handoff also records signed-zero exponentiation inconsistency,
 binary-search nontermination and false strict tagging, `IND-OPT` type/Option
 violations, reader diagnostic copy errors, and incorrect teaching equations.
+Phase 1's context inspection also directly observed green claim mismatches
+outside its authorized `MULT`/`DIV`/`MOD`/`bin-eq` boundary: strict
+`IS_ZERO(TRUE)` and `SUB(FIVE)(FIVE)`; coercive `IS_ZERO(FALSE)`,
+`SUB(FIVE)(FIVE)`, `EXP(ZERO)(ONE)`, `EXP(FIVE)(FIVE)`, and
+`EXP(FOUR)(ERROR)`; and binary `bin-add(bin-zero)(bin-one)`. These were not
+changed in Phase 1 and have not received their own repair authorization.
 Do not start those repairs merely because the five phases above finish; discuss
-their behavioral decisions with Kyle first.
+their scope, and any behavioral decisions they require, with Kyle first.
 
 ## Phase 2 — continuing the build (from ~/all-the-lambdas-notes.md priorities)
 

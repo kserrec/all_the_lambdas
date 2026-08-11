@@ -71,13 +71,13 @@
 (define MULT-tests (list
     (test-list-element "MULT(ZERO)(ZERO)" (read-any ((MULT ZERO) ZERO)) "nat:0")
     (test-list-element "MULT(ONE)(ZERO)" (read-any ((MULT ONE) ZERO)) "nat:0")
-    (test-list-element "MULT(ZERO)(ONE)" (read-any ((MULT THREE) ONE)) "nat:3")
+    (test-list-element "MULT(ZERO)(ONE)" (read-any ((MULT ZERO) ONE)) "nat:0")
     (test-list-element "MULT(FIVE)(ONE)" (read-any ((MULT FIVE) ONE)) "nat:5")
     (test-list-element "MULT(ONE)(TWO)" (read-any ((MULT ONE) TWO)) "nat:2")
     (test-list-element "MULT(THREE)(FOUR)" (read-any ((MULT THREE) FOUR)) "nat:12")
     (test-list-element "MULT(FOUR)(THREE)" (read-any ((MULT FOUR) THREE)) "nat:12")
     (test-list-element "MULT(TWO)(TWO)" (read-any ((MULT TWO) TWO)) "nat:4")
-    (test-list-element "MULT(FIVE)(FIVE)" (read-any ((MULT FIVE) TWO)) "nat:10")
+    (test-list-element "MULT(FIVE)(FIVE)" (read-any ((MULT FIVE) FIVE)) "nat:25")
     ; type fails
     (test-list-element "MULT(TRUE)(FIVE)" (read-any ((MULT TRUE) FIVE)) "MULT(arg1(err:nat))")
     (test-list-element "MULT(negTWO)(FIVE)" (read-any ((MULT negTWO) FIVE)) "MULT(arg1(err:nat))")
@@ -91,7 +91,7 @@
 
 (define DIV-tests (list
     (test-list-element "DIV(ZERO)(ONE)" (read-any ((DIV ZERO) ONE)) "nat:0")
-    (test-list-element "DIV(ZERO)(FOUR)" (read-any ((DIV ZERO) ONE)) "nat:0")
+    (test-list-element "DIV(ZERO)(FOUR)" (read-any ((DIV ZERO) FOUR)) "nat:0")
     (test-list-element "DIV(FIVE)(ONE)" (read-any ((DIV FIVE) ONE)) "nat:5")
     (test-list-element "DIV(ONE)(TWO)" (read-any ((DIV ONE) TWO)) "nat:0")
     (test-list-element "DIV(THREE)(FOUR)" (read-any ((DIV THREE) FOUR)) "nat:0")
@@ -113,13 +113,13 @@
 
 (define MOD-tests (list
     (test-list-element "MOD(ZERO)(ONE)" (read-any ((MOD ZERO) ONE)) "nat:0")
-    (test-list-element "MOD(ZERO)(FOUR)" (read-any ((MOD ZERO) ONE)) "nat:0")
+    (test-list-element "MOD(ZERO)(FOUR)" (read-any ((MOD ZERO) FOUR)) "nat:0")
     (test-list-element "MOD(FIVE)(ONE)" (read-any ((MOD FIVE) ONE)) "nat:0")
     (test-list-element "MOD(ONE)(TWO)" (read-any ((MOD ONE) TWO)) "nat:1")
     (test-list-element "MOD(THREE)(FOUR)" (read-any ((MOD THREE) FOUR)) "nat:3")
     (test-list-element "MOD(FOUR)(THREE)" (read-any ((MOD FOUR) THREE)) "nat:1")
     (test-list-element "MOD(TWO)(TWO)" (read-any ((MOD TWO) TWO)) "nat:0")
-    (test-list-element "MOD(FIVE)(FIVE)" (read-any ((MOD FIVE) FOUR)) "nat:1")
+    (test-list-element "MOD(FIVE)(FIVE)" (read-any ((MOD FIVE) FIVE)) "nat:0")
     (test-list-element "MOD(FOUR)(TWO)" (read-any ((MOD FOUR) TWO)) "nat:0")
     (test-list-element "MOD(SUCC(FIVE))(TWO)" (read-any ((MOD (SUCC FIVE)) TWO)) "nat:0")
     ; type fails
