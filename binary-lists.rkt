@@ -456,6 +456,14 @@
 ;===================================================   
 
 
+#|
+    ~ BINARY DIGIT LIST DIVISION ~
+    - Contract: (bin-list,bin-list) => bin-list quotient
+    - Logic: grade-school long division, normalized to canonical binary form
+    - Zero-divisor policy: totalized as quotient bin-zero. Together with
+                           bin-div-n-mod, this chooses the whole dividend as
+                           remainder and preserves dividend = q*divisor + r.
+|#
 (def bin-div l1 l2 = 
     (_let both-zero = ((_or (bin-is-zero l1)) (bin-is-zero l2))
     (_if ((_or both-zero) ((bin-lt l1) l2))
@@ -495,8 +503,7 @@
         - Get the quotient from bin-div
         - Multiply it back by the divisor and subtract from the dividend
         - Return both as a pair
-    Note: division by zero keeps bin-div's convention (quotient zero),
-          which makes the remainder the whole dividend
+    Zero-divisor policy: quotient bin-zero, remainder the canonical dividend
 |#
 (def bin-div-n-mod l1 l2 =
     (_let q = ((bin-div l1) l2)
@@ -507,6 +514,7 @@
     ~ BINARY DIGIT LIST MODULO ~
     Contract: (bin-list, bin-list) => bin-list
     Logic: just the remainder part of bin-div-n-mod
+    Zero-divisor policy: x mod bin-zero = x
 |#
 (def bin-mod l1 l2 = (tail ((bin-div-n-mod l1) l2)))
 

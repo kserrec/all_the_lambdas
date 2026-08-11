@@ -178,6 +178,9 @@
                 and do regular division for number
     - Note: quotient truncates toward zero (e.g. -3/2 => -1), since the
             magnitude is divided as a natural number
+    - Zero-divisor policy: inherits bin-div's zero quotient magnitude. The sign
+                           is still computed normally, but the signed-zero
+                           convention makes either sign readable and equal as 0.
 |#
 (def divZ-bin z1-bin z2-bin =
     ; let vars

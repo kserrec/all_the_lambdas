@@ -81,6 +81,9 @@
     ~ DIVISION ~
     - Contract: (INT,INT) => INT
     - Idea: Z1,Z2 => Z1/Z2
+    - Boundary: validates the runtime tags, then delegates to raw divZ
+    - Partiality: a correctly tagged zero divisor does not terminate; this
+                  strict wrapper does not turn the domain failure into an error
 |#
 (def DIVz Z1 Z2 = (((((((fully-type2 divZ) "DIVz") int) Z1) int) Z2) int))
 

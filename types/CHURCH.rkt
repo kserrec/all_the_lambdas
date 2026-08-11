@@ -99,6 +99,9 @@
     ~ DIVISION ~
     - Contract: (NAT,NAT) => NAT
     - Idea: M,N => M/N
+    - Boundary: validates the runtime tags, then delegates to raw div
+    - Partiality: a correctly tagged zero divisor does not terminate; this
+                  strict wrapper does not turn the domain failure into an error
 |#
 (def DIV M N = (((((((fully-type2 div) "DIV") nat) M) nat) N) nat))
 
@@ -106,6 +109,8 @@
     ~ MODULO ~
     - Contract: (NAT,NAT) => NAT
     - Idea: Same as remainder for natural numbers
+    - Partiality: a correctly tagged zero divisor inherits raw mod's
+                  nontermination
 |#
 (def MOD M N = (((((((fully-type2 mod) "MOD") nat) M) nat) N) nat))
 

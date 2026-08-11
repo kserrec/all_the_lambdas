@@ -193,6 +193,10 @@
     - Idea: z1,z2 => z1/z2
     - Logic: Negate logical xor (if both same sign, true, else false) for sign 
                 and do regular division for number
+    - Defined domain: the divisor magnitude is nonzero
+    - Partiality: delegates to raw Church-natural div. Demanding a result for
+                  a zero divisor does not terminate and does not return an
+                  error value.
 |#
 (def divZ z1 z2 = 
     ; let vars
@@ -353,7 +357,6 @@
     - Idea: check if nat part is even
 |#
 (def isEvenZ z = (isEven (tail z)))
-
 
 
 

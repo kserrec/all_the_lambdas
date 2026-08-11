@@ -8,13 +8,13 @@ is valued there too, so explicit beats clever.
 
 ## Session status (as of 2026-08-11)
 
-The current priority is the ordered **remaining integrity work** queue below.
-A new session invoked with `$next` must start with **Integrity Phase 5 — declare
-the accepted division policies**: document the partial Church-natural and
-Church-integer boundaries, the coercive zero-divisor errors, and the binary
-quotient/remainder totalization consistently across implementation and teaching
-documents. Complete that one phase, update this roadmap, and stop. Each
-integrity phase is intentionally sized for one pass.
+The ordered integrity-work queue is complete. There is no pre-authorized
+implementation phase for a new `$next` invocation. The next action is a
+decision turn with Kyle: choose whether to address one of the preserved later
+integrity findings (signed-zero exponentiation, binary-search termination and
+false tagging, `IND-OPT`, remaining test-claim mismatches, reader diagnostics,
+or teaching equations) or begin a new Phase 3 product track. The deferred reals
+arc remains set aside and must not be selected without asking.
 
 Integrity Phase 1 is complete. The bounded strict, coercive, and binary test
 claims named by that phase now execute the cases their labels describe; all
@@ -34,6 +34,12 @@ canonical digit lists directly rather than relying on readers to hide an empty
 zero or leading quotient zeroes. Direct structure tests cover the binary-natural
 arithmetic boundary and representative signed-integer and rational consumers;
 the full repository now passes 1,807 tests.
+
+Integrity Phase 5 is complete. The existing division-by-zero choices are now
+declared consistently at their raw, strict, coercive, binary, and rational
+implementation boundaries and in the teaching documents. No executable
+behavior changed; focused probes and all 1,807 repository tests confirm the
+documented policy matrix.
 
 The targeted rational-division phase is complete. Its raw implementations were
 preserved behaviorally, a strict runtime-tagged rational division module was
@@ -218,23 +224,39 @@ point. Do not combine consecutive phases merely because time remains.
   68), and the explicit 26-file repository run passes 1,807/1,807 with zero
   failures.
 
-### Integrity Phase 5 — declare the accepted division policies
+### Integrity Phase 5 — declare the accepted division policies (complete 2026-08-11)
 
-- [ ] **Step 1. Document partial Church division** — state plainly in the raw
+- [x] **Step 1. Document partial Church division** — state plainly in the raw
   Church-natural and Church-integer implementations and their strict
   runtime-tagged wrappers that demanding a zero-divisor result does not
-  terminate; do not describe this as an error return.
-- [ ] **Step 2. Document coercive errors** — state plainly that coercive
+  terminate; do not describe this as an error return. Completed 2026-08-11:
+  `division.rkt`, `integers.rkt`, `types/CHURCH.rkt`, and
+  `types/INTEGERS.rkt` now state the partial domain at the definitions. The
+  bounded subprocess suite passes 8/8: four terminating controls return, while
+  raw `div`/`divZ` and strict `DIV`/`DIVz` remain active at the 10-second
+  zero-divisor deadline.
+- [x] **Step 2. Document coercive errors** — state plainly that coercive
   runtime-tagged natural and integer division checks the coerced divisor and
-  returns `err:div by 0`.
-- [ ] **Step 3. Document the binary totalization** — state plainly that binary
+  returns `err:div by 0`. Completed 2026-08-11: comments at coercive `DIV`,
+  `MOD`, and `DIVz` now name coercion-before-checking and the explicit error.
+  Readable probes for natural and integer zero values plus `FALSE` coercions all
+  return `err:div by 0`.
+- [x] **Step 3. Document the binary totalization** — state plainly that binary
   natural division chooses quotient zero and remainder equal to the dividend
   at a zero divisor, and that signed binary integer division inherits the zero
-  quotient.
-- [ ] **Step 4. Synchronize the teaching documents** — make README,
+  quotient. Completed 2026-08-11: `binary-lists.rkt` and
+  `int-binary-lists.rkt` now state the policy at `bin-div`, `bin-div-n-mod`,
+  `bin-mod`, and `divZ-bin`. Direct readable/structural probes return quotient
+  `0`/`[0]`, remainder `5`/`[1,0,1]`, and signed quotient `0`/`[0]`.
+- [x] **Step 4. Synchronize the teaching documents** — make README,
   `CLAUDE.md`, implementation comments, and the evaluation describe the same
   domain-and-layer policy; run focused readable probes and the full repository
-  runner before marking the queue complete.
+  runner before marking the queue complete. Completed 2026-08-11: README and
+  `CLAUDE.md` now carry the same five-row policy matrix; the evaluation and
+  audit handoff record the resolved status and current evidence. Eight affected
+  ordinary suites pass 894/894, the bounded partiality suite passes 8/8, all
+  readable probes match the documentation, and the explicit 26-file repository
+  run passes 1,807/1,807 with zero failures.
 
 ### Later integrity findings — preserved, not authorized by this queue
 

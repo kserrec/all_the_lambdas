@@ -37,6 +37,12 @@
 
 (def EXPz Z1 Z2 = (((((COERCE-2 expZ) convert-to-int) Z1) Z2) int))
 
+#|
+    ~ COERCIVE INTEGER DIVISION ~
+    - Boundary: IS_ZEROz coerces the divisor to INT before checking it
+    - Zero-divisor policy: return err:div by 0 instead of entering the partial
+                           raw divZ operation
+|#
 (def DIVz Z1 Z2 = 
     (IF (IS_ZEROz Z2)
         THEN (make-int-err "err:div by 0")

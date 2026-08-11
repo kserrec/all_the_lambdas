@@ -37,6 +37,12 @@
 
 (def EXP N1 N2 = (((((COERCE-2 _exp) convert-to-nat) N1) N2) nat))
 
+#|
+    ~ COERCIVE DIVISION AND MODULO ~
+    - Boundary: IS_ZERO coerces the divisor to NAT before checking it
+    - Zero-divisor policy: return err:div by 0 instead of entering the partial
+                           raw div/mod operation
+|#
 (def DIV N1 N2 = 
     (IF (IS_ZERO N2)
         THEN (make-nat-err "err:div by 0")
@@ -60,4 +66,3 @@
 (def GT N1 N2 = (((((COERCE-2 gt) convert-to-nat) N1) N2) bool))
 
 (def LT N1 N2 = (((((COERCE-2 lt) convert-to-nat) N1) N2) bool))
-

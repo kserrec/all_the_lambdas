@@ -100,6 +100,19 @@ them through readers.
   division checks the divisor after coercion and returns a typed error directly.
   Both guards wrap the unchanged raw rational operation.
 
+**Division-by-zero policies** are intentionally layer-specific:
+
+- Raw Church-natural `div` and Church-integer `divZ` are partial at a zero
+  divisor: demanding the result does not terminate and does not return an error.
+  Strict runtime-tagged `DIV`/`DIVz` validate tags but inherit that partiality.
+- Coercive runtime-tagged natural and integer division coerces the divisor,
+  checks the coerced zero, and returns `err:div by 0`.
+- Binary-natural division totalizes `x / 0` as quotient `[0]` and `x mod 0` as
+  the canonical dividend; signed binary division inherits the zero magnitude.
+- Raw Church-backed and binary-backed rational division totalizes a
+  rational-zero divisor as rational zero. Strict and coercive runtime-tagged
+  rational boundaries override that raw result with their documented errors.
+
 **Tests.** Most object-language tests compare reader output strings:
 `(test-list-element "label" (bin-read expr) "42")`, grouped into a list and
 reported with `(show-results "group" tests)`. Test files must explicitly

@@ -5,12 +5,11 @@
 > by rational zero still returns rational zero. Strict and coercive
 > runtime-tagged rational division now return explicit errors for a
 > rational-zero divisor. The implementation and current evidence are tracked in
-> `ROADMAP.md`. Integrity Phases 1 through 4 completed on 2026-08-11; the one
-> remaining approved, single-pass integrity phase is ordered there, and a
-> future `$next` starts by documenting the accepted division policies across
-> representations and layers in Integrity Phase 5. The findings below describe
-> the pre-change state and preserve the later issues that still require
-> decisions.
+> `ROADMAP.md`. Integrity Phases 1 through 5 completed on 2026-08-11, so no
+> pre-authorized integrity phase remains for `$next`. The next action is a
+> decision with Kyle: choose a preserved later finding or a new Phase 3 product
+> track. The findings below describe the pre-change state and preserve those
+> later issues that still require decisions.
 
 > Created 2026-08-10 for resuming this discussion in a new session.
 >
@@ -39,7 +38,7 @@
 
 ## Next step
 
-Read this handoff with Kyle and discuss which currently undeclared semantic differences should become explicit, documented policies and which should be aligned. Do not edit implementation or solidify a phase-and-step plan until Kyle has made the decisions that materially affect behavior.
+The five approved integrity phases are complete. Before further implementation, Kyle must choose either one preserved later integrity finding or a new Phase 3 product track; the roadmap names both sets precisely. The reals arc remains explicitly deferred.
 
 ## Watch-outs
 
@@ -58,7 +57,7 @@ Read this handoff with Kyle and discuss which currently undeclared semantic diff
 
 ## Main conclusion
 
-The totalizing choices are individually defensible. The integrity problem is that the project currently applies several different policies without declaring where each policy belongs.
+The totalizing choices are individually defensible. At audit time, the integrity problem was that the project applied several different policies without declaring where each policy belonged. Integrity Phase 5 later declared those domain-and-layer policies without changing them.
 
 The evaluation should therefore say: “division by zero returns zero” is not itself a defect. The defect is semantic drift between representations and layers.
 
@@ -78,7 +77,8 @@ When the result is demanded, the project currently has four behaviors:
 | Binary integers | Returns readable integer `0` |
 | Church rationals | `(1/2) / 0` returns rational `0` |
 | Binary rationals | `(1/2) / 0` returns rational `0` |
-| Coercive rationals | `(1/2) / 0` returns `rat:0` |
+| Strict typed rationals | Returns `result:err(err:div by 0)` |
+| Coercive typed rationals | Returns `err:div by 0` after coercion |
 
 The unary Church implementation in `division.rkt` repeatedly asks whether the divisor is greater than the remaining dividend. With divisor zero, that condition never becomes true because `n × 0` always remains zero. The recursion therefore never makes semantic progress. `mod` inherits the same behavior because it calls `div`.
 
@@ -98,7 +98,7 @@ dividend = quotient × divisor + remainder
 
 The coercive natural and integer layers explicitly return errors in `types/coercive/CHURCH.rkt` and `types/coercive/INTEGERS.rkt`.
 
-The rational encodings make a different but deliberate choice: any rational with a zero numerator or zero denominator counts as rational zero in `rationals.rkt`. Consequently, reciprocating zero creates a denominator-zero representation, which collapses back into rational zero. Unary rationals, binary rationals, and coercive rationals agree on this.
+The raw rational encodings make a different but deliberate choice: any rational with a zero numerator or zero denominator counts as rational zero in `rationals.rkt`. Consequently, reciprocating zero creates a denominator-zero representation, which collapses back into rational zero. Raw unary and binary rationals agree on this. Their strict and coercive runtime-tagged boundaries now deliberately override a rational-zero divisor with explicit errors.
 
 The resulting judgment is:
 
@@ -106,9 +106,9 @@ The resulting judgment is:
 - The binary quotient/remainder policy is internally coherent.
 - Returning an error value is coherent.
 - Leaving division partial is normal in lambda calculus.
-- Having all four without an explicit domain-and-layer policy is the integrity problem.
-- The clearest direct mismatches are Church naturals versus binary naturals, and Church integers versus binary integers: changing only the representation changes whether the same operation terminates.
-- Strict versus coercive behavior may intentionally differ because they are different experiments. But `types/coercive/TYPES.rkt` claims the coercive layer provides “guardrails (like no division by zero),” while coercive rational division returns zero rather than an error. That is a direct contradiction inside the coercive layer's stated policy.
+- Having all four without an explicit domain-and-layer policy was the integrity problem; the completed integrity queue now declares the boundary at each implementation and teaching surface.
+- Church naturals versus binary naturals, and Church integers versus binary integers, intentionally demonstrate that changing representation can also change whether the same operation is partial or totalized.
+- Strict versus coercive behavior intentionally differs because they are different experiments. Coercive rational division now matches that layer's stated zero-divisor guardrail by returning an explicit error after coercion.
 
 ## Totalizations that are largely consistent
 

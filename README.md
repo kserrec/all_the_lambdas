@@ -124,6 +124,20 @@ The point is not just that lambda calculus *can* encode arithmetic (that's the
 tutorial part). It's that once enough structure exists, ordinary algorithm
 design reappears inside the lambda universe.
 
+#### Division by Zero Is Layer-Specific
+
+The project deliberately keeps several division policies because the layers
+are exploring different ideas. Here, *partial* means that demanding the result
+does not produce either a value or an error; evaluation continues indefinitely.
+
+| Number family and layer | Zero-divisor policy |
+|---|---|
+| Raw Church naturals and integers; strict runtime-tagged wrappers | `div`/`divZ` and correctly tagged `DIV`/`DIVz` are partial and do not terminate. Raw/strict natural modulo inherits the same boundary. |
+| Coercive runtime-tagged naturals and integers | Coerce the divisor, then return `err:div by 0` when the coerced value is zero. |
+| Binary naturals and signed binary integers | `bin-div x 0 = 0`, `bin-mod x 0 = x`, and signed division inherits the zero quotient magnitude. This preserves `x = quotient × divisor + remainder`. |
+| Raw Church-backed and binary-backed rationals | A zero numerator or denominator represents rational zero, so division by rational zero returns rational zero. |
+| Runtime-tagged rationals | Strict division returns `result:err(err:div by 0)`; coercive division checks after coercion and returns `err:div by 0`. |
+
 #### Repository Map:
 | Where | What | Flavor |
 |---|---|---|
@@ -142,7 +156,7 @@ The three flavors are deliberate: same ideas, increasing comfort. Purity lives i
 2. From root, run `./run-all-tests.sh`
 3. Or run one file or folder: `./run-all-tests.sh tests/logic-test.rkt`, `./run-all-tests.sh types`
 
-The full suite deliberately spends 40 seconds checking partial division:
+The full suite deliberately spends about one minute checking partial division:
 `tests/nontermination-test.rkt` starts a fresh Lazy Racket process for each of
 four approved zero-divisor expressions and requires each one to remain active
 until a 10-second deadline. Matching terminating controls ensure the deadline

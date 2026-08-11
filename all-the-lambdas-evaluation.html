@@ -1380,20 +1380,21 @@
           <strong>Keep the thesis. Stabilize the boundaries. Then build the language branch.</strong>
           <p>
             The project already succeeds as an unusually ambitious executable lambda-calculus laboratory.
-            It is not yet dependable as a fully traversable teaching path because its advertised raw on-ramp is broken
-            and several boundaries make contradictory, undocumented, or unverified claims. Repair those foundations first; the
-            strongest next major extension is strings → parser combinators → lambda terms as data.
+            The completed five-phase integrity queue restored and tested the raw on-ramp, repaired the audited test claims,
+            bounded deliberate nontermination, enforced canonical binary structure, and declared the division policies.
+            Later findings remain, but the strongest next major extension is still strings → parser combinators → lambda
+            terms as data once those remaining priorities are discussed.
           </p>
         </div>
       </div>
 
       <div class="metrics" aria-label="Audit metrics">
-        <div class="metric"><strong>70</strong><span>current project files</span></div>
-        <div class="metric"><strong>64</strong><span>Racket source and test files</span></div>
-        <div class="metric"><strong>12,227</strong><span>lines of Racket, Markdown, shell, and CI material</span></div>
-        <div class="metric"><strong>24</strong><span>test modules executed by the main runner</span></div>
-        <div class="metric"><strong>211</strong><span>named test groups</span></div>
-        <div class="metric"><strong>1,745 / 0</strong><span>passing / failing assertions in the green suite</span></div>
+        <div class="metric"><strong>74</strong><span>current project files</span></div>
+        <div class="metric"><strong>66</strong><span>Racket source and test files</span></div>
+        <div class="metric"><strong>12,880</strong><span>lines of Racket, Markdown, shell, and CI material</span></div>
+        <div class="metric"><strong>26</strong><span>test modules executed by the main runner</span></div>
+        <div class="metric"><strong>216</strong><span>named test groups</span></div>
+        <div class="metric"><strong>1,807 / 0</strong><span>passing / failing assertions in the green suite</span></div>
       </div>
     </div>
   </header>
@@ -1504,12 +1505,12 @@
           <div class="score-row">
             <strong>Pedagogical sequencing</strong>
             <span class="rating mixed">Promising, uneven</span>
-            <p>The conceptual progression is rich, but the advertised first route breaks and later modules read more like a library than a guided course.</p>
+            <p>The conceptual progression is rich and the advertised first route now runs, but later modules still read more like a library than a guided course.</p>
           </div>
           <div class="score-row">
             <strong>Executable evidence</strong>
             <span class="rating mixed">Broad, incomplete</span>
-            <p>1,745 passing assertions are meaningful, but entire branches and representation invariants sit outside that green signal.</p>
+            <p>1,807 passing assertions now include the raw branch, bounded partiality, and binary structure, while later findings still sit outside that green signal.</p>
           </div>
           <div class="score-row">
             <strong>Extensibility</strong>
@@ -1778,7 +1779,7 @@
           <article class="card">
             <h3>Executable review</h3>
             <ul>
-              <li>Ran the complete test runner after the rational-boundary work: 1,745 passes, zero reported failures.</li>
+              <li>Ran the complete test runner after the integrity queue: 1,807 passes, zero reported failures.</li>
               <li>Loaded every non-test Racket module independently to find branches outside test discovery.</li>
               <li>Used isolated timeouts to distinguish nontermination from slow execution.</li>
               <li>Probed internal binary digit shapes, typed readers, safe indexing, rational zero behavior, and closure-demo outputs.</li>
@@ -1815,30 +1816,35 @@
               <span class="finding-id">F-01 · Traversability</span>
               <span class="severity high">High</span>
             </div>
-            <h3>The recommended raw on-ramp is broken at <code>bitter/lists.rkt</code>.</h3>
+            <h3>The recommended raw on-ramp was broken at <code>bitter/lists.rkt</code> (resolved).</h3>
             <p>
-              The README recommends beginning in <code>bitter/</code>, but that branch comments out its local
-              <code>pair</code> and <code>nil</code> definitions and does not import replacements. Loading the module
-              stops at its first <code>pair</code> use with <code>pair: unbound identifier</code>. The integer and
-              algorithm modules that depend on it fail for the same reason.
+              <strong>Resolution:</strong> Integrity Phase 2 restored the raw <code>pair</code>/<code>nil</code>
+              definitions, corrected mixed-sign integer addition, and added a discovered
+              <code>bitter/tests/</code> suite. The focused route passes 10/10 tests and all seven library modules plus
+              the human-readable demonstration load successfully.
             </p>
             <p>
-              <strong>Why it matters:</strong> the project’s pedagogically purest route is also the first route a learner
-              is explicitly told to take. Because no bitter module is under the main <code>tests/</code> tree, the complete
-              suite remains green.
+              At audit time, the README recommended beginning in <code>bitter/</code>, but that branch had commented out
+              its local <code>pair</code> and <code>nil</code> definitions without importing replacements. Loading stopped
+              at the first <code>pair</code> use with <code>pair: unbound identifier</code>; dependent integer and
+              algorithm modules failed for the same reason.
+            </p>
+            <p>
+              <strong>Why it mattered:</strong> the project’s pedagogically purest route was also the first route a learner
+              was explicitly told to take, while no bitter module was then under test discovery.
             </p>
             <details>
               <summary>Evidence and repair direction</summary>
               <div class="detail-body">
                 <ul>
                   <li><code>README.md:146</code> recommends starting with bitter logic.</li>
-                  <li><code>bitter/lists.rkt:38–53</code> comments out <code>pair</code> and <code>nil</code>; the first unresolved use is near line 84.</li>
-                  <li><code>bitter/test.rkt</code>, <code>bitter/integers.rkt</code>, and <code>bitter/algorithms.rkt</code> consequently do not load.</li>
-                  <li>Once loadability is restored, mixed-sign <code>addZ</code> also needs correction: its positive/negative case subtracts the magnitudes in reverse order, so the written definition would map +5 + −2 to 0 rather than 3.</li>
+                  <li><code>bitter/lists.rkt:38–53</code> had commented out <code>pair</code> and <code>nil</code>; the first unresolved use was near line 84.</li>
+                  <li><code>bitter/test.rkt</code>, <code>bitter/integers.rkt</code>, and <code>bitter/algorithms.rkt</code> consequently did not load.</li>
+                  <li>Mixed-sign <code>addZ</code> also subtracted magnitudes in reverse order, mapping +5 + −2 to 0 rather than 3.</li>
                 </ul>
                 <p>
-                  The repair target is not merely “make it compile.” Give bitter its own smoke tests and a small
-                  equivalence suite against the sugared root branch so the raw path cannot drift silently again.
+                  The completed repair restored the local representation, corrected mixed-sign addition, and gave the
+                  branch its own smoke and regression tests so this route cannot drift silently again.
                 </p>
               </div>
             </details>
@@ -1849,7 +1855,7 @@
               <span class="finding-id">F-02 · Mathematical semantics</span>
               <span class="severity medium">Medium</span>
             </div>
-            <h3>Division by zero follows four different, mostly undeclared policies.</h3>
+            <h3>Division by zero follows deliberately different, now-declared policies.</h3>
             <p>
               Raw and strict runtime-tagged Church natural and integer division do not terminate. Coercive natural and
               integer division returns an explicit error. Binary division returns quotient zero and the original
@@ -1858,18 +1864,18 @@
               explicit errors for a divisor that meets that raw zero definition.
             </p>
             <p>
-              <strong>Why it matters:</strong> each choice can be coherent within its layer. The integrity problem is
-              failing to tell a learner which domain uses which policy, especially when changing only a representation
-              or runtime wrapper changes whether an operation returns, errors, or does not terminate.
+              <strong>Resolution:</strong> each choice is coherent within its layer. The README, implementation comments,
+              and repository guide now tell a learner which domain uses which policy, including when changing a
+              representation or runtime wrapper changes whether an operation returns, errors, or does not terminate.
             </p>
             <details>
               <summary>Observed behavior matrix</summary>
               <div class="detail-body">
                 <div class="table-wrap">
                   <table>
-                    <thead><tr><th>Surface</th><th>Observed zero-divisor behavior</th><th>Semantic problem</th></tr></thead>
+                    <thead><tr><th>Surface</th><th>Observed zero-divisor behavior</th><th>Declared policy</th></tr></thead>
                     <tbody>
-                      <tr><td>Raw and strict Church naturals/integers</td><td>Demanding a zero-divisor result does not terminate.</td><td>A conventional partial operation; the remaining problem is that the boundary does not say so clearly.</td></tr>
+                      <tr><td>Raw and strict Church naturals/integers</td><td>Demanding a zero-divisor result does not terminate.</td><td>An intentional partial operation, stated at the raw and strict definitions.</td></tr>
                       <tr><td>Coercive naturals/integers</td><td>Returns <code>err:div by 0</code> after coercing the divisor.</td><td>A coherent runtime-guard policy.</td></tr>
                       <tr><td>Binary naturals/integers</td><td><code>bin-div x 0 = 0</code>; <code>bin-mod x 0 = x</code>; signed division inherits quotient zero.</td><td>A coherent totalization that preserves <code>x = q×d + r</code>.</td></tr>
                       <tr><td>Raw Church/binary rationals</td><td><code>(1/2) / 0 = 0</code>; a zero numerator or denominator counts as rational zero.</td><td>A deliberate raw representation convention, now documented.</td></tr>
@@ -1878,8 +1884,8 @@
                   </table>
                 </div>
                 <p>
-                  Preserve these domain decisions. Finish the integrity work by documenting each policy at its
-                  implementation and teaching boundary, and by testing deliberate nontermination with bounded probes.
+                  These domain decisions are preserved and documented at their implementation and teaching boundaries.
+                  Bounded subprocess tests distinguish deliberate nontermination from crashes and early values.
                 </p>
               </div>
             </details>
@@ -1922,24 +1928,28 @@
               <span class="finding-id">F-04 · Representation invariant</span>
               <span class="severity high">High</span>
             </div>
-            <h3>Public binary functions do not always return the promised canonical representation.</h3>
+            <h3>Public binary arithmetic violated its canonical representation (resolved).</h3>
             <p>
-              Repository guidance says binary naturals have no leading zeroes and every public function returns
-              normalized output. Direct structure probes contradict that claim: <code>bin-div 4 3</code> produces
-              the little-endian digit list <code>[0,0,1]</code> rather than <code>[1]</code>, while
-              <code>bin-sub 4 4</code> produces the empty list rather than the declared zero representation <code>[0]</code>.
+              <strong>Resolution:</strong> Integrity Phase 4 made all-zero normalization return canonical
+              <code>[0]</code>, normalized generated division quotients, and added direct structure checks across the
+              binary-natural boundary and its signed-integer and rational consumers.
             </p>
             <p>
-              <strong>Why it matters:</strong> the public reader collapses both malformed forms to the right host number,
-              so value-only tests cannot see the invariant failure. Later algorithms can depend on shape, not merely value.
+              At audit time, repository guidance said binary naturals had no leading zeroes and public arithmetic
+              returned normalized output. Direct structure probes contradicted that claim: <code>bin-div 4 3</code> produced
+              the little-endian digit list <code>[0,0,1]</code> rather than <code>[1]</code>, while
+              <code>bin-sub 4 4</code> produced the empty list rather than the declared zero representation <code>[0]</code>.
+            </p>
+            <p>
+              <strong>Why it mattered:</strong> the public reader collapsed both malformed forms to the right host number,
+              so value-only tests could not see the invariant failure. Later algorithms can depend on shape, not merely value.
             </p>
             <details>
               <summary>Repair direction</summary>
               <div class="detail-body">
                 <p>
-                  Define one canonical constructor/normalizer, specify exactly whether zero is <code>[0]</code>, and
-                  make public operations cross that constructor boundary. Add representation readers or structural
-                  predicates to the tests; do not rely exclusively on <code>bin-read</code>.
+                  The completed repair makes <code>[0]</code> the one canonical zero, normalizes division, and uses direct
+                  digit-list assertions rather than relying exclusively on <code>bin-read</code>.
                 </p>
               </div>
             </details>
@@ -1999,10 +2009,15 @@
             </div>
             <h3>Several test names do not describe the expressions they execute.</h3>
             <p>
-              The problem is distributed: a strict test labeled <code>DIV ZERO FOUR</code> executes division by one;
-              multiplication and subtraction labels sometimes execute different operands; one binary “unnormalized
-              versus normalized” equality test compares <code>bin-one</code> with itself; list append and fold labels
-              similarly drift from their expressions.
+              <strong>Partial resolution:</strong> Integrity Phase 1 corrected the approved strict, coercive, and binary
+              arithmetic claims. Additional mismatches listed in the roadmap remain outside that phase's authorized
+              boundary.
+            </p>
+            <p>
+              At audit time, a strict test labeled <code>DIV ZERO FOUR</code> executed division by one;
+              multiplication and subtraction labels sometimes executed different operands; one binary “unnormalized
+              versus normalized” equality test compared <code>bin-one</code> with itself; list append and fold labels
+              similarly drifted from their expressions.
             </p>
             <p>
               <strong>Why it matters:</strong> every assertion can pass while the named teaching example was never run.
@@ -2142,31 +2157,33 @@
 
       <section id="tests">
         <p class="section-kicker">08 · Evidence and tests</p>
-        <h2>1,745 passes are real evidence—but only for what the runner can see.</h2>
+        <h2>1,807 passes are real evidence—but only for what the runner can see.</h2>
         <p class="section-intro">
-          The suite gives strong confidence in many ordinary value-level cases. It does not currently certify raw-branch
-          loadability, deliberate nontermination, representation invariants, or the accuracy of every test label.
+          The suite now certifies the restored raw branch, the four approved partial division boundaries, and canonical
+          binary arithmetic structures in addition to ordinary value-level cases. It does not certify every adversarial
+          boundary or the accuracy of every remaining handwritten test label.
         </p>
 
         <div class="grid-2">
           <article class="card">
             <h3>What the green run establishes</h3>
             <ul>
-              <li>The discovered 24 test modules load and complete in one run.</li>
-              <li>All 211 named groups report zero failing assertions.</li>
+              <li>The discovered 26 test modules load and complete in one run.</li>
+              <li>All 216 named groups report zero failing assertions.</li>
               <li>Core valid-domain examples have substantial breadth.</li>
               <li>Crashing discovered test files would produce a failing process and CI signal.</li>
               <li>Large binary value fixtures execute successfully.</li>
+              <li>Bounded subprocess probes distinguish approved partial division from crashes and early values.</li>
+              <li>Direct digit-list assertions detect noncanonical binary zeroes and leading zeroes.</li>
             </ul>
           </article>
           <article class="card">
             <h3>What it does not establish</h3>
             <ul>
-              <li>Any <code>bitter/</code> module beyond the earlier raw core works.</li>
-              <li>The untested <code>bitter/</code> demonstration and modules load successfully.</li>
-              <li>Operations terminate for adversarial boundary inputs.</li>
-              <li>Binary values are canonical internally.</li>
-              <li>Handwritten labels match the expressions underneath them.</li>
+              <li>Binary search terminates for every adversarial boundary input.</li>
+              <li>Every handwritten label matches the expression underneath it.</li>
+              <li>The unresolved strict contract and teaching-equation findings are correct.</li>
+              <li>Broad algebraic laws hold beyond the explicit fixture set.</li>
             </ul>
           </article>
         </div>
@@ -2806,24 +2823,23 @@
         </p>
 
         <h3>Selected direct probes</h3>
-        <pre aria-label="Selected audit probe outputs">Current full runner     1,745 pass · 0 fail
+        <pre aria-label="Selected audit probe outputs">Current full runner     1,807 pass · 0 fail
 
-Non-test module smoke    bitter/lists.rkt      pair: unbound identifier
-                         bitter/integers.rkt   same upstream failure
-                         bitter/algorithms.rkt same upstream failure
+Raw branch smoke         seven bitter modules  load successfully
+                         bitter test harness   10 pass · 0 fail
 
-Timeout probes           Church div(1, 0)      timed out after 4 seconds
-                         typed DIV(1, 0)       timed out after 4 seconds
-                         binary search below
-                         first element         timed out after 4 seconds
+Bounded partial probes   Church div(5, 0)      active at 10-second deadline
+                         Church divZ(5, 0)     active at 10-second deadline
+                         strict DIV(5, 0)      active at 10-second deadline
+                         strict DIVz(5, 0)     active at 10-second deadline
 
 Rational probes          raw Church (1/2)/0    0
                          raw binary (1/2)/0    0
                          strict tagged         result:err(err:div by 0)
                          coercive tagged       err:div by 0
 
-Binary shape probes      div(4, 3) digits      [0,0,1]
-                         sub(4, 4) digits      []
+Binary shape probes      div(4, 3) digits      [1]
+                         sub(4, 4) digits      [0]
                          declared zero shape   [0]
 
 Contract probes          IND-OPT(FALSE, ZERO) option:none
@@ -2843,7 +2859,7 @@ Integer domain probe     expZ(2, -1)           0</pre>
           </div>
           <div class="reference">
             <strong><a href="bitter/lists.rkt">bitter/lists.rkt</a> and <a href="bitter/integers.rkt">bitter/integers.rkt</a></strong>
-            <p>Raw-branch load failure and the latent mixed-sign addition defect.</p>
+            <p>The restored raw branch, corrected mixed-sign addition, and harness-covered teaching route.</p>
           </div>
           <div class="reference">
             <strong><a href="algorithms.rkt">algorithms.rkt</a> and <a href="types/ALGORITHMS.rkt">types/ALGORITHMS.rkt</a></strong>

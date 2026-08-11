@@ -11,8 +11,17 @@
 ;===================================================
 
 #|
+    ~ ZERO-DIVISOR POLICY ~
+    Raw Church-natural division is intentionally partial. The divisor must be
+    nonzero. If a result from div, div-n-mod, or mod with divisor zero is
+    demanded, the recursive search makes no progress and does not terminate.
+    These functions do not return an error value for that case.
+|#
+
+#|
     ~ DIVISION ~
     - Contract: (nat,nat) => nat
+    - Defined domain: the divisor b is nonzero
     - Logic: def div(a)(b)(n) = 
                 (let n = 0 to start)
                 if(b > (a-(n*b)))
@@ -27,8 +36,12 @@
         _then n
         _else (((f a) b) (succ n))))
 
-        
-        
+#|
+    ~ DIVISION WITH REMAINDER ~
+    - Contract: (nat,nat) => {nat quotient,nat remainder}
+    - Defined domain: the divisor is nonzero
+    - Partiality: inherits div's zero-divisor nontermination
+|#
 (def div-n-mod dividend divisor = ((((Y div-n-mod-helper) dividend) divisor) zero))
 
 (def div-n-mod-helper f dividend divisor _quotient =
@@ -46,6 +59,7 @@
     - Contract: (nat,nat) => nat
     - Idea: Same as remainder for natural numbers
     - Logic: m - (n * quotient)
+    - Partiality: calls div, so divisor zero does not terminate
 |#
 (def mod m n = 
     (_let q = ((div m) n)
