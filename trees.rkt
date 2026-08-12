@@ -167,6 +167,137 @@
                 ((app (f l)) ((app (f r)) (onelist v))))))))
 
 ;===================================================
+; MEASURES AND STRUCTURAL OPERATIONS
+;===================================================
+
+#|
+    ~ SIZE ~
+    - Contract: tree => nat
+    - Idea: How many nodes the tree holds
+    - Logic: Empty counts zero; a node counts one more than its
+                two subtree counts added together
+|#
+(def t-size t = ((Y t-size-helper) t))
+
+(def t-size-helper f t =
+    ((t zero)
+     (lambda (l)
+        (lambda (v)
+            (lambda (r)
+                (succ ((add (f l)) (f r))))))))
+
+#|
+    ~ HEIGHT ~
+    - Contract: tree => nat
+    - Idea: The number of nodes on the longest root-to-leaf walk;
+                the empty tree has height zero, a leaf has height one
+    - Logic: Empty is zero; a node is one more than the taller of
+                its two subtree heights (picked with gte)
+|#
+(def t-height t = ((Y t-height-helper) t))
+
+(def t-height-helper f t =
+    ((t zero)
+     (lambda (l)
+        (lambda (v)
+            (lambda (r)
+                (_let hl = (f l)
+                    (_let hr = (f r)
+                        (succ
+                            (_if ((gte hl) hr)
+                                _then hl
+                                _else hr)))))))))
+
+#|
+    ~ FOLD ~
+    - Contract: (func, func, tree) => func
+    - Idea: Collapse a whole tree into one value: g decides how a
+                node combines (folded-left, value, folded-right),
+                and z stands in for every empty subtree
+    - Logic: Empty answers z; a node hands g its folded left subtree,
+                its value, and its folded right subtree. Both t-size
+                and the traversals could be written as folds — the
+                tests demonstrate the size one
+|#
+(def t-fold g z t = ((((Y t-fold-helper) g) z) t))
+
+(def t-fold-helper f g z t =
+    ((t z)
+     (lambda (l)
+        (lambda (v)
+            (lambda (r)
+                (((g ((((f g) z) l))) v) (((f g) z) r)))))))
+
+#|
+    ~ MAP ~
+    - Contract: (func, tree) => tree
+    - Idea: Apply g to every value while keeping the shape identical
+    - Logic: Empty stays empty; a node rebuilds with g of its value
+                and the mapped subtrees
+|#
+(def t-map g t = (((Y t-map-helper) g) t))
+
+(def t-map-helper f g t =
+    ((t t-empty)
+     (lambda (l)
+        (lambda (v)
+            (lambda (r)
+                (((t-node ((f g) l)) (g v)) ((f g) r)))))))
+
+#|
+    ~ MIRROR ~
+    - Contract: tree => tree
+    - Idea: The left-right reflection of the tree
+    - Logic: Empty stays empty; a node rebuilds with its subtrees
+                mirrored AND swapped. Mirroring twice gives back the
+                original shape
+|#
+(def t-mirror t = ((Y t-mirror-helper) t))
+
+(def t-mirror-helper f t =
+    ((t t-empty)
+     (lambda (l)
+        (lambda (v)
+            (lambda (r)
+                (((t-node (f r)) v) (f l)))))))
+
+#|
+    ~ DEEPEN ~
+    - Contract: {bool, nat} => {bool, nat}
+    - Idea: Helper for t-depth: a found answer from one level down
+                is one step deeper from here
+    - Logic: {true, d} becomes {true, succ d}; not-found passes through
+|#
+(def t-deepen res =
+    (_if (head res)
+        _then ((pair true) (succ (tail res)))
+        _else ((pair false) false)))
+
+#|
+    ~ DEPTH OF A VALUE (in a binary search tree) ~
+    - Contract: (func, func, tree) => {bool, nat}
+    - Idea: How far below the root x sits in a search tree ordered by
+                the less-than comparator lt: the root itself is depth
+                zero. Answers {false, false} when x is not in the tree
+    - Logic: Walk the search path: if x is less than this value, the
+                answer lies left; if this value is less than x, right;
+                otherwise (neither is less) x IS this value, at depth
+                zero. Each step back up adds one via t-deepen
+|#
+(def t-depth lt x t = ((((Y t-depth-helper) lt) x) t))
+
+(def t-depth-helper f lt x t =
+    ((t ((pair false) false))
+     (lambda (l)
+        (lambda (v)
+            (lambda (r)
+                (_if ((lt x) v)
+                    _then (t-deepen (((f lt) x) l))
+                    _else (_if ((lt v) x)
+                            _then (t-deepen (((f lt) x) r))
+                            _else ((pair true) zero))))))))
+
+;===================================================
 ; BREADTH-FIRST TRAVERSAL
 ;===================================================
 

@@ -79,7 +79,7 @@ here, pushed after each commit).
 - [x] **A4. Breadth-first traversal** (done 2026-08-11) — `bfs-order t` in `trees.rkt` using the
   A3 queue: pop a tree, emit its value, push its children. Tests: level order
   of a 3-level tree.
-- [ ] **A5. size / height / depth / map / fold / mirror** — `t-size`,
+- [x] **A5. size / height / depth / map / fold / mirror** (done 2026-08-11) — `t-size`,
   `t-height` (empty → 0, node → succ of max of children; max via `gte`),
   `t-fold g z t` (empty → z, node → `g (fold l) v (fold r)`), `t-map g t`,
   `t-mirror t`, and `t-depth lt x t` → `{found-bool, church-depth}` of `x` in a
