@@ -57,7 +57,7 @@ here, pushed after each commit).
 
 ### Phase A — persistent binary trees (`trees.rkt`, `queues.rkt`)
 
-- [ ] **A1. Tree encoding + constructors + basic observers** (`trees.rkt`,
+- [x] **A1. Tree encoding + constructors + basic observers** (done 2026-08-11) (`trees.rkt`,
   `tests/trees-test.rkt`). Handler encoding, same discrimination-by-application
   style as the rest of the repo: `t-empty = λe.λn. e`,
   `t-node l v r = λe.λn. n l v r`; `t-leaf v = t-node t-empty v t-empty`;
@@ -66,7 +66,7 @@ here, pushed after each commit).
   `t-read tree read-fn`: empty → `"_"`, node → `"(<val> <left> <right>)"`
   recursively. Tests: build small trees by hand, check `isEmptyT`, selectors,
   and `t-read` shapes.
-- [ ] **A2. Depth-first traversals** — `preorder`/`inorder`/`postorder`, each
+- [x] **A2. Depth-first traversals** (done 2026-08-11) — `preorder`/`inorder`/`postorder`, each
   `(Y helper)` returning a lambda list (use `app` from `lists.rkt` to join, or
   an accumulator; either is fine, be consistent). Tests render with
   `(l-read (inorder t) n-read)` on hand-built trees.
