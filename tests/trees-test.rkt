@@ -254,6 +254,31 @@
 
 ; ====================================================================
 
+; Deletion: nat-bst is (4 (2 (1 _ _) (3 _ _)) (5 _ _));
+; nat-bst6 adds 6 so node 5 has exactly one child
+(define nat-bst6 (((bst-insert lt) (succ five)) nat-bst))
+
+(define bst-delete-tests (list
+    (test-list-element "delete leaf(1)" ((l-read (inorder (((bst-delete lt) one) nat-bst))) n-read) "[2,3,4,5]")
+    (test-list-element "delete one-child(5)" ((l-read (inorder (((bst-delete lt) five) nat-bst6))) n-read) "[1,2,3,4,6]")
+    (test-list-element "delete two-children(2)" ((l-read (inorder (((bst-delete lt) two) nat-bst))) n-read) "[1,3,4,5]")
+    (test-list-element "delete two-children(2) shape" ((t-read (((bst-delete lt) two) nat-bst)) n-read) "(4 (3 (1 _ _) _) (5 _ _))")
+    (test-list-element "delete root(4)" ((l-read (inorder (((bst-delete lt) four) nat-bst))) n-read) "[1,2,3,5]")
+    (test-list-element "delete root(4) new root" (n-read (t-val (((bst-delete lt) four) nat-bst))) "5")
+    (test-list-element "delete absent(0)" ((l-read (inorder (((bst-delete lt) zero) nat-bst))) n-read) "[1,2,3,4,5]")
+    (test-list-element "delete from empty" (b-read (isEmptyT (((bst-delete lt) one) t-empty))) "true")
+    (test-list-element "delete only node" (b-read (isEmptyT (((bst-delete lt) one) (t-leaf one)))) "true")
+    (test-list-element "delete chain 2,4,1" ((l-read (inorder
+        (((bst-delete lt) one)
+         (((bst-delete lt) four)
+          (((bst-delete lt) two) nat-bst))))) n-read) "[3,5]")
+    (test-list-element "original untouched by deletes" ((l-read (inorder nat-bst)) n-read) "[1,2,3,4,5]")
+    (test-list-element "binary-nat delete(7)" ((l-read (inorder (((bst-delete bin-lt) bin-seven) bin-bst))) bin-read) "[2,5,10]")))
+
+(show-results "bst-delete" bst-delete-tests)
+
+; ====================================================================
+
 ; Integers: the SAME operations again, handed ltZ — negatives sort first
 (define z-bst
     (((bst-insert ltZ) posThree)

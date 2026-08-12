@@ -96,7 +96,7 @@ here, pushed after each commit).
   (empty → false pair). Tests across at least Church naturals AND binary nats
   AND integers to prove parameterization. Include the persistence test: insert
   into `t`, then show `t` itself still inorder-reads unchanged.
-- [ ] **A7. BST deletion** — `bst-delete lt x t`: leaf → empty; one child →
+- [x] **A7. BST deletion** (done 2026-08-11 — Phase A complete) — `bst-delete lt x t`: leaf → empty; one child →
   that child; two children → replace value with in-order successor (min of
   right subtree) and delete that successor from the right subtree. Absent value
   → tree unchanged. Tests: delete leaf/one-child/two-children/root/absent,

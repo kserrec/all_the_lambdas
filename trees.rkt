@@ -397,6 +397,40 @@
                     _then ((pair true) v)
                     _else (f r)))))))
 
+#|
+    ~ BST DELETE ~
+    - Contract: (func, func, tree) => tree
+    - Idea: A new tree without x, sharing everything off the search
+                path; deleting an absent value gives the tree back
+                unchanged in content
+    - Logic: Search as usual. On finding the node: with an empty side,
+                the other side simply takes its place. With two
+                children, the node's value is replaced by its in-order
+                successor — the minimum of the right subtree (which
+                bst-min is guaranteed to find, since that subtree is
+                not empty) — and that successor is deleted from the
+                right subtree, where, as a minimum, it has at most
+                one child of its own
+|#
+(def bst-delete lt x t = ((((Y bst-delete-helper) lt) x) t))
+
+(def bst-delete-helper f lt x t =
+    ((t t-empty)
+     (lambda (l)
+        (lambda (v)
+            (lambda (r)
+                (_if ((lt x) v)
+                    _then (((t-node (((f lt) x) l)) v) r)
+                    _else (_if ((lt v) x)
+                            _then (((t-node l) v) (((f lt) x) r))
+                            _else (_if (isEmptyT l)
+                                    _then r
+                                    _else (_if (isEmptyT r)
+                                            _then l
+                                            _else (_let sv = (tail (bst-min r))
+                                                    (((t-node l) sv)
+                                                     (((f lt) sv) r))))))))))))
+
 ;===================================================
 ; BREADTH-FIRST TRAVERSAL
 ;===================================================
