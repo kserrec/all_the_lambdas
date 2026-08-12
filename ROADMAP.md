@@ -143,10 +143,10 @@ Church-natural vertices.
 - [x] **C2. Depth-first search + reachability** (done 2026-08-11) — `dfs eq?v g start` → visit
   order list (recursive: visit vertex, fold over neighbors threading visited);
   `reachable eq?v g from to` → bool via `member-by` on the DFS result.
-- [ ] **C3. Breadth-first search + unweighted distances** — `bfs eq?v g start`
+- [x] **C3. Breadth-first search + unweighted distances** (done 2026-08-11) — `bfs eq?v g start`
   → visit order using the A3 queue; `bfs-distances eq?v g start` → list of
   `{vertex, church-distance}` pairs, by enqueueing `{vertex, depth}` pairs.
-- [ ] **C4. Path finding** — `find-path eq?v g from to` →
+- [x] **C4. Path finding** (done 2026-08-11) — `find-path eq?v g from to` →
   `{found-bool, path-list from..to}` via DFS carrying the path-so-far;
   `from = to` → `{true, [from]}`; unreachable → false pair.
 - [ ] **C5. Cycle detection** — `has-cycle eq?v g` for directed graphs: DFS

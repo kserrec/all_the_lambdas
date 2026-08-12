@@ -76,6 +76,21 @@
                 ((pair (tail (head q))) (tail q))))))
 
 #|
+    ~ PUSH ALL ~
+    - Contract: (list, queue) => queue
+    - Idea: Push every element of the list, in list order, so the
+                first element of the list is the first of them to
+                leave the queue later
+    - Logic: Push the head, then push the rest onto that queue
+|#
+(def q-push-all xs q = (((Y q-push-all-helper) xs) q))
+
+(def q-push-all-helper f xs q =
+    (_if (isNil xs)
+        _then q
+        _else ((f (tail xs)) ((q-push (head xs)) q))))
+
+#|
     ~ DRAIN ~
     - Contract: queue => list
     - Idea: Pop until empty, collecting the values in the order they leave

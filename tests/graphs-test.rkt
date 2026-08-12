@@ -69,6 +69,49 @@
 
 ; ====================================================================
 
+(define bfs-tests (list
+    (test-list-element "bfs(g-line,1)" ((l-read (((bfs eq) g-line) one)) n-read) "[1,2,3]")
+    (test-list-element "bfs(g-cycle,2)" ((l-read (((bfs eq) g-cycle) two)) n-read) "[2,3,1]")
+    (test-list-element "bfs(g-diamond,1) ring order" ((l-read (((bfs eq) g-diamond) one)) n-read) "[1,2,3,4]")
+    (test-list-element "bfs(g-split,3)" ((l-read (((bfs eq) g-split) three)) n-read) "[3]")))
+
+(show-results "bfs" bfs-tests)
+
+; ====================================================================
+
+; Reader for {vertex, distance} pairs — host-side test rendering only
+(define vd-read (lambda (p) (string-append (n-read (head p)) ":" (n-read (tail p)))))
+
+(define bfs-distances-tests (list
+    (test-list-element "distances(g-line,1)" ((l-read (((bfs-distances eq) g-line) one)) vd-read) "[1:0,2:1,3:2]")
+    (test-list-element "distances(g-diamond,1)" ((l-read (((bfs-distances eq) g-diamond) one)) vd-read) "[1:0,2:1,3:1,4:2]")
+    (test-list-element "distances(g-cycle,3)" ((l-read (((bfs-distances eq) g-cycle) three)) vd-read) "[3:0,1:1,2:2]")
+    (test-list-element "distances(g-split,3)" ((l-read (((bfs-distances eq) g-split) three)) vd-read) "[3:0]")))
+
+(show-results "bfs-distances" bfs-distances-tests)
+
+; ====================================================================
+
+(define path-1-3-line ((((find-path eq) g-line) one) three))
+(define path-1-4-diamond ((((find-path eq) g-diamond) one) four))
+(define path-3-2-cycle ((((find-path eq) g-cycle) three) two))
+(define path-1-3-split ((((find-path eq) g-split) one) three))
+(define path-2-2-split ((((find-path eq) g-split) two) two))
+(define path-4-1-diamond ((((find-path eq) g-diamond) four) one))
+
+(define find-path-tests (list
+    (test-list-element "path(1~>3, line) found" (b-read (head path-1-3-line)) "true")
+    (test-list-element "path(1~>3, line)" ((l-read (tail path-1-3-line)) n-read) "[1,2,3]")
+    (test-list-element "path(1~>4, diamond)" ((l-read (tail path-1-4-diamond)) n-read) "[1,2,4]")
+    (test-list-element "path(3~>2, cycle)" ((l-read (tail path-3-2-cycle)) n-read) "[3,1,2]")
+    (test-list-element "path(2~>2, self)" ((l-read (tail path-2-2-split)) n-read) "[2]")
+    (test-list-element "path(1~>3, split) found" (b-read (head path-1-3-split)) "false")
+    (test-list-element "path(4~>1, diamond) found" (b-read (head path-4-1-diamond)) "false")))
+
+(show-results "find-path" find-path-tests)
+
+; ====================================================================
+
 (define reachable-tests (list
     (test-list-element "reachable(1~>3, line)" (b-read ((((reachable eq) g-line) one) three)) "true")
     (test-list-element "reachable(3~>1, line)" (b-read ((((reachable eq) g-line) three) one)) "false")

@@ -60,6 +60,14 @@
 
 ; ====================================================================
 
+(define push-all-tests (list
+    (test-list-element "push-all([2,3,4]) after 1" ((l-read (q-drain ((q-push-all (_cons two three four)) q-1))) n-read) "[1,2,3,4]")
+    (test-list-element "push-all([]) is no-op" ((l-read (q-drain ((q-push-all nil) q-123))) n-read) "[1,2,3]")))
+
+(show-results "q-push-all" push-all-tests)
+
+; ====================================================================
+
 ; Persistence: popping and pushing never disturb older queues
 (define persistence-tests (list
     (test-list-element "q-123 unchanged after pops" ((l-read (q-drain q-123)) n-read) "[1,2,3]")
