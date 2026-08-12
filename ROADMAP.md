@@ -104,13 +104,13 @@ here, pushed after each commit).
 
 ### Phase B — sorting (`sorting.rkt`, `heaps.rkt`)
 
-- [ ] **B1. Merge sort** (`sorting.rkt`, `tests/sorting-test.rkt`).
+- [x] **B1. Merge sort** (done 2026-08-11) (`sorting.rkt`, `tests/sorting-test.rkt`).
   `merge lte l1 l2` via Y; split by halving with `len`, `_take`, `_drop` (all
   in `lists.rkt`); `merge-sort lte lst` via Y with singleton/empty base cases.
   Tests: empty, singleton, sorted, reverse-sorted, duplicates; run the same
   sort on Church naturals (`lte`), integers (`lteZ`), and binary nats
   (`bin-lte`).
-- [ ] **B2. Quicksort via filter** — `quick-sort lt lst`: pivot = head; recurse
+- [x] **B2. Quicksort via filter** (done 2026-08-11) — `quick-sort lt lst`: pivot = head; recurse
   on `(_filter (λx. lt x pivot) rest)` and the complement
   (`(_filter (λx. _not (lt x pivot)) rest)`). Same test matrix as B1.
 - [ ] **B3. Leftist heap** (`heaps.rkt`, `tests/heaps-test.rkt`). Handler
