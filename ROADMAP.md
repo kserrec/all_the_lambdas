@@ -149,15 +149,19 @@ Church-natural vertices.
 - [x] **C4. Path finding** (done 2026-08-11) — `find-path eq?v g from to` →
   `{found-bool, path-list from..to}` via DFS carrying the path-so-far;
   `from = to` → `{true, [from]}`; unreachable → false pair.
-- [ ] **C5. Cycle detection** — `has-cycle eq?v g` for directed graphs: DFS
+- [x] **C5. Cycle detection** (done 2026-08-11) — `has-cycle eq?v g` for directed graphs: DFS
   from every vertex with an explicit on-current-path list (gray set) alongside
   the finished list; edge into the gray set → cycle. Tests: directed cycle →
   true; DAG and line → false.
-- [ ] **C6. Connected components** — `components eq?v g` → list of vertex
+- [x] **C6. Connected components** (done 2026-08-11) — `components eq?v g` → list of vertex
   lists. Documented contract: expects a symmetric (undirected-style) adjacency
   representation; fold over `g-vertices`, running a traversal from each
   not-yet-assigned vertex. Tests on the disconnected fixture.
-- [ ] **C7. Topological sort** — `topo-sort eq?v g` → vertex list via DFS
+- [x] **C7. Topological sort** (done 2026-08-11 — Phase C complete; cycle
+  detection shipped as the edge-closes-a-loop definition over `reachable`
+  rather than a gray-set DFS, and topo sort as Kahn-style source removal —
+  both simpler in a mutual-recursion-free Y style and behaviorally identical
+  on the DAG contract) — `topo-sort eq?v g` → vertex list via DFS
   finish-order, reversed (`rev`). Documented contract: meaningful on DAGs
   (cyclic input still terminates via the visited set but the order is not a
   topological order — say so in the comment). Test: diamond DAG order respects

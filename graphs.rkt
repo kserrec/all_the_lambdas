@@ -216,3 +216,144 @@
 |#
 (def reachable veq g from to =
     (((member-by veq) to) (((dfs veq) g) from)))
+
+;===================================================
+; CYCLES, COMPONENTS, TOPOLOGICAL ORDER
+;===================================================
+
+#|
+    ~ EDGE CLOSES A LOOP ~
+    - Contract: (func, graph, func, list) => bool
+    - Idea: Helper for has-cycle: does some edge v -> w (w drawn from
+                the list ws) come back around, i.e. is v reachable
+                from w?
+    - Logic: Try each w; reachable does the walking
+|#
+(def edge-closes-loop veq g v ws =
+    (((((Y edge-closes-loop-helper) veq) g) v) ws))
+
+(def edge-closes-loop-helper f veq g v ws =
+    (_if (isNil ws)
+        _then false
+        _else (_if ((((reachable veq) g) (head ws)) v)
+                _then true
+                _else ((((f veq) g) v) (tail ws)))))
+
+#|
+    ~ HAS CYCLE (directed) ~
+    - Contract: (func, graph) => bool
+    - Idea: A directed graph has a cycle exactly when some edge
+                v -> w closes a loop: w can walk back to v. That is
+                the definition itself, checked edge by edge
+    - Note: This reads the graph as DIRECTED. A symmetric (undirected-
+                style) graph always answers true, since v <-> w is
+                already a round trip
+    - Logic: For every entry {v, ws}, ask edge-closes-loop; any hit
+                is a cycle, no hits anywhere means none
+|#
+(def has-cycle veq g = ((((Y has-cycle-helper) veq) g) g))
+
+(def has-cycle-helper f veq g entries =
+    (_if (isNil entries)
+        _then false
+        _else (_if ((((edge-closes-loop veq) g) (head (head entries))) (tail (head entries)))
+                _then true
+                _else (((f veq) g) (tail entries)))))
+
+#|
+    ~ CONNECTED COMPONENTS ~
+    - Contract: (func, graph) => list of lists
+    - Idea: Split the graph into its islands: groups of vertices
+                that can reach each other
+    - Note: Written for SYMMETRIC (undirected-style) adjacency — when
+                every edge runs both ways, "reaches" and "is connected
+                to" coincide, and one dfs from any vertex collects its
+                whole island
+    - Logic: Walk the vertex list carrying two accumulators: the
+                components found so far, and a flat list of every
+                vertex already assigned to one. An unassigned vertex
+                starts a new component — its dfs — and that whole
+                component joins the assigned list
+|#
+(def components veq g =
+    (((((( Y components-helper) veq) g) (g-vertices g)) nil) nil))
+
+(def components-helper f veq g vs comps assigned =
+    (_if (isNil vs)
+        _then (rev comps)
+        _else (_let v = (head vs)
+            (_if (((member-by veq) v) assigned)
+                _then (((((f veq) g) (tail vs)) comps) assigned)
+                _else (_let comp = (((dfs veq) g) v)
+                        (((((f veq) g) (tail vs))
+                            ((pair comp) comps))
+                            ((app comp) assigned)))))))
+
+#|
+    ~ HAS INCOMING ~
+    - Contract: (func, graph, func, list) => bool
+    - Idea: Helper for topo-sort: does any vertex still in the
+                remaining list point an edge at v?
+    - Logic: Check v's membership in each remaining vertex's
+                adjacency list
+|#
+(def has-incoming veq g v us =
+    (((((Y has-incoming-helper) veq) g) v) us))
+
+(def has-incoming-helper f veq g v us =
+    (_if (isNil us)
+        _then false
+        _else (_if (((member-by veq) v) (((g-neighbors veq) (head us)) g))
+                _then true
+                _else ((((f veq) g) v) (tail us)))))
+
+#|
+    ~ FIND SOURCE ~
+    - Contract: (func, graph, list, list) => {bool, func}
+    - Idea: Helper for topo-sort: the first candidate with no
+                incoming edge from the remaining vertices
+    - Logic: Walk the candidates; {false, false} when every one has
+                something pointing at it (which on a DAG cannot happen
+                while any remain)
+|#
+(def find-source veq g vs remaining =
+    (((((Y find-source-helper) veq) g) vs) remaining))
+
+(def find-source-helper f veq g vs remaining =
+    (_if (isNil vs)
+        _then ((pair false) false)
+        _else (_if ((((has-incoming veq) g) (head vs)) remaining)
+                _then ((((f veq) g) (tail vs)) remaining)
+                _else ((pair true) (head vs)))))
+
+#|
+    ~ REMOVE BY ~
+    - Contract: (func, func, list) => list
+    - Logic: The list without every element equal to x
+|#
+(def remove-by veq x lst =
+    ((_filter (lambda (y) (_not ((veq x) y)))) lst))
+
+#|
+    ~ TOPOLOGICAL SORT ~
+    - Contract: (func, graph) => list
+    - Idea: An order for a DAG's vertices in which every edge points
+                forward: repeatedly take a vertex nothing remaining
+                points at (a source), list it, and remove it
+    - Note: Meaningful on DAGs. Cyclic input still terminates — once
+                only cycle members remain, no source exists and the
+                walk stops early, so the answer simply omits them —
+                but it is NOT a topological order of such a graph
+    - Logic: Each round either removes one vertex from remaining or
+                finds no source and stops, so the recursion is finite
+|#
+(def topo-sort veq g = ((((Y topo-sort-helper) veq) g) (g-vertices g)))
+
+(def topo-sort-helper f veq g remaining =
+    (_if (isNil remaining)
+        _then nil
+        _else (_let src = ((((find-source veq) g) remaining) remaining)
+            (_if (head src)
+                _then ((pair (tail src))
+                        (((f veq) g) (((remove-by veq) (tail src)) remaining)))
+                _else nil))))

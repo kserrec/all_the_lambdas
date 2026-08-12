@@ -122,3 +122,50 @@
     (test-list-element "reachable(self)" (b-read ((((reachable eq) g-split) three) three)) "true")))
 
 (show-results "reachable" reachable-tests)
+
+; ====================================================================
+
+; g-self: a single vertex pointing at itself
+(define g-self (onelist ((pair one) (onelist one))))
+
+(define has-cycle-tests (list
+    (test-list-element "has-cycle(g-cycle)" (b-read ((has-cycle eq) g-cycle)) "true")
+    (test-list-element "has-cycle(g-line)" (b-read ((has-cycle eq) g-line)) "false")
+    (test-list-element "has-cycle(g-diamond)" (b-read ((has-cycle eq) g-diamond)) "false")
+    (test-list-element "has-cycle(self-loop)" (b-read ((has-cycle eq) g-self)) "true")
+    (test-list-element "has-cycle(sym pair reads as 2-cycle)" (b-read ((has-cycle eq) g-split)) "true")))
+
+(show-results "has-cycle" has-cycle-tests)
+
+; ====================================================================
+
+; Symmetric fixtures for components:
+;   g-iso:      1 and 2, no edges at all
+;   g-sym-tri:  1-2-3 all mutually linked
+(define g-iso (_cons ((pair one) nil) ((pair two) nil)))
+
+(define g-sym-tri (_cons
+    ((pair one) (_cons two three))
+    ((pair two) (_cons one three))
+    ((pair three) (_cons one two))))
+
+; Host-side reader for a list of components (a list of lists)
+(define comp-read (lambda (c) ((l-read c) n-read)))
+
+(define components-tests (list
+    (test-list-element "components(g-split)" ((l-read ((components eq) g-split)) comp-read) "[[1,2],[3]]")
+    (test-list-element "components(g-iso)" ((l-read ((components eq) g-iso)) comp-read) "[[1],[2]]")
+    (test-list-element "components(g-sym-tri)" ((l-read ((components eq) g-sym-tri)) comp-read) "[[1,2,3]]")
+    (test-list-element "components(empty graph)" ((l-read ((components eq) nil)) comp-read) "[]")))
+
+(show-results "components" components-tests)
+
+; ====================================================================
+
+(define topo-sort-tests (list
+    (test-list-element "topo(g-line)" ((l-read ((topo-sort eq) g-line)) n-read) "[1,2,3]")
+    (test-list-element "topo(g-diamond)" ((l-read ((topo-sort eq) g-diamond)) n-read) "[1,2,3,4]")
+    (test-list-element "topo(g-iso)" ((l-read ((topo-sort eq) g-iso)) n-read) "[1,2]")
+    (test-list-element "topo(cyclic input stops early)" ((l-read ((topo-sort eq) g-cycle)) n-read) "[]")))
+
+(show-results "topo-sort" topo-sort-tests)
