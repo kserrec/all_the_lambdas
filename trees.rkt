@@ -5,6 +5,7 @@
          "church.rkt"
          "logic.rkt"
          "lists.rkt"
+         "queues.rkt"
          "recursion.rkt")
 
 ;===================================================
@@ -164,3 +165,33 @@
         (lambda (v)
             (lambda (r)
                 ((app (f l)) ((app (f r)) (onelist v))))))))
+
+;===================================================
+; BREADTH-FIRST TRAVERSAL
+;===================================================
+
+#|
+    ~ BREADTH-FIRST (LEVEL) ORDER ~
+    - Contract: tree => list
+    - Idea: The root, then its children left to right, then THEIR
+                children left to right, level by level
+    - Logic: Work through a queue of trees that starts holding just
+                the whole tree. Each round pops one tree: an empty
+                tree contributes nothing; a node contributes its value
+                and lines its two subtrees up at the end of the queue
+                (left first, so left stays ahead of right). When the
+                queue runs dry the traversal is the collected values
+|#
+(def bfs-order t = ((Y bfs-order-helper) ((q-push t) q-empty)))
+
+(def bfs-order-helper f q =
+    (_let popped = (q-pop q)
+        (_if (head popped)
+            _then (_let curr = (head (tail popped))
+                    (_let rest = (tail (tail popped))
+                        (_if (isEmptyT curr)
+                            _then (f rest)
+                            _else ((pair (t-val curr))
+                                   (f ((q-push (t-right curr))
+                                       ((q-push (t-left curr)) rest)))))))
+            _else nil)))

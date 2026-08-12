@@ -70,13 +70,13 @@ here, pushed after each commit).
   `(Y helper)` returning a lambda list (use `app` from `lists.rkt` to join, or
   an accumulator; either is fine, be consistent). Tests render with
   `(l-read (inorder t) n-read)` on hand-built trees.
-- [ ] **A3. Persistent queue** (`queues.rkt`, `tests/queues-test.rkt`).
+- [x] **A3. Persistent queue** (done 2026-08-11) (`queues.rkt`, `tests/queues-test.rkt`).
   Two-list queue `{front, back}`: `q-empty`, `q-isEmpty`, `q-push x q` (conses
   onto back), `q-pop q` → `{found-bool, {head, rest-queue}}` with the reversal
   of `back` into `front` when `front` runs dry (`rev` exists in `lists.rkt`).
   `q-pop q-empty` → `(pair false false)`. Tests: FIFO order over pushes/pops,
   persistence (popping a queue leaves the original usable).
-- [ ] **A4. Breadth-first traversal** — `bfs-order t` in `trees.rkt` using the
+- [x] **A4. Breadth-first traversal** (done 2026-08-11) — `bfs-order t` in `trees.rkt` using the
   A3 queue: pop a tree, emit its value, push its children. Tests: level order
   of a 3-level tree.
 - [ ] **A5. size / height / depth / map / fold / mirror** — `t-size`,

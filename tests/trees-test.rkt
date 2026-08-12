@@ -85,6 +85,16 @@
 
 ; ====================================================================
 
+(define bfs-order-tests (list
+    (test-list-element "bfs-order(t-empty)" ((l-read (bfs-order t-empty)) n-read) "[]")
+    (test-list-element "bfs-order(leaf(1))" ((l-read (bfs-order leaf-1)) n-read) "[1]")
+    (test-list-element "bfs-order(t-213)" ((l-read (bfs-order t-213)) n-read) "[2,1,3]")
+    (test-list-element "bfs-order(t-42135)" ((l-read (bfs-order t-42135)) n-read) "[4,2,5,1,3]")))
+
+(show-results "bfs-order" bfs-order-tests)
+
+; ====================================================================
+
 ; Persistence: t-42135 was built FROM t-213; the old tree is untouched
 ; and still reads exactly as it did before it was used as a subtree.
 (define persistence-tests (list
