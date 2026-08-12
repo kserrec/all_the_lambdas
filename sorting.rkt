@@ -6,6 +6,7 @@
          "logic.rkt"
          "lists.rkt"
          "division.rkt"
+         "heaps.rkt"
          "recursion.rkt")
 
 ;===================================================
@@ -93,3 +94,14 @@
                         ((f lt) ((_filter (lambda (x) ((lt x) pivot))) rest)))
                         ((pair pivot)
                          ((f lt) ((_filter (lambda (x) (_not ((lt x) pivot)))) rest))))))))
+
+#|
+    ~ HEAPSORT ~
+    - Contract: (func, list) => list
+    - Idea: Pour the list into a leftist heap, then drain it — the
+                heap hands back its minimum first every time, so the
+                drain IS the sorted list
+    - Logic: Two steps from heaps.rkt glued together; the comparator
+                is threaded through both
+|#
+(def heap-sort lte lst = ((h-drain lte) ((heap-from-list lte) lst)))

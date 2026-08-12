@@ -113,7 +113,7 @@ here, pushed after each commit).
 - [x] **B2. Quicksort via filter** (done 2026-08-11) — `quick-sort lt lst`: pivot = head; recurse
   on `(_filter (λx. lt x pivot) rest)` and the complement
   (`(_filter (λx. _not (lt x pivot)) rest)`). Same test matrix as B1.
-- [ ] **B3. Leftist heap** (`heaps.rkt`, `tests/heaps-test.rkt`). Handler
+- [x] **B3. Leftist heap** (done 2026-08-11) (`heaps.rkt`, `tests/heaps-test.rkt`). Handler
   encoding parallel to trees but with rank: `h-empty`, `h-node rank v l r`;
   `h-rank` (empty → zero); core `h-merge lte h1 h2` (smaller root wins, merge
   into its right, swap children to restore leftist rank invariant);
@@ -121,7 +121,7 @@ here, pushed after each commit).
   `h-find-min h` → `{found-bool, value}`; `h-delete-min lte h` → merge of
   children (empty → empty). Tests: min tracks insertions, delete-min drains in
   sorted order, persistence (old heap usable after insert).
-- [ ] **B4. Heapsort** — `heap-sort lte lst` in `sorting.rkt` (requires
+- [x] **B4. Heapsort** (done 2026-08-11 — Phase B complete) — `heap-sort lte lst` in `sorting.rkt` (requires
   `heaps.rkt`): fold the list into a heap, drain with `h-delete-min`. Tests:
   output matches `merge-sort` output on the same inputs, across two numeric
   representations.

@@ -77,10 +77,25 @@
 
 ; ====================================================================
 
-; The two sorts agree with each other on the same input
+(define heap-sort-tests (list
+    (test-list-element "hsort([])" ((l-read ((heap-sort lte) nil)) n-read) "[]")
+    (test-list-element "hsort([3])" ((l-read ((heap-sort lte) (onelist three))) n-read) "[3]")
+    (test-list-element "hsort(reversed)" ((l-read ((heap-sort lte) nats-reversed)) n-read) "[1,2,3,4,5]")
+    (test-list-element "hsort([3,1,4,1,5])" ((l-read ((heap-sort lte) nats-unsorted)) n-read) "[1,1,3,4,5]")
+    (test-list-element "hsort integers" ((l-read ((heap-sort lteZ) z-mixed)) z-read) "[-3,-1,0,1,2]")
+    (test-list-element "hsort binary nats" ((l-read ((heap-sort bin-lte) bin-mixed)) bin-read) "[2,5,7,10]")))
+
+(show-results "heap-sort" heap-sort-tests)
+
+; ====================================================================
+
+; The three sorts agree with each other on the same input
 (define agreement-tests (list
     (test-list-element "msort = qsort on [3,1,4,1,5]"
         ((l-read ((quick-sort lt) nats-unsorted)) n-read)
+        ((l-read ((merge-sort lte) nats-unsorted)) n-read))
+    (test-list-element "msort = hsort on [3,1,4,1,5]"
+        ((l-read ((heap-sort lte) nats-unsorted)) n-read)
         ((l-read ((merge-sort lte) nats-unsorted)) n-read))))
 
 (show-results "sort agreement" agreement-tests)
