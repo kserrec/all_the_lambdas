@@ -81,3 +81,37 @@
     (test-list-element "7 XOR 7" (bin-read ((bin-xor bin-seven) bin-seven)) "0")))
 
 (show-results "bitwise and/or/xor" bitwise-tests)
+
+; ====================================================================
+
+(define conversion-tests (list
+    (test-list-element "bin-to-church(0)" (n-read (bin-to-church bin-zero)) "0")
+    (test-list-element "bin-to-church(1)" (n-read (bin-to-church bin-one)) "1")
+    (test-list-element "bin-to-church(5)" (n-read (bin-to-church bin-five)) "5")
+    (test-list-element "bin-to-church(16)" (n-read (bin-to-church bin-sixteen)) "16")
+    (test-list-element "church-to-bin(0)" (bin-read (church-to-bin zero)) "0")
+    (test-list-element "church-to-bin(1)" (bin-read (church-to-bin one)) "1")
+    (test-list-element "church-to-bin(5)" (bin-read (church-to-bin five)) "5")
+    (test-list-element "round-trip bin(7)" (bin-read (church-to-bin (bin-to-church bin-seven))) "7")
+    (test-list-element "round-trip bin(10)" (bin-read (church-to-bin (bin-to-church bin-ten))) "10")
+    (test-list-element "round-trip church(4)" (n-read (bin-to-church (church-to-bin four))) "4")))
+
+(show-results "binary <-> church conversions" conversion-tests)
+
+; ====================================================================
+
+(define isqrt-tests (list
+    (test-list-element "isqrt(0)" (bin-read (bin-isqrt bin-zero)) "0")
+    (test-list-element "isqrt(1)" (bin-read (bin-isqrt bin-one)) "1")
+    (test-list-element "isqrt(2)" (bin-read (bin-isqrt bin-two)) "1")
+    (test-list-element "isqrt(3)" (bin-read (bin-isqrt bin-three)) "1")
+    (test-list-element "isqrt(4)" (bin-read (bin-isqrt bin-four)) "2")
+    (test-list-element "isqrt(8)" (bin-read (bin-isqrt bin-eight)) "2")
+    (test-list-element "isqrt(9)" (bin-read (bin-isqrt bin-nine)) "3")
+    (test-list-element "isqrt(15)" (bin-read (bin-isqrt bin-fifteen)) "3")
+    (test-list-element "isqrt(16)" (bin-read (bin-isqrt bin-sixteen)) "4")
+    (test-list-element "isqrt(31)" (bin-read (bin-isqrt bin-thirty-one)) "5")
+    (test-list-element "isqrt(64)" (bin-read (bin-isqrt bin-sixty-four)) "8")
+    (test-list-element "isqrt(127)" (bin-read (bin-isqrt bin-one-hundred-twenty-seven)) "11")))
+
+(show-results "bin-isqrt" isqrt-tests)

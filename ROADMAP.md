@@ -190,13 +190,13 @@ the base libraries are NOT modified. All results normalized via
   digit booleans — digits ARE Church booleans here, `zero` is `false`),
   normalize with `rem-head-zeroes`. Tests against hand-computed small cases,
   including unequal lengths.
-- [ ] **D3. Conversions, entirely as lambda terms** — `bin-to-church bin`:
+- [x] **D3. Conversions, entirely as lambda terms** (done 2026-08-11) — `bin-to-church bin`:
   fold over digits, `acc' = add (add acc acc) digit-as-nat` (digit `one` is
   Church one via `_cond`); `church-to-bin n`: apply the numeral `n` to
   `bin-succ` starting from `bin-zero` — the numeral itself drives the
   iteration. Tests: round-trip both directions for 0..10 and a couple of
   two-digit values, rendered with `n-read`/`bin-read`.
-- [ ] **D4. Integer square root** — `bin-isqrt x`: binary search on
+- [x] **D4. Integer square root** (done 2026-08-11) — `bin-isqrt x`: binary search on
   `lo..hi = [0]..x` via Y, invariant `lo² ≤ x < (hi+1)²`, terminating when the
   range collapses (mirror the terminating-search style already used in
   `algorithms.rkt` binarySearch). `bin-isqrt [0]` → `[0]`. Tests: perfect

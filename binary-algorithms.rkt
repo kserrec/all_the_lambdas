@@ -165,3 +165,61 @@
 (def bin-or l1 l2 = (((bin-bitwise dig-or) l1) l2))
 
 (def bin-xor l1 l2 = (((bin-bitwise dig-xor) l1) l2))
+
+;===================================================
+; CONVERSIONS — BINARY <-> CHURCH, AS LAMBDA TERMS
+;===================================================
+
+#|
+    ~ BINARY TO CHURCH ~
+    - Contract: bin-list => nat
+    - Idea: Read the digits left to right the way a person reads
+                binary: double what you have, add the digit
+    - Logic: Each digit IS already the Church numeral zero or one,
+                so "add the digit" is literally add. The whole
+                conversion is a fold — a lambda term through and
+                through, no host arithmetic anywhere
+|#
+(def bin-to-church bin = (((Y bin-to-church-helper) bin) zero))
+
+(def bin-to-church-helper f bin acc =
+    (_if (isNil bin)
+        _then acc
+        _else ((f (tail bin)) ((add ((add acc) acc)) (head bin)))))
+
+#|
+    ~ CHURCH TO BINARY ~
+    - Contract: nat => bin-list
+    - Idea: A Church numeral n IS n-fold application — so apply the
+                binary successor n times to binary zero and the
+                numeral itself drives the whole computation
+    - Logic: One application of n; no recursion of our own needed
+|#
+(def church-to-bin n = ((n bin-succ) bin-zero))
+
+;===================================================
+; INTEGER SQUARE ROOT
+;===================================================
+
+#|
+    ~ INTEGER SQUARE ROOT ~
+    - Contract: bin-list => bin-list
+    - Idea: The largest r with r*r <= x, found by binary search on
+                the answer — the same terminating search shape as
+                binarySearch in algorithms.rkt
+    - Logic: Keep lo <= answer <= hi, starting at 0..x. Each round
+                tries the UPPER middle (lo+hi+1 halved): if its square
+                still fits under x the answer is at least mid (lo
+                rises to mid), otherwise it is below mid (hi drops to
+                mid-1). The upper middle makes both moves strict, so
+                the range shrinks every round until lo meets hi
+|#
+(def bin-isqrt x = ((((Y bin-isqrt-helper) x) bin-zero) x))
+
+(def bin-isqrt-helper f x lo hi =
+    (_if ((bin-eq lo) hi)
+        _then lo
+        _else (_let mid = ((bin-shr one) (bin-succ ((bin-add lo) hi)))
+            (_if ((bin-lte ((bin-mult mid) mid)) x)
+                _then (((f x) mid) hi)
+                _else (((f x) lo) ((bin-sub mid) bin-one))))))
