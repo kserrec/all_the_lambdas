@@ -174,7 +174,8 @@ the base libraries are NOT modified. All results normalized via
 `rem-head-zeroes` where leading zeroes can arise. Tests in
 `tests/binary-algorithms-test.rkt`, values small.
 
-- [ ] **D1. Shifts, width-NOT, bit length, popcount** —
+- [x] **D1. Shifts, width-NOT, bit length, popcount** (done 2026-08-11; the
+  planned `bin-len` alias shipped as `bin-bit-length`, which normalizes first) —
   `bin-shl n bin` (delegate to existing `bin-mult-pow-2`; zero stays `[0]`),
   `bin-shr n bin` (drop `n` low digits via repeated "all but last" or
   `_take (sub (len bin) n)`; shift past length → `[0]`),
@@ -183,7 +184,7 @@ the base libraries are NOT modified. All results normalized via
   `bin-len bin` (= `len`, as a named alias with its own contract),
   `bin-popcount bin` → Church nat (fold digits, add one per one-digit; `[0]` →
   zero). Round-trip and edge tests.
-- [ ] **D2. Bitwise AND / OR / XOR** — pad the shorter operand with
+- [x] **D2. Bitwise AND / OR / XOR** (done 2026-08-11) — pad the shorter operand with
   `prepend-zeroes` to equal length, zip digit-wise via a shared Y helper
   parameterized by the digit operation (`_and`/`_or`/`xor` on the zero/one
   digit booleans — digits ARE Church booleans here, `zero` is `false`),
