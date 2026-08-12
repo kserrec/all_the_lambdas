@@ -86,7 +86,11 @@ here, pushed after each commit).
   BST (root depth zero), using the derived equality. Tests include: size and
   height agree with hand counts; `t-mirror (t-mirror t)` inorder-reads equal to
   `t`; `t-fold` reimplements `t-size`.
-- [ ] **A6. BST insert / lookup / min / max** — comparator-parameterized:
+- [x] **A6. BST insert / lookup / min / max** (done 2026-08-11; also fixed
+  an A5 zero-arg application in `t-fold-helper` that crashed the file after
+  the `t-height` group, and hardened `run-all-tests.sh` so a nonzero racket
+  exit always marks the file FAIL — the A5 commit's "1943/1943" green claim
+  was wrong because the old runner counted the crashed file as PASS) — comparator-parameterized:
   `bst-insert lt x t` (duplicates: keep tree unchanged on equal), `bst-lookup
   lt x t` → lambda bool, `bst-min t` / `bst-max t` → `{found-bool, value}`
   (empty → false pair). Tests across at least Church naturals AND binary nats

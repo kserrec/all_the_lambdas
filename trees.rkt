@@ -226,7 +226,7 @@
      (lambda (l)
         (lambda (v)
             (lambda (r)
-                (((g ((((f g) z) l))) v) (((f g) z) r)))))))
+                (((g (((f g) z) l)) v) (((f g) z) r)))))))
 
 #|
     ~ MAP ~
@@ -296,6 +296,106 @@
                     _else (_if ((lt v) x)
                             _then (t-deepen (((f lt) x) r))
                             _else ((pair true) zero))))))))
+
+;===================================================
+; BINARY SEARCH TREES
+;===================================================
+
+#| BINARY SEARCH TREES
+
+    A binary search tree keeps everything less than a node's value in
+    its left subtree and everything greater in its right subtree.
+
+    Every operation takes the ordering itself as an argument: a
+    less-than comparator lt. Equality never needs its own argument —
+    two values are equal exactly when neither is less than the other.
+    This is what lets ONE implementation serve Church naturals (lt),
+    integers (ltZ), rationals (ltR), binary naturals (bin-lt), and
+    signed binary integers (ltZ-bin).
+
+    Insertion is persistent: it rebuilds only the search path and
+    shares every untouched subtree with the old tree, which remains
+    fully usable.
+|#
+
+#|
+    ~ BST INSERT ~
+    - Contract: (func, func, tree) => tree
+    - Idea: A new tree that also holds x, sharing all untouched subtrees
+    - Logic: Inserting into empty makes a leaf. Otherwise compare:
+                x less goes left, v less goes right (rebuilding just
+                that side), and when neither is less, x is already
+                here — the tree is returned unchanged
+|#
+(def bst-insert lt x t = ((((Y bst-insert-helper) lt) x) t))
+
+(def bst-insert-helper f lt x t =
+    ((t (t-leaf x))
+     (lambda (l)
+        (lambda (v)
+            (lambda (r)
+                (_if ((lt x) v)
+                    _then (((t-node (((f lt) x) l)) v) r)
+                    _else (_if ((lt v) x)
+                            _then (((t-node l) v) (((f lt) x) r))
+                            _else t)))))))
+
+#|
+    ~ BST LOOKUP ~
+    - Contract: (func, func, tree) => bool
+    - Idea: Is x in the search tree?
+    - Logic: Follow the one search path: left when x is less, right
+                when v is less, found when neither is less; running
+                off the bottom answers false
+|#
+(def bst-lookup lt x t = ((((Y bst-lookup-helper) lt) x) t))
+
+(def bst-lookup-helper f lt x t =
+    ((t false)
+     (lambda (l)
+        (lambda (v)
+            (lambda (r)
+                (_if ((lt x) v)
+                    _then (((f lt) x) l)
+                    _else (_if ((lt v) x)
+                            _then (((f lt) x) r)
+                            _else true)))))))
+
+#|
+    ~ BST MINIMUM ~
+    - Contract: tree => {bool, func}
+    - Idea: The smallest value is as far left as the tree goes
+    - Logic: Walk left until the left subtree is empty; that node's
+                value is the minimum. The empty tree has no minimum,
+                so the answer carries a found flag: {false, false}
+|#
+(def bst-min t = ((Y bst-min-helper) t))
+
+(def bst-min-helper f t =
+    ((t ((pair false) false))
+     (lambda (l)
+        (lambda (v)
+            (lambda (r)
+                (_if (isEmptyT l)
+                    _then ((pair true) v)
+                    _else (f l)))))))
+
+#|
+    ~ BST MAXIMUM ~
+    - Contract: tree => {bool, func}
+    - Idea: The largest value is as far right as the tree goes
+    - Logic: Mirror image of bst-min
+|#
+(def bst-max t = ((Y bst-max-helper) t))
+
+(def bst-max-helper f t =
+    ((t ((pair false) false))
+     (lambda (l)
+        (lambda (v)
+            (lambda (r)
+                (_if (isEmptyT r)
+                    _then ((pair true) v)
+                    _else (f r)))))))
 
 ;===================================================
 ; BREADTH-FIRST TRAVERSAL

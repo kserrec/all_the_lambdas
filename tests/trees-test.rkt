@@ -5,6 +5,8 @@
          "../logic.rkt"
          "../lists.rkt"
          "../trees.rkt"
+         "../binary-lists.rkt"
+         "../integers.rkt"
          "helpers/test-helpers.rkt")
 
 ; ====================================================================
@@ -180,3 +182,91 @@
     (test-list-element "inorder(t-213) unchanged after reuse" ((l-read (inorder t-213)) n-read) "[1,2,3]")))
 
 (show-results "tree persistence" persistence-tests)
+
+; ====================================================================
+; ~ BINARY SEARCH TREE TESTS ~
+; ====================================================================
+
+; Church naturals: insert 4,2,5,1,3 — inorder must come out sorted
+(define nat-bst
+    (((bst-insert lt) three)
+     (((bst-insert lt) one)
+      (((bst-insert lt) five)
+       (((bst-insert lt) two)
+        (((bst-insert lt) four) t-empty))))))
+
+(define nat-bst-tests (list
+    (test-list-element "inorder(nat-bst)" ((l-read (inorder nat-bst)) n-read) "[1,2,3,4,5]")
+    (test-list-element "shape(nat-bst)" ((t-read nat-bst) n-read) "(4 (2 (1 _ _) (3 _ _)) (5 _ _))")
+    (test-list-element "lookup(3)" (b-read (((bst-lookup lt) three) nat-bst)) "true")
+    (test-list-element "lookup(5)" (b-read (((bst-lookup lt) five) nat-bst)) "true")
+    (test-list-element "lookup(0)" (b-read (((bst-lookup lt) zero) nat-bst)) "false")
+    (test-list-element "lookup in empty" (b-read (((bst-lookup lt) one) t-empty)) "false")
+    (test-list-element "min(nat-bst) found" (b-read (head (bst-min nat-bst))) "true")
+    (test-list-element "min(nat-bst)" (n-read (tail (bst-min nat-bst))) "1")
+    (test-list-element "max(nat-bst)" (n-read (tail (bst-max nat-bst))) "5")
+    (test-list-element "min(empty) found" (b-read (head (bst-min t-empty))) "false")
+    (test-list-element "max(empty) found" (b-read (head (bst-max t-empty))) "false")))
+
+(show-results "BST over Church naturals" nat-bst-tests)
+
+; ====================================================================
+
+; Duplicate insertion leaves the tree as it was
+(define nat-bst-dup (((bst-insert lt) two) nat-bst))
+
+(define dup-tests (list
+    (test-list-element "size after dup insert" (n-read (t-size nat-bst-dup)) "5")
+    (test-list-element "inorder after dup insert" ((l-read (inorder nat-bst-dup)) n-read) "[1,2,3,4,5]")))
+
+(show-results "BST duplicate insert" dup-tests)
+
+; ====================================================================
+
+; Persistence: inserting into nat-bst gives a NEW tree; the old one
+; still holds exactly its old five values
+(define nat-bst-plus0 (((bst-insert lt) zero) nat-bst))
+
+(define bst-persistence-tests (list
+    (test-list-element "new tree has 0" ((l-read (inorder nat-bst-plus0)) n-read) "[0,1,2,3,4,5]")
+    (test-list-element "old tree unchanged" ((l-read (inorder nat-bst)) n-read) "[1,2,3,4,5]")
+    (test-list-element "old tree lookup(0) still false" (b-read (((bst-lookup lt) zero) nat-bst)) "false")))
+
+(show-results "BST persistence" bst-persistence-tests)
+
+; ====================================================================
+
+; Binary naturals: the SAME bst-insert/lookup, handed bin-lt instead
+(define bin-bst
+    (((bst-insert bin-lt) bin-two)
+     (((bst-insert bin-lt) bin-ten)
+      (((bst-insert bin-lt) bin-seven)
+       (((bst-insert bin-lt) bin-five) t-empty)))))
+
+(define bin-bst-tests (list
+    (test-list-element "inorder(bin-bst)" ((l-read (inorder bin-bst)) bin-read) "[2,5,7,10]")
+    (test-list-element "lookup(7)" (b-read (((bst-lookup bin-lt) bin-seven) bin-bst)) "true")
+    (test-list-element "lookup(3)" (b-read (((bst-lookup bin-lt) bin-three) bin-bst)) "false")
+    (test-list-element "min(bin-bst)" (bin-read (tail (bst-min bin-bst))) "2")
+    (test-list-element "max(bin-bst)" (bin-read (tail (bst-max bin-bst))) "10")))
+
+(show-results "BST over binary naturals" bin-bst-tests)
+
+; ====================================================================
+
+; Integers: the SAME operations again, handed ltZ — negatives sort first
+(define z-bst
+    (((bst-insert ltZ) posThree)
+     (((bst-insert ltZ) negOne)
+      (((bst-insert ltZ) posOne)
+       (((bst-insert ltZ) negThree)
+        (((bst-insert ltZ) posZero) t-empty))))))
+
+(define z-bst-tests (list
+    (test-list-element "inorder(z-bst)" ((l-read (inorder z-bst)) z-read) "[-3,-1,0,1,3]")
+    (test-list-element "lookup(-3)" (b-read (((bst-lookup ltZ) negThree) z-bst)) "true")
+    (test-list-element "lookup(2)" (b-read (((bst-lookup ltZ) posTwo) z-bst)) "false")
+    (test-list-element "min(z-bst)" (z-read (tail (bst-min z-bst))) "-3")
+    (test-list-element "max(z-bst)" (z-read (tail (bst-max z-bst))) "3")))
+
+(show-results "BST over integers" z-bst-tests)
