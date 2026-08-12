@@ -56,15 +56,18 @@ for test_file in "${test_files[@]}"; do
     echo "Running $test_file..."
     echo ""
     start=$(date +%s.%N)
-    racket "$test_file" | tee "$file_output"
+    racket "$test_file" 2>&1 | tee "$file_output"
+    racket_status=${PIPESTATUS[0]}
     end=$(date +%s.%N)
     cat "$file_output" >> "$test_output_file"
 
     elapsed=$(awk -v s="$start" -v e="$end" 'BEGIN { printf "%.1f", e - s }')
     file_results=$(grep "^-- .* results:" -A 1 "$file_output" | grep -v "^---")
     file_fails=$(echo "$file_results" | awk '{ fails += $1 } END { print fails+0 }')
-    # A file that produced no results lines (e.g. crashed) counts as failed
-    if [ -n "$file_results" ] && [ "$file_fails" -eq 0 ]; then
+    # A file counts as failed if it produced no results lines, reported a
+    # failing test, OR exited nonzero (a crash after some green groups must
+    # never read as a pass)
+    if [ "$racket_status" -eq 0 ] && [ -n "$file_results" ] && [ "$file_fails" -eq 0 ]; then
         printf "%b\n" "${GREEN}PASS${RESET} $test_file (${elapsed}s)"
     else
         printf "%b\n" "${RED}FAIL${RESET} $test_file (${elapsed}s)"
