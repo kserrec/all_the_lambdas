@@ -137,10 +137,10 @@ state anywhere. Test fixtures (`tests/graphs-test.rkt`): a line, a directed
 cycle, a DAG (diamond), a disconnected pair, and a small symmetric graph, over
 Church-natural vertices.
 
-- [ ] **C1. Representation + helpers** — `member-by`, `g-neighbors`,
+- [x] **C1. Representation + helpers** (done 2026-08-11) — `member-by`, `g-neighbors`,
   `g-vertices g` (list of firsts), constructors for the test fixtures. Tests on
   membership and neighbor lookup.
-- [ ] **C2. Depth-first search + reachability** — `dfs eq?v g start` → visit
+- [x] **C2. Depth-first search + reachability** (done 2026-08-11) — `dfs eq?v g start` → visit
   order list (recursive: visit vertex, fold over neighbors threading visited);
   `reachable eq?v g from to` → bool via `member-by` on the DFS result.
 - [ ] **C3. Breadth-first search + unweighted distances** — `bfs eq?v g start`
