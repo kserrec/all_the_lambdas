@@ -84,7 +84,10 @@ conceptual flow rather than an exhaustive `require` graph.
 | Collections and division | `lists.rkt`, `division.rkt` | Lambda lists, traversal/composition, Church-natural quotient and remainder |
 | Composed numeric values | `integers.rkt`, `rationals.rkt` | Sign/magnitude integers and integer-over-natural rationals |
 | Algorithms | `algorithms.rkt` | Binary search and sorting over the existing encodings |
+| Persistent data structures | `trees.rkt`, `queues.rkt`, `heaps.rkt` | Handler-encoded binary trees (traversals, folds, comparator-parameterized BSTs), two-list FIFO queues, and rank-carrying leftist min-heaps — all persistent by construction |
+| Comparator-parameterized algorithms | `sorting.rkt`, `graphs.rkt` | Merge/quick/heap sorts taking their ordering as an argument; adjacency-list graphs (equality-parameterized) with DFS, BFS, reachability, paths, distances, cycles, components, and topological sort |
 | Scalable numeric values | `binary-lists.rkt`, `int-binary-lists.rkt`, `binary-rationals.rkt` | Binary digit-list naturals, signed binary integers, and binary rationals |
+| Bit-level and number theory | `binary-algorithms.rkt` | Shifts, width-relative NOT, bit stats, bitwise AND/OR/XOR, binary↔Church conversions, isqrt, modexp, extended Euclid, modular inverses, primality, fast-doubling Fibonacci — built atop the binary libraries without modifying them |
 | Strict runtime discipline | `types/TYPES.rkt`, other `types/*.rkt` | Tags, checked wrappers, error propagation, `Option`, `Result`, and strict operation families |
 | Coercive experiment | `types/coercive/TYPES.rkt`, other `types/coercive/*.rkt` | Conversion policies and wrappers that coerce before invoking raw operations |
 | Unsugared teaching route | `bitter/*.rkt` | Selected logic-through-algorithm modules as direct nested lambdas |

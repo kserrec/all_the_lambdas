@@ -6,13 +6,22 @@ The sugar layer (macros) and tooling (test runner, CI) are ordinary
 Racket/bash and may be improved freely — but readability-as-teaching-material
 is valued there too, so explicit beats clever.
 
-## Overnight run 2026-08-11 → 2026-08-12 (authorized by Kyle, this session)
+## Overnight run 2026-08-11 → 2026-08-12 — COMPLETE
 
-Kyle authorized an unattended overnight run covering four work items: persistent
-binary trees, better list sorting, graphs and traversals, and more binary-number
-algorithms. Monads and gaussian rationals were explicitly CUT from scope — do
-not start them. Branch: `overnight-trees-sorting-graphs-binary` (all commits go
-here, pushed after each commit).
+**Status: every step below is checked off; nothing is blocked.** Six new root
+modules (`trees.rkt`, `queues.rkt`, `heaps.rkt`, `sorting.rkt`, `graphs.rkt`,
+`binary-algorithms.rkt`) and their test files landed on branch
+`overnight-trees-sorting-graphs-binary`, pushed commit by commit. The full
+suite stands at 2,207/2,207 under the hardened runner (a nonzero racket exit
+now always marks a file FAIL — fixed mid-run after it let a crashed file read
+as green). See `HANDOFF-overnight-2026-08-12.md` for the session summary. The
+branch awaits Kyle's morning review and merge; no further work is
+pre-authorized beyond that review.
+
+Original scope, for the record: Kyle authorized an unattended overnight run
+covering four work items — persistent binary trees, better list sorting,
+graphs and traversals, and more binary-number algorithms. Monads and gaussian
+rationals were explicitly CUT from scope.
 
 ### Run protocol (every iteration follows this exactly)
 
@@ -231,7 +240,7 @@ the base libraries are NOT modified. All results normalized via
 
 ### Phase E — wrap-up (final iteration)
 
-- [ ] **E1. Docs + handoff + shutdown** — add the new modules to the README
+- [x] **E1. Docs + handoff + shutdown** (done 2026-08-12 — run complete) — add the new modules to the README
   map and `ARCHITECTURE.md` (one paragraph each, matching existing tone);
   update this file's status section; write
   `HANDOFF-overnight-2026-08-12.md`: what completed, what (if anything) is
