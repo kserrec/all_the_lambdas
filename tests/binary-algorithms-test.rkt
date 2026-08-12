@@ -5,6 +5,7 @@
          "../logic.rkt"
          "../lists.rkt"
          "../binary-lists.rkt"
+         "../int-binary-lists.rkt"
          "../binary-algorithms.rkt"
          "helpers/test-helpers.rkt")
 
@@ -115,3 +116,62 @@
     (test-list-element "isqrt(127)" (bin-read (bin-isqrt bin-one-hundred-twenty-seven)) "11")))
 
 (show-results "bin-isqrt" isqrt-tests)
+
+; ====================================================================
+
+(define modexp-tests (list
+    (test-list-element "2^3 mod 5" (bin-read (((bin-modexp bin-two) bin-three) bin-five)) "3")
+    (test-list-element "3^4 mod 7" (bin-read (((bin-modexp bin-three) bin-four) bin-seven)) "4")
+    (test-list-element "5^0 mod 3" (bin-read (((bin-modexp bin-five) bin-zero) bin-three)) "1")
+    (test-list-element "2^10 mod 10" (bin-read (((bin-modexp bin-two) bin-ten) bin-ten)) "4")
+    (test-list-element "7^2 mod 4" (bin-read (((bin-modexp bin-seven) bin-two) bin-four)) "1")
+    (test-list-element "agrees with exp-then-mod" (bin-read (((bin-modexp bin-three) bin-four) bin-five))
+        (bin-read ((bin-mod ((bin-exp bin-three) bin-four)) bin-five)))))
+
+(show-results "bin-modexp" modexp-tests)
+
+; ====================================================================
+
+; Signed fixtures for the extended Euclid
+(define zb-six ((makeZ-bin true) bin-six))
+(define zb-four ((makeZ-bin true) bin-four))
+(define zb-seven ((makeZ-bin true) bin-seven))
+(define zb-five-p ((makeZ-bin true) bin-five))
+(define zb-three-p ((makeZ-bin true) bin-three))
+
+; Evaluate the Bezout certificate a*x + b*y for a result {g, {x, y}}
+(define (bezout a b res)
+    (bin-z-read
+        ((addZ-bin ((multZ-bin a) (head (tail res))))
+         ((multZ-bin b) (tail (tail res))))))
+
+(define ee-64 ((bin-ext-euclid zb-six) zb-four))
+(define ee-75 ((bin-ext-euclid zb-seven) zb-five-p))
+(define ee-50 ((bin-ext-euclid zb-five-p) bin-posZero))
+
+(define ext-euclid-tests (list
+    (test-list-element "gcd(6,4)" (bin-z-read (head ee-64)) "2")
+    (test-list-element "bezout(6,4) = gcd" (bezout zb-six zb-four ee-64) "2")
+    (test-list-element "gcd(7,5)" (bin-z-read (head ee-75)) "1")
+    (test-list-element "bezout(7,5) = gcd" (bezout zb-seven zb-five-p ee-75) "1")
+    (test-list-element "gcd(5,0)" (bin-z-read (head ee-50)) "5")
+    (test-list-element "x for (5,0)" (bin-z-read (head (tail ee-50))) "1")
+    (test-list-element "y for (5,0)" (bin-z-read (tail (tail ee-50))) "0")))
+
+(show-results "bin-ext-euclid" ext-euclid-tests)
+
+; ====================================================================
+
+(define inv-3-mod-7 ((bin-mod-inverse zb-three-p) zb-seven))
+(define inv-5-mod-7 ((bin-mod-inverse zb-five-p) zb-seven))
+(define inv-2-mod-4 ((bin-mod-inverse ((makeZ-bin true) bin-two)) zb-four))
+(define inv-1-mod-5 ((bin-mod-inverse bin-posOne) zb-five-p))
+
+(define mod-inverse-tests (list
+    (test-list-element "inverse(3 mod 7) found" (b-read (head inv-3-mod-7)) "true")
+    (test-list-element "inverse(3 mod 7)" (bin-z-read (tail inv-3-mod-7)) "5")
+    (test-list-element "inverse(5 mod 7)" (bin-z-read (tail inv-5-mod-7)) "3")
+    (test-list-element "inverse(1 mod 5)" (bin-z-read (tail inv-1-mod-5)) "1")
+    (test-list-element "inverse(2 mod 4) found" (b-read (head inv-2-mod-4)) "false")))
+
+(show-results "bin-mod-inverse" mod-inverse-tests)

@@ -201,13 +201,13 @@ the base libraries are NOT modified. All results normalized via
   range collapses (mirror the terminating-search style already used in
   `algorithms.rkt` binarySearch). `bin-isqrt [0]` → `[0]`. Tests: perfect
   squares and non-squares (0,1,2,3,4,8,9,15,16,100).
-- [ ] **D5. Modular exponentiation** — `bin-modexp base ex m`: square-and-
+- [x] **D5. Modular exponentiation** (done 2026-08-11) — `bin-modexp base ex m`: square-and-
   multiply folding over the digits of `ex` most-significant-first (`acc' =
   mod (acc² · base^digit) m` per digit, via `bin-mult`/`bin-mod`). Contract:
   modulus zero inherits `bin-mod`'s documented totalization. Tests against
   hand-computed values, plus agreement with `bin-mod (bin-exp b e) m` on tiny
   inputs.
-- [ ] **D6. Extended Euclid + modular inverse** — over signed binary integers:
+- [x] **D6. Extended Euclid + modular inverse** (done 2026-08-11) — over signed binary integers:
   `bin-ext-euclid a b` → `{g, {x, y}}` with `g = ax + by` (recursive:
   `b = 0 → {a, {1, 0}}`, else recurse on `(b, a mod b)` — needs signed
   mult/sub `multZ-bin`/`subZ-bin` and a nonneg `mod` built from

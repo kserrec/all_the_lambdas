@@ -6,6 +6,7 @@
          "logic.rkt"
          "lists.rkt"
          "binary-lists.rkt"
+         "int-binary-lists.rkt"
          "recursion.rkt")
 
 ;===================================================
@@ -223,3 +224,94 @@
             (_if ((bin-lte ((bin-mult mid) mid)) x)
                 _then (((f x) mid) hi)
                 _else (((f x) lo) ((bin-sub mid) bin-one))))))
+
+;===================================================
+; MODULAR EXPONENTIATION
+;===================================================
+
+#|
+    ~ MODULAR EXPONENTIATION ~
+    - Contract: (bin-list, bin-list, bin-list) => bin-list
+    - Idea: base^ex mod m by square-and-multiply: reading the
+                exponent's digits most significant first, each digit
+                squares the accumulator, and a one-digit multiplies
+                in the base — every step reduced mod m so the numbers
+                never grow past the modulus
+    - Note: A zero modulus inherits bin-mod's documented totalization
+                (x mod 0 = x), so bin-modexp(b, e, 0) = b^e
+    - Logic: A fold over the exponent's digit list; the accumulator
+                starts at one and is reduced from the first step on
+|#
+(def bin-modexp base ex m =
+    (((((Y bin-modexp-helper) base) m) ex) bin-one))
+
+(def bin-modexp-helper f base m digits acc =
+    (_if (isNil digits)
+        _then acc
+        _else (_let squared = ((bin-mod ((bin-mult acc) acc)) m)
+            (_let stepped = (_if (isOne (head digits))
+                                _then ((bin-mod ((bin-mult squared) base)) m)
+                                _else squared)
+                ((((f base) m) (tail digits)) stepped)))))
+
+;===================================================
+; EXTENDED EUCLID AND MODULAR INVERSES
+;===================================================
+
+#|
+    ~ SIGNED REMAINDER ~
+    - Contract: (z-bin, z-bin) => z-bin
+    - Idea: Helper for the extended Euclid: the remainder that pairs
+                with truncated division, r = a - b*(a div b), so that
+                a = b*q + r always holds and |r| < |b|
+|#
+(def bin-z-mod a b =
+    ((subZ-bin a) ((multZ-bin b) ((divZ-bin a) b))))
+
+#|
+    ~ EXTENDED EUCLIDEAN ALGORITHM ~
+    - Contract: (z-bin, z-bin) => {z-bin, {z-bin, z-bin}}
+    - Idea: Not just the gcd g of a and b, but the certificate with
+                it: coefficients x and y with a*x + b*y = g
+    - Logic: euclid(a, 0) is {a, {1, 0}} — a*1 + 0*0 = a. Otherwise
+                recurse on (b, a mod b), whose answer gives
+                b*x1 + (a - b*q)*y1 = g; regrouping around a and b
+                turns that into a*y1 + b*(x1 - q*y1) = g. Each
+                remainder is strictly smaller in magnitude, so the
+                recursion reaches zero
+    - Note: For nonnegative a and b this is the textbook gcd; the
+                tests exercise that range and check the certificate
+                by evaluating a*x + b*y outright
+|#
+(def bin-ext-euclid a b = (((Y bin-ext-euclid-helper) a) b))
+
+(def bin-ext-euclid-helper f a b =
+    (_if (isZeroZ-bin b)
+        _then ((pair a) ((pair bin-posOne) bin-posZero))
+        _else (_let q = ((divZ-bin a) b)
+            (_let sub = ((f b) ((subZ-bin a) ((multZ-bin b) q)))
+                (_let x1 = (head (tail sub))
+                    (_let y1 = (tail (tail sub))
+                        ((pair (head sub))
+                         ((pair y1)
+                          ((subZ-bin x1) ((multZ-bin q) y1))))))))))
+
+#|
+    ~ MODULAR INVERSE ~
+    - Contract: (z-bin, z-bin) => {bool, z-bin}
+    - Idea: The x with a*x = 1 (mod m), which exists exactly when
+                gcd(a, m) = 1 — the extended Euclid hands it to us as
+                the coefficient on a
+    - Logic: Run the extended Euclid; if g is one, reduce x into
+                [0, m) (the truncated remainder can come out negative,
+                in which case one addition of m lands it in range);
+                otherwise {false, false}
+|#
+(def bin-mod-inverse a m =
+    (_let res = ((bin-ext-euclid a) m)
+        (_if ((eqZ-bin (head res)) bin-posOne)
+            _then (_let r = ((bin-z-mod (head (tail res))) m)
+                (_if ((ltZ-bin r) bin-posZero)
+                    _then ((pair true) ((addZ-bin r) m))
+                    _else ((pair true) r)))
+            _else ((pair false) false))))
