@@ -215,13 +215,15 @@ the base libraries are NOT modified. All results normalized via
   (`{true, x mod m}` when `g = 1`, else false pair). Tests: Bézout identity
   checked by evaluating `ax + by` and comparing to `g`; inverse of 3 mod 7 = 5;
   no inverse of 2 mod 4.
-- [ ] **D7. Primality** — `bin-prime? n`: trial division by 2 then odd
+- [x] **D7. Primality** (done 2026-08-11; predicates named `bin-is-prime` /
+  `bin-is-prime-mr` to match house naming; a base divisible by n passes
+  trivially — the standard guard, caught by the mr(3) test) — `bin-prime? n`: trial division by 2 then odd
   divisors up to `bin-isqrt n` (Y over the candidate divisor); values below 2
   → false. Then `bin-prime-mr? n bases`: Miller–Rabin using D5's `bin-modexp`,
   taking the witness list explicitly (document: bases `[2, 3]` are
   deterministic for the test-sized inputs used). Tests: primes and composites
   through a few dozen, both predicates agreeing.
-- [ ] **D8. Fibonacci by fast doubling** — `bin-fib n` (binary-nat in and
+- [x] **D8. Fibonacci by fast doubling** (done 2026-08-11 — Phase D complete) — `bin-fib n` (binary-nat in and
   out): recurse on `bin-shr 1 n` returning the pair `{F(k), F(k+1)}`, combine
   with `F(2k) = F(k)·(2F(k+1) − F(k))` and `F(2k+1) = F(k)² + F(k+1)²`
   (subtraction is safe: nonnegative by construction), select by `bin-is-odd`.

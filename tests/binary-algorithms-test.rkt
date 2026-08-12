@@ -175,3 +175,59 @@
     (test-list-element "inverse(2 mod 4) found" (b-read (head inv-2-mod-4)) "false")))
 
 (show-results "bin-mod-inverse" mod-inverse-tests)
+
+; ====================================================================
+
+(define trial-division-tests (list
+    (test-list-element "prime(0)" (b-read (bin-is-prime bin-zero)) "false")
+    (test-list-element "prime(1)" (b-read (bin-is-prime bin-one)) "false")
+    (test-list-element "prime(2)" (b-read (bin-is-prime bin-two)) "true")
+    (test-list-element "prime(3)" (b-read (bin-is-prime bin-three)) "true")
+    (test-list-element "prime(4)" (b-read (bin-is-prime bin-four)) "false")
+    (test-list-element "prime(5)" (b-read (bin-is-prime bin-five)) "true")
+    (test-list-element "prime(7)" (b-read (bin-is-prime bin-seven)) "true")
+    (test-list-element "prime(9)" (b-read (bin-is-prime bin-nine)) "false")
+    (test-list-element "prime(15)" (b-read (bin-is-prime bin-fifteen)) "false")
+    (test-list-element "prime(31)" (b-read (bin-is-prime bin-thirty-one)) "true")))
+
+(show-results "bin-is-prime (trial division)" trial-division-tests)
+
+; ====================================================================
+
+; Miller-Rabin with witness bases [2, 3] — deterministic far past
+; every value tested here
+(define mr-bases (_cons bin-two bin-three))
+
+(define miller-rabin-tests (list
+    (test-list-element "mr(2)" (b-read ((bin-is-prime-mr bin-two) mr-bases)) "true")
+    (test-list-element "mr(3)" (b-read ((bin-is-prime-mr bin-three) mr-bases)) "true")
+    (test-list-element "mr(5)" (b-read ((bin-is-prime-mr bin-five) mr-bases)) "true")
+    (test-list-element "mr(7)" (b-read ((bin-is-prime-mr bin-seven) mr-bases)) "true")
+    (test-list-element "mr(31)" (b-read ((bin-is-prime-mr bin-thirty-one) mr-bases)) "true")
+    (test-list-element "mr(1)" (b-read ((bin-is-prime-mr bin-one) mr-bases)) "false")
+    (test-list-element "mr(9)" (b-read ((bin-is-prime-mr bin-nine) mr-bases)) "false")
+    (test-list-element "mr(15)" (b-read ((bin-is-prime-mr bin-fifteen) mr-bases)) "false")
+    (test-list-element "mr(16)" (b-read ((bin-is-prime-mr bin-sixteen) mr-bases)) "false")
+    (test-list-element "mr agrees with trial on 25"
+        (b-read ((bin-is-prime-mr ((bin-add bin-twenty) bin-five)) mr-bases))
+        (b-read (bin-is-prime ((bin-add bin-twenty) bin-five))))))
+
+(show-results "bin-is-prime-mr" miller-rabin-tests)
+
+; ====================================================================
+
+(define fib-tests (list
+    (test-list-element "fib(0)" (bin-read (bin-fib bin-zero)) "0")
+    (test-list-element "fib(1)" (bin-read (bin-fib bin-one)) "1")
+    (test-list-element "fib(2)" (bin-read (bin-fib bin-two)) "1")
+    (test-list-element "fib(3)" (bin-read (bin-fib bin-three)) "2")
+    (test-list-element "fib(4)" (bin-read (bin-fib bin-four)) "3")
+    (test-list-element "fib(5)" (bin-read (bin-fib bin-five)) "5")
+    (test-list-element "fib(6)" (bin-read (bin-fib bin-six)) "8")
+    (test-list-element "fib(7)" (bin-read (bin-fib bin-seven)) "13")
+    (test-list-element "fib(8)" (bin-read (bin-fib bin-eight)) "21")
+    (test-list-element "fib(9)" (bin-read (bin-fib bin-nine)) "34")
+    (test-list-element "fib(10)" (bin-read (bin-fib bin-ten)) "55")
+    (test-list-element "fib(12)" (bin-read (bin-fib bin-twelve)) "144")))
+
+(show-results "bin-fib (fast doubling)" fib-tests)

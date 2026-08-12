@@ -315,3 +315,150 @@
                     _then ((pair true) ((addZ-bin r) m))
                     _else ((pair true) r)))
             _else ((pair false) false))))
+
+;===================================================
+; PRIMALITY
+;===================================================
+
+#|
+    ~ IS PRIME (trial division) ~
+    - Contract: bin-list => bool
+    - Idea: The schoolbook test: below two is not prime, two is, other
+                evens are not, and an odd n is prime unless some odd
+                divisor up to its square root divides it evenly
+    - Logic: March candidate divisors 3, 5, 7, ... while they do not
+                exceed isqrt(n); a zero remainder convicts
+|#
+(def bin-is-prime n =
+    (_if ((bin-lt n) bin-two)
+        _then false
+        _else (_if ((bin-eq n) bin-two)
+            _then true
+            _else (_if (bin-is-even n)
+                _then false
+                _else ((((Y bin-is-prime-helper) n) bin-three) (bin-isqrt n))))))
+
+(def bin-is-prime-helper f n d limit =
+    (_if ((bin-gt d) limit)
+        _then true
+        _else (_if (bin-is-zero ((bin-mod n) d))
+            _then false
+            _else (((f n) ((bin-add d) bin-two)) limit))))
+
+#|
+    ~ SPLIT OUT TWOS ~
+    - Contract: bin-list => {nat, bin-list}
+    - Idea: Helper for Miller-Rabin: write m as d * 2^s with d odd,
+                answering {s, d} (s a Church natural — it only counts
+                squarings)
+    - Logic: Halve while even, counting; never called on zero
+|#
+(def bin-split-twos m = (((Y bin-split-twos-helper) zero) m))
+
+(def bin-split-twos-helper f s m =
+    (_if (bin-is-even m)
+        _then ((f (succ s)) ((bin-shr one) m))
+        _else ((pair s) m)))
+
+#|
+    ~ SQUARE CHAIN (Miller-Rabin inner loop) ~
+    - Contract: (nat, bin-list, bin-list, bin-list) => bool
+    - Idea: Square x up to count times looking for n-1; reaching it
+                means this base cannot convict n
+    - Logic: Each squaring reduced mod n; count exhausted with no
+                n-1 in sight answers false (composite for this base)
+|#
+(def mr-square-chain count x n nm1 =
+    (((((Y mr-square-chain-helper) count) x) n) nm1))
+
+(def mr-square-chain-helper f count x n nm1 =
+    (_if (isZero count)
+        _then false
+        _else (_let x2 = ((bin-mod ((bin-mult x) x)) n)
+            (_if ((bin-eq x2) nm1)
+                _then true
+                _else ((((f (pred count)) x2) n) nm1)))))
+
+#|
+    ~ MILLER-RABIN WITNESS ~
+    - Contract: (bin-list, bin-list) => bool
+    - Idea: Does base a believe odd n > 2 is prime? Write n-1 as
+                d * 2^s; n passes for a when a^d mod n is 1 or n-1,
+                or some squaring of it reaches n-1 before s runs out
+    - Note: A base divisible by n carries no information (a^d mod n
+                is 0 no matter what n is), so it passes trivially —
+                without this guard, base 3 would wrongly convict n=3
+    - Logic: bin-modexp does the heavy lift; the square chain gets
+                s-1 squarings (the s-th would just reach a^(n-1))
+|#
+(def mr-witness a n =
+    (_if (bin-is-zero ((bin-mod a) n))
+        _then true
+        _else (_let nm1 = (bin-pred n)
+            (_let sd = (bin-split-twos nm1)
+                (_let x = (((bin-modexp a) (tail sd)) n)
+                    (_if ((bin-eq x) bin-one)
+                        _then true
+                        _else (_if ((bin-eq x) nm1)
+                            _then true
+                            _else ((((mr-square-chain (pred (head sd))) x) n) nm1))))))))
+
+#|
+    ~ IS PRIME (Miller-Rabin) ~
+    - Contract: (bin-list, list) => bool
+    - Idea: n is declared prime when EVERY base in the witness list
+                passes. The bases are the caller's choice: [2, 3] is
+                deterministic for every n below 1,373,653 — far past
+                anything these tests run
+    - Logic: Even-and-small cases settled directly, then a fold of
+                mr-witness across the bases
+|#
+(def bin-is-prime-mr n bases =
+    (_if ((bin-lt n) bin-two)
+        _then false
+        _else (_if ((bin-eq n) bin-two)
+            _then true
+            _else (_if (bin-is-even n)
+                _then false
+                _else (((Y mr-bases-helper) n) bases)))))
+
+(def mr-bases-helper f n bases =
+    (_if (isNil bases)
+        _then true
+        _else (_if ((mr-witness (head bases)) n)
+            _then ((f n) (tail bases))
+            _else false)))
+
+;===================================================
+; FIBONACCI BY FAST DOUBLING
+;===================================================
+
+#|
+    ~ FIBONACCI (fast doubling) ~
+    - Contract: bin-list => bin-list
+    - Idea: recursion.rkt computes fib by the two-branch definition,
+                one step at a time. Fast doubling leaps: from the pair
+                {F(k), F(k+1)} it builds the pair at 2k (or 2k+1)
+                directly —
+                    F(2k)   = F(k) * (2F(k+1) - F(k))
+                    F(2k+1) = F(k)^2 + F(k+1)^2
+                — so the recursion follows n's BINARY digits: halve
+                the index, recurse, double back up. The subtraction
+                is safe: 2F(k+1) >= F(k) always
+    - Logic: The helper returns the pair {F(n), F(n+1)}; bin-fib
+                keeps the first. Base: {F(0), F(1)} = {0, 1}. The odd
+                case shifts the doubled pair one slot with an add
+|#
+(def bin-fib n = (head ((Y bin-fib-pair-helper) n)))
+
+(def bin-fib-pair-helper f n =
+    (_if (bin-is-zero n)
+        _then ((pair bin-zero) bin-one)
+        _else (_let ab = (f ((bin-shr one) n))
+            (_let a = (head ab)
+                (_let b = (tail ab)
+                    (_let c = ((bin-mult a) ((bin-sub (bin-mult-2 b)) a))
+                        (_let d = ((bin-add ((bin-mult a) a)) ((bin-mult b) b))
+                            (_if (bin-is-odd n)
+                                _then ((pair d) ((bin-add c) d))
+                                _else ((pair c) d)))))))))
